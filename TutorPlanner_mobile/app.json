@@ -1,0 +1,35 @@
+{
+    "expo": {
+        "name": "TutorPlanner_mobile",
+        "slug": "TutorPlanner_mobile",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./src/assets/icon.png",
+        "userInterfaceStyle": "light",
+        "splash": {
+            "image": "./src/assets/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "assetBundlePatterns": ["**/*"],
+        "ios": {
+            "supportsTablet": true
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./src/assets/adaptive-icon.png",
+                "backgroundColor": "#ffffff"
+            }
+        },
+        "assets": ["./src/assets/"],
+        "web": {
+            "bundler": "metro",
+            "favicon": "./src/assets/favicon.png"
+        },
+        "plugins": ["expo-updates", "expo-asset"],
+        "packagerOpts": {
+            "config": "metro.config.js",
+            "sourceExts": ["ts", "tsx", "scss", "sass"]
+        }
+    }
+}
