@@ -16,6 +16,8 @@
             "supportsTablet": true
         },
         "android": {
+            "package": "com.tutorplanner.mobile",
+            "versionCode": 0.5,
             "adaptiveIcon": {
                 "foregroundImage": "./src/assets/adaptive-icon.png",
                 "backgroundColor": "#ffffff"
