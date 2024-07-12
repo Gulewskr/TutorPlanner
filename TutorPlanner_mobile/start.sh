@@ -1,6 +1,8 @@
 #!/bin/bash
 # Build the app locally
-expo prebuild --clean
+
+# TODO - enable clean before build + create default gradle config which will be copied before run
+# expo prebuild --clean
 
 # We do not support ios anyway
 # expo run:ios

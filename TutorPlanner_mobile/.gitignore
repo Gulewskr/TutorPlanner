@@ -4,6 +4,9 @@
 # dependencies
 node_modules/
 
+# Gradle
+.gradle/
+
 # Expo
 .expo/
 dist/
