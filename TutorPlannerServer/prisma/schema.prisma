@@ -1,0 +1,92 @@
+datasource db {
+    url      = env("DATABASE_URL")
+    provider = "mysql"
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model Student {
+    id           Int           @id @default(autoincrement())
+    firstname    String
+    surename     String
+    class        String?
+    extendedMath Boolean?
+    description  String?
+    defaultPrice Float?
+    ContactData  ContactData[]
+    Payment      Payment[]
+}
+
+model ContactData {
+    id        Int         @id @default(autoincrement())
+    type      ContactType
+    value     String
+    studentId Int
+    student   Student     @relation(fields: [studentId], references: [id])
+}
+
+enum ContactType {
+    PHONE
+    EMAIL
+    FACEBOOK
+    DISCORD
+}
+
+model Payment {
+    id        Int      @id @default(autoincrement())
+    studentId Int
+    price     Int
+    date      DateTime
+    student   Student  @relation(fields: [studentId], references: [id])
+}
+
+model Lesson {
+    id          Int      @id @default(autoincrement())
+    studentId   Int
+    eventId     Int
+    price       Float
+    isPaid      Boolean
+    date        DateTime
+    description String
+    startHour   String
+    endHour     String
+    isCanceled  Boolean
+    event       Event    @relation(fields: [eventId], references: [id])
+}
+
+model SingleEvent {
+    id          Int      @id @default(autoincrement())
+    eventId     Int
+    name        String
+    date        DateTime
+    description String
+    startHour   String
+    endHour     String
+    isCanceled  Boolean
+    event       Event    @relation(fields: [eventId], references: [id])
+}
+
+model Event {
+    id          Int           @id @default(autoincrement())
+    name        String
+    description String
+    startHour   String
+    endHour     String
+    type        EventType
+    pattern     String?
+    startDate   DateTime?
+    endDate     DateTime?
+    isCanceled  Boolean
+    events      SingleEvent[]
+    lesson      Lesson[]
+}
+
+enum EventType {
+    SINGLE
+    DAILY
+    WEEKLY
+    MONTHLY
+    YEARLY
+}
