@@ -1,11 +1,9 @@
 import * as React from "react";
-import { Button, Image, Pressable, StyleSheet, Text, View } from "react-native";
-// import styles from "./Button.scss";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 interface ButtonProps {
   secondary: boolean;
   icon: string;
-  // key: string;
   title: string;
   handleClick: () => void;
 }
@@ -13,28 +11,39 @@ interface ButtonProps {
 const iconsMap: { [key: string]: any } = {
   minus: require("../../assets/icons/minus.png"),
   plus: require("../../assets/icons/plus.png"),
-  // check: require("../../assets/icons/check.png"),
 };
 
 const CustomButton: React.FC<ButtonProps> = ({
-  // key,
   title,
   handleClick,
   secondary,
   icon,
 }) => {
-  const style = styles(secondary, !!title, icon);
+  const [pressed, setPressed] = React.useState<boolean>(false);
+  const [buttonHeight, setButtonHeight] = React.useState<number>(0);
+
+  const style = styles(secondary, !!title, pressed, icon);
+
   return (
     <View style={{ position: "relative" }}>
-      <Pressable style={style.button} onPress={handleClick}>
+      <Pressable
+        style={style.button}
+        onPress={handleClick}
+        onPressIn={() => setPressed(true)}
+        onPressOut={() => setPressed(false)}
+        onLayout={(event) => {
+          const { height } = event.nativeEvent.layout;
+          setButtonHeight(height);
+        }}
+      >
         <View style={style.content}>
           {icon && iconsMap[icon] && (
             <Image source={iconsMap[icon]} style={style.icon} />
           )}
-          <Text style={style.text}>{title}</Text>
+          {title && <Text style={style.text}>{title}</Text>}
         </View>
       </Pressable>
-      <View style={style.shadow} />
+      <View style={[style.shadow, { height: buttonHeight }]} />
     </View>
   );
 };
@@ -43,12 +52,17 @@ CustomButton.displayName = "Button";
 
 export default CustomButton;
 
-const styles = (secondary: boolean, isExpanded: boolean, icon?: string) =>
+const styles = (
+  secondary: boolean,
+  isExpanded: boolean,
+  pressed: boolean,
+  icon?: string
+) =>
   StyleSheet.create({
     button: {
       alignItems: "center",
       justifyContent: "center",
-      height: 40,
+      minHeight: 40,
       borderRadius: 10,
       width: isExpanded ? 200 : 40,
       backgroundColor: secondary ? "#B0CFFF" : "#FFA9F1",
@@ -58,12 +72,15 @@ const styles = (secondary: boolean, isExpanded: boolean, icon?: string) =>
       zIndex: 10,
       borderWidth: 1,
       borderColor: "#070707",
+      top: pressed ? 4 : 0,
+      left: pressed ? 4 : 0,
     },
 
     content: {
       flexDirection: "row",
       alignItems: "center",
       gap: 8,
+      marginVertical: 5,
     },
 
     icon: {
@@ -73,16 +90,17 @@ const styles = (secondary: boolean, isExpanded: boolean, icon?: string) =>
     },
 
     text: {
-      fontSize: 16,
+      fontSize: 12,
       lineHeight: 21,
       fontWeight: "bold",
       letterSpacing: 0.25,
       color: "#070707",
-      display: isExpanded ? "flex" : "none",
+      flexShrink: 1,
+      maxWidth: "80%",
+      paddingBottom: 2,
     },
 
     shadow: {
-      height: 40,
       borderRadius: 10,
       width: isExpanded ? 200 : 40,
       position: "absolute",

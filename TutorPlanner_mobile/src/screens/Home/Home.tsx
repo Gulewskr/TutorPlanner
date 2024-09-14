@@ -25,7 +25,7 @@ export const Home: React.FC<{ navigation: any }> = ({ navigation }) => {
           secondary={false}
           icon="plus"
           handleClick={() => 1}
-          title="Dodaj"
+          title="dasdasdsdadsadsadsadadsadsadasdaddasdsaadasdsadasdasdsdadsadsadsadadsadsadasdaddasdsaadasdsadasdasdsdadsadsadsadadsadsadasdaddasdsaadasdsa"
         />
         <CustomButton
           secondary={false}
