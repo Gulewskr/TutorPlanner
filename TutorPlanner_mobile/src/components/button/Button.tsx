@@ -22,7 +22,7 @@ const CustomButton: React.FC<ButtonProps> = ({
   const [pressed, setPressed] = React.useState<boolean>(false);
   const [buttonHeight, setButtonHeight] = React.useState<number>(0);
 
-  const style = styles(secondary, !!title, pressed, icon);
+  const style = styles(secondary, !!title, pressed);
 
   return (
     <View style={{ position: "relative" }}>
@@ -52,12 +52,7 @@ CustomButton.displayName = "Button";
 
 export default CustomButton;
 
-const styles = (
-  secondary: boolean,
-  isExpanded: boolean,
-  pressed: boolean,
-  icon?: string
-) =>
+const styles = (secondary: boolean, isExpanded: boolean, pressed: boolean) =>
   StyleSheet.create({
     button: {
       alignItems: "center",
@@ -65,7 +60,13 @@ const styles = (
       minHeight: 40,
       borderRadius: 10,
       width: isExpanded ? 200 : 40,
-      backgroundColor: secondary ? "#B0CFFF" : "#FFA9F1",
+      backgroundColor: secondary
+        ? pressed
+          ? "#EFF5FF"
+          : "#B0CFFF"
+        : pressed
+        ? "#F5D4F5"
+        : "#FFA9F1",
       position: "relative",
       shadowColor: "#000000",
       elevation: 3,
