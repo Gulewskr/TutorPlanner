@@ -47,6 +47,18 @@ const lessonRepository = {
             },
         });
     },
+    getLessonsByStudentId: async (studentId: number): Promise<LessonDAO[]> => {
+        return await prisma.event.findMany({
+            include: {
+                lessonData: true,
+            },
+            where: {
+                lessonData: {
+                    studentId: studentId,
+                },
+            },
+        });
+    },
     getLessonByEventSeriesId: async (id: number): Promise<LessonDAO[]> => {
         return await prisma.event.findMany({
             include: {

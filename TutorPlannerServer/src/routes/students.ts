@@ -1,6 +1,7 @@
-import express, { Router } from 'express';
+import express, { Request, Response, Router } from 'express';
 import StudentService from '../services/StudentService';
-import PaymentsService from '../services/PaymentsService';
+import paymentRouter from './payments';
+import LessonsService from '../services/LessonsService';
 
 var router: Router = express.Router();
 
@@ -13,59 +14,50 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:studentId', async (req, res) => {
-    const studentId = Number(req.params.studentId);
-    if (Number.isNaN(studentId)) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'Invalid input. Wrong studentId provided.',
-        });
-    }
+    const studentId = validateStudentId(req, res);
+    if (studentId == -1) return;
     const student = await StudentService.getStudent(studentId);
     res.status(200).json(student);
 });
 
 router.post('/:studentId', async (req, res) => {
-    const studentId = Number(req.params.studentId);
-    if (Number.isNaN(studentId)) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'Invalid input. Wrong studentId provided.',
-        });
-    }
+    const studentId = validateStudentId(req, res);
+    if (studentId == -1) return;
     const student = await StudentService.updateStudent(studentId, req.body);
     res.status(200).json(student);
 });
 
-router.get('/:studentId/payments/', async (req, res) => {
-    const studentId = Number(req.params.studentId);
-    if (Number.isNaN(studentId)) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'Invalid input. Wrong studentId provided.',
-        });
-    }
-    const payments = await PaymentsService.getStudentPayments(studentId);
-    res.status(200).json(payments);
+router.use('/:studentId/payments', paymentRouter);
+
+router.get('/:studentId/lessons', async (req, res) => {
+    const studentId = validateStudentId(req, res);
+    if (studentId == -1) return;
+    const student = await LessonsService.getStudentLessons(studentId);
+    res.status(200).json(student);
 });
 
-router.post('/:studentId/payments/', async (req, res) => {
-    const studentId = Number(req.params.studentId);
-    if (Number.isNaN(studentId)) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'Invalid input. Wrong studentId provided.',
-        });
-    }
-    const payment = await PaymentsService.addPayment({
-        ...req.body,
-        studentId: studentId,
-    });
-    res.status(200).json(payment);
+router.post('/:studentId/lessons', async (req, res) => {
+    const studentId = validateStudentId(req, res);
+    if (studentId == -1) return;
+    const student = await LessonsService.addUserLesson(studentId, req.body);
+    res.status(200).json(student);
 });
 
 router.post('/', async (req, res, next) => {
     const createdStudent = await StudentService.createStudent(req.body);
     res.status(200).json(createdStudent);
 });
+
+const validateStudentId = (req: Request, res: Response): number => {
+    const studentId = Number(req.params.studentId);
+    if (Number.isNaN(studentId)) {
+        res.status(400).json({
+            status: 'error',
+            message: 'Invalid input. Wrong studentId provided.',
+        });
+        return -1;
+    }
+    return studentId;
+};
 
 export default router;

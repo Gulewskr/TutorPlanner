@@ -5,16 +5,21 @@ var router: Router = express.Router();
 
 router.get('/', async (req, res) => {
     //const filters = {};
-    await LessonsService.getLessons(undefined);
+    const lessons = await LessonsService.getLessons(undefined);
+    res.status(200).json(lessons);
 });
 
 router.get('/:id', async (req, res) => {
-    await LessonsService.getLesson(Number(req.params.id));
+    const lesson = await LessonsService.getLesson(Number(req.params.id));
+    res.status(200).json(lesson);
 });
 
 router.post('/', async (req, res, next) => {
-    await LessonsService.createLssson(req.body);
-    res.status(200).json('Lessons has been created successfully.');
+    const lesson = await LessonsService.createLssson(req.body);
+    res.status(200).json({
+        message: 'Lessons has been created successfully.',
+        data: lesson,
+    });
 });
 
 /*
@@ -26,10 +31,21 @@ router.put('/:id', async (req, res, next) => {
             Number(req.params.id),
             req.body,
         );
+        const lesson = await LessonsService.getLesson(Number(req.params.id));
+        res.status(200).json({
+            message: 'Lessons has been updated successfully.',
+            data: lesson,
+        });
     } else {
-        await LessonsService.updateLesson(Number(req.params.id), req.body);
+        const lesson = await LessonsService.updateLesson(
+            Number(req.params.id),
+            req.body,
+        );
+        res.status(200).json({
+            message: 'Lessons has been updated successfully.',
+            data: lesson,
+        });
     }
-    res.status(200).json('Lessons has been created successfully.');
 });
 
 router.post('/:id/pay', async (req, res, next) => {

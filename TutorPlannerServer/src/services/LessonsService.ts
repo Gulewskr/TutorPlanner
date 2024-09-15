@@ -11,7 +11,7 @@ import { addWeeks } from 'date-fns';
 interface LessonInput {
     name: string;
     description: string;
-    student: number;
+    student?: number;
     price: number;
     date: Date;
     startHour: string;
@@ -39,6 +39,10 @@ class LessonsService {
 
     public async getLessons(filters?: lessonFilters): Promise<Lesson[]> {
         return await lessonRepository.getAllLessons();
+    }
+
+    public async getStudentLessons(studnetId: number): Promise<Lesson[]> {
+        return await lessonRepository.getLessonsByStudentId(studnetId);
     }
 
     public async getNotPaidStudentLessons(
@@ -83,6 +87,16 @@ class LessonsService {
                 isPaid: false,
                 studentId: studentId,
             },
+        });
+    }
+
+    public async addUserLesson(
+        studnetId: number,
+        lesson: LessonInput,
+    ): Promise<void> {
+        return await this.createLssson({
+            ...lesson,
+            student: studnetId,
         });
     }
 
