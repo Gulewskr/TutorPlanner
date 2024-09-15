@@ -1,6 +1,6 @@
 import { Student, studentRepository } from '../models/student';
 
-interface StudentCreateInput {
+interface StudentInput {
     firstname: string;
     surename: string;
     class?: string;
@@ -29,12 +29,16 @@ class StudentService {
         }
         return student;
     }
-    public async createStudent(student: StudentCreateInput): Promise<Student> {
-        console.log(`creating...`);
-        console.log(student);
+    public async createStudent(student: StudentInput): Promise<Student> {
         return await studentRepository.createStudent(student);
+    }
+    public async updateStudent(
+        studentId: number,
+        student: StudentInput,
+    ): Promise<Student> {
+        return await studentRepository.updateStudent(studentId, student);
     }
 }
 
 export default new StudentService();
-export { StudentCreateInput };
+export { StudentInput };

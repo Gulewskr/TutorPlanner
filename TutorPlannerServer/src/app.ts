@@ -5,6 +5,7 @@ import logger from 'morgan';
 
 import router from './routes/index';
 import studentsRouter from './routes/students';
+import lessonsRouter from './routes/lessons';
 
 var app: Express = express();
 const port = 3000;
@@ -16,6 +17,7 @@ app.use(cookieParser());
 
 app.use('/', router);
 app.use('/students', studentsRouter);
+app.use('/lessons', lessonsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req: Request, res: Response, next: NextFunction) {
