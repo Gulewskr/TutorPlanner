@@ -17,6 +17,7 @@ model Student {
     defaultPrice Float?
     ContactData  ContactData[]
     Payment      Payment[]
+    Lesson       LessonData[]
 }
 
 model ContactData {
@@ -42,49 +43,59 @@ model Payment {
     student   Student  @relation(fields: [studentId], references: [id])
 }
 
-model Lesson {
-    id          Int      @id @default(autoincrement())
-    studentId   Int
-    eventId     Int
-    price       Float
-    isPaid      Boolean
-    date        DateTime
-    description String
-    startHour   String
-    endHour     String
-    isCanceled  Boolean
-    event       Event    @relation(fields: [eventId], references: [id])
-}
+model LessonData {
+    id     Int     @id @default(autoincrement())
+    price  Float
+    isPaid Boolean @default(false)
 
-model SingleEvent {
-    id          Int      @id @default(autoincrement())
-    eventId     Int
-    name        String
-    date        DateTime
-    description String
-    startHour   String
-    endHour     String
-    isCanceled  Boolean
-    event       Event    @relation(fields: [eventId], references: [id])
+    studentId Int
+    student   Student @relation(fields: [studentId], references: [id])
+
+    eventId Int   @unique
+    event   Event @relation(fields: [eventId], references: [id])
 }
 
 model Event {
-    id          Int           @id @default(autoincrement())
+    id           Int       @id @default(autoincrement())
+    date         DateTime
+    isCanceled   Boolean   @default(false)
+    isOverridden Boolean   @default(false)
+    type         EventType
+
+    lessonData LessonData?
+
+    eventSeriesId Int?
+    eventSeries   EventSeries? @relation(fields: [eventSeriesId], references: [id])
+
     name        String
-    description String
-    startHour   String
-    endHour     String
-    type        EventType
-    pattern     String?
-    startDate   DateTime?
-    endDate     DateTime?
-    isCanceled  Boolean
-    events      SingleEvent[]
-    lesson      Lesson[]
+    description String?
+    startHour   String?
+    endHour     String?
 }
 
+model EventSeries {
+    id         Int             @id @default(autoincrement())
+    type       EventSeriesType
+    pattern    String?
+    startDate  DateTime?
+    endDate    DateTime?
+    isCanceled Boolean         @default(false)
+
+    name        String
+    description String?
+    startHour   String?
+    endHour     String?
+
+    events Event[]
+}
+
+//TODO - make possible to user create own event types
 enum EventType {
-    SINGLE
+    DEFAULT
+    LESSON
+}
+
+enum EventSeriesType {
     DAILY
     WEEKLY
     MONTHLY

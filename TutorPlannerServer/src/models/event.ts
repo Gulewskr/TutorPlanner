@@ -13,8 +13,20 @@ const eventRepository = {
     getAllEvents: async (): Promise<Event[]> => {
         return await prisma.event.findMany();
     },
+    getEventsInTimeFrame: async (
+        startDate: Date,
+        endDate: Date,
+    ): Promise<Event[]> => {
+        return await prisma.event.findMany({
+            where: {
+                date: {
+                    gte: startDate,
+                    lte: endDate,
+                },
+            },
+        });
+    },
     createEvent: async (event: Prisma.EventCreateInput): Promise<Event> => {
-        //TODO - add transaction - for event series
         return await prisma.event.create({
             data: event,
         });
@@ -31,9 +43,6 @@ const eventRepository = {
         });
     },
     deleteEvent: async (id: number): Promise<Event> => {
-        //TODO - add transaction
-        await prisma.singleEvent.deleteMany({ where: { eventId: id } });
-        await prisma.lesson.deleteMany({ where: { eventId: id } });
         return await prisma.event.delete({
             where: {
                 id: id,
