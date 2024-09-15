@@ -4,12 +4,12 @@ import { Layout } from '../Layout';
 import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-export const Profile: React.FC<
-    NativeStackScreenProps<RootStackParamList, 'Profile'>
+export const Students: React.FC<
+    NativeStackScreenProps<RootStackParamList, 'Students'>
 > = ({ navigation, route }) => {
     return (
         <Layout navigation={navigation} route={'Students'}>
-            <Text>This is {route.params?.name}'s profile</Text>
+            <Text>Students list</Text>
         </Layout>
     );
 };
