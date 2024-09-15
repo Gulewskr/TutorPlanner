@@ -14,6 +14,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res, next) => {
     const studentId = Number((req.params as any).studentId);
+    console.log(studentId);
     const payment = await PaymentsService.addPayment({
         ...req.body,
         studentId: Number.isNaN(studentId) ? req.body.studentId : studentId,

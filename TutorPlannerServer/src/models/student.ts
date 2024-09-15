@@ -19,7 +19,6 @@ const studentRepository = {
         const createdStudent = await prisma.student.create({
             data: student,
         });
-        console.log('CREATED!');
         return createdStudent;
     },
     updateStudent: async (

@@ -3,12 +3,11 @@ import { PrismaClient, Prisma, Event, EventType } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export type LessonDAO = Event & {
-    lessonData: {
-        id: number;
-        price: number;
-        isPaid: boolean;
-        studentId: number;
-    } | null;
+    startHour: string;
+    endHour: string;
+    price: number;
+    isPaid: boolean;
+    studentId: number;
 };
 
 type UpdateLessonInput = {
@@ -23,94 +22,71 @@ type UpdateLessonInput = {
     studentId: number;
 };
 
+//TODO remove not related to Lesson type fucntions
 const lessonRepository = {
     createLesson: async (
         lesson: Prisma.EventCreateInput,
     ): Promise<LessonDAO> => {
-        return await prisma.event.create({
+        return (await prisma.event.create({
             data: {
                 ...lesson,
                 type: 'LESSON',
             },
-            include: {
-                lessonData: true,
-            },
-        });
+        })) as LessonDAO;
     },
     getLessonById: async (id: number): Promise<LessonDAO | null> => {
-        return await prisma.event.findFirst({
-            include: {
-                lessonData: true,
-            },
+        return (await prisma.event.findFirst({
             where: {
+                type: 'LESSON',
                 id: id,
             },
-        });
+        })) as LessonDAO;
     },
     getLessonsByStudentId: async (studentId: number): Promise<LessonDAO[]> => {
-        return await prisma.event.findMany({
-            include: {
-                lessonData: true,
-            },
+        return (await prisma.event.findMany({
             where: {
-                lessonData: {
-                    studentId: studentId,
-                },
+                type: 'LESSON',
+                studentId: studentId,
             },
-        });
+        })) as LessonDAO[];
     },
     getLessonByEventSeriesId: async (id: number): Promise<LessonDAO[]> => {
-        return await prisma.event.findMany({
-            include: {
-                lessonData: true,
-            },
+        return (await prisma.event.findMany({
             where: {
-                NOT: {
-                    lessonData: null,
-                },
+                type: 'LESSON',
                 eventSeriesId: id,
             },
-        });
+        })) as LessonDAO[];
     },
     getAllLessons: async (
         filter?: Prisma.EventWhereInput,
     ): Promise<LessonDAO[]> => {
-        return await prisma.event.findMany({
+        return (await prisma.event.findMany({
             where: {
                 ...filter,
-                NOT: {
-                    lessonData: null,
-                },
-            },
-            include: {
-                lessonData: true,
+                type: 'LESSON',
             },
             orderBy: {
                 date: 'asc',
             },
-        });
+        })) as LessonDAO[];
     },
     getLessonsInTimeFrame: async (
         startDate: Date,
         endDate: Date,
     ): Promise<LessonDAO[]> => {
-        return await prisma.event.findMany({
+        return (await prisma.event.findMany({
             where: {
-                NOT: {
-                    lessonData: null,
-                },
+                type: 'LESSON',
                 date: {
                     gte: startDate,
                     lte: endDate,
                 },
             },
-            include: {
-                lessonData: true,
-            },
             orderBy: {
                 date: 'asc',
             },
-        });
+        })) as LessonDAO[];
     },
     createLessons: async (
         inputData: Prisma.EventCreateManyInput[],
@@ -123,34 +99,13 @@ const lessonRepository = {
         id: number,
         lesson: Prisma.EventUpdateInput,
     ): Promise<LessonDAO> => {
-        return await prisma.event.update({
+        return (await prisma.event.update({
             data: lesson,
             where: {
                 id: id,
+                type: 'LESSON',
             },
-            include: {
-                lessonData: true,
-            },
-        });
-    },
-    updateLessonData: async (
-        eventId: number,
-        lesson: Prisma.LessonDataUpdateInput,
-    ): Promise<LessonDAO> => {
-        await prisma.lessonData.update({
-            data: lesson,
-            where: {
-                eventId: eventId,
-            },
-        });
-        return await prisma.event.findFirstOrThrow({
-            include: {
-                lessonData: true,
-            },
-            where: {
-                id: eventId,
-            },
-        });
+        })) as LessonDAO;
     },
     updateLessonSeriesByEventId: async (
         id: number,
@@ -186,24 +141,13 @@ const lessonRepository = {
                 },
             },
         });
-        await prisma.lessonData.updateMany({
-            data: lesson,
-            where: {
-                event: {
-                    eventSeriesId: eventSeries.eventSeriesId,
-                },
-            },
-        });
     },
     deleteLesson: async (id: number): Promise<LessonDAO> => {
-        return await prisma.event.delete({
+        return (await prisma.event.delete({
             where: {
                 id: id,
             },
-            include: {
-                lessonData: true,
-            },
-        });
+        })) as LessonDAO;
     },
 };
 

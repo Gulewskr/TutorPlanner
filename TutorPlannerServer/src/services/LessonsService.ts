@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { CONFIG } from '../config';
 import { eventSeriesRepository } from '../models/eventSeries';
 import {
@@ -49,10 +50,8 @@ class LessonsService {
         studentId: number,
     ): Promise<LessonDAO[]> {
         return await lessonRepository.getAllLessons({
-            lessonData: {
-                isPaid: true,
-                studentId: studentId,
-            },
+            isPaid: true,
+            studentId: studentId,
             date: {
                 lt: new Date(),
             },
@@ -63,16 +62,10 @@ class LessonsService {
         studentId: number,
     ): Promise<PayedLessonsData> {
         const lessons: LessonDAO[] = await lessonRepository.getAllLessons({
-            lessonData: {
-                isPaid: true,
-                studentId: studentId,
-            },
+            isPaid: true,
+            studentId: studentId,
         });
-        const sum: number = lessons.reduce(
-            (a, b): number =>
-                b.lessonData?.price ? b.lessonData?.price + a : a,
-            0,
-        );
+        const sum: number = lessons.reduce((a, b): number => b.price + a, 0);
         return {
             lessons,
             sum,
@@ -83,10 +76,8 @@ class LessonsService {
         studentId: number,
     ): Promise<LessonDAO[]> {
         return await lessonRepository.getAllLessons({
-            lessonData: {
-                isPaid: false,
-                studentId: studentId,
-            },
+            isPaid: false,
+            studentId: studentId,
         });
     }
 
@@ -101,19 +92,15 @@ class LessonsService {
     }
 
     public async createLssson(lesson: LessonInput): Promise<void> {
-        if (lesson.weekly) {
+        if (!lesson.weekly) {
             await lessonRepository.createLesson({
                 name: lesson.name,
                 date: lesson.date,
                 type: 'LESSON',
-                lessonData: {
-                    create: {
-                        price: lesson.price,
-                        student: {
-                            connect: {
-                                id: lesson.student,
-                            },
-                        },
+                price: lesson.price,
+                student: {
+                    connect: {
+                        id: lesson.student,
                     },
                 },
             });
@@ -126,7 +113,7 @@ class LessonsService {
                 type: 'WEEKLY',
                 isCanceled: false,
             });
-            const inputData = [];
+            const inputData: Prisma.EventCreateManyInput[] = [];
             let lessonDate = lesson.date;
             while (lessonDate < CONFIG.MAX_LESSONS_DATE) {
                 inputData.push({
@@ -136,13 +123,8 @@ class LessonsService {
                     description: lesson.description,
                     startHour: lesson.startHour,
                     endHour: lesson.endHour,
-                    lessonData: {
-                        create: {
-                            price: lesson.price,
-                            date: lesson.date,
-                            studentId: lesson.student,
-                        },
-                    },
+                    price: lesson.price,
+                    studentId: lesson.student,
                     eventSeriesId: series.id,
                 });
                 lessonDate = addWeeks(lessonDate, 1);
@@ -155,8 +137,8 @@ class LessonsService {
         lessonId: number,
         data: Partial<LessonInput>,
     ): Promise<void> {
+        //TODO
         await lessonRepository.updateLesson(lessonId, {
-            ...data,
             isOverridden: true,
         });
     }
@@ -170,11 +152,7 @@ class LessonsService {
 
     public async markLessonAsPaid(lessonId: number): Promise<void> {
         await lessonRepository.updateLesson(lessonId, {
-            lessonData: {
-                update: {
-                    isPaid: true,
-                },
-            },
+            isPaid: true,
         });
     }
 

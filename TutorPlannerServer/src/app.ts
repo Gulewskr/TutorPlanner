@@ -7,6 +7,7 @@ import router from './routes/index';
 import studentsRouter from './routes/students';
 import lessonsRouter from './routes/lessons';
 import paymentsRouter from './routes/payments';
+import { addDemoData } from './demoData/addDemoData';
 
 var app: Express = express();
 const port = 3000;
@@ -45,5 +46,7 @@ app.use(function (
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
+
+addDemoData();
 
 module.exports = app;

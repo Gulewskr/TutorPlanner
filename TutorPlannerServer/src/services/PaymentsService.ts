@@ -1,10 +1,11 @@
 import { Prisma } from '@prisma/client';
 import { Payment, paymentRepository } from '../models/payment';
+import { validateDateFormat } from '../utils/utils';
 
 interface PaymentInput {
     studentId: number;
     price: number;
-    date?: Date;
+    date?: string;
 }
 
 interface Filters {}
@@ -26,16 +27,18 @@ class PaymentsService {
         return await paymentRepository.getPaymentByStudentId(studentId);
     }
 
-    public async addPayment(data: PaymentInput): Promise<void> {
+    public async addPayment(data: PaymentInput): Promise<Payment> {
+        const paymentDate = validateDateFormat(data.date);
         const payment = await paymentRepository.createPayment({
             price: data.price,
-            date: data.date || '',
+            date: paymentDate,
             student: {
                 connect: {
                     id: data.studentId,
                 },
             },
         });
+        return payment;
     }
 
     public async updatePayment(

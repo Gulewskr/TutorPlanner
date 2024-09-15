@@ -17,7 +17,7 @@ model Student {
     defaultPrice Float?
     ContactData  ContactData[]
     Payment      Payment[]
-    Lesson       LessonData[]
+    Event        Event[]
 }
 
 model ContactData {
@@ -43,18 +43,6 @@ model Payment {
     student   Student  @relation(fields: [studentId], references: [id])
 }
 
-model LessonData {
-    id     Int     @id @default(autoincrement())
-    price  Float
-    isPaid Boolean @default(false)
-
-    studentId Int
-    student   Student @relation(fields: [studentId], references: [id])
-
-    eventId Int   @unique
-    event   Event @relation(fields: [eventId], references: [id])
-}
-
 model Event {
     id           Int       @id @default(autoincrement())
     date         DateTime
@@ -62,15 +50,20 @@ model Event {
     isOverridden Boolean   @default(false)
     type         EventType
 
-    lessonData LessonData?
-
     eventSeriesId Int?
     eventSeries   EventSeries? @relation(fields: [eventSeriesId], references: [id])
 
+    //Generic data
     name        String
     description String?
     startHour   String?
     endHour     String?
+
+    //LessonData
+    price     Float?
+    isPaid    Boolean? @default(false)
+    studentId Int?
+    student   Student? @relation(fields: [studentId], references: [id])
 }
 
 model EventSeries {
