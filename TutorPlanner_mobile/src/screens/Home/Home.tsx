@@ -4,6 +4,7 @@ import CustomButton from '../../components/button/Button';
 import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
+import CustomHeader from '../../components/header/Header';
 
 export const Home: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Home'>
@@ -13,6 +14,14 @@ export const Home: React.FC<
     return (
         <Layout navigation={navigation} route={'Home'}>
             <StatusBar style="auto" />
+
+            <CustomHeader
+                optionalText={'Dziś jest wspaniały dzień do działania :)'}
+                secondIcon="settings"
+                secondAction={() => navigation.navigate('Settings')}
+            >
+                Witaj, Natalcia!
+            </CustomHeader>
 
             <View style={styles.double_button_container}>
                 <CustomButton

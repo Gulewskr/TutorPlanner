@@ -1,75 +1,72 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { NavbarNavigationScreens, RootStackParamList } from '../../App';
-import { Icon } from '../icon/Icon';
+import { ICON_NAME } from '../icon/Icon';
 import CustomButton from '../button/Button';
 
 interface HeaderProps {
-    navigation: NativeStackNavigationProp<RootStackParamList, any, any>;
-    route: NavbarNavigationScreens;
+    firstIcon?: ICON_NAME;
+    firstAction?: () => void;
+    optionalText?: string;
+    secondIcon?: ICON_NAME;
+    secondAction?: () => void;
+    centered?: boolean;
+    children: React.ReactNode;
 }
 
-const CustomHeader: React.FC<HeaderProps> = ({ navigation, route }) => {
-    const isHome = route === 'Home';
-
-    type ROUTE_NAME =
-        | 'Payments'
-        | 'Calendar'
-        | 'Students'
-        | 'Profile'
-        | 'Home'
-        | 'Notes'
-        | 'Settings';
-
-    const titleMap: { [key in ROUTE_NAME]: string } = {
-        Payments: 'Płatności',
-        Calendar: 'Kalendarz',
-        Students: 'Studenci',
-        Profile: 'Profil',
-        Home: 'Strona główna',
-        Notes: 'Notatki',
-        Settings: 'Ustawienia',
-    };
+const CustomHeader: React.FC<HeaderProps> = ({
+    firstIcon,
+    firstAction,
+    optionalText,
+    secondIcon,
+    secondAction,
+    centered = false,
+    children,
+}) => {
     return (
-        <View style={styles.header}>
-            {isHome || (
-                <Pressable
-                    style={styles.go_back}
-                    onPress={() => navigation.goBack()}
-                >
-                    <Icon icon={'back'} size="sm" />
-                </Pressable>
-            )}
+        <View style={styles.header_container}>
+            <View style={styles.header}>
+                {firstAction && (
+                    <Pressable style={styles.first_icon} onPress={firstAction}>
+                        <CustomButton
+                            icon={firstIcon}
+                            type="icon-button"
+                            secondary
+                            onClick={firstAction}
+                        />
+                    </Pressable>
+                )}
 
-            <View
-                style={[
-                    styles.text_container,
-                    { alignItems: isHome ? '' : 'center' },
-                ]}
-            >
-                <Text style={styles.main_text}>
-                    {isHome ? 'Witaj, Natalcia!' : titleMap[route]}
-                </Text>
-                {isHome && (
-                    <Text style={styles.optional_text}>
-                        Dziś jest wspaniały dzień do działania :)
-                    </Text>
+                <View
+                    style={[
+                        styles.text_container,
+                        {
+                            alignItems: centered ? 'center' : 'flex-start',
+                            paddingRight: secondIcon ? 0 : 50,
+                            paddingLeft: firstIcon ? 0 : centered ? 50 : 20,
+                        },
+                    ]}
+                >
+                    <Text style={styles.main_text}>{children}</Text>
+                    {optionalText && (
+                        <Text style={styles.optional_text}>{optionalText}</Text>
+                    )}
+                </View>
+
+                {secondAction && (
+                    <Pressable
+                        style={styles.second_icon}
+                        onPress={secondAction}
+                    >
+                        <CustomButton
+                            icon={secondIcon}
+                            type="icon-button"
+                            secondary
+                            onClick={secondAction}
+                        />
+                    </Pressable>
                 )}
             </View>
-
-            <Pressable
-                style={styles.options}
-                onPress={() => navigation.goBack()}
-            >
-                <CustomButton
-                    icon="settings"
-                    type="icon-button"
-                    secondary
-                    onClick={() => navigation.navigate('Settings')}
-                />
-            </Pressable>
         </View>
     );
 };
@@ -79,25 +76,29 @@ CustomHeader.displayName = 'Header';
 export default CustomHeader;
 
 const styles = EStyleSheet.create({
-    header: {
-        height: 100,
-        paddingTop: 20,
+    header_container: {
+        position: 'absolute',
+        paddingTop: 15,
+        top: 0,
         width: '100%',
-        display: 'flex',
+    },
+
+    header: {
+        height: 80,
+        width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         zIndex: 10,
     },
 
-    go_back: {
+    first_icon: {
         marginLeft: 10,
     },
 
     text_container: {
-        width: '70%',
-        marginLeft: 20,
-        display: 'flex',
+        flex: 1,
+        alignItems: 'center',
     },
 
     main_text: {
@@ -109,7 +110,7 @@ const styles = EStyleSheet.create({
         fontSize: 14,
     },
 
-    options: {
+    second_icon: {
         marginRight: 10,
     },
 });

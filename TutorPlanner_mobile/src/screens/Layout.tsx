@@ -19,7 +19,6 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
 }) => {
     return (
         <View style={styles.container}>
-            <CustomHeader navigation={navigation} route={route}></CustomHeader>
             <LinearGradient
                 colors={['#FFC3FF', '#FFFCE3']}
                 style={styles.background}
@@ -64,6 +63,7 @@ const styles = EStyleSheet.create({
     },
     scrollContent: {
         flexGrow: 1,
+        paddingTop: 100,
         justifyContent: 'center',
         alignItems: 'center',
         paddingBottom: 50,
