@@ -1,10 +1,9 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { Icon, ICON_NAME } from '../icon/Icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { NavbarNavigationScreens, RootStackParamList } from '../../App';
-import { RouteProp } from '@react-navigation/native';
+import { Icon, ICON_NAME } from '../icon/Icon';
 
 interface IconProps {
     name: NavbarNavigationScreens;
@@ -86,10 +85,8 @@ Navbar.displayName = 'Navbar';
 
 const styles = EStyleSheet.create({
     navbar: {
-        position: 'absolute',
         display: 'flex',
         alignItems: 'center',
-        bottom: 0,
         width: '100%',
         height: 56,
         borderTopWidth: 1,
@@ -106,7 +103,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
     },
     navbarItem__active: {
-        backgroundColor: '$backgroundColorWhite',
+        // backgroundColor: '$backgroundColorWhite',
         width: '100%',
         aspectRatio: 1,
         borderRadius: 50,
@@ -115,22 +112,25 @@ const styles = EStyleSheet.create({
     },
     navbarItem__active_border: {
         position: 'absolute',
-        top: 0,
+        top: 36,
         left: 0,
         width: '100%',
-        height: '100%',
+        height: '50%',
         aspectRatio: 1,
-        borderRadius: 50,
+        borderBottomLeftRadius: 50,
+        borderBottomRightRadius: 50,
         borderWidth: 1,
         borderColor: '$colorBlack',
         borderStartColor: 'white',
     },
     navbarItem__active_border_after: {
         position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
+        top: 35,
+        left: 1,
+        width: '97%',
         height: '50%',
+        borderBottomLeftRadius: 50,
+        borderBottomRightRadius: 50,
         backgroundColor: '$backgroundColorWhite',
     },
     activeIconContainer: {
@@ -141,6 +141,8 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         border: '0.5px solid $colorBlack',
+        borderWidth: 1,
+        borderColor: '$colorBlack',
     },
 });
 

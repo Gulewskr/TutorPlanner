@@ -1,10 +1,11 @@
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { PropsWithChildren } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Navbar from '../components/navbar/Navbar';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { NavbarNavigationScreens, RootStackParamList } from '../App';
+import CustomHeader from '../components/header/Header';
 
 interface LayoutProps {
     navigation: NativeStackNavigationProp<RootStackParamList, any, any>;
@@ -18,14 +19,25 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
 }) => {
     return (
         <View style={styles.container}>
+            <CustomHeader navigation={navigation} route={route}></CustomHeader>
             <LinearGradient
                 colors={['#FFC3FF', '#FFFCE3']}
-                //colors={['red', 'black']}
                 style={styles.background}
                 start={{ x: 0.55, y: 0.2 }}
                 end={{ x: 1, y: 0.7 }}
             />
-            {children}
+
+            <ScrollView contentContainerStyle={styles.scrollContent}>
+                {children}
+            </ScrollView>
+
+            <LinearGradient
+                colors={['transparent', 'rgba(255, 252, 227, .9)', '#FFFCE3']}
+                style={styles.fade}
+                start={{ x: 0.5, y: 0 }}
+                end={{ x: 0.5, y: 1 }}
+            />
+
             <Navbar navigation={navigation} route={route} />
         </View>
     );
@@ -34,9 +46,6 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'orange',
         zIndex: 1,
     },
     background: {
@@ -45,5 +54,18 @@ const styles = EStyleSheet.create({
         top: 0,
         height: '100%',
         width: '100%',
+    },
+    fade: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        height: '20%',
+    },
+    scrollContent: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingBottom: 50,
     },
 });

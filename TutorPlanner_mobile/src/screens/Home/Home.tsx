@@ -12,14 +12,35 @@ export const Home: React.FC<
 
     return (
         <Layout navigation={navigation} route={'Home'}>
-            <Text>😘</Text>
-            <Text>HOME SCREEN</Text>
-            <Text>
-                (to tylko tekst ale to już znak że zaczynamy działać :D)
-            </Text>
             <StatusBar style="auto" />
 
-            {users.map((user, i) => (
+            <View style={styles.double_button_container}>
+                <CustomButton
+                    icon="addLesson"
+                    onClick={() => 1}
+                    label="Dodaj zajęcia"
+                />
+                <CustomButton
+                    icon="addStudent"
+                    onClick={() => 1}
+                    label="Dodaj ucznia"
+                />
+            </View>
+
+            <View style={styles.double_button_container}>
+                <CustomButton
+                    icon="addPayment"
+                    onClick={() => 1}
+                    label="Dodaj płatność"
+                />
+                <CustomButton
+                    icon="notes"
+                    onClick={() => 1}
+                    label="Dodaj notatkę"
+                />
+            </View>
+
+            {/* {users.map((user, i) => (
                 <CustomButton
                     key={`user-${i}`}
                     icon="minus"
@@ -28,50 +49,17 @@ export const Home: React.FC<
                         navigation.navigate('Profile', { name: user })
                     }
                 />
-            ))}
-
-            <View style={{ gap: 10 }}>
-                <CustomButton
-                    key={1}
-                    icon="minus"
-                    secondary
-                    isDisabled
-                    label="Usuń"
-                    onClick={() => 1}
-                />
-                <CustomButton
-                    key={12}
-                    icon="minus"
-                    secondary
-                    isDisabled
-                    label="Usuń"
-                    onClick={() => 1}
-                />
-                <CustomButton
-                    key={13}
-                    icon="minus"
-                    label="Usuń"
-                    secondary
-                    isDisabled
-                    onClick={() => 1}
-                />
-                <CustomButton
-                    key={31}
-                    icon="minus"
-                    label="Usuń"
-                    secondary
-                    isDisabled
-                    onClick={() => 1}
-                />
-                <CustomButton
-                    key={14}
-                    icon="minus"
-                    label="Usuń"
-                    secondary
-                    isDisabled
-                    onClick={() => 1}
-                />
-            </View>
+            ))} */}
         </Layout>
     );
 };
+
+const styles = StyleSheet.create({
+    double_button_container: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 10,
+        marginTop: 5,
+        marginBottom: 5,
+    },
+});

@@ -9,6 +9,7 @@ import { Students } from './screens/Students/Students';
 import { Payments } from './screens/Payments/Payments';
 import { Notes } from './screens/Notes/Notes';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { Settings } from './screens/Settings/Settings';
 
 EStyleSheet.build({
     $colorBlack: '#070707',
@@ -31,6 +32,7 @@ export type RootStackParamList = {
     Students: undefined;
     Payments: undefined;
     Notes: undefined;
+    Settings: undefined;
 };
 
 export type NavbarNavigationScreens =
@@ -39,7 +41,8 @@ export type NavbarNavigationScreens =
     | 'Calendar'
     | 'Students'
     | 'Payments'
-    | 'Notes';
+    | 'Notes'
+    | 'Settings';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -66,6 +69,7 @@ const App: React.FC<{}> = () => {
                 <Stack.Screen name="Students" component={Students} />
                 <Stack.Screen name="Payments" component={Payments} />
                 <Stack.Screen name="Notes" component={Notes} />
+                <Stack.Screen name="Settings" component={Settings} />
             </Stack.Navigator>
         </NavigationContainer>
     );

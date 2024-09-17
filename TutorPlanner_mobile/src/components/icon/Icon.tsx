@@ -12,7 +12,12 @@ export type ICON_NAME =
     | 'students'
     | 'home'
     | 'payments'
-    | 'notes';
+    | 'notes'
+    | 'back'
+    | 'settings'
+    | 'addLesson'
+    | 'addPayment'
+    | 'addStudent';
 
 const iconsMap: { [key in ICON_NAME]: any } = {
     minus: require('../../assets/icons/minus.png'),
@@ -22,6 +27,11 @@ const iconsMap: { [key in ICON_NAME]: any } = {
     home: require('../../assets/icons/home.png'),
     payments: require('../../assets/icons/payments.png'),
     notes: require('../../assets/icons/notes.png'),
+    back: require('../../assets/icons/back.png'),
+    settings: require('../../assets/icons/settings.png'),
+    addStudent: require('../../assets/icons/addStudent.png'),
+    addPayment: require('../../assets/icons/addPayment.png'),
+    addLesson: require('../../assets/icons/addLesson.png'),
 };
 
 export const Icon: React.FC<IconProps> = ({ icon, size }) => (

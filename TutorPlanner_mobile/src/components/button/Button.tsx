@@ -7,7 +7,7 @@ interface ButtonProps {
     secondary?: boolean;
     type?: 'button' | 'icon-button';
     icon?: ICON_NAME;
-    label: string;
+    label?: string;
     onClick: () => void;
     isDisabled?: boolean;
 }
@@ -48,7 +48,7 @@ const CustomButton: React.FC<ButtonProps> = ({
             >
                 <View style={style.content}>
                     {icon && <Icon icon={icon} />}
-                    {label && <Text style={style.text}>{label}</Text>}
+                    {isIconButton || <Text style={style.text}>{label}</Text>}
                 </View>
             </Pressable>
             <View style={[style.shadow, { height: buttonHeight, width }]} />
@@ -62,9 +62,13 @@ export default CustomButton;
 
 const styles = (secondary: boolean, pressed: boolean, isDisabled: boolean) =>
     EStyleSheet.create({
-        container: { position: 'relative', width: 200 },
+        container: {
+            position: 'relative',
+            flexDirection: 'row',
+        },
         iconButton: {
             width: 40,
+            minWidth: 40,
         },
 
         button: {
@@ -72,7 +76,12 @@ const styles = (secondary: boolean, pressed: boolean, isDisabled: boolean) =>
             justifyContent: 'center',
             minHeight: 40,
             borderRadius: 10,
-            width: 'auto',
+            flexGrow: 1,
+            flexShrink: 1,
+            maxWidth: 320,
+            width: 155,
+            minWidth: 130,
+
             backgroundColor: isDisabled
                 ? '#6F6F6F'
                 : secondary
