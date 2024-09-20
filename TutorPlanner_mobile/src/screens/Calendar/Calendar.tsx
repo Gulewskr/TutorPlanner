@@ -3,6 +3,7 @@ import { Layout } from '../Layout';
 import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import CustomHeader from '../../components/header/Header';
+import React from 'react';
 
 export const Calendar: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Calendar'>
