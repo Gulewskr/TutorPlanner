@@ -1,6 +1,6 @@
+import { Icon, ICON_NAME } from '@components/Icon';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { Icon, ICON_NAME } from '../icon/Icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 interface ButtonProps {
@@ -12,7 +12,7 @@ interface ButtonProps {
     isDisabled?: boolean;
 }
 
-const CustomButton: React.FC<ButtonProps> = ({
+const Button: React.FC<ButtonProps> = ({
     onClick,
     secondary = false,
     type = 'button',
@@ -56,9 +56,9 @@ const CustomButton: React.FC<ButtonProps> = ({
     );
 };
 
-CustomButton.displayName = 'Button';
+Button.displayName = 'Button';
 
-export default CustomButton;
+export default Button;
 
 const styles = (secondary: boolean, pressed: boolean, isDisabled: boolean) =>
     EStyleSheet.create({

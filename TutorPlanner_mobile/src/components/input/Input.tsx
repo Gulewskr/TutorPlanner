@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, TextInput, Image } from 'react-native';
-import { Icon, ICON_NAME } from '../icon/Icon';
+import { Icon, ICON_NAME } from '@components/Icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 interface InputProps {

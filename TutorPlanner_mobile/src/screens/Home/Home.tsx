@@ -1,10 +1,10 @@
-import { Button, View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import CustomButton from '../../components/button/Button';
+import { Button } from '@components/Button';
 import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
-import CustomHeader from '../../components/header/Header';
+import { Header } from '@components/Header';
 
 export const Home: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Home'>
@@ -15,21 +15,21 @@ export const Home: React.FC<
         <Layout navigation={navigation} route={'Home'}>
             <StatusBar style="auto" />
 
-            <CustomHeader
+            <Header
                 optionalText={'Dziś jest wspaniały dzień do działania :)'}
                 secondIcon="settings"
                 secondAction={() => navigation.navigate('Settings')}
             >
                 Witaj, Natalcia!
-            </CustomHeader>
+            </Header>
 
             <View style={styles.double_button_container}>
-                <CustomButton
+                <Button
                     icon="addLesson"
                     onClick={() => 1}
                     label="Dodaj zajęcia"
                 />
-                <CustomButton
+                <Button
                     icon="addStudent"
                     onClick={() => 1}
                     label="Dodaj ucznia"
@@ -37,16 +37,12 @@ export const Home: React.FC<
             </View>
 
             <View style={styles.double_button_container}>
-                <CustomButton
+                <Button
                     icon="addPayment"
                     onClick={() => 1}
                     label="Dodaj płatność"
                 />
-                <CustomButton
-                    icon="notes"
-                    onClick={() => 1}
-                    label="Dodaj notatkę"
-                />
+                <Button icon="notes" onClick={() => 1} label="Dodaj notatkę" />
             </View>
 
             {/* {users.map((user, i) => (

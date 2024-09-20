@@ -2,10 +2,9 @@ import { View, ScrollView } from 'react-native';
 import { PropsWithChildren } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Navbar from '../components/navbar/Navbar';
+import { Navbar } from '@components/Navbar';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { NavbarNavigationScreens, RootStackParamList } from '../App';
-import CustomHeader from '../components/header/Header';
 
 interface LayoutProps {
     navigation: NativeStackNavigationProp<RootStackParamList, any, any>;

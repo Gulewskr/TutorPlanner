@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { ICON_NAME } from '../icon/Icon';
-import CustomButton from '../button/Button';
+import { ICON_NAME } from '../Icon/Icon';
+import { Button } from '@components/Button';
 
 interface HeaderProps {
     firstIcon?: ICON_NAME;
@@ -14,7 +14,7 @@ interface HeaderProps {
     children: React.ReactNode;
 }
 
-const CustomHeader: React.FC<HeaderProps> = ({
+const Header: React.FC<HeaderProps> = ({
     firstIcon,
     firstAction,
     optionalText,
@@ -28,7 +28,7 @@ const CustomHeader: React.FC<HeaderProps> = ({
             <View style={styles.header}>
                 {firstAction && (
                     <Pressable style={styles.first_icon} onPress={firstAction}>
-                        <CustomButton
+                        <Button
                             icon={firstIcon}
                             type="icon-button"
                             secondary
@@ -58,7 +58,7 @@ const CustomHeader: React.FC<HeaderProps> = ({
                         style={styles.second_icon}
                         onPress={secondAction}
                     >
-                        <CustomButton
+                        <Button
                             icon={secondIcon}
                             type="icon-button"
                             secondary
@@ -71,9 +71,9 @@ const CustomHeader: React.FC<HeaderProps> = ({
     );
 };
 
-CustomHeader.displayName = 'Header';
+Header.displayName = 'Header';
 
-export default CustomHeader;
+export default Header;
 
 const styles = EStyleSheet.create({
     header_container: {

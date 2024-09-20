@@ -1,10 +1,8 @@
-import { Text } from 'react-native';
 import { Layout } from '../Layout';
 import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import CustomInput from '../../components/input/Input';
-import { ICON_NAME } from '../../components/icon/Icon';
-import CustomHeader from '../../components/header/Header';
+import { Input } from '@components/Input';
+import { Header } from '@components/Header';
 
 //In next version - disable in first release
 export const Notes: React.FC<
@@ -16,7 +14,7 @@ export const Notes: React.FC<
     ];
     return (
         <Layout navigation={navigation} route={'Notes'}>
-            <CustomHeader
+            <Header
                 firstIcon={'back'}
                 firstAction={() => navigation.goBack()}
                 secondIcon="settings"
@@ -24,14 +22,14 @@ export const Notes: React.FC<
                 centered
             >
                 Notatki
-            </CustomHeader>
+            </Header>
             {t.map(t => (
-                <CustomInput
+                <Input
                     key={t}
                     title="TEST INPUT"
                     label="TEST INPUT"
                     icon="minus"
-                ></CustomInput>
+                ></Input>
             ))}
         </Layout>
     );

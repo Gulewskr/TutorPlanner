@@ -5,7 +5,7 @@ interface IconProps {
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
-export type ICON_NAME =
+type ICON_NAME =
     | 'minus'
     | 'plus'
     | 'calendar'
@@ -34,7 +34,7 @@ const iconsMap: { [key in ICON_NAME]: any } = {
     addLesson: require('../../assets/icons/addLesson.png'),
 };
 
-export const Icon: React.FC<IconProps> = ({ icon, size }) => (
+const Icon: React.FC<IconProps> = ({ icon, size }) => (
     <Image
         source={iconsMap[icon]}
         style={[styles.icon, size == 'xs' && styles['icon-sm']]}
@@ -53,3 +53,6 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
 });
+
+export default Icon;
+export { type ICON_NAME };
