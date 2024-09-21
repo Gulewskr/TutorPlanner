@@ -9,16 +9,12 @@ export const Calendar: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Calendar'>
 > = ({ navigation, route }) => {
     return (
-        <Layout navigation={navigation} route={'Calendar'}>
-            <Header
-                firstIcon={'back'}
-                firstAction={() => navigation.goBack()}
-                secondIcon="settings"
-                secondAction={() => navigation.navigate('Settings')}
-                centered
-            >
-                Kalendarz
-            </Header>
+        <Layout
+            navigation={navigation}
+            route={'Calendar'}
+            title="Kalendarz"
+            hasHeader
+        >
             <Text>This is calendar</Text>
         </Layout>
     );

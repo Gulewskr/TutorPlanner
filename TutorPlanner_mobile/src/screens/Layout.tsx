@@ -1,21 +1,33 @@
-import { View, ScrollView } from 'react-native';
+import { View } from 'react-native';
 import { PropsWithChildren } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Navbar } from '@components/Navbar';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { NavbarNavigationScreens, RootStackParamList } from '../App';
+import { Header } from '@components/Header';
 
 interface LayoutProps {
     navigation: NativeStackNavigationProp<RootStackParamList, any, any>;
     route: NavbarNavigationScreens;
+    hasHeader?: boolean;
+    isHeaderCentered?: boolean;
+    title?: string;
+    subtitle?: string;
 }
 
 export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
     children,
     navigation,
+    hasHeader,
+    isHeaderCentered = true,
     route,
+    title,
+    subtitle,
 }) => {
+    const isBackButtonDisabled = !navigation.canGoBack();
+    const isSettingsButtonDisabled = route == 'Settings';
+
     return (
         <View style={styles.container}>
             <LinearGradient
@@ -24,9 +36,39 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
                 start={{ x: 0.55, y: 0.2 }}
                 end={{ x: 1, y: 0.7 }}
             />
-            <ScrollView contentContainerStyle={styles.scrollContent}>
+            {hasHeader && (
+                <View style={styles.header_container}>
+                    <Header
+                        leftIcon={isBackButtonDisabled ? undefined : 'back'}
+                        leftAction={
+                            isBackButtonDisabled
+                                ? undefined
+                                : () => navigation.goBack()
+                        }
+                        rightIcon={
+                            isSettingsButtonDisabled ? undefined : 'settings'
+                        }
+                        rightAction={
+                            isSettingsButtonDisabled
+                                ? undefined
+                                : () => navigation.navigate('Settings')
+                        }
+                        title={title}
+                        subtitle={subtitle}
+                        isCentered={isHeaderCentered}
+                    />
+                </View>
+            )}
+            <View
+                style={[
+                    styles.content,
+                    {
+                        marginTop: hasHeader ? 90 : 0,
+                    },
+                ]}
+            >
                 {children}
-            </ScrollView>
+            </View>
             <LinearGradient
                 colors={['transparent', 'rgba(255, 252, 227, .9)', '#FFFCE3']}
                 style={styles.bottomGradient}
@@ -41,18 +83,6 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
 };
 
 const styles = EStyleSheet.create({
-    container: {
-        zIndex: 1,
-        backgroundColor: 'red',
-        height: '100%',
-        position: 'relative',
-    },
-    navbar: {
-        position: 'absolute',
-        bottom: -2,
-        left: 0,
-        width: '100%',
-    },
     backgroundGradient: {
         position: 'absolute',
         left: 0,
@@ -67,9 +97,29 @@ const styles = EStyleSheet.create({
         width: '100%',
         height: '20%',
     },
-    scrollContent: {
-        flexGrow: 1,
-        justifyContent: 'center',
+    container: {
+        zIndex: 1,
+        backgroundColor: 'red',
+        height: '100%',
+        position: 'relative',
+    },
+    header_container: {
+        position: 'absolute',
+        paddingTop: 15,
+        top: 0,
+        width: '100%',
+        height: 90,
+    },
+    navbar: {
+        position: 'absolute',
+        bottom: -2,
+        left: 0,
+        width: '100%',
+    },
+    content: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 15,
         alignItems: 'center',
     },
 });

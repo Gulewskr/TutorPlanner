@@ -9,16 +9,12 @@ export const Profile: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Profile'>
 > = ({ navigation, route }) => {
     return (
-        <Layout navigation={navigation} route={'Students'}>
-            <Header
-                firstIcon={'back'}
-                firstAction={() => navigation.goBack()}
-                secondIcon="settings"
-                secondAction={() => navigation.navigate('Settings')}
-                centered
-            >
-                Profil
-            </Header>
+        <Layout
+            navigation={navigation}
+            route={'Students'}
+            title="Profil"
+            hasHeader
+        >
             <Text>This is {route.params?.name}'s profile</Text>
         </Layout>
     );

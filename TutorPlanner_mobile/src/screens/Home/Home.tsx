@@ -1,5 +1,4 @@
 import { View, StyleSheet } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { Button } from '@components/Button';
 import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -12,37 +11,51 @@ export const Home: React.FC<
     const users = ['OLA P', 'KAMIL S'];
 
     return (
-        <Layout navigation={navigation} route={'Home'}>
-            <StatusBar style="auto" />
-
-            <Header
-                optionalText={'Dziś jest wspaniały dzień do działania :)'}
-                secondIcon="settings"
-                secondAction={() => navigation.navigate('Settings')}
-            >
-                Witaj, Natalcia!
-            </Header>
-
-            <View style={styles.double_button_container}>
-                <Button
-                    icon="addLesson"
-                    onClick={() => 1}
-                    label="Dodaj zajęcia"
-                />
-                <Button
-                    icon="addStudent"
-                    onClick={() => 1}
-                    label="Dodaj ucznia"
-                />
+        <Layout
+            navigation={navigation}
+            route={'Home'}
+            hasHeader
+            isHeaderCentered={false}
+            title="Witaj, Natalcia!"
+            subtitle="Dziś jest wspaniały dzień do działania :)"
+        >
+            <View style={styles.controlPanel}>
+                <View style={styles.double_button_container}>
+                    <Button
+                        icon="addLesson"
+                        onClick={() => 1}
+                        label="Dodaj zajęcia"
+                        width={160}
+                    />
+                    <Button
+                        icon="addStudent"
+                        onClick={() => 1}
+                        label="Dodaj ucznia"
+                        width={160}
+                    />
+                </View>
+                <View style={styles.double_button_container}>
+                    <Button
+                        icon="addPayment"
+                        onClick={() => 1}
+                        label="Dodaj płatność"
+                        width={160}
+                    />
+                    <Button
+                        icon="notes"
+                        onClick={() => 1}
+                        label="Dodaj notatkę"
+                        width={160}
+                    />
+                </View>
             </View>
 
-            <View style={styles.double_button_container}>
-                <Button
-                    icon="addPayment"
-                    onClick={() => 1}
-                    label="Dodaj płatność"
+            <View style={styles.timeline}>
+                <Header
+                    rightIcon={'addLesson'}
+                    rightAction={() => 1}
+                    title={'Dzisiejszy plan'}
                 />
-                <Button icon="notes" onClick={() => 1} label="Dodaj notatkę" />
             </View>
 
             {/* {users.map((user, i) => (
@@ -67,4 +80,8 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 5,
     },
+    controlPanel: {
+        gap: 5,
+    },
+    timeline: {},
 });

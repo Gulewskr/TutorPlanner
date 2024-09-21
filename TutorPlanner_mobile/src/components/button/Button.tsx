@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
+type ButtonSize = 'small' | 'medium' | 'large';
 interface ButtonProps {
     secondary?: boolean;
     type?: 'button' | 'icon-button';
@@ -10,6 +11,9 @@ interface ButtonProps {
     label?: string;
     onClick: () => void;
     isDisabled?: boolean;
+    size?: ButtonSize;
+    hasShadow?: boolean;
+    width?: number;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -19,12 +23,15 @@ const Button: React.FC<ButtonProps> = ({
     isDisabled = false,
     label,
     icon,
+    size = 'medium',
+    hasShadow = true,
+    width: customWidth,
 }) => {
     const [pressed, setPressed] = useState<boolean>(false);
     const [buttonHeight, setButtonHeight] = useState<number>(0);
     const [width, setWidth] = useState(0);
 
-    const style = styles(secondary, pressed, isDisabled);
+    const style = styles(secondary, pressed, isDisabled, size, customWidth);
     const isIconButton = type == 'icon-button';
 
     return (
@@ -51,7 +58,9 @@ const Button: React.FC<ButtonProps> = ({
                     {isIconButton || <Text style={style.text}>{label}</Text>}
                 </View>
             </Pressable>
-            <View style={[style.shadow, { height: buttonHeight, width }]} />
+            {hasShadow && (
+                <View style={[style.shadow, { height: buttonHeight, width }]} />
+            )}
         </View>
     );
 };
@@ -60,15 +69,23 @@ Button.displayName = 'Button';
 
 export default Button;
 
-const styles = (secondary: boolean, pressed: boolean, isDisabled: boolean) =>
+const styles = (
+    secondary: boolean,
+    pressed: boolean,
+    isDisabled: boolean,
+    size: ButtonSize,
+    width?: number,
+) =>
     EStyleSheet.create({
         container: {
             position: 'relative',
             flexDirection: 'row',
+            minHeight: size === 'medium' ? 50 : size === 'small' ? 40 : 60,
         },
         iconButton: {
             width: 40,
             minWidth: 40,
+            aspectRatio: 1,
         },
 
         button: {
@@ -79,9 +96,9 @@ const styles = (secondary: boolean, pressed: boolean, isDisabled: boolean) =>
             flexGrow: 1,
             flexShrink: 1,
             maxWidth: 320,
-            width: 155,
-            minWidth: 130,
-
+            minWidth: width ? width : 130,
+            paddingLeft: 10,
+            paddingRight: 10,
             backgroundColor: isDisabled
                 ? '#6F6F6F'
                 : secondary

@@ -8,16 +8,12 @@ export const Payments: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Payments'>
 > = ({ navigation, route }) => {
     return (
-        <Layout navigation={navigation} route={'Payments'}>
-            <Header
-                firstIcon={'back'}
-                firstAction={() => navigation.goBack()}
-                secondIcon="settings"
-                secondAction={() => navigation.navigate('Settings')}
-                centered
-            >
-                Płatności
-            </Header>
+        <Layout
+            navigation={navigation}
+            route={'Payments'}
+            title="Płatności"
+            hasHeader
+        >
             <Text>This is Payments</Text>
         </Layout>
     );

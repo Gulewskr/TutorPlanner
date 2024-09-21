@@ -9,14 +9,12 @@ export const Settings: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Settings'>
 > = ({ navigation, route }) => {
     return (
-        <Layout navigation={navigation} route={'Settings'}>
-            <Header
-                firstIcon={'back'}
-                firstAction={() => navigation.goBack()}
-                centered
-            >
-                Ustawienia
-            </Header>
+        <Layout
+            navigation={navigation}
+            route={'Settings'}
+            title="Ustawienia"
+            hasHeader
+        >
             <Text>This is Settings</Text>
         </Layout>
     );

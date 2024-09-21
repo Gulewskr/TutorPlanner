@@ -1,72 +1,68 @@
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { ICON_NAME } from '../Icon/Icon';
 import { Button } from '@components/Button';
 
 interface HeaderProps {
-    firstIcon?: ICON_NAME;
-    firstAction?: () => void;
-    optionalText?: string;
-    secondIcon?: ICON_NAME;
-    secondAction?: () => void;
-    centered?: boolean;
-    children: React.ReactNode;
+    leftAction?: () => void;
+    leftIcon?: ICON_NAME;
+    isCentered?: boolean;
+    rightAction?: () => void;
+    rightIcon?: ICON_NAME;
+    subtitle?: string;
+    title?: string;
 }
 
 const Header: React.FC<HeaderProps> = ({
-    firstIcon,
-    firstAction,
-    optionalText,
-    secondIcon,
-    secondAction,
-    centered = false,
-    children,
+    leftIcon,
+    leftAction,
+    title,
+    subtitle,
+    rightIcon,
+    rightAction,
+    isCentered: centered = false,
 }) => {
     return (
-        <View style={styles.header_container}>
-            <View style={styles.header}>
-                {firstAction && (
-                    <Pressable style={styles.first_icon} onPress={firstAction}>
-                        <Button
-                            icon={firstIcon}
-                            type="icon-button"
-                            secondary
-                            onClick={firstAction}
-                        />
-                    </Pressable>
-                )}
-
-                <View
-                    style={[
-                        styles.text_container,
-                        {
-                            alignItems: centered ? 'center' : 'flex-start',
-                            paddingRight: secondIcon ? 0 : 50,
-                            paddingLeft: firstIcon ? 0 : centered ? 50 : 20,
-                        },
-                    ]}
-                >
-                    <Text style={styles.main_text}>{children}</Text>
-                    {optionalText && (
-                        <Text style={styles.optional_text}>{optionalText}</Text>
-                    )}
+        <View style={styles.header}>
+            {leftAction && (
+                <View style={styles.left_icon}>
+                    <Button
+                        icon={leftIcon}
+                        type="icon-button"
+                        secondary
+                        onClick={leftAction}
+                        hasShadow={false}
+                    />
                 </View>
-
-                {secondAction && (
-                    <Pressable
-                        style={styles.second_icon}
-                        onPress={secondAction}
-                    >
-                        <Button
-                            icon={secondIcon}
-                            type="icon-button"
-                            secondary
-                            onClick={secondAction}
-                        />
-                    </Pressable>
+            )}
+            <View
+                style={[
+                    styles.text_container,
+                    {
+                        alignItems: centered ? 'center' : 'flex-start',
+                        paddingRight: rightIcon ? 0 : 50,
+                        paddingLeft: leftIcon ? 0 : centered ? 50 : 20,
+                    },
+                ]}
+            >
+                {title && <Text style={styles.main_text}>{title}</Text>}
+                {subtitle && (
+                    <Text style={styles.optional_text}>{subtitle}</Text>
                 )}
             </View>
+
+            {rightAction && (
+                <View style={styles.right_icon}>
+                    <Button
+                        icon={rightIcon}
+                        type="icon-button"
+                        secondary
+                        onClick={rightAction}
+                        hasShadow={false}
+                    />
+                </View>
+            )}
         </View>
     );
 };
@@ -76,13 +72,6 @@ Header.displayName = 'Header';
 export default Header;
 
 const styles = EStyleSheet.create({
-    header_container: {
-        position: 'absolute',
-        paddingTop: 15,
-        top: 0,
-        width: '100%',
-    },
-
     header: {
         height: 80,
         width: '100%',
@@ -92,7 +81,7 @@ const styles = EStyleSheet.create({
         zIndex: 10,
     },
 
-    first_icon: {
+    left_icon: {
         marginLeft: 10,
     },
 
@@ -110,7 +99,7 @@ const styles = EStyleSheet.create({
         fontSize: 14,
     },
 
-    second_icon: {
+    right_icon: {
         marginRight: 10,
     },
 });

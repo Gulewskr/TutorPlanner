@@ -2,7 +2,7 @@ import { Layout } from '../Layout';
 import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Input } from '@components/Input';
-import { Header } from '@components/Header';
+import { ScrollView } from 'react-native';
 
 //In next version - disable in first release
 export const Notes: React.FC<
@@ -13,24 +13,22 @@ export const Notes: React.FC<
         21, 22,
     ];
     return (
-        <Layout navigation={navigation} route={'Notes'}>
-            <Header
-                firstIcon={'back'}
-                firstAction={() => navigation.goBack()}
-                secondIcon="settings"
-                secondAction={() => navigation.navigate('Settings')}
-                centered
-            >
-                Notatki
-            </Header>
-            {t.map(t => (
-                <Input
-                    key={t}
-                    title="TEST INPUT"
-                    label="TEST INPUT"
-                    icon="minus"
-                ></Input>
-            ))}
+        <Layout
+            navigation={navigation}
+            route={'Notes'}
+            title="Notatki"
+            hasHeader
+        >
+            <ScrollView showsVerticalScrollIndicator={false}>
+                {t.map(t => (
+                    <Input
+                        key={t}
+                        title="TEST INPUT"
+                        label="TEST INPUT"
+                        icon="minus"
+                    ></Input>
+                ))}
+            </ScrollView>
         </Layout>
     );
 };
