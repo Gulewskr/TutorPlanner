@@ -3,43 +3,44 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Home } from './screens/Home/Home';
-import { Profile } from './screens/Profile/Profile';
 import { Calendar } from './screens/Calendar/Calendar';
 import { Students } from './screens/Students/Students';
-import { Payments } from './screens/Payments/Payments';
+import { Payments, PaymentsTabParamList } from './screens/Payments/Payments';
 import { Notes } from './screens/Notes/Notes';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { Settings } from './screens/Settings/Settings';
+import { Lessons, LessonsTabParamList } from './screens/Lessons/Lessons';
 
 EStyleSheet.build({
-    $colorBlack: '#070707',
-    $colorWhite: '#F5F5F5',
-    $backgroundColorWhite: '#FFFCE3',
-    $backgroundColorPrimary: '#FFC3FF',
-    $colorPrimary: '#FFA9F1',
-    $colorSecondary: '#B0CFFF',
-    $colorFunctional: '#FFF59C',
-    $colorPrimary_hover: '#F5D4F5',
-    $colorSecondary_hover: '#EFF5FF',
-    $shadowColorPrimary: '#9E0042',
-    $shadowColorSecondary: '#002C9E',
+    $color_primary: '#FFA9F1',
+    $color_secondary: '#B0CFFF',
+    $color_func: '#FFF59C',
+    $color_black: '#070707',
+    $color_white: '#F5F5F5',
+    $color_disabled: '#6F6F6F',
+    $color_disabled_primary: '#B08DA9',
+    $bgColor_white: '#FFFCE3',
+    $bgColor_primary: '#FFC3FF',
+    $bgColor_secondary: '#D3E4FF',
+    $color_primary_hover: '#F5D4F5',
+    $color_secondary_hover: '#EFF5FF',
+    $shadow_color_primary: '#9E0042',
+    $shadow_color_secondary: '#002C9E',
+    //Probably should be local variable
+    $tile_bgColor: '#F4DDFF',
 });
 
 export type RootStackParamList = {
     Home: undefined;
-    Profile: { name: string } | undefined;
     Calendar: undefined;
     Students: undefined;
-    Payments: undefined;
+    Payments: { screen: keyof PaymentsTabParamList; initial: boolean };
     Notes: undefined;
+    Settings: undefined;
+    Lessons: { screen: keyof LessonsTabParamList; initial: boolean };
 };
 
-export type NavbarNavigationScreens =
-    | 'Home'
-    | 'Profile'
-    | 'Calendar'
-    | 'Students'
-    | 'Payments'
-    | 'Notes';
+export type NavbarNavigationScreens = keyof RootStackParamList;
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -61,11 +62,12 @@ const App: React.FC<{}> = () => {
                         title: 'Welcome',
                     }}
                 />
-                <Stack.Screen name="Profile" component={Profile} />
                 <Stack.Screen name="Calendar" component={Calendar} />
-                <Stack.Screen name="Students" component={Students} />
-                <Stack.Screen name="Payments" component={Payments} />
+                <Stack.Screen name="Lessons" component={Lessons} />
                 <Stack.Screen name="Notes" component={Notes} />
+                <Stack.Screen name="Payments" component={Payments} />
+                <Stack.Screen name="Students" component={Students} />
+                <Stack.Screen name="Settings" component={Settings} />
             </Stack.Navigator>
         </NavigationContainer>
     );

@@ -154,7 +154,7 @@ const getStudentLesson = (student: Student) => {
 
 const addDemoData = async () => {
     console.log('Checking if there is data in database');
-    const students = await studentRepository.getAllStudents();
+    const students = await studentRepository.findAll();
     if (students.length > 0) {
         console.log(
             "There is already existing data in database demo data wont't be added.",
@@ -164,7 +164,7 @@ const addDemoData = async () => {
     console.log('Adding demo data...');
     for (let i = 0; i < 10; i++) {
         const studInput = getStudentInput();
-        const student = await studentRepository.createStudent(studInput);
+        const student = await studentRepository.create(studInput);
         const contacts = getStudentContacts(student);
         for (const contact of contacts) {
             await contactDataRepository.createContactData(contact);

@@ -2,15 +2,13 @@ import express, { Request, Response, Router } from 'express';
 import StudentService from '../services/StudentService';
 import paymentRouter from './payments';
 import LessonsService from '../services/LessonsService';
+import { StudentsDTO } from '../dto/students';
 
 var router: Router = express.Router();
 
 router.get('/', async (req, res) => {
-    const students = await StudentService.getStudents();
-    res.status(200).json({
-        data: students,
-        size: students.length,
-    });
+    const data: StudentsDTO = await StudentService.getStudents();
+    res.status(200).json(data);
 });
 
 router.get('/:studentId', async (req, res) => {

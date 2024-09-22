@@ -113,7 +113,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         position: 'relative',
         borderWidth: 1,
-        borderColor: '$colorBlack',
+        borderColor: '$color_black',
         borderRadius: 10,
     },
 
@@ -144,7 +144,7 @@ const styles = EStyleSheet.create({
     },
 
     text: {
-        color: '$colorBlack',
+        color: '$color_black',
         fontSize: 12,
         textAlign: 'center',
     },

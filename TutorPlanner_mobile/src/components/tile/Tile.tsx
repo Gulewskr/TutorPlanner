@@ -29,7 +29,6 @@ const CustomTile: React.FC<TileProps> = ({ children, color }) => {
         return keys[randomIndex];
     };
 
-    // Determine the selected color
     const selectedColor =
         color && colorsMap[color]
             ? colorsMap[color]

@@ -3,6 +3,18 @@
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.scss", "src/**/*.css"],
   "exclude": ["node_modules", "dist", ".expo"],
   "compilerOptions": {
-    "plugins": [{ "name": "typescript-plugin-css-modules" }]
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@model": [
+        "src/model/index.ts"
+      ],
+      "@services/*": [
+        "src/services/*"
+      ],
+    }
   }
 }

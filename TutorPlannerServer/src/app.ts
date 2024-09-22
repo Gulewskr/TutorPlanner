@@ -2,6 +2,7 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import createError from 'http-errors';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import cors from 'cors';
 
 import router from './routes/index';
 import studentsRouter from './routes/students';
@@ -16,6 +17,13 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+const corsOption = {
+    origin: ['*'],
+    credentials: false,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+};
+app.use(cors(corsOption));
 
 app.use('/', router);
 app.use('/students', studentsRouter);

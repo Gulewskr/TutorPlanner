@@ -1,30 +1,37 @@
+import { Icon, ICON_NAME } from '@components/Icon';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { Icon, ICON_NAME } from '../icon/Icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
+type ButtonSize = 'small' | 'medium' | 'large';
 interface ButtonProps {
     secondary?: boolean;
     type?: 'button' | 'icon-button';
     icon?: ICON_NAME;
-    label: string;
+    label?: string;
     onClick: () => void;
-    isDisabled?: boolean;
+    disabled?: boolean;
+    size?: ButtonSize;
+    hasShadow?: boolean;
+    width?: number;
 }
 
-const CustomButton: React.FC<ButtonProps> = ({
+const Button: React.FC<ButtonProps> = ({
     onClick,
     secondary = false,
     type = 'button',
-    isDisabled = false,
+    disabled = false,
     label,
     icon,
+    size = 'medium',
+    hasShadow = true,
+    width: customWidth,
 }) => {
     const [pressed, setPressed] = useState<boolean>(false);
     const [buttonHeight, setButtonHeight] = useState<number>(0);
     const [width, setWidth] = useState(0);
 
-    const style = styles(secondary, pressed, isDisabled);
+    const style = styles(secondary, pressed, disabled, size, customWidth);
     const isIconButton = type == 'icon-button';
 
     return (
@@ -36,7 +43,7 @@ const CustomButton: React.FC<ButtonProps> = ({
             }}
         >
             <Pressable
-                disabled={isDisabled}
+                disabled={disabled}
                 style={[style.button, isIconButton && style.iconButton]}
                 onPress={onClick}
                 onPressIn={() => setPressed(true)}
@@ -48,23 +55,37 @@ const CustomButton: React.FC<ButtonProps> = ({
             >
                 <View style={style.content}>
                     {icon && <Icon icon={icon} />}
-                    {label && <Text style={style.text}>{label}</Text>}
+                    {isIconButton || <Text style={style.text}>{label}</Text>}
                 </View>
             </Pressable>
-            <View style={[style.shadow, { height: buttonHeight, width }]} />
+            {hasShadow && (
+                <View style={[style.shadow, { height: buttonHeight, width }]} />
+            )}
         </View>
     );
 };
 
-CustomButton.displayName = 'Button';
+Button.displayName = 'Button';
 
-export default CustomButton;
+export default Button;
 
-const styles = (secondary: boolean, pressed: boolean, isDisabled: boolean) =>
+const styles = (
+    secondary: boolean,
+    pressed: boolean,
+    isDisabled: boolean,
+    size: ButtonSize,
+    width?: number,
+) =>
     EStyleSheet.create({
-        container: { position: 'relative', width: 200 },
+        container: {
+            position: 'relative',
+            flexDirection: 'row',
+            minHeight: size === 'medium' ? 50 : size === 'small' ? 40 : 60,
+        },
         iconButton: {
             width: 40,
+            minWidth: 40,
+            aspectRatio: 1,
         },
 
         button: {
@@ -72,22 +93,27 @@ const styles = (secondary: boolean, pressed: boolean, isDisabled: boolean) =>
             justifyContent: 'center',
             minHeight: 40,
             borderRadius: 10,
-            width: 'auto',
+            flexGrow: 1,
+            flexShrink: 1,
+            maxWidth: 320,
+            minWidth: width ? width : 130,
+            paddingLeft: 10,
+            paddingRight: 10,
             backgroundColor: isDisabled
-                ? '#6F6F6F'
+                ? '$color_disabled_primary'
                 : secondary
                   ? pressed
-                      ? '$colorSecondary_hover'
-                      : '$colorSecondary'
+                      ? '$color_secondary_hover'
+                      : '$color_secondary'
                   : pressed
-                    ? '$colorPrimary_hover'
-                    : '$colorPrimary',
+                    ? '$color_primary_hover'
+                    : '$color_primary',
             position: 'relative',
             shadowColor: '#000000',
             elevation: 3,
             zIndex: 10,
             borderWidth: 1,
-            borderColor: isDisabled ? '#4A4A4A' : '$colorBlack',
+            borderColor: isDisabled ? '#4A4A4A' : '$color_black',
             top: pressed ? 4 : 0,
             left: pressed ? 4 : 0,
         },
@@ -105,7 +131,7 @@ const styles = (secondary: boolean, pressed: boolean, isDisabled: boolean) =>
             lineHeight: 21,
             fontWeight: 'bold',
             letterSpacing: 0.25,
-            color: '$colorBlack',
+            color: '$color_black',
             flexShrink: 1,
             maxWidth: '80%',
             paddingBottom: 2,
@@ -117,12 +143,12 @@ const styles = (secondary: boolean, pressed: boolean, isDisabled: boolean) =>
             top: 4,
             left: 4,
             backgroundColor: isDisabled
-                ? '#6F6F6F'
+                ? '$color_disabled_primary'
                 : secondary
-                  ? '$shadowColorSecondary'
-                  : '$shadowColorPrimary',
+                  ? '$shadow_color_secondary'
+                  : '$shadow_color_primary',
             borderWidth: 1,
-            borderColor: isDisabled ? '#4A4A4A' : '$colorBlack',
+            borderColor: isDisabled ? '#4A4A4A' : '$color_black',
             zIndex: 1,
         },
     });

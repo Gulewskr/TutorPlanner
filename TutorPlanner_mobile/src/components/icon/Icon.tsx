@@ -5,14 +5,19 @@ interface IconProps {
     size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
-export type ICON_NAME =
+type ICON_NAME =
     | 'minus'
     | 'plus'
     | 'calendar'
     | 'students'
     | 'home'
     | 'payments'
-    | 'notes';
+    | 'notes'
+    | 'back'
+    | 'settings'
+    | 'addLesson'
+    | 'addPayment'
+    | 'addStudent';
 
 const iconsMap: { [key in ICON_NAME]: any } = {
     minus: require('../../assets/icons/minus.png'),
@@ -22,9 +27,14 @@ const iconsMap: { [key in ICON_NAME]: any } = {
     home: require('../../assets/icons/home.png'),
     payments: require('../../assets/icons/payments.png'),
     notes: require('../../assets/icons/notes.png'),
+    back: require('../../assets/icons/back.png'),
+    settings: require('../../assets/icons/settings.png'),
+    addStudent: require('../../assets/icons/addStudent.png'),
+    addPayment: require('../../assets/icons/addPayment.png'),
+    addLesson: require('../../assets/icons/addLesson.png'),
 };
 
-export const Icon: React.FC<IconProps> = ({ icon, size }) => (
+const Icon: React.FC<IconProps> = ({ icon, size }) => (
     <Image
         source={iconsMap[icon]}
         style={[styles.icon, size == 'xs' && styles['icon-sm']]}
@@ -43,3 +53,6 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
 });
+
+export default Icon;
+export { type ICON_NAME };
