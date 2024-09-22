@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LessonsTabParamList } from './Lessons';
-import { Input } from '@components/input';
+import { HourInput, Input } from '@components/input';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Button } from '@components/button';
 
@@ -26,7 +26,7 @@ export const CreateLessonForm: React.FC<
             />
             <Input placeholder="--Podaj cene--" label="Cena" icon="payments" />
             <Input placeholder="--Data--" label="Data" icon="calendar" />
-            <Input placeholder="--Godzina--" label="Godzina" />
+            <HourInput placeholder="--Godzina--" label="Godzina" />
             <Input placeholder="--Zajecia cotygodniowe--" label="checkbox" />
             <View style={styles.double_button_container}>
                 <Button

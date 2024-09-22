@@ -1,2 +1,3 @@
 import Input from './Input';
-export { Input };
+import HourInput from './HourInput';
+export { Input, HourInput };

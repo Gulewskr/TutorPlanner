@@ -22,7 +22,7 @@ const CustomInput: React.FC<InputProps> = ({ placeholder, icon, label }) => {
         >
             {label && <Text style={styles.label}>{label}</Text>}
             <View style={styles.content}>
-                {icon && <Icon icon={icon} />}
+                {icon && <Icon icon={icon} size='sm' />}
                 <TextInput style={styles.input} placeholder={placeholder} />
             </View>
 
@@ -38,7 +38,7 @@ export default CustomInput;
 const styles = EStyleSheet.create({
     label: {
         position: 'absolute',
-        top: -12,
+        top: -15,
         left: 10,
         zIndex: 2,
         backgroundColor: '$color_white',
@@ -47,7 +47,7 @@ const styles = EStyleSheet.create({
         color: '$color_black',
         width: 120,
         height: 20,
-        borderRadius: 10,
+        borderRadius: 15,
         borderWidth: 1,
         borderColor: '$color_black',
         textAlign: 'center',
@@ -57,12 +57,12 @@ const styles = EStyleSheet.create({
     content: {
         flexDirection: 'row',
         alignItems: 'center',
-        height: 40,
+        minHeight: 40,
         borderWidth: 1,
         borderColor: '$color_black',
-        borderRadius: 10,
+        borderRadius: 15,
         backgroundColor: '$color_white',
-        paddingHorizontal: 10,
+        padding: 10,
     },
 
     input: {
@@ -71,8 +71,8 @@ const styles = EStyleSheet.create({
     },
 
     shadow: {
-        borderRadius: 10,
-        height: 40,
+        borderRadius: 15,
+        height: '100%',
         position: 'absolute',
         top: 4,
         left: 4,
