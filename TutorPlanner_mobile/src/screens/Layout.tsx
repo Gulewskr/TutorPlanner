@@ -2,10 +2,10 @@ import { View } from 'react-native';
 import { PropsWithChildren } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Navbar } from '@components/Navbar';
+import { Navbar } from '@components/navbar';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { NavbarNavigationScreens } from '../App';
-import { Header } from '@components/Header';
+import { Header } from '@components/header';
 
 interface LayoutProps {
     navigation: NativeStackNavigationProp<any>;

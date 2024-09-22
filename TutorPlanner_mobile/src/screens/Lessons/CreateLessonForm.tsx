@@ -3,9 +3,9 @@ import { View } from 'react-native';
 import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LessonsTabParamList } from './Lessons';
-import { Input } from '@components/Input';
+import { Input } from '@components/input';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Button } from '@components/Button';
+import { Button } from '@components/button';
 
 export const CreateLessonForm: React.FC<
     NativeStackScreenProps<LessonsTabParamList, 'Create'>
