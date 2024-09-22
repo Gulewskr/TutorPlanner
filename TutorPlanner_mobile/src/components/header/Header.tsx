@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { ICON_NAME } from '../Icon/Icon';
-import { Button } from '@components/Button';
+import { Button } from '@components/button';
+import { ICON_NAME } from '@components/icon';
 
 interface HeaderProps {
     leftAction?: () => void;

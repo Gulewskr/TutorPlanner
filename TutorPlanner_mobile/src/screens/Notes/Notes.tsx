@@ -1,7 +1,7 @@
 import { Layout } from '../Layout';
 import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Input } from '@components/Input';
+import { Input } from '@components/input';
 import { ScrollView } from 'react-native';
 
 //In next version - disable in first release

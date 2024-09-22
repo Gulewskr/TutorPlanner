@@ -1,9 +1,9 @@
 import { View, StyleSheet } from 'react-native';
-import { Button } from '@components/Button';
+import { Button } from '@components/button';
 import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
-import { Header } from '@components/Header';
+import { Header } from '@components/header';
 
 export const Home: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Home'>

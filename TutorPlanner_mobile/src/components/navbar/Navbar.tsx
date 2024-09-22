@@ -4,7 +4,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Svg, Defs, Rect, Mask, Circle, Line } from 'react-native-svg';
 import { NavbarNavigationScreens } from '../../App';
-import { Icon, ICON_NAME } from '@components/Icon';
+import { Icon, ICON_NAME } from '@components/icon';
 
 interface NavbarItemProps {
     name: NavbarNavigationScreens;

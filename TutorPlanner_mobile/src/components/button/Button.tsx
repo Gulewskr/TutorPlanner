@@ -1,4 +1,4 @@
-import { Icon, ICON_NAME } from '@components/Icon';
+import { Icon, ICON_NAME } from '@components/icon';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
