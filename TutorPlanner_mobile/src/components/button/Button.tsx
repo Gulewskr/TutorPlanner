@@ -10,7 +10,7 @@ interface ButtonProps {
     icon?: ICON_NAME;
     label?: string;
     onClick: () => void;
-    isDisabled?: boolean;
+    disabled?: boolean;
     size?: ButtonSize;
     hasShadow?: boolean;
     width?: number;
@@ -20,7 +20,7 @@ const Button: React.FC<ButtonProps> = ({
     onClick,
     secondary = false,
     type = 'button',
-    isDisabled = false,
+    disabled = false,
     label,
     icon,
     size = 'medium',
@@ -31,7 +31,7 @@ const Button: React.FC<ButtonProps> = ({
     const [buttonHeight, setButtonHeight] = useState<number>(0);
     const [width, setWidth] = useState(0);
 
-    const style = styles(secondary, pressed, isDisabled, size, customWidth);
+    const style = styles(secondary, pressed, disabled, size, customWidth);
     const isIconButton = type == 'icon-button';
 
     return (
@@ -43,7 +43,7 @@ const Button: React.FC<ButtonProps> = ({
             }}
         >
             <Pressable
-                disabled={isDisabled}
+                disabled={disabled}
                 style={[style.button, isIconButton && style.iconButton]}
                 onPress={onClick}
                 onPressIn={() => setPressed(true)}
@@ -100,20 +100,20 @@ const styles = (
             paddingLeft: 10,
             paddingRight: 10,
             backgroundColor: isDisabled
-                ? '#6F6F6F'
+                ? '$color_disabled_primary'
                 : secondary
                   ? pressed
-                      ? '$colorSecondary_hover'
-                      : '$colorSecondary'
+                      ? '$color_secondary_hover'
+                      : '$color_secondary'
                   : pressed
-                    ? '$colorPrimary_hover'
-                    : '$colorPrimary',
+                    ? '$color_primary_hover'
+                    : '$color_primary',
             position: 'relative',
             shadowColor: '#000000',
             elevation: 3,
             zIndex: 10,
             borderWidth: 1,
-            borderColor: isDisabled ? '#4A4A4A' : '$colorBlack',
+            borderColor: isDisabled ? '#4A4A4A' : '$color_black',
             top: pressed ? 4 : 0,
             left: pressed ? 4 : 0,
         },
@@ -131,7 +131,7 @@ const styles = (
             lineHeight: 21,
             fontWeight: 'bold',
             letterSpacing: 0.25,
-            color: '$colorBlack',
+            color: '$color_black',
             flexShrink: 1,
             maxWidth: '80%',
             paddingBottom: 2,
@@ -143,12 +143,12 @@ const styles = (
             top: 4,
             left: 4,
             backgroundColor: isDisabled
-                ? '#6F6F6F'
+                ? '$color_disabled_primary'
                 : secondary
-                  ? '$shadowColorSecondary'
-                  : '$shadowColorPrimary',
+                  ? '$shadow_color_secondary'
+                  : '$shadow_color_primary',
             borderWidth: 1,
-            borderColor: isDisabled ? '#4A4A4A' : '$colorBlack',
+            borderColor: isDisabled ? '#4A4A4A' : '$color_black',
             zIndex: 1,
         },
     });

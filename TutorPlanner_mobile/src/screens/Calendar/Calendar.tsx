@@ -3,10 +3,41 @@ import { Layout } from '../Layout';
 import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
-import { Header } from '@components/Header';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-export const Calendar: React.FC<
+export type CalendarTabParamList = {
+    MonthlyCalendar: undefined;
+    DailyCalendar: undefined;
+    Create: undefined;
+    Event: { id: string };
+};
+
+const Tab = createBottomTabNavigator<CalendarTabParamList>();
+
+export const RootCalendar: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Calendar'>
+> = ({ navigation, route }) => {
+    return (
+        <Tab.Navigator
+            initialRouteName="MonthlyCalendar"
+            screenOptions={{
+                headerShown: false,
+                tabBarStyle: {
+                    display: 'none',
+                },
+            }}
+            backBehavior="history"
+        >
+            <Tab.Screen name="MonthlyCalendar" component={MonthlyCalendar} />
+            <Tab.Screen name="DailyCalendar" component={DailyCalendar} />
+            <Tab.Screen name="Event" component={EventDetails} />
+            <Tab.Screen name="Create" component={CreateEvent} />
+        </Tab.Navigator>
+    );
+};
+
+const MonthlyCalendar: React.FC<
+    NativeStackScreenProps<CalendarTabParamList, 'MonthlyCalendar'>
 > = ({ navigation, route }) => {
     return (
         <Layout
@@ -15,7 +46,54 @@ export const Calendar: React.FC<
             title="Kalendarz"
             hasHeader
         >
-            <Text>This is calendar</Text>
+            <Text>Widok całego miesiąca</Text>
         </Layout>
     );
 };
+
+const DailyCalendar: React.FC<
+    NativeStackScreenProps<CalendarTabParamList, 'DailyCalendar'>
+> = ({ navigation, route }) => {
+    return (
+        <Layout
+            navigation={navigation}
+            route={'Calendar'}
+            title="Kalendarz"
+            hasHeader
+        >
+            <Text>Kalendarz - widok dnia</Text>
+        </Layout>
+    );
+};
+
+const CreateEvent: React.FC<
+    NativeStackScreenProps<CalendarTabParamList, 'Create'>
+> = ({ navigation, route }) => {
+    return (
+        <Layout
+            navigation={navigation}
+            route={'Calendar'}
+            title="Dodaj wydarzenie"
+            hasHeader
+        >
+            <Text>TODO</Text>
+        </Layout>
+    );
+};
+
+const EventDetails: React.FC<
+    NativeStackScreenProps<CalendarTabParamList, 'Event'>
+> = ({ navigation, route }) => {
+    return (
+        <Layout
+            navigation={navigation}
+            route={'Calendar'}
+            title="Szczegóły wydarzenia"
+            hasHeader
+        >
+            <Text>TODO</Text>
+        </Layout>
+    );
+};
+
+export { RootCalendar as Calendar };

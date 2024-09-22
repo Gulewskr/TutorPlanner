@@ -23,7 +23,12 @@ export const Home: React.FC<
                 <View style={styles.double_button_container}>
                     <Button
                         icon="addLesson"
-                        onClick={() => 1}
+                        onClick={() =>
+                            navigation.navigate('Lessons', {
+                                screen: 'Create',
+                                initial: true,
+                            })
+                        }
                         label="Dodaj zajęcia"
                         width={160}
                     />
@@ -37,7 +42,12 @@ export const Home: React.FC<
                 <View style={styles.double_button_container}>
                     <Button
                         icon="addPayment"
-                        onClick={() => 1}
+                        onClick={() =>
+                            navigation.navigate('Payments', {
+                                screen: 'Create',
+                                initial: true,
+                            })
+                        }
                         label="Dodaj płatność"
                         width={160}
                     />
@@ -45,6 +55,7 @@ export const Home: React.FC<
                         icon="notes"
                         onClick={() => 1}
                         label="Dodaj notatkę"
+                        disabled={true}
                         width={160}
                     />
                 </View>

@@ -4,12 +4,12 @@ import { Icon, ICON_NAME } from '@components/Icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 interface InputProps {
-    title?: string;
+    placeholder?: string;
     icon?: ICON_NAME;
     label?: string;
 }
 
-const CustomInput: React.FC<InputProps> = ({ title, icon, label }) => {
+const CustomInput: React.FC<InputProps> = ({ placeholder, icon, label }) => {
     const [width, setWidth] = useState(0);
 
     return (
@@ -23,10 +23,7 @@ const CustomInput: React.FC<InputProps> = ({ title, icon, label }) => {
             {label && <Text style={styles.label}>{label}</Text>}
             <View style={styles.content}>
                 {icon && <Icon icon={icon} />}
-                <TextInput
-                    style={styles.input}
-                    placeholder={title ? `--${title}--` : ''}
-                />
+                <TextInput style={styles.input} placeholder={placeholder} />
             </View>
 
             <View style={[styles.shadow, { width }]}></View>
@@ -44,15 +41,15 @@ const styles = EStyleSheet.create({
         top: -12,
         left: 10,
         zIndex: 2,
-        backgroundColor: '$colorWhite',
+        backgroundColor: '$color_white',
         paddingHorizontal: 5,
         fontSize: 12,
-        color: '$colorBlack',
+        color: '$color_black',
         width: 120,
         height: 20,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: '$colorBlack',
+        borderColor: '$color_black',
         textAlign: 'center',
         textAlignVertical: 'center',
     },
@@ -62,9 +59,9 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         height: 40,
         borderWidth: 1,
-        borderColor: '$colorBlack',
+        borderColor: '$color_black',
         borderRadius: 10,
-        backgroundColor: '$colorWhite',
+        backgroundColor: '$color_white',
         paddingHorizontal: 10,
     },
 
@@ -79,9 +76,9 @@ const styles = EStyleSheet.create({
         position: 'absolute',
         top: 4,
         left: 4,
-        backgroundColor: '$shadowColorPrimary',
+        backgroundColor: '$shadow_color_primary',
         borderWidth: 1,
-        borderColor: '$colorBlack',
+        borderColor: '$color_black',
         zIndex: -1,
     },
 });

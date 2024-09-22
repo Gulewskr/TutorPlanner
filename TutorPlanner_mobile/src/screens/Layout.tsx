@@ -4,11 +4,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Navbar } from '@components/Navbar';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { NavbarNavigationScreens, RootStackParamList } from '../App';
+import { NavbarNavigationScreens } from '../App';
 import { Header } from '@components/Header';
 
 interface LayoutProps {
-    navigation: NativeStackNavigationProp<RootStackParamList, any, any>;
+    navigation: NativeStackNavigationProp<any>;
     route: NavbarNavigationScreens;
     hasHeader?: boolean;
     isHeaderCentered?: boolean;
@@ -99,13 +99,14 @@ const styles = EStyleSheet.create({
     },
     container: {
         zIndex: 1,
+        paddingTop: 15,
         backgroundColor: 'red',
         height: '100%',
         position: 'relative',
     },
     header_container: {
         position: 'absolute',
-        paddingTop: 15,
+        paddingTop: 30,
         top: 0,
         width: '100%',
         height: 90,

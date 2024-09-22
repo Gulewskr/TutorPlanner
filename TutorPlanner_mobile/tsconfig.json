@@ -8,7 +8,13 @@
     "paths": {
       "@components/*": [
         "src/components/*"
-      ]
+      ],
+      "@model": [
+        "src/model/index.ts"
+      ],
+      "@services/*": [
+        "src/services/*"
+      ],
     }
   }
 }

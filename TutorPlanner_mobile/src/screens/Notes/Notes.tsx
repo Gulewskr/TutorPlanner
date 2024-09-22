@@ -23,10 +23,10 @@ export const Notes: React.FC<
                 {t.map(t => (
                     <Input
                         key={t}
-                        title="TEST INPUT"
+                        placeholder="TEST INPUT"
                         label="TEST INPUT"
                         icon="minus"
-                    ></Input>
+                    />
                 ))}
             </ScrollView>
         </Layout>

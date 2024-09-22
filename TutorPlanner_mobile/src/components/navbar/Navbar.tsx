@@ -3,16 +3,17 @@ import { View, TouchableOpacity } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Svg, Defs, Rect, Mask, Circle, Line } from 'react-native-svg';
-import { NavbarNavigationScreens, RootStackParamList } from '../../App';
+import { NavbarNavigationScreens } from '../../App';
 import { Icon, ICON_NAME } from '@components/Icon';
 
 interface NavbarItemProps {
     name: NavbarNavigationScreens;
     icon: ICON_NAME;
+    disabled?: boolean;
 }
 
 interface NavbarProps {
-    navigation: NativeStackNavigationProp<RootStackParamList>;
+    navigation: NativeStackNavigationProp<any>;
     route: NavbarNavigationScreens;
 }
 
@@ -36,6 +37,7 @@ const NAVBAR_ITEMS: NavbarItemProps[] = [
     {
         name: 'Notes',
         icon: 'notes',
+        disabled: true,
     },
 ];
 
@@ -63,7 +65,7 @@ const ActiveComponent = () => (
             y="0"
             height="100%"
             width="100%"
-            fill="#FFC3FF" //$backgroundColorPrimary
+            fill="#FFC3FF" //$bgColor_primary
             mask="url(#mask)"
             fill-opacity="0"
         />
@@ -72,7 +74,7 @@ const ActiveComponent = () => (
             cx="50%"
             cy="0"
             mask="url(#mask)"
-            fill="#070707" //$colorBlack
+            fill="#070707" //$color_black
         />
         <Line
             x1={0}
@@ -80,7 +82,7 @@ const ActiveComponent = () => (
             y1="0.5"
             y2="0.5"
             mask="url(#mask)"
-            stroke="#070707" //$colorBlack
+            stroke="#070707" //$color_black
             strokeWidth="1.5"
         />
     </Svg>
@@ -97,13 +99,14 @@ const Navbar: React.FC<NavbarProps> = ({ navigation, route }) => {
 
     return (
         <View style={styles.navbar}>
-            {NAVBAR_ITEMS.map((icon, index) => {
+            {NAVBAR_ITEMS.map((item, index) => {
                 const isActive = activeIndex === index;
                 return (
                     <TouchableOpacity
                         key={index}
                         activeOpacity={1}
-                        onPress={() => handlePress(icon.name)}
+                        disabled={item.disabled}
+                        onPress={() => !item.disabled && handlePress(item.name)}
                         style={[
                             styles.navbarItem,
                             isActive || styles.navbarItemBG,
@@ -112,12 +115,15 @@ const Navbar: React.FC<NavbarProps> = ({ navigation, route }) => {
                         {isActive ? (
                             <>
                                 <View style={styles.activeIconContainer}>
-                                    <Icon icon={icon.icon} size={'sm'} />
+                                    <Icon icon={item.icon} size={'sm'} />
                                 </View>
                                 <ActiveComponent />
                             </>
                         ) : (
-                            <Icon icon={icon.icon} />
+                            <Icon icon={item.icon} />
+                        )}
+                        {item.disabled && (
+                            <View style={styles.navbarItemBG_disabled} />
                         )}
                     </TouchableOpacity>
                 );
@@ -135,7 +141,7 @@ const styles = EStyleSheet.create({
         height: 56,
         flexDirection: 'row',
         justifyContent: 'space-around',
-        border: '1px solid $colorBlack',
+        border: '1px solid $color_black',
     },
     navbarItem: {
         flex: 1,
@@ -145,19 +151,26 @@ const styles = EStyleSheet.create({
     },
     navbarItemBG: {
         borderTopWidth: 1,
-        backgroundColor: '$backgroundColorPrimary',
+        backgroundColor: '$bgColor_primary',
+    },
+    navbarItemBG_disabled: {
+        backgroundColor: '$color_disabled_primary',
+        opacity: 0.5,
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
     },
     activeIconContainer: {
-        backgroundColor: '$colorPrimary',
+        backgroundColor: '$color_primary',
         borderRadius: 50,
         width: 50,
         height: 50,
         top: -28,
         justifyContent: 'center',
         alignItems: 'center',
-        border: '0.5px solid $colorBlack',
+        border: '0.5px solid $color_black',
         borderWidth: 1,
-        borderColor: '$colorBlack',
+        borderColor: '$color_black',
     },
 });
 

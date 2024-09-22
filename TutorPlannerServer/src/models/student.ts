@@ -3,25 +3,26 @@ import { PrismaClient, Prisma, Student } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const studentRepository = {
-    getStudentById: async (studentId: number): Promise<Student | null> => {
+    findStudentById: async (studentId: number): Promise<Student | null> => {
         return await prisma.student.findFirst({
             where: {
                 id: studentId,
             },
         });
     },
-    getAllStudents: async (): Promise<Student[]> => {
+    count: async (): Promise<number> => {
+        return await prisma.student.count();
+    },
+    findAll: async (): Promise<Student[]> => {
         return await prisma.student.findMany();
     },
-    createStudent: async (
-        student: Prisma.StudentCreateInput,
-    ): Promise<Student> => {
+    create: async (student: Prisma.StudentCreateInput): Promise<Student> => {
         const createdStudent = await prisma.student.create({
             data: student,
         });
         return createdStudent;
     },
-    updateStudent: async (
+    update: async (
         studentId: number,
         student: Prisma.StudentCreateInput,
     ): Promise<Student> => {
@@ -32,7 +33,7 @@ const studentRepository = {
             },
         });
     },
-    deleteStudent: async (studentId: number): Promise<Student> => {
+    delete: async (studentId: number): Promise<Student> => {
         return await prisma.student.delete({
             where: {
                 id: studentId,
