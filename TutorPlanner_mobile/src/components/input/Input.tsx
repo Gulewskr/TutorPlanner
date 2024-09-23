@@ -22,7 +22,7 @@ const CustomInput: React.FC<InputProps> = ({ placeholder, icon, label }) => {
         >
             {label && <Text style={styles.label}>{label}</Text>}
             <View style={styles.content}>
-                {icon && <Icon icon={icon} size='sm' />}
+                {icon && <Icon icon={icon} />}
                 <TextInput style={styles.input} placeholder={placeholder} />
             </View>
 

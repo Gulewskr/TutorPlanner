@@ -1,11 +1,12 @@
-import * as React from 'react';
-import { View } from 'react-native';
-import { Layout } from '../Layout';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { LessonsTabParamList } from './Lessons';
-import { HourInput, Input } from '@components/input';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import { Button } from '@components/button';
+import * as React from 'react'
+import { View } from 'react-native'
+import { Layout } from '../Layout'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { LessonsTabParamList } from './Lessons'
+import { HourInput, Input } from '@components/input'
+import EStyleSheet from 'react-native-extended-stylesheet'
+import { Button } from '@components/button'
+import { CheckboxTile } from '@components/checkbox'
 
 export const CreateLessonForm: React.FC<
     NativeStackScreenProps<LessonsTabParamList, 'Create'>
@@ -15,8 +16,7 @@ export const CreateLessonForm: React.FC<
             navigation={navigation}
             route={'Lessons'}
             title="Dodaj zajecia"
-            hasHeader
-        >
+            hasHeader>
             <Input placeholder="--Nazwa wydarzenia--" label="Nazwa" />
             <Input placeholder="--Opis--" label="Opis" />
             <Input
@@ -27,7 +27,7 @@ export const CreateLessonForm: React.FC<
             <Input placeholder="--Podaj cene--" label="Cena" icon="payments" />
             <Input placeholder="--Data--" label="Data" icon="calendar" />
             <HourInput placeholder="--Godzina--" label="Godzina" />
-            <Input placeholder="--Zajecia cotygodniowe--" label="checkbox" />
+            <CheckboxTile label={'Zajęcia cotygodniowe'} />
             <View style={styles.double_button_container}>
                 <Button
                     icon="minus"
@@ -43,8 +43,8 @@ export const CreateLessonForm: React.FC<
                 />
             </View>
         </Layout>
-    );
-};
+    )
+}
 
 const styles = EStyleSheet.create({
     double_button_container: {
@@ -54,4 +54,4 @@ const styles = EStyleSheet.create({
         marginTop: 5,
         marginBottom: 5,
     },
-});
+})
