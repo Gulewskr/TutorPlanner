@@ -1,8 +1,8 @@
-import { Image, StyleSheet } from 'react-native'
+import { Image, StyleSheet } from 'react-native';
 
 interface IconProps {
-    icon: ICON_NAME
-    size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+    icon: ICON_NAME;
+    size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
 type ICON_NAME =
@@ -18,7 +18,7 @@ type ICON_NAME =
     | 'payments'
     | 'plus'
     | 'settings'
-    | 'students'
+    | 'students';
 
 const iconsMap: { [key in ICON_NAME]: any } = {
     cancel: require('../../assets/icons/cancel.png'),
@@ -34,7 +34,7 @@ const iconsMap: { [key in ICON_NAME]: any } = {
     addStudent: require('../../assets/icons/addStudent.png'),
     addPayment: require('../../assets/icons/addPayment.png'),
     addLesson: require('../../assets/icons/addLesson.png'),
-}
+};
 
 const Icon: React.FC<IconProps> = ({ icon, size }) => (
     <Image
@@ -48,7 +48,7 @@ const Icon: React.FC<IconProps> = ({ icon, size }) => (
             size == 'xl' && styles['icon-xl'],
         ]}
     />
-)
+);
 
 const styles = StyleSheet.create({
     'icon-xxs': {
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         height: 50,
         resizeMode: 'contain',
     },
-})
+});
 
-export default Icon
-export { type ICON_NAME }
+export default Icon;
+export { type ICON_NAME };

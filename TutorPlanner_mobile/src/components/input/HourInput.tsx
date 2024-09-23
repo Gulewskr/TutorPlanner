@@ -14,7 +14,7 @@ const initialValue = () => {
     const initialTime = new Date();
     initialTime.setHours(0, 0, 0, 0); // Set hours and minutes to 00:00
     return initialTime;
-  }
+};
 
 const CustomInput: React.FC<InputProps> = ({ placeholder, icon, label }) => {
     const [width, setWidth] = useState(0);
@@ -60,34 +60,42 @@ const CustomInput: React.FC<InputProps> = ({ placeholder, icon, label }) => {
             <View style={styles.content}>
                 <TouchableOpacity onPress={() => setStartHourPicker(true)}>
                     <View style={styles.hourinput}>
-                        <Text style={styles.hourinputText}>{formatTime(startHour)}</Text>
+                        <Text style={styles.hourinputText}>
+                            {formatTime(startHour)}
+                        </Text>
                     </View>
                 </TouchableOpacity>
                 <View style={styles.separator} />
                 <TouchableOpacity onPress={() => setEndHourPicker(true)}>
                     <View style={styles.hourinput}>
-                        <Text style={styles.hourinputText}>{formatTime(endHour)}</Text>
+                        <Text style={styles.hourinputText}>
+                            {formatTime(endHour)}
+                        </Text>
                     </View>
                 </TouchableOpacity>
             </View>
 
             <View style={[styles.shadow, { width }]}></View>
-            {showStartHourPicker && <DateTimePicker
-                style={styles.input}
-                value={startHour}
-                mode="time"
-                is24Hour={true}
-                display="spinner" // You can also use 'default', 'clock' depending on your platform
-                onChange={onChangeStartHour}
-            />}
-            {showEndHourPicker && <DateTimePicker
-                style={styles.input}
-                value={endHour}
-                mode="time"
-                is24Hour={true}
-                display="spinner" // You can also use 'default', 'clock' depending on your platform
-                onChange={onChangeEndHour}
-            />}
+            {showStartHourPicker && (
+                <DateTimePicker
+                    style={styles.input}
+                    value={startHour}
+                    mode="time"
+                    is24Hour={true}
+                    display="spinner" // You can also use 'default', 'clock' depending on your platform
+                    onChange={onChangeStartHour}
+                />
+            )}
+            {showEndHourPicker && (
+                <DateTimePicker
+                    style={styles.input}
+                    value={endHour}
+                    mode="time"
+                    is24Hour={true}
+                    display="spinner" // You can also use 'default', 'clock' depending on your platform
+                    onChange={onChangeEndHour}
+                />
+            )}
         </View>
     );
 };
@@ -135,7 +143,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
     },
     hourinputText: {
-        fontSize: 20
+        fontSize: 20,
     },
     input: {
         flex: 1,
@@ -144,7 +152,7 @@ const styles = EStyleSheet.create({
     separator: {
         width: 20,
         borderWidth: 0.5,
-        margin: 10
+        margin: 10,
     },
     shadow: {
         borderRadius: 15,

@@ -1,5 +1,5 @@
-import React, { PropsWithChildren, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { PropsWithChildren, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 type TileColors =
     | 'white'
@@ -12,10 +12,11 @@ type TileColors =
     | 'pink'
     | 'brightBlue'
     | 'green'
-    | 'brightPink' | 'primary'
+    | 'brightPink'
+    | 'primary';
 
 interface TileProps {
-    color?: TileColors
+    color?: TileColors;
 }
 
 const TILE_COLORS: { [key in TileColors]: string } = {
@@ -31,22 +32,22 @@ const TILE_COLORS: { [key in TileColors]: string } = {
     green: '#6DF1A2',
     brightPink: '#FFA9F1',
     primary: '#FFA9F1', //$color_primary
-}
+};
 
 const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
     children,
     color,
 }) => {
-    const [width, setWidth] = useState(0)
+    const [width, setWidth] = useState(0);
 
     const getRandomColorKey = (): string => {
-        const keys = Object.keys(TILE_COLORS)
-        const randomIndex = Math.floor(Math.random() * keys.length)
-        return TILE_COLORS[keys[randomIndex] as TileColors]
-    }
+        const keys = Object.keys(TILE_COLORS);
+        const randomIndex = Math.floor(Math.random() * keys.length);
+        return TILE_COLORS[keys[randomIndex] as TileColors];
+    };
 
     const selectedColor =
-        color && TILE_COLORS[color] ? TILE_COLORS[color] : getRandomColorKey()
+        color && TILE_COLORS[color] ? TILE_COLORS[color] : getRandomColorKey();
 
     return (
         <View
@@ -55,20 +56,21 @@ const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
                 width: 320,
             }}
             onLayout={event => {
-                const { width } = event.nativeEvent.layout
-                setWidth(width)
-            }}>
+                const { width } = event.nativeEvent.layout;
+                setWidth(width);
+            }}
+        >
             <View style={[styles.content, { backgroundColor: selectedColor }]}>
                 <Text style={styles.text}>{children}</Text>
             </View>
             <View style={[styles.shadow, { width }]}></View>
         </View>
-    )
-}
+    );
+};
 
-CustomTile.displayName = 'CustomTile'
+CustomTile.displayName = 'CustomTile';
 
-export default CustomTile
+export default CustomTile;
 
 const styles = StyleSheet.create({
     content: {
@@ -95,4 +97,4 @@ const styles = StyleSheet.create({
         borderColor: '#070707',
         zIndex: -1,
     },
-})
+});

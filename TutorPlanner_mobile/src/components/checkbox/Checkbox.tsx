@@ -8,16 +8,15 @@ interface CheckboxProps {
     label?: string;
 }
 
-const CheckboxTile: React.FC<CheckboxProps> = (props) => {
+const CheckboxTile: React.FC<CheckboxProps> = props => {
     return (
-        <Tile color='white'>
+        <Tile color="white">
             <Checkbox {...props} />
         </Tile>
     );
 };
 
 const Checkbox: React.FC<CheckboxProps> = ({ label }) => {
-
     const [isChecked, setIsChecked] = useState(false);
 
     const toggleCheckbox = () => {
@@ -30,11 +29,11 @@ const Checkbox: React.FC<CheckboxProps> = ({ label }) => {
                 style={styles.checkboxBG}
                 onPress={toggleCheckbox}
             >
-                <View
-                    style={[styles.checkbox, isChecked && styles.checked]}
-                >
-                    {//TODO change icon to checkmark 
-                    isChecked && <Icon icon='plus' size='xxs' />}
+                <View style={[styles.checkbox, isChecked && styles.checked]}>
+                    {
+                        //TODO change icon to checkmark
+                        isChecked && <Icon icon="plus" size="xxs" />
+                    }
                 </View>
             </TouchableOpacity>
             {label && <Text style={styles.label}>{label}</Text>}
