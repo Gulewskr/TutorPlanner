@@ -17,6 +17,7 @@ export const CreateLessonForm: React.FC<
             route={'Lessons'}
             title="Dodaj zajecia"
             hasHeader
+            hasHeaderSeperated
         >
             <Input placeholder="--Nazwa wydarzenia--" label="Nazwa" />
             <Input placeholder="--Opis--" label="Opis" />

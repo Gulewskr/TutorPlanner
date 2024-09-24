@@ -7,6 +7,7 @@ import { ICON_NAME } from '@components/icon';
 interface HeaderProps {
     leftAction?: () => void;
     leftIcon?: ICON_NAME;
+    leftIconNoBG?: boolean;
     isCentered?: boolean;
     rightAction?: () => void;
     rightIcon?: ICON_NAME;
@@ -17,6 +18,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({
     leftIcon,
     leftAction,
+    leftIconNoBG,
     title,
     subtitle,
     rightIcon,

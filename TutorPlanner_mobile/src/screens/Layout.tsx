@@ -11,6 +11,7 @@ interface LayoutProps {
     navigation: NativeStackNavigationProp<any>;
     route: NavbarNavigationScreens;
     hasHeader?: boolean;
+    hasHeaderSeperated?: boolean;
     isHeaderCentered?: boolean;
     title?: string;
     subtitle?: string;
@@ -20,6 +21,7 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
     children,
     navigation,
     hasHeader,
+    hasHeaderSeperated,
     isHeaderCentered = true,
     route,
     title,
@@ -37,27 +39,31 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
                 end={{ x: 1, y: 0.7 }}
             />
             {hasHeader && (
-                <View style={styles.header_container}>
-                    <Header
-                        leftIcon={isBackButtonDisabled ? undefined : 'back'}
-                        leftAction={
-                            isBackButtonDisabled
-                                ? undefined
-                                : () => navigation.goBack()
-                        }
-                        rightIcon={
-                            isSettingsButtonDisabled ? undefined : 'settings'
-                        }
-                        rightAction={
-                            isSettingsButtonDisabled
-                                ? undefined
-                                : () => navigation.navigate('Settings')
-                        }
-                        title={title}
-                        subtitle={subtitle}
-                        isCentered={isHeaderCentered}
-                    />
-                </View>
+                <>
+                    <View style={styles.header_container}>
+                        <Header
+                            leftIcon={isBackButtonDisabled ? undefined : 'back'}
+                            leftAction={
+                                isBackButtonDisabled
+                                    ? undefined
+                                    : () => navigation.goBack()
+                            }
+                            rightIcon={
+                                isSettingsButtonDisabled
+                                    ? undefined
+                                    : 'settings'
+                            }
+                            rightAction={
+                                isSettingsButtonDisabled
+                                    ? undefined
+                                    : () => navigation.navigate('Settings')
+                            }
+                            title={title}
+                            subtitle={subtitle}
+                            isCentered={isHeaderCentered}
+                        />
+                    </View>
+                </>
             )}
             <View
                 style={[
@@ -67,6 +73,7 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
                     },
                 ]}
             >
+                {hasHeaderSeperated && <View style={styles.verticalLine} />}
                 {children}
             </View>
             <LinearGradient
@@ -110,6 +117,11 @@ const styles = EStyleSheet.create({
         top: 0,
         width: '100%',
         height: 90,
+    },
+    verticalLine: {
+        width: '100%',
+        borderWidth: 0.5,
+        height: 1,
     },
     navbar: {
         position: 'absolute',
