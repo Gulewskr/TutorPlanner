@@ -4,11 +4,29 @@ import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import { Header } from '@components/header';
+import { useState } from 'react';
+import { TabItem, Tabs } from '@components/tab';
 
 export const Home: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Home'>
 > = ({ navigation, route }) => {
     const users = ['OLA P', 'KAMIL S'];
+
+    const tabs: Array<TabItem> = [
+        { isExpanded: true, text: 'Wydarzenia', icon: 'plus' },
+        { isExpanded: true, text: 'Zdjęcia', icon: 'minus' },
+        { isExpanded: true, text: 'Tab', icon: 'minus' },
+        { isExpanded: true, text: 'Tab', icon: 'minus' },
+        { isExpanded: true, text: 'Tab', icon: 'minus' },
+        { isExpanded: true, text: 'Tab', icon: 'minus' },
+        { isExpanded: true, text: 'Tab', icon: 'minus' },
+    ];
+
+    const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
+
+    const changeActiveTab = (index: number) => {
+        setActiveTabIndex(index);
+    };
 
     return (
         <Layout
@@ -66,6 +84,14 @@ export const Home: React.FC<
                     rightIcon={'addLesson'}
                     rightAction={() => 1}
                     title={'Dzisiejszy plan'}
+                />
+            </View>
+
+            <View>
+                <Tabs
+                    tabs={tabs}
+                    activeTabIndex={activeTabIndex}
+                    changeActiveTab={changeActiveTab}
                 />
             </View>
 
