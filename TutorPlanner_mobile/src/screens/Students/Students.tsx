@@ -8,6 +8,8 @@ import { useState } from 'react';
 import { studentsService } from '@services/students.service';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StudentProfile } from './StudentProfile';
+import { Input } from '@components/input';
+import { AddStudent } from './AddStudent';
 
 export type StudentsTabParamList = {
     List: undefined;
@@ -60,21 +62,6 @@ export const StudentsList: React.FC<
         >
             <Text>Students list</Text>
             <Text>{students.map(stud => JSON.stringify(stud))}</Text>
-        </Layout>
-    );
-};
-
-export const AddStudent: React.FC<
-    NativeStackScreenProps<StudentsTabParamList, 'Create'>
-> = ({ navigation, route }) => {
-    return (
-        <Layout
-            navigation={navigation}
-            route={'Students'}
-            title="Dodaj ucznia"
-            hasHeader
-        >
-            <Text>TODO - FORMULARZ</Text>
         </Layout>
     );
 };

@@ -1,34 +1,32 @@
-import * as React from 'react';
-import { View } from 'react-native';
-import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { LessonsTabParamList } from './Lessons';
-import { HourInput, Input } from '@components/input';
+import { PaymentsTabParamList } from './Payments';
+import { Layout } from '../Layout';
+import { Input } from '@components/input';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { View } from 'react-native';
 import { Button } from '@components/button';
-import { CheckboxTile } from '@components/checkbox';
 
-export const CreateLessonForm: React.FC<
-    NativeStackScreenProps<LessonsTabParamList, 'Create'>
+export const CreatePayments: React.FC<
+    NativeStackScreenProps<PaymentsTabParamList, 'Create'>
 > = ({ navigation, route }) => {
     return (
         <Layout
             navigation={navigation}
-            route={'Lessons'}
-            title="Dodaj zajecia"
+            route={'Payments'}
+            title="Dodaj płatność"
             hasHeader
         >
-            <Input placeholder="--Nazwa wydarzenia--" label="Nazwa" />
-            <Input placeholder="--Opis--" label="Opis" />
             <Input
+                icon="students"
                 placeholder="--Wybierz ucznia--"
                 label="Uczeń"
-                icon="students"
             />
-            <Input placeholder="--Podaj cene--" label="Cena" icon="payments" />
-            <Input placeholder="--Data--" label="Data" icon="calendar" />
-            <HourInput placeholder="--Godzina--" label="Godzina" />
-            <CheckboxTile label={'Zajęcia cotygodniowe'} />
+            <Input
+                icon="payments"
+                placeholder="--Podaj kwote--"
+                label="Kwota"
+            />
+
             <View style={styles.double_button_container}>
                 <Button
                     icon="minus"

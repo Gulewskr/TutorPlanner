@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Home } from './screens/Home/Home';
 import { Calendar } from './screens/Calendar/Calendar';
-import { Students } from './screens/Students/Students';
+import { Students, StudentsTabParamList } from './screens/Students/Students';
 import { Payments, PaymentsTabParamList } from './screens/Payments/Payments';
 import { Notes } from './screens/Notes/Notes';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -33,8 +33,12 @@ EStyleSheet.build({
 export type RootStackParamList = {
     Home: undefined;
     Calendar: undefined;
-    Students: undefined;
-    Payments: { screen: keyof PaymentsTabParamList; initial: boolean };
+    Students: { screen: keyof StudentsTabParamList; initial: boolean };
+    Payments: {
+        screen: keyof PaymentsTabParamList;
+        initial: boolean;
+        activeTab: number;
+    };
     Notes: undefined;
     Settings: undefined;
     Lessons: { screen: keyof LessonsTabParamList; initial: boolean };

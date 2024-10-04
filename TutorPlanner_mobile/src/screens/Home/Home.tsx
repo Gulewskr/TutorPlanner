@@ -12,15 +12,15 @@ export const Home: React.FC<
 > = ({ navigation, route }) => {
     const users = ['OLA P', 'KAMIL S'];
 
-    const tabs: Array<TabItem> = [
-        { isExpanded: true, text: 'Wydarzenia', icon: 'plus' },
-        { isExpanded: true, text: 'Zdjęcia', icon: 'minus' },
-        { isExpanded: true, text: 'Tab', icon: 'minus' },
-        { isExpanded: true, text: 'Tab', icon: 'minus' },
-        { isExpanded: true, text: 'Tab', icon: 'minus' },
-        { isExpanded: true, text: 'Tab', icon: 'minus' },
-        { isExpanded: true, text: 'Tab', icon: 'minus' },
-    ];
+    // const tabs: Array<TabItem> = [
+    //     { isExpanded: true, text: 'Wydarzenia', icon: 'plus' },
+    //     { isExpanded: true, text: 'Zdjęcia', icon: 'minus' },
+    //     { isExpanded: true, text: 'Tab', icon: 'minus' },
+    //     { isExpanded: true, text: 'Tab', icon: 'minus' },
+    //     { isExpanded: true, text: 'Tab', icon: 'minus' },
+    //     { isExpanded: true, text: 'Tab', icon: 'minus' },
+    //     { isExpanded: true, text: 'Tab', icon: 'minus' },
+    // ];
 
     const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
 
@@ -52,7 +52,12 @@ export const Home: React.FC<
                     />
                     <Button
                         icon="addStudent"
-                        onClick={() => 1}
+                        onClick={() =>
+                            navigation.navigate('Students', {
+                                screen: 'Create',
+                                initial: true,
+                            })
+                        }
                         label="Dodaj ucznia"
                         width={160}
                     />
@@ -62,8 +67,9 @@ export const Home: React.FC<
                         icon="addPayment"
                         onClick={() =>
                             navigation.navigate('Payments', {
-                                screen: 'Create',
+                                screen: 'List',
                                 initial: true,
+                                activeTab: 2,
                             })
                         }
                         label="Dodaj płatność"
@@ -87,13 +93,13 @@ export const Home: React.FC<
                 />
             </View>
 
-            <View>
+            {/* <View>
                 <Tabs
                     tabs={tabs}
                     activeTabIndex={activeTabIndex}
                     changeActiveTab={changeActiveTab}
                 />
-            </View>
+            </View> */}
 
             {/* {users.map((user, i) => (
                 <CustomButton

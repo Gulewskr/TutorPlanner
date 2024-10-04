@@ -17,6 +17,9 @@ type TileColors =
 
 interface TileProps {
     color?: TileColors;
+    width?: number;
+    centered?: boolean;
+    hasShadow?: boolean;
 }
 
 const TILE_COLORS: { [key in TileColors]: string } = {
@@ -37,9 +40,10 @@ const TILE_COLORS: { [key in TileColors]: string } = {
 const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
     children,
     color,
+    hasShadow = true,
+    width = 320,
+    centered = false,
 }) => {
-    const [width, setWidth] = useState(0);
-
     const getRandomColorKey = (): string => {
         const keys = Object.keys(TILE_COLORS);
         const randomIndex = Math.floor(Math.random() * keys.length);
@@ -53,17 +57,25 @@ const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
         <View
             style={{
                 position: 'relative',
-                width: 320,
             }}
-            onLayout={event => {
-                const { width } = event.nativeEvent.layout;
-                setWidth(width);
-            }}
+            // onLayout={event => {
+            //     const { width } = event.nativeEvent.layout;
+            //     setWidth(width);
+            // }}
         >
-            <View style={[styles.content, { backgroundColor: selectedColor }]}>
+            <View
+                style={[
+                    styles.content,
+                    {
+                        backgroundColor: selectedColor,
+                        width,
+                        justifyContent: centered ? 'center' : 'flex-start',
+                    },
+                ]}
+            >
                 <Text style={styles.text}>{children}</Text>
             </View>
-            <View style={[styles.shadow, { width }]}></View>
+            {hasShadow && <View style={[styles.shadow, { width }]}></View>}
         </View>
     );
 };
@@ -78,6 +90,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 40,
         borderWidth: 1,
+
         borderColor: '#000',
         borderRadius: 10,
         backgroundColor: '#F5F5F5',

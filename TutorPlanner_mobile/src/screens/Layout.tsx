@@ -74,6 +74,7 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
                 style={styles.bottomGradient}
                 start={{ x: 0.5, y: 0.3 }}
                 end={{ x: 0.5, y: 1 }}
+                pointerEvents="none"
             />
             <View style={styles.navbar}>
                 <Navbar navigation={navigation} route={route} />
@@ -100,7 +101,6 @@ const styles = EStyleSheet.create({
     container: {
         zIndex: 1,
         paddingTop: 15,
-        backgroundColor: 'red',
         height: '100%',
         position: 'relative',
     },
@@ -122,5 +122,6 @@ const styles = EStyleSheet.create({
         flexDirection: 'column',
         gap: 15,
         alignItems: 'center',
+        // zIndex: 1,
     },
 });
