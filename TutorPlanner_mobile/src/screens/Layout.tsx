@@ -122,6 +122,5 @@ const styles = EStyleSheet.create({
         flexDirection: 'column',
         gap: 15,
         alignItems: 'center',
-        // zIndex: 1,
     },
 });

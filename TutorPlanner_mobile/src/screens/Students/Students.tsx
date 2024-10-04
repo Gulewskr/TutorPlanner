@@ -10,6 +10,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StudentProfile } from './StudentProfile';
 import { Input } from '@components/input';
 import { AddStudent } from './AddStudent';
+import { StudentTile } from '@components/tile';
+import { Button } from '@components/button';
 
 export type StudentsTabParamList = {
     List: undefined;
@@ -60,8 +62,28 @@ export const StudentsList: React.FC<
             title="Studenci"
             hasHeader
         >
-            <Text>Students list</Text>
-            <Text>{students.map(stud => JSON.stringify(stud))}</Text>
+            <View>
+                {students.map(student => (
+                    <>
+                        <StudentTile key={student.id}>
+                            {student.firstname} {student.surename}
+                        </StudentTile>
+                        {/* 
+                        TO-DO: Naprawic bo sie nie scrolluje :(
+
+                        <StudentTile key={student.id}>
+                            {student.firstname} {student.surename}
+                        </StudentTile> */}
+                    </>
+                ))}
+
+                {/* TO-DO: Add function to add students (xd)*/}
+                <Button
+                    onClick={() => console.log(1)}
+                    icon="addStudent"
+                    label="Dodaj ucznia"
+                />
+            </View>
         </Layout>
     );
 };

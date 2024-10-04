@@ -45,7 +45,7 @@ const ActiveComponent = () => (
     <Svg
         style={{
             position: 'absolute',
-            top: -1,
+            top: -2.9,
             left: 0,
         }}
         x={0}
@@ -79,8 +79,8 @@ const ActiveComponent = () => (
         <Line
             x1={0}
             x2={100}
-            y1="0.5"
-            y2="0.5"
+            y1="0.75"
+            y2="0.75"
             mask="url(#mask)"
             stroke="#070707" //$color_black
             strokeWidth="1.5"

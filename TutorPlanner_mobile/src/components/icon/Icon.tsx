@@ -18,7 +18,10 @@ type ICON_NAME =
     | 'payments'
     | 'plus'
     | 'settings'
-    | 'students';
+    | 'students'
+    | 'messenger'
+    | 'oneNote'
+    | 'pencil';
 
 const iconsMap: { [key in ICON_NAME]: any } = {
     cancel: require('../../assets/icons/cancel.png'),
@@ -34,6 +37,9 @@ const iconsMap: { [key in ICON_NAME]: any } = {
     addStudent: require('../../assets/icons/addStudent.png'),
     addPayment: require('../../assets/icons/addPayment.png'),
     addLesson: require('../../assets/icons/addLesson.png'),
+    messenger: require('../../assets/icons/messenger.png'),
+    oneNote: require('../../assets/icons/oneNote.png'),
+    pencil: require('../../assets/icons/pencil.png'),
 };
 
 const Icon: React.FC<IconProps> = ({ icon, size }) => (

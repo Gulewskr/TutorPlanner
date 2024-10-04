@@ -1,2 +1,3 @@
 import Tile from './Tile';
-export { Tile };
+import CustomStudentTile from './StudentTile';
+export { Tile, CustomStudentTile as StudentTile };
