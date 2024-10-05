@@ -7,6 +7,7 @@ import { HourInput, Input } from '@components/input';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Button } from '@components/button';
 import { CheckboxTile } from '@components/checkbox';
+import { FormProvider, FormRenderer } from '@components/form';
 
 export const CreateLessonForm: React.FC<
     NativeStackScreenProps<LessonsTabParamList, 'Create'>
@@ -19,6 +20,29 @@ export const CreateLessonForm: React.FC<
             hasHeader
             hasHeaderSeperated
         >
+            <FormProvider>
+                <Form />
+            </FormProvider>
+        </Layout>
+    );
+};
+
+const Form: React.FC = () => {
+    return (
+        <>
+            <FormRenderer
+                schema={{
+                    fields: {},
+                }}
+                onSubmit={function (data: any): void {
+                    console.log('Submit');
+                    console.log(data);
+                }}
+                onCancel={function (): void {
+                    console.log('cancel');
+                }}
+            />
+            {/*
             <Input placeholder="--Nazwa wydarzenia--" label="Nazwa" />
             <Input placeholder="--Opis--" label="Opis" />
             <Input
@@ -44,7 +68,8 @@ export const CreateLessonForm: React.FC<
                     width={160}
                 />
             </View>
-        </Layout>
+             */}
+        </>
     );
 };
 

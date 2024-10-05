@@ -3,7 +3,7 @@ import { Text, View, TextInput, Image } from 'react-native';
 import { Icon, ICON_NAME } from '@components/icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-interface InputProps {
+export interface InputProps {
     placeholder?: string;
     icon?: ICON_NAME;
     label?: string;
