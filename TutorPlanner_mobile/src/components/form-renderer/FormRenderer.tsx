@@ -3,14 +3,7 @@ import React from 'react';
 import { View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useFormContext } from './FormRendererProvider';
-
-interface FormRendererSchema {
-    fields: {};
-}
-
-interface FormRendererFieldSchema {
-    component: any; //todo
-}
+import { FormRendererSchema } from './model';
 
 interface FormRendererProps {
     schema: FormRendererSchema;

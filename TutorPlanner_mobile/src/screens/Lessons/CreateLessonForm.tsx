@@ -1,13 +1,9 @@
 import * as React from 'react';
-import { View } from 'react-native';
 import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LessonsTabParamList } from './Lessons';
-import { HourInput, Input } from '@components/input';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Button } from '@components/button';
-import { CheckboxTile } from '@components/checkbox';
-import { FormProvider, FormRenderer } from '@components/form';
+import { FormProvider, FormRenderer } from '@components/form-renderer';
 
 export const CreateLessonForm: React.FC<
     NativeStackScreenProps<LessonsTabParamList, 'Create'>
@@ -29,47 +25,72 @@ export const CreateLessonForm: React.FC<
 
 const Form: React.FC = () => {
     return (
-        <>
-            <FormRenderer
-                schema={{
-                    fields: {},
-                }}
-                onSubmit={function (data: any): void {
-                    console.log('Submit');
-                    console.log(data);
-                }}
-                onCancel={function (): void {
-                    console.log('cancel');
-                }}
-            />
-            {/*
-            <Input placeholder="--Nazwa wydarzenia--" label="Nazwa" />
-            <Input placeholder="--Opis--" label="Opis" />
-            <Input
-                placeholder="--Wybierz ucznia--"
-                label="Uczeń"
-                icon="students"
-            />
-            <Input placeholder="--Podaj cene--" label="Cena" icon="payments" />
-            <Input placeholder="--Data--" label="Data" icon="calendar" />
-            <HourInput placeholder="--Godzina--" label="Godzina" />
-            <CheckboxTile label={'Zajęcia cotygodniowe'} />
-            <View style={styles.double_button_container}>
-                <Button
-                    icon="minus"
-                    onClick={() => console.log('Anuluj')}
-                    label="Anuluj"
-                    width={160}
-                />
-                <Button
-                    icon="plus"
-                    onClick={() => console.log('Dodaj')}
-                    label="Dodaj"
-                    width={160}
-                />
-            </View>
-             */}
-        </>
+        <FormRenderer
+            schema={{
+                title: 'Dodaj zajęcia',
+                initValue: {},
+                fields: {
+                    name: {
+                        component: 'input',
+                        componentProps: {
+                            label: 'Nazwa',
+                            placeholder: '--Nazwa wydarzenia--',
+                        },
+                    },
+                    description: {
+                        component: 'input',
+                        componentProps: {
+                            label: 'Opis',
+                            placeholder: '--Opis--',
+                        },
+                    },
+                    student: {
+                        component: 'input',
+                        componentProps: {
+                            label: 'Uczeń',
+                            icon: 'students',
+                            placeholder: '--Wybierz ucznia--',
+                        },
+                    },
+                    price: {
+                        component: 'input',
+                        componentProps: {
+                            label: 'Cena',
+                            icon: 'payments',
+                            placeholder: '--Podaj cene--',
+                        },
+                    },
+                    date: {
+                        component: 'input',
+                        componentProps: {
+                            label: 'Data',
+                            icon: 'calendar',
+                            placeholder: '--Data--',
+                        },
+                    },
+                    hour: {
+                        component: 'hour-input',
+                        componentProps: {
+                            label: 'Godzina',
+                            placeholder: '--Godzina--',
+                        },
+                    },
+                    isWeekly: {
+                        component: 'checkbox-tile',
+                        componentProps: {
+                            label: 'Zajęcia cotygodniowe',
+                        },
+                    },
+                },
+            }}
+            onSubmit={function (data: any): void {
+                console.log('Submit');
+                console.log(data);
+            }}
+            onCancel={function (): void {
+                console.log('cancel');
+            }}
+        />
     );
 };
 

@@ -76,12 +76,14 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
                 {hasHeaderSeperated && <View style={styles.verticalLine} />}
                 {children}
             </View>
+            {/*
             <LinearGradient
                 colors={['transparent', 'rgba(255, 252, 227, .9)', '#FFFCE3']}
                 style={styles.bottomGradient}
                 start={{ x: 0.5, y: 0.3 }}
                 end={{ x: 0.5, y: 1 }}
             />
+            */}
             <View style={styles.navbar}>
                 <Navbar navigation={navigation} route={route} />
             </View>

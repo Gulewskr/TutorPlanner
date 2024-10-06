@@ -1,5 +1,6 @@
 import { createContext, useContext, useMemo, useState } from 'react';
-import { getFormComponent } from './helper';
+import { FieldWrapper } from './FieldWrapper';
+import { FormRendererSchema } from './model';
 
 interface FormContextProps {
     formData: any; //Init form data
@@ -21,39 +22,46 @@ const FormContext: React.Context<FormContextProps> =
     createContext(defaultFormContext);
 
 // Custom hook to use the form context
-export const useFormContext = (schema: any): FormContextHookProps => {
-    const context = useContext(FormContext);
+export const useFormContext = (
+    schema: FormRendererSchema,
+): FormContextHookProps => {
+    const { formData, handleDataChange } = useContext(FormContext);
     const [formBody] = useMemo(() => {
-        if (!context) {
+        if (!handleDataChange) {
             throw new Error('useForm must be used within a FormProvider');
         }
+
         const formBody = (
             <>
-                {getFormComponent({
-                    component: 'input',
-                    componentProps: {},
-                })}
-                {getFormComponent({
-                    component: 'checkbox',
-                    componentProps: {},
-                })}
+                {Object.entries(schema.fields).map(
+                    ([fieldName, field], index) => {
+                        return (
+                            <FieldWrapper
+                                key={`${fieldName}-${index}`}
+                                component={field.component}
+                                componentProps={field.componentProps}
+                                onFieldChange={(v: string) => {
+                                    handleDataChange(fieldName, v);
+                                }}
+                            />
+                        );
+                    },
+                )}
             </>
         );
         return [formBody];
     }, [schema]);
 
     return {
-        formData: context.formData,
+        formData: formData,
         FormBody: formBody,
     };
 };
 
 // FormProvider component to wrap around the form
 export const FormProvider = ({ children }: React.PropsWithChildren) => {
-    // Initialize form state
     const [formData, setFormData] = useState({});
 
-    // Handle input changes
     const handleDataChange = (name: string, value: string) => {
         setFormData(prevData => ({
             ...prevData,

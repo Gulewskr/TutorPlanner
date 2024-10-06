@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { Icon, ICON_NAME } from '@components/icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-interface InputProps {
+interface HourInputProps {
     placeholder?: string;
     icon?: ICON_NAME;
     label?: string;
+    onChange: (value: string) => void;
 }
 
 const initialValue = () => {
@@ -16,12 +17,27 @@ const initialValue = () => {
     return initialTime;
 };
 
-const CustomInput: React.FC<InputProps> = ({ placeholder, icon, label }) => {
+const CustomInput: React.FC<HourInputProps> = ({
+    placeholder,
+    icon,
+    label,
+    onChange,
+}) => {
     const [width, setWidth] = useState(0);
     const [showStartHourPicker, setStartHourPicker] = useState<boolean>(false);
     const [startHour, setstartHour] = useState(initialValue());
     const [showEndHourPicker, setEndHourPicker] = useState<boolean>(false);
     const [endHour, setEndHour] = useState(initialValue());
+
+    const formatTime = (date: Date): string => {
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+    };
+
+    useEffect(() => {
+        onChange(`${formatTime(startHour)}-${formatTime(endHour)}`);
+    }, [startHour, endHour]);
 
     const onChangeStartHour = (event: Event, selectedTime?: Date) => {
         if (event === 'dismissed') {
@@ -40,12 +56,6 @@ const CustomInput: React.FC<InputProps> = ({ placeholder, icon, label }) => {
             setEndHourPicker(false); // Hide the picker after time selection
             setEndHour(selectedTime < startHour ? startHour : selectedTime); // Update the time state
         }
-    };
-
-    const formatTime = (date: Date): string => {
-        const hours = date.getHours().toString().padStart(2, '0');
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        return `${hours}:${minutes}`;
     };
 
     return (
