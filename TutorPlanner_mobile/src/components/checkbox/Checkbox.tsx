@@ -6,6 +6,7 @@ import { Tile } from '@components/tile';
 
 interface CheckboxProps {
     label?: string;
+    onChange: (v: boolean) => void;
 }
 
 const CheckboxTile: React.FC<CheckboxProps> = props => {
@@ -16,11 +17,12 @@ const CheckboxTile: React.FC<CheckboxProps> = props => {
     );
 };
 
-const Checkbox: React.FC<CheckboxProps> = ({ label }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ label, onChange }) => {
     const [isChecked, setIsChecked] = useState(false);
 
     const toggleCheckbox = () => {
         setIsChecked(!isChecked);
+        onChange(!isChecked);
     };
 
     return (
