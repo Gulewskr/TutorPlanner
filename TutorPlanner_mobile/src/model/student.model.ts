@@ -11,6 +11,7 @@ type StudentDTO = {
 type StudentsDTO = {
     data: StudentDTO[];
     size: number;
+    error?: string;
 };
 
 export type { StudentDTO, StudentsDTO };

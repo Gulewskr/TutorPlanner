@@ -16,6 +16,7 @@
         "src/services/*"
       ],
     },
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]
   }
 }
