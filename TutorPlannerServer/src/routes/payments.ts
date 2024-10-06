@@ -1,11 +1,10 @@
 import express, { Router } from 'express';
-import LessonsService from '../services/LessonsService';
 import PaymentsService from '../services/PaymentsService';
 
 /**
  * Typescript don't like merging params so as workaround cast req.params to any
  */
-var router: Router = express.Router({ mergeParams: true });
+const router: Router = express.Router({ mergeParams: true });
 
 router.get('/:id', async (req, res) => {
     const payment = await PaymentsService.getPayment(Number(req.params.id));

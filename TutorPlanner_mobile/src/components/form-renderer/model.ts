@@ -19,4 +19,5 @@ export interface FormField {
     component: FormRendererComponents;
     componentProps: any;
     fields?: { [name: string]: FormField };
+    required?: boolean;
 }

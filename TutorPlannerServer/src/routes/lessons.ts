@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import LessonsService from '../services/LessonsService';
 
-var router: Router = express.Router();
+const router: Router = express.Router();
 
 router.get('/', async (req, res) => {
     //const filters = {};

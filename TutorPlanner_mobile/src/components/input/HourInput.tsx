@@ -8,7 +8,13 @@ interface HourInputProps {
     placeholder?: string;
     icon?: ICON_NAME;
     label?: string;
-    onChange: (value: string) => void;
+    onChange: ({
+        startHour,
+        endHour,
+    }: {
+        startHour: string;
+        endHour: string;
+    }) => void;
 }
 
 const initialValue = () => {
@@ -36,7 +42,10 @@ const CustomInput: React.FC<HourInputProps> = ({
     };
 
     useEffect(() => {
-        onChange(`${formatTime(startHour)}-${formatTime(endHour)}`);
+        onChange({
+            startHour: formatTime(startHour),
+            endHour: formatTime(endHour),
+        });
     }, [startHour, endHour]);
 
     const onChangeStartHour = (event: Event, selectedTime?: Date) => {

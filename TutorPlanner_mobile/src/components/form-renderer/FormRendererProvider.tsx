@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import React, { createContext, useContext, useMemo, useState } from 'react';
 import { FieldWrapper } from './FieldWrapper';
 import { FormRendererSchema } from './model';
 
@@ -67,6 +67,10 @@ export const FormProvider = ({ children }: React.PropsWithChildren) => {
             ...prevData,
             [name]: value,
         }));
+    };
+
+    const validate = (data: any, schema: FormRendererSchema) => {
+        //TODO
     };
 
     return (

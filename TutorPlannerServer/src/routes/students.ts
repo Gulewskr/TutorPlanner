@@ -4,7 +4,7 @@ import paymentRouter from './payments';
 import LessonsService from '../services/LessonsService';
 import { StudentsDTO } from '../dto/students';
 
-var router: Router = express.Router();
+const router: Router = express.Router();
 
 router.get('/', async (req, res) => {
     const data: StudentsDTO = await StudentService.getStudents();
