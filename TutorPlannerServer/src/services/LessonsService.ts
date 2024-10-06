@@ -9,6 +9,7 @@ import {
 } from '../models/lesson';
 import { addWeeks } from 'date-fns';
 import { LessonDTO } from '../dto/lessons';
+import { z } from 'zod';
 
 interface LessonInput {
     name: string;
@@ -20,6 +21,17 @@ interface LessonInput {
     endHour: string;
     weekly: boolean;
 }
+
+const LessonInputSchema = z.object({
+    name: z.string(),
+    description: z.string().nullable(),
+    student: z.number(),
+    price: z.number(),
+    date: z.date(),
+    startHour: z.string(),
+    endHour: z.string(),
+    weekly: z.boolean(),
+});
 
 interface lessonFilters {
     //TOOD
@@ -93,6 +105,7 @@ class LessonsService {
     }
 
     public async createLssson(lesson: LessonInput): Promise<LessonDTO> {
+        LessonInputSchema.parse(lesson);
         if (!lesson.weekly) {
             const createdLesson = await lessonRepository.createLesson({
                 name: lesson.name,

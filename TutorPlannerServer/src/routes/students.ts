@@ -35,10 +35,15 @@ router.get('/:studentId/lessons', async (req, res) => {
 });
 
 router.post('/:studentId/lessons', async (req, res) => {
-    const studentId = validateStudentId(req, res);
-    if (studentId == -1) return;
-    const student = await LessonsService.addUserLesson(studentId, req.body);
-    res.status(200).json(student);
+    try {
+        const studentId = validateStudentId(req, res);
+        if (studentId == -1) return;
+        const student = await LessonsService.addUserLesson(studentId, req.body);
+        res.status(200).json(student);
+    } catch (e) {
+        res.json(e);
+        res.status(400);
+    }
 });
 
 router.post('/', async (req, res, next) => {
