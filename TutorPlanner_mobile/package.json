@@ -9,6 +9,7 @@
     "pretty": "prettier --write \"**/*.{ts,tsx,js,jsx}\""
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "^8.2.0",
     "@react-native/metro-config": "^0.74.83",
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.18",

@@ -15,6 +15,7 @@
       "@services/*": [
         "src/services/*"
       ],
-    }
+    },
+    "forceConsistentCasingInFileNames": true
   }
 }

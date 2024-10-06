@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { EventSeriesType, Prisma } from '@prisma/client';
 import { CONFIG } from '../config';
 import { eventSeriesRepository } from '../models/eventSeries';
 import {
@@ -8,17 +8,30 @@ import {
     lessonRepository,
 } from '../models/lesson';
 import { addWeeks } from 'date-fns';
+import { LessonDTO } from '../dto/lessons';
+import { z } from 'zod';
 
 interface LessonInput {
     name: string;
     description: string;
-    student?: number;
+    student: number;
     price: number;
     date: Date;
     startHour: string;
     endHour: string;
     weekly: boolean;
 }
+
+const LessonInputSchema = z.object({
+    name: z.string(),
+    description: z.string().nullable(),
+    student: z.number(),
+    price: z.number(),
+    date: z.date(),
+    startHour: z.string(),
+    endHour: z.string(),
+    weekly: z.boolean(),
+});
 
 interface lessonFilters {
     //TOOD
@@ -84,19 +97,20 @@ class LessonsService {
     public async addUserLesson(
         studnetId: number,
         lesson: LessonInput,
-    ): Promise<void> {
+    ): Promise<LessonDTO> {
         return await this.createLssson({
             ...lesson,
             student: studnetId,
         });
     }
 
-    public async createLssson(lesson: LessonInput): Promise<void> {
+    public async createLssson(lesson: LessonInput): Promise<LessonDTO> {
+        LessonInputSchema.parse(lesson);
         if (!lesson.weekly) {
-            await lessonRepository.createLesson({
+            const createdLesson = await lessonRepository.createLesson({
                 name: lesson.name,
                 date: lesson.date,
-                type: 'LESSON',
+                type: EventType.LESSON,
                 price: lesson.price,
                 student: {
                     connect: {
@@ -104,13 +118,25 @@ class LessonsService {
                     },
                 },
             });
+            return {
+                name: createdLesson.name,
+                date: createdLesson.date,
+                isCanceled: createdLesson.isCanceled,
+                isOverridden: createdLesson.isOverridden,
+                description: createdLesson.description || '',
+                startHour: createdLesson.startHour,
+                endHour: createdLesson.endHour,
+                price: createdLesson.price,
+                isPaid: false,
+                studentId: createdLesson.studentId,
+            };
         } else {
             const series = await eventSeriesRepository.createEventSeries({
                 name: lesson.name,
                 description: lesson.description,
                 startHour: lesson.startHour,
                 endHour: lesson.endHour,
-                type: 'WEEKLY',
+                type: EventSeriesType.WEEKLY,
                 isCanceled: false,
             });
             const inputData: Prisma.EventCreateManyInput[] = [];
@@ -130,6 +156,19 @@ class LessonsService {
                 lessonDate = addWeeks(lessonDate, 1);
             }
             await lessonRepository.createLessons(inputData);
+            return {
+                name: lesson.name,
+                date: lesson.date,
+                isCanceled: false,
+                isOverridden: false,
+                description: lesson.description || '',
+                startHour: series.startHour || lesson.startHour,
+                endHour: series.endHour || lesson.endHour,
+                price: lesson.price,
+                isPaid: false,
+                studentId: lesson.student,
+                eventSeriesId: series.id,
+            };
         }
     }
 

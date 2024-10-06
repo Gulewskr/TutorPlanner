@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import LessonsService from '../services/LessonsService';
 
-var router: Router = express.Router();
+const router: Router = express.Router();
 
 router.get('/', async (req, res) => {
     //const filters = {};
@@ -15,11 +15,16 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res, next) => {
-    const lesson = await LessonsService.createLssson(req.body);
-    res.status(200).json({
-        message: 'Lessons has been created successfully.',
-        data: lesson,
-    });
+    try {
+        const lesson = await LessonsService.createLssson(req.body);
+        res.status(200).json({
+            message: 'Lessons has been created successfully.',
+            data: lesson,
+        });
+    } catch (e) {
+        res.json(e);
+        res.status(400);
+    }
 });
 
 /*
