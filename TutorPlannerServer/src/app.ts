@@ -11,7 +11,7 @@ import paymentsRouter from './routes/payments';
 import { addDemoData } from './demoData/addDemoData';
 
 var app: Express = express();
-const port = 3000;
+const port = process.env.PORT;
 
 app.use(logger('dev'));
 app.use(express.json());

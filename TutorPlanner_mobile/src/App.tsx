@@ -4,12 +4,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Home } from './screens/Home/Home';
 import { Calendar } from './screens/Calendar/Calendar';
-import { Students } from './screens/Students/Students';
+import { Students, StudentsTabParamList } from './screens/Students/Students';
 import { Payments, PaymentsTabParamList } from './screens/Payments/Payments';
 import { Notes } from './screens/Notes/Notes';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Settings } from './screens/Settings/Settings';
 import { Lessons, LessonsTabParamList } from './screens/Lessons/Lessons';
+import { CreatePayment } from './screens/CreatePayment/CreatePayment';
+import { CreateStudent } from './screens/CreateStudent/CreateStudent';
 
 EStyleSheet.build({
     $color_primary: '#FFA9F1',
@@ -33,8 +35,13 @@ EStyleSheet.build({
 export type RootStackParamList = {
     Home: undefined;
     Calendar: undefined;
-    Students: undefined;
-    Payments: { screen: keyof PaymentsTabParamList; initial: boolean };
+    Students: { screen: keyof StudentsTabParamList; initial: boolean };
+    Payments: {
+        screen: keyof PaymentsTabParamList;
+        initial: boolean;
+    };
+    CreatePayment: undefined;
+    CreateStudent: undefined;
     Notes: undefined;
     Settings: undefined;
     Lessons: { screen: keyof LessonsTabParamList; initial: boolean };
@@ -68,6 +75,8 @@ const App: React.FC<{}> = () => {
                 <Stack.Screen name="Payments" component={Payments} />
                 <Stack.Screen name="Students" component={Students} />
                 <Stack.Screen name="Settings" component={Settings} />
+                <Stack.Screen name="CreatePayment" component={CreatePayment} />
+                <Stack.Screen name="CreateStudent" component={CreateStudent} />
             </Stack.Navigator>
         </NavigationContainer>
     );

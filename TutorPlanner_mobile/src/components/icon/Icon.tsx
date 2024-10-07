@@ -2,7 +2,7 @@ import { Image, StyleSheet } from 'react-native';
 
 interface IconProps {
     icon: ICON_NAME;
-    size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    size?: 'xxs' | 'xs' | 'sm' | 'lg' | 'xl';
 }
 
 type ICON_NAME =
@@ -18,7 +18,10 @@ type ICON_NAME =
     | 'payments'
     | 'plus'
     | 'settings'
-    | 'students';
+    | 'students'
+    | 'messenger'
+    | 'oneNote'
+    | 'pencil';
 
 const iconsMap: { [key in ICON_NAME]: any } = {
     cancel: require('../../assets/icons/cancel.png'),
@@ -34,52 +37,43 @@ const iconsMap: { [key in ICON_NAME]: any } = {
     addStudent: require('../../assets/icons/addStudent.png'),
     addPayment: require('../../assets/icons/addPayment.png'),
     addLesson: require('../../assets/icons/addLesson.png'),
+    messenger: require('../../assets/icons/messenger.png'),
+    oneNote: require('../../assets/icons/oneNote.png'),
+    pencil: require('../../assets/icons/pencil.png'),
 };
 
 const Icon: React.FC<IconProps> = ({ icon, size }) => (
     <Image
         source={iconsMap[icon]}
-        style={[
-            styles.icon,
-            size == 'xxs' && styles['icon-xxs'],
-            size == 'xs' && styles['icon-xs'],
-            size == 'sm' && styles['icon-sm'],
-            size == 'lg' && styles['icon-lg'],
-            size == 'xl' && styles['icon-xl'],
-        ]}
+        style={[styles.icon, size && styles[`icon-${size}`]]}
     />
 );
 
 const styles = StyleSheet.create({
-    'icon-xxs': {
-        width: 15,
-        height: 15,
-        resizeMode: 'contain',
-    },
-    'icon-xs': {
-        width: 20,
-        height: 20,
-        resizeMode: 'contain',
-    },
-    'icon-sm': {
-        width: 25,
-        height: 25,
-        resizeMode: 'contain',
-    },
     icon: {
         width: 30,
         height: 30,
         resizeMode: 'contain',
     },
+    'icon-xxs': {
+        width: 15,
+        height: 15,
+    },
+    'icon-xs': {
+        width: 20,
+        height: 20,
+    },
+    'icon-sm': {
+        width: 25,
+        height: 25,
+    },
     'icon-lg': {
         width: 40,
         height: 40,
-        resizeMode: 'contain',
     },
     'icon-xl': {
         width: 50,
         height: 50,
-        resizeMode: 'contain',
     },
 });
 

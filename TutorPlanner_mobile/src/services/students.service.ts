@@ -10,7 +10,11 @@ class StudentsService {
         } catch (error) {
             console.log('getStudentsList error');
             console.log(JSON.stringify(error, null, 2));
-            throw error;
+            return {
+                data: [],
+                size: 0,
+                error: 'Error',
+            };
         }
     };
 }

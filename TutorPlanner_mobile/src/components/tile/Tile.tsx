@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 type TileColors =
     | 'white'
@@ -17,6 +18,9 @@ type TileColors =
 
 interface TileProps {
     color?: TileColors;
+    width?: number;
+    centered?: boolean;
+    hasShadow?: boolean;
 }
 
 const TILE_COLORS: { [key in TileColors]: string } = {
@@ -37,9 +41,10 @@ const TILE_COLORS: { [key in TileColors]: string } = {
 const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
     children,
     color,
+    hasShadow = true,
+    width = 320,
+    centered = false,
 }) => {
-    const [width, setWidth] = useState(0);
-
     const getRandomColorKey = (): string => {
         const keys = Object.keys(TILE_COLORS);
         const randomIndex = Math.floor(Math.random() * keys.length);
@@ -53,17 +58,25 @@ const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
         <View
             style={{
                 position: 'relative',
-                width: 320,
             }}
-            onLayout={event => {
-                const { width } = event.nativeEvent.layout;
-                setWidth(width);
-            }}
+            // onLayout={event => {
+            //     const { width } = event.nativeEvent.layout;
+            //     setWidth(width);
+            // }}
         >
-            <View style={[styles.content, { backgroundColor: selectedColor }]}>
+            <View
+                style={[
+                    styles.content,
+                    {
+                        backgroundColor: selectedColor,
+                        width,
+                        justifyContent: centered ? 'center' : 'flex-start',
+                    },
+                ]}
+            >
                 <Text style={styles.text}>{children}</Text>
             </View>
-            <View style={[styles.shadow, { width }]}></View>
+            {hasShadow && <View style={[styles.shadow, { width }]}></View>}
         </View>
     );
 };
@@ -72,15 +85,16 @@ CustomTile.displayName = 'CustomTile';
 
 export default CustomTile;
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     content: {
         flexDirection: 'row',
         alignItems: 'center',
         height: 40,
         borderWidth: 1,
+
         borderColor: '#000',
         borderRadius: 10,
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '$color_white',
         paddingHorizontal: 10,
     },
 
@@ -92,9 +106,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 4,
         left: 4,
-        backgroundColor: '#9E0042',
+        backgroundColor: '$shadow_color_primary',
         borderWidth: 1,
-        borderColor: '#070707',
+        borderColor: '$color_black',
         zIndex: -1,
     },
 });

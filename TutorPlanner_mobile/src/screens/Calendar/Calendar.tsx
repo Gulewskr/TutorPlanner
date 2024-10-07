@@ -2,8 +2,10 @@ import { Text } from 'react-native';
 import { Layout } from '../Layout';
 import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Button } from '@components/button';
+import { Calendar } from '@components/calendar';
 
 export type CalendarTabParamList = {
     MonthlyCalendar: undefined;
@@ -39,6 +41,12 @@ export const RootCalendar: React.FC<
 const MonthlyCalendar: React.FC<
     NativeStackScreenProps<CalendarTabParamList, 'MonthlyCalendar'>
 > = ({ navigation, route }) => {
+    const [selectedDay, setSelectedDay] = useState(new Date());
+
+    const handleChangeDay = (newDay: Date) => {
+        setSelectedDay(newDay);
+    };
+
     return (
         <Layout
             navigation={navigation}
@@ -46,7 +54,15 @@ const MonthlyCalendar: React.FC<
             title="Kalendarz"
             hasHeader
         >
-            <Text>Widok całego miesiąca</Text>
+            <Button
+                onClick={() => navigation.navigate('DailyCalendar')}
+                hasShadow
+                icon="calendar"
+                label="Przełącz na widok dzienny"
+            />
+
+            <Calendar day={selectedDay} handleChangeDay={handleChangeDay} />
+            <Text>{selectedDay.getDate()}</Text>
         </Layout>
     );
 };

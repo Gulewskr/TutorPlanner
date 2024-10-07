@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
 import { Layout } from '../Layout';
 import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -8,6 +7,10 @@ import { useState } from 'react';
 import { studentsService } from '@services/students.service';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StudentProfile } from './StudentProfile';
+import { AddStudent } from './AddStudent';
+import { Button } from '@components/button';
+import { ScrollView } from '@components/scrool-view';
+import { StudentTile } from './components/StudentTile';
 
 export type StudentsTabParamList = {
     List: undefined;
@@ -58,23 +61,21 @@ export const StudentsList: React.FC<
             title="Studenci"
             hasHeader
         >
-            <Text>Students list</Text>
-            <Text>{students.map(stud => JSON.stringify(stud))}</Text>
-        </Layout>
-    );
-};
+            <ScrollView>
+                {students.concat(students).map((student, index) => (
+                    <StudentTile
+                        key={`${index}-${student.id}`}
+                        student={student}
+                    />
+                ))}
 
-export const AddStudent: React.FC<
-    NativeStackScreenProps<StudentsTabParamList, 'Create'>
-> = ({ navigation, route }) => {
-    return (
-        <Layout
-            navigation={navigation}
-            route={'Students'}
-            title="Dodaj ucznia"
-            hasHeader
-        >
-            <Text>TODO - FORMULARZ</Text>
+                {/* TO-DO: Add function to add students (xd)*/}
+                <Button
+                    onClick={() => console.log(1)}
+                    icon="addStudent"
+                    label="Dodaj ucznia"
+                />
+            </ScrollView>
         </Layout>
     );
 };
