@@ -62,6 +62,15 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
                     </View>
                 </>
             )}
+            {/* //TODO - add top gradient
+            <LinearGradient
+                colors={['transparent', 'rgba(255, 252, 227, .9)', '#FFFCE3']}
+                style={styles.topGradient}
+                start={{ x: 0.5, y: 0.3 }}
+                end={{ x: 0.5, y: 1 }}
+                pointerEvents="none"
+            />
+            */}
             <View
                 style={[
                     styles.content,
@@ -98,6 +107,13 @@ const styles = EStyleSheet.create({
     bottomGradient: {
         position: 'absolute',
         bottom: 0,
+        left: 0,
+        width: '100%',
+        height: '20%',
+    },
+    topGradient: {
+        position: 'absolute',
+        top: 0,
         left: 0,
         width: '100%',
         height: '20%',

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
 import { FieldWrapper } from './FieldWrapper';
 import { FormRendererSchema } from './model';
+import { View } from 'react-native';
 
 interface FormContextProps {
     formData: any; //Init form data
@@ -32,7 +33,16 @@ export const useFormContext = (
         }
 
         const formBody = (
-            <>
+            <View
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 15,
+                    alignItems: 'center',
+                    backgroundColor: 'transparent',
+                    width: '100%',
+                }}
+            >
                 {Object.entries(schema.fields).map(
                     ([fieldName, field], index) => {
                         return (
@@ -47,7 +57,7 @@ export const useFormContext = (
                         );
                     },
                 )}
-            </>
+            </View>
         );
         return [formBody];
     }, [schema]);

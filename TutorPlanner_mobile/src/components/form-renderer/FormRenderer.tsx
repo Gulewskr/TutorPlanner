@@ -22,18 +22,16 @@ export const FormRenderer: React.FunctionComponent<FormRendererProps> = ({
         <>
             {FormBody}
             <View style={styles.double_button_container}>
-                <Button
-                    icon="cancel"
-                    onClick={onCancel}
-                    label="Anuluj"
-                    width={160}
-                />
-                <Button
-                    icon="checkbox"
-                    onClick={() => onSubmit(formData)}
-                    label="Dodaj"
-                    width={160}
-                />
+                <View style={{ width: '50%' }}>
+                    <Button icon="cancel" onClick={onCancel} label="Anuluj" />
+                </View>
+                <View style={{ width: '50%' }}>
+                    <Button
+                        icon="checkbox"
+                        onClick={() => onSubmit(formData)}
+                        label="Dodaj"
+                    />
+                </View>
             </View>
         </>
     );
@@ -42,9 +40,11 @@ export const FormRenderer: React.FunctionComponent<FormRendererProps> = ({
 const styles = EStyleSheet.create({
     double_button_container: {
         display: 'flex',
+        width: '100%',
+        justifyContent: 'center',
         flexDirection: 'row',
         gap: 10,
-        marginTop: 5,
-        marginBottom: 5,
+        marginTop: 10,
+        marginBottom: 10,
     },
 });

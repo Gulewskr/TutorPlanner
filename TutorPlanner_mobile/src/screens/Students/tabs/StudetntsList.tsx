@@ -35,8 +35,7 @@ export const StudentsList: React.FC<
                         student={student}
                         onClick={() =>
                             navigation.jumpTo('Profile', {
-                                screen: 'Info',
-                                studentId: student.id,
+                                student: student,
                             })
                         }
                     />

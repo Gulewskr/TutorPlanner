@@ -5,7 +5,7 @@ import { Button } from '@components/button';
 import { ICON_NAME } from '@components/icon';
 
 interface HeaderProps {
-    isLeftActionDisabled: boolean;
+    isLeftActionDisabled?: boolean;
     leftAction?: () => void;
     leftIcon?: ICON_NAME;
     leftIconNoBG?: boolean;

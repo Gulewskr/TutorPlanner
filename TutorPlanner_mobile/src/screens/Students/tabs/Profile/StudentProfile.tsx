@@ -6,16 +6,17 @@ import {
 import { StudentInformations } from './tabs/StudentInformation';
 import { StudentAnalise } from './tabs/StudentAnalise';
 import { StudentLessons } from './tabs/StudentLessons';
+import { StudentDTO } from '@model';
 
 export type StudentProfileTabParamList = {
     Info: {
-        studentId: number;
+        student: StudentDTO;
     };
     Lessons: {
-        studentId: number;
+        student: StudentDTO;
     };
     Analise: {
-        studentId: number;
+        student: StudentDTO;
     };
 };
 

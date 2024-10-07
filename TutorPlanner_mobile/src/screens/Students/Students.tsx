@@ -5,11 +5,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StudentCreate } from './tabs/StudentCreate';
 import { StudentsList } from './tabs/StudetntsList';
 import { StudentProfile } from './tabs/Profile/StudentProfile';
+import { StudentDTO } from '@model';
 
 export type StudentsTabParamList = {
     List: undefined;
     Create: undefined;
-    Profile: { studentId: number };
+    Profile: { student: StudentDTO };
 };
 
 const Tab = createBottomTabNavigator<StudentsTabParamList>();

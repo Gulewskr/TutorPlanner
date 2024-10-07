@@ -5,6 +5,8 @@ import { LessonsTabParamList } from './Lessons';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { FormProvider, FormRenderer } from '@components/form-renderer';
 import { lessonsService } from '@services/lessons.service';
+import { View } from 'react-native';
+import { ScrollView } from '@components/scrool-view';
 
 interface CreateLessonData {
     name: string;
@@ -67,79 +69,80 @@ export const CreateLessonForm: React.FC<
             hasHeaderSeperated
         >
             <FormProvider>
-                <FormRenderer
-                    schema={{
-                        title: 'Dodaj zajęcia',
-                        initValue: defaultData,
-                        fields: {
-                            name: {
-                                component: 'input',
-                                componentProps: {
-                                    label: 'Nazwa',
-                                    placeholder: '--Nazwa wydarzenia--',
+                <ScrollView>
+                    <View style={styles.form_container}>
+                        <FormRenderer
+                            schema={{
+                                title: 'Dodaj zajęcia',
+                                initValue: defaultData,
+                                fields: {
+                                    name: {
+                                        component: 'input',
+                                        componentProps: {
+                                            label: 'Nazwa',
+                                            placeholder: '--Nazwa wydarzenia--',
+                                        },
+                                    },
+                                    description: {
+                                        component: 'input',
+                                        componentProps: {
+                                            label: 'Opis',
+                                            placeholder: '--Opis--',
+                                        },
+                                    },
+                                    student: {
+                                        component: 'input',
+                                        componentProps: {
+                                            label: 'Uczeń',
+                                            icon: 'students',
+                                            placeholder: '--Wybierz ucznia--',
+                                        },
+                                    },
+                                    price: {
+                                        component: 'input',
+                                        componentProps: {
+                                            label: 'Cena',
+                                            icon: 'payments',
+                                            placeholder: '--Podaj cene--',
+                                        },
+                                    },
+                                    date: {
+                                        //TODO change to datepicker
+                                        component: 'input',
+                                        componentProps: {
+                                            label: 'Data',
+                                            icon: 'calendar',
+                                            placeholder: '--Data--',
+                                        },
+                                    },
+                                    hour: {
+                                        component: 'hour-input',
+                                        componentProps: {
+                                            label: 'Godzina',
+                                            placeholder: '--Godzina--',
+                                        },
+                                    },
+                                    isWeekly: {
+                                        component: 'checkbox-tile',
+                                        componentProps: {
+                                            label: 'Zajęcia cotygodniowe',
+                                        },
+                                    },
                                 },
-                            },
-                            description: {
-                                component: 'input',
-                                componentProps: {
-                                    label: 'Opis',
-                                    placeholder: '--Opis--',
-                                },
-                            },
-                            student: {
-                                component: 'input',
-                                componentProps: {
-                                    label: 'Uczeń',
-                                    icon: 'students',
-                                    placeholder: '--Wybierz ucznia--',
-                                },
-                            },
-                            price: {
-                                component: 'input',
-                                componentProps: {
-                                    label: 'Cena',
-                                    icon: 'payments',
-                                    placeholder: '--Podaj cene--',
-                                },
-                            },
-                            date: {
-                                //TODO change to datepicker
-                                component: 'input',
-                                componentProps: {
-                                    label: 'Data',
-                                    icon: 'calendar',
-                                    placeholder: '--Data--',
-                                },
-                            },
-                            hour: {
-                                component: 'hour-input',
-                                componentProps: {
-                                    label: 'Godzina',
-                                    placeholder: '--Godzina--',
-                                },
-                            },
-                            isWeekly: {
-                                component: 'checkbox-tile',
-                                componentProps: {
-                                    label: 'Zajęcia cotygodniowe',
-                                },
-                            },
-                        },
-                    }}
-                    onSubmit={handleSubmit}
-                    onCancel={handleCancel}
-                />
+                            }}
+                            onSubmit={handleSubmit}
+                            onCancel={handleCancel}
+                        />
+                    </View>
+                </ScrollView>
             </FormProvider>
         </Layout>
     );
 };
 
 const styles = EStyleSheet.create({
-    double_button_container: {
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 10,
-        marginTop: 5,
-        marginBottom: 5,
+    form_container: {
+        width: '100%',
+        padding: 15,
     },
 });

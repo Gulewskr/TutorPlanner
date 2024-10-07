@@ -3,6 +3,7 @@ import { StudentProfileTabParamList } from './StudentProfile';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { PropsWithChildren } from 'react';
 import { Layout } from 'src/screens/Layout';
+import { StudentDTO } from '@model';
 
 const tabs: Array<TabItem<keyof StudentProfileTabParamList>> = [
     { id: 'Info', isExpanded: true, text: 'Informacje', icon: 'studentCap' },
@@ -14,6 +15,9 @@ const tabs: Array<TabItem<keyof StudentProfileTabParamList>> = [
         icon: 'calendar',
     },
 ];
+
+const getFullName = (student?: StudentDTO): string =>
+    student ? `${student.firstname} ${student.surename}` : '-';
 
 export const StudentsLayout: React.FC<
     PropsWithChildren<
@@ -27,7 +31,7 @@ export const StudentsLayout: React.FC<
         <Layout
             navigation={navigation.getParent()}
             route={'Students'}
-            title="Profil ucznia"
+            title={getFullName(route.params.student)}
             hasHeader
         >
             <Tabs
