@@ -1,8 +1,9 @@
+import React from 'react';
 import { Icon, ICON_NAME } from '@components/icon';
 import { StudentDTO } from '@model';
-import React, { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { getFullName } from 'src/utils/utils';
 
 interface StudentTileProps {
     student: StudentDTO;
@@ -33,9 +34,7 @@ const StudentTile: React.FC<StudentTileProps> = ({ student, onClick }) => {
         >
             <Pressable onPress={onClick}>
                 <View style={styles.content}>
-                    <Text style={styles.text}>
-                        {student.firstname} {student.surename}
-                    </Text>
+                    <Text style={styles.text}>{getFullName(student)}</Text>
                     <View style={styles.buttons}>
                         {actions.map((action, index) => (
                             <Pressable

@@ -6,6 +6,7 @@ export interface FormComponentProps<T> {
 export type FormRendererComponents =
     | 'checkbox'
     | 'checkbox-tile'
+    | 'dropdown'
     | 'input'
     | 'hour-input';
 

@@ -7,19 +7,12 @@ import { StudentTile } from '../components/StudentTile';
 import { StudentsTabParamList } from '../Students';
 import { ScrollView } from '@components/scrool-view';
 import { Button } from '@components/button';
+import { useStudents } from 'src/hooks/useStudents';
 
 export const StudentsList: React.FC<
     BottomTabScreenProps<StudentsTabParamList, 'List'>
 > = ({ navigation, route }) => {
-    const [students, setStudents] = useState<StudentDTO[]>([]);
-
-    React.useEffect(() => {
-        initData();
-    }, []);
-    const initData = async (): Promise<void> => {
-        const response = await studentsService.getStudentsList();
-        setStudents(response.data);
-    };
+    const students = useStudents();
 
     return (
         <Layout

@@ -9,7 +9,7 @@ export const StudentAnalise: React.FC<
     const { navigation, route } = props;
     return (
         <StudentsLayout {...props}>
-            <Text>This is {route.params?.studentId}'s profile</Text>
+            <Text>This is {route.params?.student?.id}'s profile</Text>
         </StudentsLayout>
     );
 };

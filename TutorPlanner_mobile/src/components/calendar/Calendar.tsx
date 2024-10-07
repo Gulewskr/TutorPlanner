@@ -147,8 +147,9 @@ const styles = EStyleSheet.create({
     },
     calendar: {
         gap: 5,
+        display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
-        width: 320,
         height: 400,
         borderRadius: 10,
         zIndex: 1,
@@ -159,9 +160,9 @@ const styles = EStyleSheet.create({
     },
     shadow: {
         position: 'absolute',
-        top: 8,
-        left: 8,
-        width: 320,
+        top: 5,
+        left: 5,
+        width: '100%',
         height: 400,
         borderRadius: 10,
         backgroundColor: '$shadow_color_primary',
@@ -173,7 +174,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         gap: 5,
         flexWrap: 'wrap',
-        marginLeft: 4,
+        justifyContent: 'center',
     },
     weekday: {
         fontWeight: 'bold',

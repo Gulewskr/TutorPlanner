@@ -33,16 +33,7 @@ export const useFormContext = (
         }
 
         const formBody = (
-            <View
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 15,
-                    alignItems: 'center',
-                    backgroundColor: 'transparent',
-                    width: '100%',
-                }}
-            >
+            <>
                 {Object.entries(schema.fields).map(
                     ([fieldName, field], index) => {
                         return (
@@ -57,7 +48,7 @@ export const useFormContext = (
                         );
                     },
                 )}
-            </View>
+            </>
         );
         return [formBody];
     }, [schema]);

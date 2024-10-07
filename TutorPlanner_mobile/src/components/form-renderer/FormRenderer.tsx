@@ -19,7 +19,16 @@ export const FormRenderer: React.FunctionComponent<FormRendererProps> = ({
     const { formData, FormBody } = useFormContext(schema);
 
     return (
-        <>
+        <View
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 15,
+                alignItems: 'center',
+                backgroundColor: 'transparent',
+                width: '100%',
+            }}
+        >
             {FormBody}
             <View style={styles.double_button_container}>
                 <View style={{ width: '50%' }}>
@@ -33,7 +42,7 @@ export const FormRenderer: React.FunctionComponent<FormRendererProps> = ({
                     />
                 </View>
             </View>
-        </>
+        </View>
     );
 };
 
@@ -41,10 +50,7 @@ const styles = EStyleSheet.create({
     double_button_container: {
         display: 'flex',
         width: '100%',
-        justifyContent: 'center',
         flexDirection: 'row',
-        gap: 10,
-        marginTop: 10,
-        marginBottom: 10,
+        gap: 5,
     },
 });

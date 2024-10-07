@@ -1,4 +1,4 @@
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { Layout } from '../Layout';
 import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -54,15 +54,22 @@ const MonthlyCalendar: React.FC<
             title="Kalendarz"
             hasHeader
         >
-            <Button
-                onClick={() => navigation.navigate('DailyCalendar')}
-                hasShadow
-                icon="calendar"
-                label="Przełącz na widok dzienny"
-            />
-
-            <Calendar day={selectedDay} handleChangeDay={handleChangeDay} />
-            <Text>{selectedDay.getDate()}</Text>
+            <View
+                style={{
+                    paddingHorizontal: 15,
+                    gap: 15,
+                    alignItems: 'center',
+                }}
+            >
+                <Button
+                    onClick={() => navigation.navigate('DailyCalendar')}
+                    hasShadow
+                    icon="calendar"
+                    label="Przełącz na widok dzienny"
+                />
+                <Calendar day={selectedDay} handleChangeDay={handleChangeDay} />
+                <Text>{selectedDay.getDate()}</Text>
+            </View>
         </Layout>
     );
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import { HourInput, Input } from '@components/input';
 import { FormRendererComponents } from './model';
 import { Checkbox, CheckboxTile } from '@components/checkbox';
+import { Dropdown } from '@components/dropdown';
 
 interface FieldWrapperProps {
     component: FormRendererComponents;
@@ -23,6 +24,8 @@ export const FieldWrapper: React.FC<FieldWrapperProps> = ({
             return (
                 <CheckboxTile {...componentProps} onChange={onFieldChange} />
             );
+        case 'dropdown':
+            return <Dropdown {...componentProps} onChange={onFieldChange} />;
         case 'hour-input':
             return <HourInput {...componentProps} onChange={onFieldChange} />;
     }

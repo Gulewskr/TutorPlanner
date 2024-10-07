@@ -68,7 +68,12 @@ const Button: React.FC<ButtonProps> = ({
                 </View>
             </Pressable>
             {hasShadow && (
-                <View style={[style.shadow, { height: buttonHeight, width }]} />
+                <View
+                    style={[
+                        style.shadow,
+                        { height: buttonHeight, width: width - 5 },
+                    ]}
+                />
             )}
         </View>
     );
@@ -91,6 +96,8 @@ const styles = (
             position: 'relative',
             flexDirection: 'row',
             minHeight: size === 'medium' ? 50 : size === 'small' ? 40 : 60,
+            width: '100%',
+            paddingRight: 5,
         },
         iconButton: {
             width: 40,
@@ -105,7 +112,6 @@ const styles = (
             borderRadius: 10,
             flexGrow: 1,
             flexShrink: 1,
-            maxWidth: 320,
             minWidth: width ? width : 130,
             paddingLeft: 10,
             paddingRight: 10,
