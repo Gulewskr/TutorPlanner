@@ -28,7 +28,6 @@ EStyleSheet.build({
     $color_secondary_hover: '#EFF5FF',
     $shadow_color_primary: '#9E0042',
     $shadow_color_secondary: '#002C9E',
-    //Probably should be local variable
     $tile_bgColor: '#F4DDFF',
 });
 

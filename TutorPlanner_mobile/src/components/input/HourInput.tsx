@@ -71,11 +71,10 @@ const CustomInput: React.FC<HourInputProps> = ({
 
     return (
         <View
-            style={{ position: 'relative', marginTop: 10, width: 320 }}
-            onLayout={event => {
-                const { width } = event.nativeEvent.layout;
-                setWidth(width);
-            }}
+            style={[
+                { position: 'relative', width: '100%' },
+                !!label && { marginTop: 10 },
+            ]}
         >
             {label && <Text style={styles.label}>{label}</Text>}
             <View style={styles.content}>
@@ -96,7 +95,7 @@ const CustomInput: React.FC<HourInputProps> = ({
                 </TouchableOpacity>
             </View>
 
-            <View style={[styles.shadow, { width }]}></View>
+            <View style={styles.shadow}></View>
             {showStartHourPicker && (
                 <DateTimePicker
                     style={styles.input}
@@ -185,6 +184,7 @@ const styles = EStyleSheet.create({
         left: 4,
         backgroundColor: '$shadow_color_primary',
         borderWidth: 1,
+        width: '100%',
         borderColor: '$color_black',
         zIndex: -1,
     },

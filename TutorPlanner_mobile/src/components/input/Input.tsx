@@ -7,6 +7,7 @@ export interface InputProps {
     placeholder?: string;
     icon?: ICON_NAME;
     label?: string;
+    value?: string;
     //TODO - make this required later
     onChange?: (value: string) => void;
 }
@@ -21,7 +22,7 @@ const CustomInput: React.FC<InputProps> = ({
 
     return (
         <View
-            style={{ position: 'relative', marginTop: 10, width: 320 }}
+            style={[styles.input, label && { marginTop: 5 }]}
             onLayout={event => {
                 const { width } = event.nativeEvent.layout;
                 setWidth(width);
@@ -31,7 +32,7 @@ const CustomInput: React.FC<InputProps> = ({
             <View style={styles.content}>
                 {icon && <Icon icon={icon} />}
                 <TextInput
-                    style={styles.input}
+                    style={styles.textInput}
                     placeholder={placeholder}
                     onChangeText={onChange}
                 />
@@ -47,9 +48,13 @@ CustomInput.displayName = 'CustomInput';
 export default CustomInput;
 
 const styles = EStyleSheet.create({
+    input: {
+        position: 'relative',
+        width: '100%',
+    },
     label: {
         position: 'absolute',
-        top: -15,
+        top: -10,
         left: 10,
         zIndex: 2,
         backgroundColor: '$color_white',
@@ -76,7 +81,7 @@ const styles = EStyleSheet.create({
         padding: 10,
     },
 
-    input: {
+    textInput: {
         flex: 1,
         marginLeft: 10,
     },

@@ -1,5 +1,6 @@
 import { StudentsDTO } from '../dto/students';
 import { Student, studentRepository } from '../models/student';
+import z from 'zod';
 
 interface StudentInput {
     firstname: string;
@@ -15,6 +16,15 @@ interface StudnentFilter {
     filter?: 'alphabetical' | 'creationDate' | 'nearestLesson';
     order?: 'asc' | 'desc';
 }
+
+const StudentInputSchema = z.object({
+    firstname: z.string(),
+    surename: z.string(),
+    class: z.string().nullish(),
+    extendedMath: z.boolean().nullish(),
+    description: z.string().nullish(),
+    defaultPrice: z.number().nullish(),
+});
 
 class StudentService {
     public async getStudents(filters?: StudnentFilter): Promise<StudentsDTO> {
@@ -37,7 +47,9 @@ class StudentService {
         return student;
     }
     public async createStudent(student: StudentInput): Promise<Student> {
-        return await studentRepository.create(student);
+        const data = StudentInputSchema.parse(student);
+        console.log(`Adding student: ${data}`);
+        return await studentRepository.create(data);
     }
     public async updateStudent(
         studentId: number,

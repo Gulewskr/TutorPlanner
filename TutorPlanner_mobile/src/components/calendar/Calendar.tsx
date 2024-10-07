@@ -74,26 +74,40 @@ const Calendar: React.FC<CalendarProps> = ({ day, handleChangeDay }) => {
     return (
         <View style={styles.container}>
             <View style={styles.calendar}>
-                <View style={{ flexDirection: 'row', gap: 10, marginTop: 10 }}>
-                    <Button
-                        type="icon-button"
-                        hasShadow={false}
-                        onClick={handlePreviousMonth}
-                        icon="arrowLeft"
-                        severity="warning"
-                    />
-                    <Tile color="white" centered hasShadow={false} width={200}>
-                        {MONTHS_NOMINATIVE[controlDate.getMonth()]}
-                        {!isSameYear(controlDate, new Date()) &&
-                            format(controlDate, ' yyyy')}
-                    </Tile>
-                    <Button
-                        type="icon-button"
-                        hasShadow={false}
-                        onClick={handleNextMonth}
-                        icon="arrowRight"
-                        severity="warning"
-                    />
+                <View
+                    style={{
+                        width: '100%',
+                        flexDirection: 'row',
+                        marginVertical: 10,
+                        gap: 10,
+                        justifyContent: 'center',
+                    }}
+                >
+                    <View>
+                        <Button
+                            type="icon-button"
+                            hasShadow={false}
+                            onClick={handlePreviousMonth}
+                            icon="arrowLeft"
+                            severity="warning"
+                        />
+                    </View>
+                    <View style={{ width: '55%' }}>
+                        <Tile color="white" centered hasShadow={false}>
+                            {MONTHS_NOMINATIVE[controlDate.getMonth()]}
+                            {!isSameYear(controlDate, new Date()) &&
+                                format(controlDate, ' yyyy')}
+                        </Tile>
+                    </View>
+                    <View>
+                        <Button
+                            type="icon-button"
+                            hasShadow={false}
+                            onClick={handleNextMonth}
+                            icon="arrowRight"
+                            severity="warning"
+                        />
+                    </View>
                 </View>
                 <View style={styles.grid}>
                     {WEEKDAYS.map(day => (
@@ -129,24 +143,26 @@ export default Calendar;
 const styles = EStyleSheet.create({
     constainer: {
         position: 'relative',
+        backgroundColor: 'black',
     },
-
     calendar: {
         gap: 5,
+        display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
-        width: 320,
         height: 400,
         borderRadius: 10,
-        backgroundColor: '$tile_bgColor',
         zIndex: 1,
         borderWidth: 1,
+        backgroundColor: '$tile_bgColor',
         borderColor: '$color_black',
+        position: 'relative',
     },
     shadow: {
         position: 'absolute',
-        top: 8,
-        left: 8,
-        width: 320,
+        top: 5,
+        left: 5,
+        width: '100%',
         height: 400,
         borderRadius: 10,
         backgroundColor: '$shadow_color_primary',
@@ -154,12 +170,11 @@ const styles = EStyleSheet.create({
         borderWidth: 1,
         borderColor: '$color_black',
     },
-
     grid: {
         flexDirection: 'row',
         gap: 5,
         flexWrap: 'wrap',
-        marginLeft: 4,
+        justifyContent: 'center',
     },
     weekday: {
         fontWeight: 'bold',

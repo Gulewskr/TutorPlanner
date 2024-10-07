@@ -19,38 +19,46 @@ export const Home: React.FC<
         >
             <View style={styles.controlPanel}>
                 <View style={styles.double_button_container}>
-                    <Button
-                        icon="addLesson"
-                        onClick={() =>
-                            navigation.navigate('Lessons', {
-                                screen: 'Create',
-                                initial: true,
-                            })
-                        }
-                        label="Dodaj zajęcia"
-                        width={160}
-                    />
-                    <Button
-                        icon="addStudent"
-                        onClick={() => navigation.navigate('CreateStudent')}
-                        label="Dodaj ucznia"
-                        width={160}
-                    />
+                    <View style={{ width: '50%' }}>
+                        <Button
+                            icon="addLesson"
+                            onClick={() =>
+                                navigation.navigate('Lessons', {
+                                    screen: 'Create',
+                                    initial: true,
+                                })
+                            }
+                            label="Dodaj zajęcia"
+                            width={160}
+                        />
+                    </View>
+                    <View style={{ width: '50%' }}>
+                        <Button
+                            icon="addStudent"
+                            onClick={() => navigation.navigate('CreateStudent')}
+                            label="Dodaj ucznia"
+                            width={160}
+                        />
+                    </View>
                 </View>
                 <View style={styles.double_button_container}>
-                    <Button
-                        icon="addPayment"
-                        onClick={() => navigation.navigate('CreatePayment')}
-                        label="Dodaj płatność"
-                        width={160}
-                    />
-                    <Button
-                        icon="notes"
-                        onClick={() => 1}
-                        label="Dodaj notatkę"
-                        disabled={true}
-                        width={160}
-                    />
+                    <View style={{ width: '50%' }}>
+                        <Button
+                            icon="addPayment"
+                            onClick={() => navigation.navigate('CreatePayment')}
+                            label="Dodaj płatność"
+                            width={160}
+                        />
+                    </View>
+                    <View style={{ width: '50%' }}>
+                        <Button
+                            icon="notes"
+                            onClick={() => 1}
+                            label="Dodaj notatkę"
+                            disabled={true}
+                            width={160}
+                        />
+                    </View>
                 </View>
             </View>
 
@@ -72,6 +80,8 @@ const styles = StyleSheet.create({
         gap: 10,
         marginTop: 5,
         marginBottom: 5,
+        width: '100%',
+        paddingHorizontal: 15,
     },
     controlPanel: {
         gap: 5,

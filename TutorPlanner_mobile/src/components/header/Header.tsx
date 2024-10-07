@@ -5,6 +5,7 @@ import { Button } from '@components/button';
 import { ICON_NAME } from '@components/icon';
 
 interface HeaderProps {
+    isLeftActionDisabled?: boolean;
     leftAction?: () => void;
     leftIcon?: ICON_NAME;
     leftIconNoBG?: boolean;
@@ -16,6 +17,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({
+    isLeftActionDisabled,
     leftIcon,
     leftAction,
     leftIconNoBG,
@@ -25,9 +27,11 @@ const Header: React.FC<HeaderProps> = ({
     rightAction,
     isCentered: centered = false,
 }) => {
+    const leftActionActive = !isLeftActionDisabled && leftAction;
+
     return (
         <View style={styles.header}>
-            {leftAction && (
+            {leftActionActive && (
                 <View style={styles.left_icon}>
                     <Button
                         icon={leftIcon}
@@ -44,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({
                     {
                         alignItems: centered ? 'center' : 'flex-start',
                         paddingRight: rightIcon ? 0 : 50,
-                        paddingLeft: leftIcon ? 0 : centered ? 50 : 20,
+                        paddingLeft: leftActionActive ? 0 : centered ? 50 : 20,
                     },
                 ]}
             >
