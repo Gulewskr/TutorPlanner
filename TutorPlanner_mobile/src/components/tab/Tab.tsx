@@ -39,7 +39,7 @@ const CustomTabs: React.FC<PropsWithChildren<TabProps>> = ({
                                 index != 0 && { marginLeft: -1 },
                             ]}
                         >
-                            {tab.icon && <Icon icon={tab.icon} size="sm" />}
+                            {tab.icon && <Icon icon={tab.icon} />}
                             <Text
                                 style={[
                                     styles.text,
@@ -98,6 +98,7 @@ const styles = EStyleSheet.create({
     },
     active_text: {
         fontWeight: 'bold',
+        fontSize: 14,
     },
 
     expanded_tab: {
@@ -108,6 +109,5 @@ const styles = EStyleSheet.create({
         backgroundColor: '$color_primary',
         paddingHorizontal: 20,
         flexGrow: 1,
-        fontSize: 12,
     },
 });

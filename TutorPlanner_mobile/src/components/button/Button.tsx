@@ -14,6 +14,7 @@ interface ButtonProps {
     size?: ButtonSize;
     hasShadow?: boolean;
     width?: number;
+    severity?: 'warning' | 'error';
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -26,12 +27,20 @@ const Button: React.FC<ButtonProps> = ({
     size = 'medium',
     hasShadow = true,
     width: customWidth,
+    severity,
 }) => {
     const [pressed, setPressed] = useState<boolean>(false);
     const [buttonHeight, setButtonHeight] = useState<number>(0);
     const [width, setWidth] = useState(0);
 
-    const style = styles(secondary, pressed, disabled, size, customWidth);
+    const style = styles(
+        secondary,
+        pressed,
+        disabled,
+        size,
+        customWidth,
+        severity,
+    );
     const isIconButton = type == 'icon-button';
 
     return (
@@ -75,6 +84,7 @@ const styles = (
     isDisabled: boolean,
     size: ButtonSize,
     width?: number,
+    severity?: 'warning' | 'error',
 ) =>
     EStyleSheet.create({
         container: {
@@ -105,9 +115,13 @@ const styles = (
                   ? pressed
                       ? '$color_secondary_hover'
                       : '$color_secondary'
-                  : pressed
-                    ? '$color_primary_hover'
-                    : '$color_primary',
+                  : severity == 'warning'
+                    ? pressed
+                        ? '$color_func'
+                        : '$color_func'
+                    : pressed
+                      ? '$color_primary_hover'
+                      : '$color_primary',
             position: 'relative',
             shadowColor: '#000000',
             elevation: 3,

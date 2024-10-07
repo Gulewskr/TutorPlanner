@@ -49,6 +49,7 @@ const CustomInput: React.FC<HourInputProps> = ({
     }, [startHour, endHour]);
 
     const onChangeStartHour = (event: Event, selectedTime?: Date) => {
+        //@ts-ignore
         if (event === 'dismissed') {
             setStartHourPicker(false); // Hide the picker if user cancels
         } else if (selectedTime) {
@@ -59,6 +60,7 @@ const CustomInput: React.FC<HourInputProps> = ({
     };
 
     const onChangeEndHour = (event: Event, selectedTime?: Date) => {
+        //@ts-ignore
         if (event === 'dismissed') {
             setEndHourPicker(false); // Hide the picker if user cancels
         } else if (selectedTime) {
@@ -102,6 +104,7 @@ const CustomInput: React.FC<HourInputProps> = ({
                     mode="time"
                     is24Hour={true}
                     display="spinner" // You can also use 'default', 'clock' depending on your platform
+                    //@ts-ignore
                     onChange={onChangeStartHour}
                 />
             )}
@@ -112,6 +115,7 @@ const CustomInput: React.FC<HourInputProps> = ({
                     mode="time"
                     is24Hour={true}
                     display="spinner" // You can also use 'default', 'clock' depending on your platform
+                    //@ts-ignore
                     onChange={onChangeEndHour}
                 />
             )}

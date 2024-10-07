@@ -79,7 +79,8 @@ const Calendar: React.FC<CalendarProps> = ({ day, handleChangeDay }) => {
                         type="icon-button"
                         hasShadow={false}
                         onClick={handlePreviousMonth}
-                        icon="minus"
+                        icon="arrowLeft"
+                        severity="warning"
                     />
                     <Tile color="white" centered hasShadow={false} width={200}>
                         {MONTHS_NOMINATIVE[controlDate.getMonth()]}
@@ -90,7 +91,8 @@ const Calendar: React.FC<CalendarProps> = ({ day, handleChangeDay }) => {
                         type="icon-button"
                         hasShadow={false}
                         onClick={handleNextMonth}
-                        icon="plus"
+                        icon="arrowRight"
+                        severity="warning"
                     />
                 </View>
                 <View style={styles.grid}>

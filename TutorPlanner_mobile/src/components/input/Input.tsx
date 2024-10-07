@@ -7,7 +7,8 @@ export interface InputProps {
     placeholder?: string;
     icon?: ICON_NAME;
     label?: string;
-    onChange: (value: string) => void;
+    //TODO - make this required later
+    onChange?: (value: string) => void;
 }
 
 const CustomInput: React.FC<InputProps> = ({

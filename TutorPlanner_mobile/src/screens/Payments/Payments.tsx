@@ -23,8 +23,8 @@ export type PaymentsTabParamList = {
 const Tab = createBottomTabNavigator<PaymentsTabParamList>();
 
 const tabs: Array<TabItem<keyof PaymentsTabParamList>> = [
-    { id: 'Summary', isExpanded: true, text: 'Podsumowanie', icon: 'plus' },
-    { id: 'History', isExpanded: true, text: 'Historia', icon: 'minus' },
+    { id: 'Summary', isExpanded: true, text: 'Podsumowanie', icon: 'payments' },
+    { id: 'History', isExpanded: true, text: 'Historia', icon: 'diagram' },
     {
         id: 'Create',
         hasHiddenLabel: true,
