@@ -28,7 +28,6 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
     title,
     subtitle,
 }) => {
-    const isBackButtonDisabled = !navigation.canGoBack();
     const isSettingsButtonDisabled = route == 'Settings';
 
     return (
@@ -43,12 +42,9 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
                 <>
                     <View style={styles.header_container}>
                         <Header
-                            leftIcon={isBackButtonDisabled ? undefined : 'back'}
-                            leftAction={
-                                isBackButtonDisabled
-                                    ? undefined
-                                    : () => navigation.goBack()
-                            }
+                            leftIcon={'back'}
+                            leftAction={navigation.goBack}
+                            isLeftActionDisabled={!navigation.canGoBack()}
                             rightIcon={
                                 isSettingsButtonDisabled
                                     ? undefined

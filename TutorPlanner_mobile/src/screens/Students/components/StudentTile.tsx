@@ -6,6 +6,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 interface StudentTileProps {
     student: StudentDTO;
+    onClick: () => void;
 }
 
 interface ActionProps {
@@ -13,7 +14,7 @@ interface ActionProps {
     action: number;
 }
 
-const StudentTile: React.FC<StudentTileProps> = ({ student }) => {
+const StudentTile: React.FC<StudentTileProps> = ({ student, onClick }) => {
     const actions: Array<ActionProps> = [
         { icon: 'messenger', action: 1 },
         { icon: 'oneNote', action: 2 },
@@ -30,22 +31,24 @@ const StudentTile: React.FC<StudentTileProps> = ({ student }) => {
                 position: 'relative',
             }}
         >
-            <View style={styles.content}>
-                <Text style={styles.text}>
-                    {student.firstname} {student.surename}
-                </Text>
-                <View style={styles.buttons}>
-                    {actions.map((action, index) => (
-                        <Pressable
-                            key={`${index}-action`}
-                            onPress={() => handleAction(action.action)}
-                        >
-                            <Icon icon={action.icon}></Icon>
-                        </Pressable>
-                    ))}
+            <Pressable onPress={onClick}>
+                <View style={styles.content}>
+                    <Text style={styles.text}>
+                        {student.firstname} {student.surename}
+                    </Text>
+                    <View style={styles.buttons}>
+                        {actions.map((action, index) => (
+                            <Pressable
+                                key={`${index}-action`}
+                                onPress={() => handleAction(action.action)}
+                            >
+                                <Icon icon={action.icon}></Icon>
+                            </Pressable>
+                        ))}
+                    </View>
                 </View>
-            </View>
-            <View style={styles.shadow}></View>
+                <View style={styles.shadow}></View>
+            </Pressable>
         </View>
     );
 };

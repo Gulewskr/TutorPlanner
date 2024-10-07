@@ -1,9 +1,9 @@
-import { Layout } from '../Layout';
+import { Layout } from '../../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StudentsTabParamList } from './Students';
-import { StudentCreateForm } from './components/StudentCreateForm';
+import { StudentsTabParamList } from '../Students';
+import { StudentCreateForm } from '../components/StudentCreateForm';
 
-export const AddStudent: React.FC<
+export const StudentCreate: React.FC<
     NativeStackScreenProps<StudentsTabParamList, 'Create'>
 > = ({ navigation, route }) => {
     return (

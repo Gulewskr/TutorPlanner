@@ -1,17 +1,13 @@
 import { Text, View } from 'react-native';
 import { Layout } from '../Layout';
 import { RootStackParamList } from '../../App';
-import {
-    NativeStackNavigationProp,
-    NativeStackScreenProps,
-} from '@react-navigation/native-stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
     BottomTabScreenProps,
     createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 import { TabItem, Tabs } from '@components/tab';
 import React, { PropsWithChildren } from 'react';
-import { toNativeStackNavigationProp } from 'src/utils/mapper';
 
 export type PaymentsTabParamList = {
     List: undefined;
