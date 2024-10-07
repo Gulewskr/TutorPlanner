@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
 import { Layout } from '../Layout';
 import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -8,10 +7,10 @@ import { useState } from 'react';
 import { studentsService } from '@services/students.service';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StudentProfile } from './StudentProfile';
-import { Input } from '@components/input';
 import { AddStudent } from './AddStudent';
-import { StudentTile } from '@components/tile';
 import { Button } from '@components/button';
+import { ScrollView } from '@components/scrool-view';
+import { StudentTile } from './components/StudentTile';
 
 export type StudentsTabParamList = {
     List: undefined;
@@ -62,19 +61,12 @@ export const StudentsList: React.FC<
             title="Studenci"
             hasHeader
         >
-            <View>
-                {students.map(student => (
-                    <>
-                        <StudentTile key={student.id}>
-                            {student.firstname} {student.surename}
-                        </StudentTile>
-                        {/* 
-                        TO-DO: Naprawic bo sie nie scrolluje :(
-
-                        <StudentTile key={student.id}>
-                            {student.firstname} {student.surename}
-                        </StudentTile> */}
-                    </>
+            <ScrollView>
+                {students.concat(students).map((student, index) => (
+                    <StudentTile
+                        key={`${index}-${student.id}`}
+                        student={student}
+                    />
                 ))}
 
                 {/* TO-DO: Add function to add students (xd)*/}
@@ -83,7 +75,7 @@ export const StudentsList: React.FC<
                     icon="addStudent"
                     label="Dodaj ucznia"
                 />
-            </View>
+            </ScrollView>
         </Layout>
     );
 };

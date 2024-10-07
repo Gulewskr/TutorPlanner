@@ -1,17 +1,19 @@
-import { Button } from '@components/button';
 import { Icon, ICON_NAME } from '@components/icon';
-import React, { PropsWithChildren, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StudentDTO } from '@model';
+import React, { useState } from 'react';
+import { Pressable, Text, View } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
-interface TileProps {}
+interface StudentTileProps {
+    student: StudentDTO;
+}
 
 interface ActionProps {
     icon: ICON_NAME;
     action: number;
 }
-const CustomStudentTile: React.FC<PropsWithChildren<TileProps>> = ({
-    children,
-}) => {
+
+const StudentTile: React.FC<StudentTileProps> = ({ student }) => {
     const actions: Array<ActionProps> = [
         { icon: 'messenger', action: 1 },
         { icon: 'oneNote', action: 2 },
@@ -29,10 +31,15 @@ const CustomStudentTile: React.FC<PropsWithChildren<TileProps>> = ({
             }}
         >
             <View style={styles.content}>
-                <Text style={styles.text}>{children}</Text>
+                <Text style={styles.text}>
+                    {student.firstname} {student.surename}
+                </Text>
                 <View style={styles.buttons}>
-                    {actions.map(action => (
-                        <Pressable onPress={() => handleAction(action.action)}>
+                    {actions.map((action, index) => (
+                        <Pressable
+                            key={`${index}-action`}
+                            onPress={() => handleAction(action.action)}
+                        >
                             <Icon icon={action.icon}></Icon>
                         </Pressable>
                     ))}
@@ -43,11 +50,7 @@ const CustomStudentTile: React.FC<PropsWithChildren<TileProps>> = ({
     );
 };
 
-CustomStudentTile.displayName = 'CustomStudentTile';
-
-export default CustomStudentTile;
-
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     content: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -56,7 +59,7 @@ const styles = StyleSheet.create({
         width: 320,
         borderColor: '#000',
         borderRadius: 10,
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '$color_white',
         paddingHorizontal: 10,
         zIndex: 0,
         justifyContent: 'space-between',
@@ -77,9 +80,11 @@ const styles = StyleSheet.create({
         top: 4,
         left: 4,
         width: 320,
-        backgroundColor: '#9E0042',
+        backgroundColor: '$shadow_color_primary',
         borderWidth: 1,
-        borderColor: '#070707',
+        borderColor: '$color_black',
         zIndex: -1,
     },
 });
+
+export { StudentTile };

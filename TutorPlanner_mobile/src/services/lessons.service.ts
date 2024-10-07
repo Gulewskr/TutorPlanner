@@ -16,7 +16,6 @@ interface LessonCreateRequestBody {
 class LessonsService {
     create = async (body: LessonCreateRequestBody): Promise<LessonDTO> => {
         try {
-            console.log(body);
             if (
                 !body.name ||
                 !body.student ||

@@ -10,6 +10,8 @@ import { Notes } from './screens/Notes/Notes';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Settings } from './screens/Settings/Settings';
 import { Lessons, LessonsTabParamList } from './screens/Lessons/Lessons';
+import { CreatePayment } from './screens/CreatePayment/CreatePayment';
+import { CreateStudent } from './screens/CreateStudent/CreateStudent';
 
 EStyleSheet.build({
     $color_primary: '#FFA9F1',
@@ -37,8 +39,9 @@ export type RootStackParamList = {
     Payments: {
         screen: keyof PaymentsTabParamList;
         initial: boolean;
-        activeTab: number;
     };
+    CreatePayment: undefined;
+    CreateStudent: undefined;
     Notes: undefined;
     Settings: undefined;
     Lessons: { screen: keyof LessonsTabParamList; initial: boolean };
@@ -72,6 +75,8 @@ const App: React.FC<{}> = () => {
                 <Stack.Screen name="Payments" component={Payments} />
                 <Stack.Screen name="Students" component={Students} />
                 <Stack.Screen name="Settings" component={Settings} />
+                <Stack.Screen name="CreatePayment" component={CreatePayment} />
+                <Stack.Screen name="CreateStudent" component={CreateStudent} />
             </Stack.Navigator>
         </NavigationContainer>
     );

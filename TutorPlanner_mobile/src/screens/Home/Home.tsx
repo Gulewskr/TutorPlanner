@@ -4,30 +4,10 @@ import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import { Header } from '@components/header';
-import { useState } from 'react';
-import { TabItem, Tabs } from '@components/tab';
 
 export const Home: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Home'>
 > = ({ navigation, route }) => {
-    const users = ['OLA P', 'KAMIL S'];
-
-    // const tabs: Array<TabItem> = [
-    //     { isExpanded: true, text: 'Wydarzenia', icon: 'plus' },
-    //     { isExpanded: true, text: 'Zdjęcia', icon: 'minus' },
-    //     { isExpanded: true, text: 'Tab', icon: 'minus' },
-    //     { isExpanded: true, text: 'Tab', icon: 'minus' },
-    //     { isExpanded: true, text: 'Tab', icon: 'minus' },
-    //     { isExpanded: true, text: 'Tab', icon: 'minus' },
-    //     { isExpanded: true, text: 'Tab', icon: 'minus' },
-    // ];
-
-    const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
-
-    const changeActiveTab = (index: number) => {
-        setActiveTabIndex(index);
-    };
-
     return (
         <Layout
             navigation={navigation}
@@ -52,12 +32,7 @@ export const Home: React.FC<
                     />
                     <Button
                         icon="addStudent"
-                        onClick={() =>
-                            navigation.navigate('Students', {
-                                screen: 'Create',
-                                initial: true,
-                            })
-                        }
+                        onClick={() => navigation.navigate('CreateStudent')}
                         label="Dodaj ucznia"
                         width={160}
                     />
@@ -65,13 +40,7 @@ export const Home: React.FC<
                 <View style={styles.double_button_container}>
                     <Button
                         icon="addPayment"
-                        onClick={() =>
-                            navigation.navigate('Payments', {
-                                screen: 'List',
-                                initial: true,
-                                activeTab: 2,
-                            })
-                        }
+                        onClick={() => navigation.navigate('CreatePayment')}
                         label="Dodaj płatność"
                         width={160}
                     />
@@ -92,25 +61,6 @@ export const Home: React.FC<
                     title={'Dzisiejszy plan'}
                 />
             </View>
-
-            {/* <View>
-                <Tabs
-                    tabs={tabs}
-                    activeTabIndex={activeTabIndex}
-                    changeActiveTab={changeActiveTab}
-                />
-            </View> */}
-
-            {/* {users.map((user, i) => (
-                <CustomButton
-                    key={`user-${i}`}
-                    icon="minus"
-                    label={`Go to ${user} Page`}
-                    onClick={() =>
-                        navigation.navigate('Profile', { name: user })
-                    }
-                />
-            ))} */}
         </Layout>
     );
 };

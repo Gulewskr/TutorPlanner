@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 type TileColors =
     | 'white'
@@ -84,7 +85,7 @@ CustomTile.displayName = 'CustomTile';
 
 export default CustomTile;
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     content: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
 
         borderColor: '#000',
         borderRadius: 10,
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '$color_white',
         paddingHorizontal: 10,
     },
 
@@ -105,9 +106,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 4,
         left: 4,
-        backgroundColor: '#9E0042',
+        backgroundColor: '$shadow_color_primary',
         borderWidth: 1,
-        borderColor: '#070707',
+        borderColor: '$color_black',
         zIndex: -1,
     },
 });

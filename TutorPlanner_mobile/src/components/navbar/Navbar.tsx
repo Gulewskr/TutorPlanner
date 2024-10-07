@@ -45,7 +45,8 @@ const ActiveComponent = () => (
     <Svg
         style={{
             position: 'absolute',
-            top: -2.9,
+            //TODO this is not wanted solution now it corrent only for specific screen size but we should found it generic
+            top: -1,
             left: 0,
         }}
         x={0}
@@ -79,8 +80,9 @@ const ActiveComponent = () => (
         <Line
             x1={0}
             x2={100}
-            y1="0.75"
-            y2="0.75"
+            //TODO line 48
+            y1="0.5"
+            y2="0.5"
             mask="url(#mask)"
             stroke="#070707" //$color_black
             strokeWidth="1.5"
