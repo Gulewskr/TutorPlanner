@@ -11,6 +11,16 @@ router.get('/', async (req, res) => {
     res.status(200).json(data);
 });
 
+router.post('/', async (req, res) => {
+    try {
+        const createdStudent = await StudentService.createStudent(req.body);
+        res.status(200).json(createdStudent);
+    } catch (err) {
+        console.log(JSON.stringify(err));
+        res.status(400).json(err);
+    }
+});
+
 router.get('/:studentId', async (req, res) => {
     const studentId = validateStudentId(req, res);
     if (studentId == -1) return;
@@ -44,11 +54,6 @@ router.post('/:studentId/lessons', async (req, res) => {
         res.json(e);
         res.status(400);
     }
-});
-
-router.post('/', async (req, res, next) => {
-    const createdStudent = await StudentService.createStudent(req.body);
-    res.status(200).json(createdStudent);
 });
 
 const validateStudentId = (req: Request, res: Response): number => {

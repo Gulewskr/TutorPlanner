@@ -23,13 +23,13 @@ export const FormRenderer: React.FunctionComponent<FormRendererProps> = ({
             {FormBody}
             <View style={styles.double_button_container}>
                 <Button
-                    icon="minus"
+                    icon="cancel"
                     onClick={onCancel}
                     label="Anuluj"
                     width={160}
                 />
                 <Button
-                    icon="plus"
+                    icon="checkbox"
                     onClick={() => onSubmit(formData)}
                     label="Dodaj"
                     width={160}
