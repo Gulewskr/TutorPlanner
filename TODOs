@@ -1,0 +1,40 @@
+Ogólne:
+
+-   potrzebny uniwersalny modal - edycja, wyświetlanie szczegółów, potwierdzanie operacji
+
+Spis funkcjonalności wersji 0.5:
+
+-   ekran główny
+    -   lista z wydarzeniami danego dnia
+-   kalendarz
+    -   lista z wydarzeniami danego dnia
+    -   widok dzienny
+-   dodawanie wydarzen
+-   edycja wydarzen
+    -   modal do podglądu szczegółów wydarzenia
+-   usuwanie wydarzen
+-   [DONE] dodawanie zajęć do kalendarzu
+-   [DONE] przegladanie listy uczniów
+-   [DONE] dodawnie uczniów
+-   edycja ucznia
+-   usuwanie ucznia
+-   profil ucznia - główne dane
+-   profil ucznia - historia
+-   profil ucznia - dodawanie płatności
+    -   modal do zmiany podstawowej ceny za zajęcia
+    -   najblizsze zajecia
+-   dodawanie płatności
+-   usuwanie płatności
+-   finanse/podsumowanie
+    -   wyświetlenie wszystkich nieopłaconych zajęć
+    -   wyświetlenie przychodu w aktualnym miesiącu (przychody/wyliczone)
+-   wyświetlanie historii płatności
+    -   lista odnotowanych płatności w danym miesiącu
+    -   lista nieopłaconych zajęć w danym
+
+Zmiany przeniesione do następnej wersji:
+
+-   Komponent timeline - przeniesiony do następnej werji w aktualnej jedynie lista wydarzeń posegrowanych według godziny
+-   kalendarz - podgląd
+    -   timeline (komponent z wydarzeniami)
+-   lista uczniów - odnośniki do kontaktu w aktualnej wersji nie obsługujemy dodawania dodatkowych danych do uczniów
