@@ -123,7 +123,7 @@ const Calendar: React.FC<CalendarProps> = ({
                         return (
                             <DayInCalendar
                                 day={day}
-                                key={`callendar-${i}`}
+                                key={`calendar-${i}`}
                                 eventsData={eventsByDate[dateKey]}
                                 isBlackedOut={!isSameMonth(controlDate, day)}
                                 isSelected={isSameDay(selectedDay, day)}

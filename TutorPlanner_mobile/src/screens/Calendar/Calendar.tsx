@@ -10,6 +10,7 @@ import axios from 'axios';
 import { lessonsService } from '@services/lessons.service';
 import { ScrollView } from '@components/scrool-view';
 import { EventTile, EventWrapper } from '@components/events';
+import { DailyViewWrapper } from '@components/daily calendar';
 
 export type CalendarTabParamList = {
     MonthlyCalendar: undefined;
@@ -84,6 +85,11 @@ const MonthlyCalendar: React.FC<
 const DailyCalendar: React.FC<
     NativeStackScreenProps<CalendarTabParamList, 'DailyCalendar'>
 > = ({ navigation, route }) => {
+    const [selectedDay, setSelectedDay] = useState<Date>(new Date());
+
+    const handleChangeDay = (day: Date) => {
+        setSelectedDay(day);
+    };
     return (
         <Layout
             navigation={navigation}
@@ -91,7 +97,8 @@ const DailyCalendar: React.FC<
             title="Kalendarz"
             hasHeader
         >
-            <Text>Kalendarz - widok dnia</Text>
+            <DailyViewWrapper day={selectedDay} onClick={handleChangeDay} />
+            <EventWrapper day={selectedDay} />
         </Layout>
     );
 };

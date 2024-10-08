@@ -32,8 +32,8 @@ export const EventWrapper: React.FC<EventWrapperProps> = ({ day }) => {
 
     return (
         <ScrollView>
-            {events.map((event: Lesson) => (
-                <EventTile event={event}></EventTile>
+            {events.map((event: Lesson, i) => (
+                <EventTile key={i} event={event}></EventTile>
             ))}
         </ScrollView>
     );

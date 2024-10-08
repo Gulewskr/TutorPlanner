@@ -1,16 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Lesson } from './EventWrapper';
-import { ScrollView } from '@components/scrool-view';
 
 export const EventTile = ({ event }: { event: Lesson }) => {
+    const [height, setHeight] = useState(0);
+
     return (
         <View style={styles.container}>
-            <View style={styles.content}>
-                <Text style={styles.text}>{event.name}</Text>
+            <View
+                style={styles.content}
+                onLayout={event => {
+                    const { height } = event.nativeEvent.layout;
+                    setHeight(height);
+                }}
+            >
+                <Text style={styles.text}>
+                    {event.name}
+                    {'\n'}
+                    {event.startHour}-{event.endHour}
+                </Text>
             </View>
-            <View style={styles.shadow}></View>
+            <View style={[styles.shadow, { height: height }]}></View>
         </View>
     );
 };
@@ -22,7 +33,8 @@ const styles = EStyleSheet.create({
     content: {
         flexDirection: 'row',
         alignItems: 'center',
-        height: 45,
+        minHeight: 45,
+        paddingVertical: 5,
         borderWidth: 1,
         width: 320,
         borderColor: '#000',
@@ -43,7 +55,7 @@ const styles = EStyleSheet.create({
 
     shadow: {
         borderRadius: 10,
-        height: 45,
+        minHeight: 45,
         position: 'absolute',
         top: 4,
         left: 4,
