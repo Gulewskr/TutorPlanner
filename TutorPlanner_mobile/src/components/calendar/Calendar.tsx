@@ -20,13 +20,15 @@ import { MONTHS_NOMINATIVE, WEEKDAYS } from './constraints';
 import { getDayOfWeek } from './utils';
 
 interface CalendarProps {
-    day: Date;
+    selectedDay: Date;
     handleChangeDay: (props: Date) => void;
 }
 
-const Calendar: React.FC<CalendarProps> = ({ day, handleChangeDay }) => {
-    const [selectedDate, setSelectedDate] = useState(day || new Date());
-    const [controlDate, setControlDate] = useState(selectedDate);
+const Calendar: React.FC<CalendarProps> = ({
+    selectedDay,
+    handleChangeDay,
+}) => {
+    const [controlDate, setControlDate] = useState(new Date());
 
     // Temp data :)
     const events = [
@@ -62,13 +64,13 @@ const Calendar: React.FC<CalendarProps> = ({ day, handleChangeDay }) => {
     };
 
     const handleCalendarChanges = (day: Date) => {
-        day.getMonth() < controlDate.getMonth()
-            ? handlePreviousMonth()
-            : day.getMonth() > controlDate.getMonth()
-              ? handleNextMonth()
-              : '';
         handleChangeDay(day);
-        setSelectedDate(day);
+        setControlDate(day);
+    };
+
+    const resetDate = () => {
+        handleChangeDay(new Date());
+        setControlDate(new Date());
     };
 
     return (
@@ -124,11 +126,19 @@ const Calendar: React.FC<CalendarProps> = ({ day, handleChangeDay }) => {
                                 key={`callendar-${i}`}
                                 eventsData={eventsByDate[dateKey]}
                                 isBlackedOut={!isSameMonth(controlDate, day)}
-                                isSelected={isSameDay(selectedDate, day)}
+                                isSelected={isSameDay(selectedDay, day)}
                                 onClick={() => handleCalendarChanges(day)}
                             />
                         );
                     })}
+                </View>
+                <View style={styles.reset_day}>
+                    <Button
+                        label="Dzisiejszy dzień"
+                        size="medium"
+                        hasShadow={false}
+                        onClick={() => resetDate()}
+                    />
                 </View>
             </View>
             <View style={styles.shadow} />
@@ -150,7 +160,7 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        height: 400,
+        height: 450,
         borderRadius: 10,
         zIndex: 1,
         borderWidth: 1,
@@ -163,7 +173,7 @@ const styles = EStyleSheet.create({
         top: 5,
         left: 5,
         width: '100%',
-        height: 400,
+        height: 450,
         borderRadius: 10,
         backgroundColor: '$shadow_color_primary',
         zIndex: 0,
@@ -180,5 +190,11 @@ const styles = EStyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         width: 40,
+    },
+
+    reset_day: {
+        top: 20,
+        left: 3,
+        width: '95%',
     },
 });

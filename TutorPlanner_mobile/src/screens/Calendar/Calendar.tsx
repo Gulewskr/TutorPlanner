@@ -67,7 +67,10 @@ const MonthlyCalendar: React.FC<
                     icon="calendar"
                     label="Przełącz na widok dzienny"
                 />
-                <Calendar day={selectedDay} handleChangeDay={handleChangeDay} />
+                <Calendar
+                    selectedDay={selectedDay}
+                    handleChangeDay={handleChangeDay}
+                />
                 <Text>{selectedDay.getDate()}</Text>
             </View>
         </Layout>

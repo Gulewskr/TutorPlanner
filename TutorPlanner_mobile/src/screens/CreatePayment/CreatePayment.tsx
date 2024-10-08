@@ -5,6 +5,7 @@ import { View } from 'react-native';
 import { Button } from '@components/button';
 import { RootStackParamList } from 'src/App';
 import { Input } from '@components/input';
+import { PaymentsCreateForm } from '../Payments/components/PaymentsCreateForm';
 
 export const CreatePayment: React.FC<
     NativeStackScreenProps<RootStackParamList, 'CreatePayment'>
@@ -18,31 +19,9 @@ export const CreatePayment: React.FC<
             hasHeaderSeperated
         >
             {/* TOOD - use form renderer */}
-            <Input
-                icon="students"
-                placeholder="--Wybierz ucznia--"
-                label="Uczeń"
-                onChange={function (value: string): void {}}
-            />
-            <Input
-                icon="payments"
-                placeholder="--Podaj kwote--"
-                label="Kwota"
-                onChange={function (value: string): void {}}
-            />
-            <View style={styles.double_button_container}>
-                <Button
-                    icon="minus"
-                    onClick={() => navigation.goBack()}
-                    label="Anuluj"
-                    width={160}
-                />
-                <Button
-                    icon="plus"
-                    onClick={() => console.log('Dodaj')}
-                    label="Dodaj"
-                    width={160}
-                />
+
+            <View style={{ padding: 15, width: '100%' }}>
+                <PaymentsCreateForm onCancel={navigation.goBack} />
             </View>
         </Layout>
     );

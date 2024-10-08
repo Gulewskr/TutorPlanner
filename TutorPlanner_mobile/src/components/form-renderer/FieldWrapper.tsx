@@ -28,6 +28,8 @@ export const FieldWrapper: React.FC<FieldWrapperProps> = ({
             return <Dropdown {...componentProps} onChange={onFieldChange} />;
         case 'hour-input':
             return <HourInput {...componentProps} onChange={onFieldChange} />;
+
+        default:
+            throw new Error('Not supported component!');
     }
-    throw new Error('Not supported component!');
 };
