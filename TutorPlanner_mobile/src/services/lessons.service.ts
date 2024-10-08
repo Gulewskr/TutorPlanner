@@ -34,6 +34,24 @@ class LessonsService {
             throw error;
         }
     };
+
+    getLessonsInDay = async (date: Date) => {
+        try {
+            if (!date) throw new Error('Missing data');
+            const formattedDate = date.toISOString().split('T')[0]; // np 2024-10-05
+            const response = await axios.get(
+                `${LESSONS_URL}/date/${formattedDate}`,
+                {
+                    params: {
+                        date: formattedDate,
+                    },
+                },
+            );
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 export const lessonsService = new LessonsService();

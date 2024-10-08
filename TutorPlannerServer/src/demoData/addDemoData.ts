@@ -169,7 +169,7 @@ const addDemoData = async () => {
         for (const contact of contacts) {
             await contactDataRepository.createContactData(contact);
         }
-        await LessonsService.createLssson(getStudentLesson(student));
+        await LessonsService.createLesson(getStudentLesson(student));
     }
     console.log('Added demo data to database!');
 };

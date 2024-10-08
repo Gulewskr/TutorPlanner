@@ -4,6 +4,7 @@ import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import { Header } from '@components/header';
+import { EventWrapper } from '@components/events';
 
 export const Home: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Home'>
@@ -69,6 +70,7 @@ export const Home: React.FC<
                     title={'Dzisiejszy plan'}
                 />
             </View>
+            <EventWrapper day={new Date(2024, 8, 11)} />
         </Layout>
     );
 };

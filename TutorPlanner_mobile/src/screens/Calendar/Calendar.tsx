@@ -2,10 +2,14 @@ import { Text, View } from 'react-native';
 import { Layout } from '../Layout';
 import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Button } from '@components/button';
 import { Calendar } from '@components/calendar';
+import axios from 'axios';
+import { lessonsService } from '@services/lessons.service';
+import { ScrollView } from '@components/scrool-view';
+import { EventTile, EventWrapper } from '@components/events';
 
 export type CalendarTabParamList = {
     MonthlyCalendar: undefined;
@@ -42,11 +46,9 @@ const MonthlyCalendar: React.FC<
     NativeStackScreenProps<CalendarTabParamList, 'MonthlyCalendar'>
 > = ({ navigation, route }) => {
     const [selectedDay, setSelectedDay] = useState(new Date());
-
     const handleChangeDay = (newDay: Date) => {
         setSelectedDay(newDay);
     };
-
     return (
         <Layout
             navigation={navigation}
@@ -54,25 +56,27 @@ const MonthlyCalendar: React.FC<
             title="Kalendarz"
             hasHeader
         >
-            <View
-                style={{
-                    paddingHorizontal: 15,
-                    gap: 15,
-                    alignItems: 'center',
-                }}
-            >
-                <Button
-                    onClick={() => navigation.navigate('DailyCalendar')}
-                    hasShadow
-                    icon="calendar"
-                    label="Przełącz na widok dzienny"
-                />
-                <Calendar
-                    selectedDay={selectedDay}
-                    handleChangeDay={handleChangeDay}
-                />
-                <Text>{selectedDay.getDate()}</Text>
-            </View>
+            <ScrollView>
+                <View
+                    style={{
+                        paddingHorizontal: 15,
+                        gap: 15,
+                        alignItems: 'center',
+                    }}
+                >
+                    <Button
+                        onClick={() => navigation.navigate('DailyCalendar')}
+                        hasShadow
+                        icon="calendar"
+                        label="Przełącz na widok dzienny"
+                    />
+                    <Calendar
+                        selectedDay={selectedDay}
+                        handleChangeDay={handleChangeDay}
+                    />
+                    <EventWrapper day={selectedDay} />
+                </View>
+            </ScrollView>
         </Layout>
     );
 };

@@ -14,9 +14,14 @@ router.get('/:id', async (req, res) => {
     res.status(200).json(lesson);
 });
 
+router.get('/date/:date', async (req, res) => {
+    const lesson = await LessonsService.getLessonsByDay(req.params.date);
+    res.status(200).json(lesson);
+});
+
 router.post('/', async (req, res, next) => {
     try {
-        const lesson = await LessonsService.createLssson(req.body);
+        const lesson = await LessonsService.createLesson(req.body);
         res.status(200).json({
             message: 'Lessons has been created successfully.',
             data: lesson,

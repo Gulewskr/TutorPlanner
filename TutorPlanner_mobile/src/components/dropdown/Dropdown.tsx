@@ -39,7 +39,7 @@ const Dropdown: React.FC<CheckboxProps> = ({
         <View style={[styles.input, label && { marginTop: 5 }]}>
             {label && <Text style={styles.label}>{label}</Text>}
             <TouchableOpacity
-                onPress={() => setOpenMenu(true)}
+                onPress={() => setOpenMenu(!openMenu)}
                 style={{
                     zIndex: 1,
                 }}

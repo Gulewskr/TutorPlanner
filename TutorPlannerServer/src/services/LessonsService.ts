@@ -55,6 +55,10 @@ class LessonsService {
         return await lessonRepository.getAllLessons();
     }
 
+    public async getLessonsByDay(date: string): Promise<Lesson[]> {
+        return await lessonRepository.getLessonsByDay(date);
+    }
+
     public async getStudentLessons(studnetId: number): Promise<Lesson[]> {
         return await lessonRepository.getLessonsByStudentId(studnetId);
     }
@@ -98,13 +102,13 @@ class LessonsService {
         studnetId: number,
         lesson: LessonInput,
     ): Promise<LessonDTO> {
-        return await this.createLssson({
+        return await this.createLesson({
             ...lesson,
             student: studnetId,
         });
     }
 
-    public async createLssson(lesson: LessonInput): Promise<LessonDTO> {
+    public async createLesson(lesson: LessonInput): Promise<LessonDTO> {
         LessonInputSchema.parse(lesson);
         if (!lesson.weekly) {
             const createdLesson = await lessonRepository.createLesson({

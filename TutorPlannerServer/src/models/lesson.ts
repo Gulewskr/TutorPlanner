@@ -88,6 +88,21 @@ const lessonRepository = {
             },
         })) as LessonDAO[];
     },
+    getLessonsByDay: async (date: string): Promise<LessonDAO[]> => {
+        return (await prisma.event.findMany({
+            where: {
+                type: 'LESSON',
+                date: {
+                    gte: new Date(`${date}T00:00:00.000Z`), // Początek dnia
+                    lt: new Date(`${date}T23:59:59.999Z`), // Koniec dnia
+                },
+            },
+            orderBy: {
+                date: 'asc',
+            },
+        })) as LessonDAO[];
+    },
+
     createLessons: async (
         inputData: Prisma.EventCreateManyInput[],
     ): Promise<Prisma.BatchPayload> => {
