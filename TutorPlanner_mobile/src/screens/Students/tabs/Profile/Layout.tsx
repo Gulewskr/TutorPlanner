@@ -7,7 +7,7 @@ import { getFullName } from 'src/utils/utils';
 
 const tabs: Array<TabItem<keyof StudentProfileTabParamList>> = [
     { id: 'Info', isExpanded: true, text: 'Informacje', icon: 'studentCap' },
-    { id: 'Lessons', isExpanded: true, text: 'List zajęć', icon: 'pencil' },
+    { id: 'Lessons', isExpanded: true, text: 'Lista zajęć', icon: 'pencil' },
     {
         id: 'Analise',
         isExpanded: true,

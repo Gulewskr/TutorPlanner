@@ -1,13 +1,10 @@
-import { Text, View } from 'react-native';
-import { Layout } from '../Layout';
 import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import {
-    BottomTabScreenProps,
-    createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs';
-import { TabItem, Tabs } from '@components/tab';
-import React, { PropsWithChildren } from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React from 'react';
+import { PaymentsSummary } from './tabs/PaymentsSummary';
+import { PaymentCreate } from './tabs/PaymentCreate';
+import { PaymentsHistory } from './tabs/PaymentsHistory';
 
 export type PaymentsTabParamList = {
     List: undefined;
@@ -17,18 +14,6 @@ export type PaymentsTabParamList = {
 };
 
 const Tab = createBottomTabNavigator<PaymentsTabParamList>();
-
-const tabs: Array<TabItem<keyof PaymentsTabParamList>> = [
-    { id: 'Summary', isExpanded: true, text: 'Podsumowanie', icon: 'payments' },
-    { id: 'History', isExpanded: true, text: 'Historia', icon: 'diagram' },
-    {
-        id: 'Create',
-        hasHiddenLabel: true,
-        isExpanded: true,
-        text: 'Tab',
-        icon: 'addPayment',
-    },
-];
 
 export const Payments: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Payments'>
@@ -45,97 +30,7 @@ export const Payments: React.FC<
         >
             <Tab.Screen name="Summary" component={PaymentsSummary} />
             <Tab.Screen name="History" component={PaymentsHistory} />
-            <Tab.Screen name="Create" component={CreatePayment} />
+            <Tab.Screen name="Create" component={PaymentCreate} />
         </Tab.Navigator>
-    );
-};
-
-//TODO - maybe not needed
-export const PaymentsRoot: React.FC<
-    BottomTabScreenProps<PaymentsTabParamList, 'List'>
-> = props => {
-    const { navigation, route } = props;
-    return (
-        <Layout
-            navigation={navigation.getParent()}
-            route={'Payments'}
-            title="Finanse"
-            hasHeader
-        >
-            <PaymentsLayout {...props}>
-                <Text>This is Payments</Text>
-            </PaymentsLayout>
-        </Layout>
-    );
-};
-
-export const PaymentsSummary: React.FC<
-    BottomTabScreenProps<PaymentsTabParamList, 'Summary'>
-> = props => {
-    const { navigation, route } = props;
-    return (
-        <Layout
-            navigation={navigation.getParent()}
-            route={'Payments'}
-            title="Finanse"
-            hasHeader
-        >
-            <PaymentsLayout {...props}>
-                <Text>Podsumowanie</Text>
-            </PaymentsLayout>
-        </Layout>
-    );
-};
-
-export const PaymentsHistory: React.FC<
-    BottomTabScreenProps<PaymentsTabParamList, 'History'>
-> = props => {
-    const { navigation, route } = props;
-    return (
-        <Layout
-            navigation={navigation.getParent()}
-            route={'Payments'}
-            title="Finanse"
-            hasHeader
-        >
-            <PaymentsLayout {...props}>
-                <Text>Historia płatności</Text>
-            </PaymentsLayout>
-        </Layout>
-    );
-};
-
-const CreatePayment: React.FC<
-    BottomTabScreenProps<PaymentsTabParamList, 'Create'>
-> = props => {
-    const { navigation, route } = props;
-    return (
-        <Layout
-            navigation={navigation.getParent()}
-            route={'Payments'}
-            title="Dodaj płatność"
-            hasHeader
-        >
-            <PaymentsLayout {...props}>
-                <Text>TODO - formularz</Text>
-            </PaymentsLayout>
-        </Layout>
-    );
-};
-
-const PaymentsLayout: React.FC<
-    PropsWithChildren<
-        BottomTabScreenProps<PaymentsTabParamList, keyof PaymentsTabParamList>
-    >
-> = ({ navigation, route, children }) => {
-    return (
-        <>
-            <Tabs
-                tabs={tabs}
-                activeTab={route.name}
-                changeActiveTab={index => navigation.jumpTo(tabs[index].id)}
-            />
-            {children}
-        </>
     );
 };

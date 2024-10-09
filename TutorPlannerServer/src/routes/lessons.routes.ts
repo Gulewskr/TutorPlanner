@@ -22,8 +22,7 @@ router.post('/', async (req, res, next) => {
             data: lesson,
         });
     } catch (e) {
-        res.json(e);
-        res.status(400);
+        res.status(400).json(e);
     }
 });
 

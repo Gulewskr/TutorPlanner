@@ -90,13 +90,21 @@ const Calendar: React.FC<CalendarProps> = ({ day, handleChangeDay }) => {
                             onClick={handlePreviousMonth}
                             icon="arrowLeft"
                             severity="warning"
+                            size="small"
                         />
                     </View>
                     <View style={{ width: '55%' }}>
-                        <Tile color="white" centered hasShadow={false}>
-                            {MONTHS_NOMINATIVE[controlDate.getMonth()]}
-                            {!isSameYear(controlDate, new Date()) &&
-                                format(controlDate, ' yyyy')}
+                        <Tile
+                            color="white"
+                            centered
+                            hasShadow={false}
+                            height={20}
+                        >
+                            <Text>
+                                {MONTHS_NOMINATIVE[controlDate.getMonth()]}
+                                {!isSameYear(controlDate, new Date()) &&
+                                    format(controlDate, ' yyyy')}
+                            </Text>
                         </Tile>
                     </View>
                     <View>
@@ -106,6 +114,7 @@ const Calendar: React.FC<CalendarProps> = ({ day, handleChangeDay }) => {
                             onClick={handleNextMonth}
                             icon="arrowRight"
                             severity="warning"
+                            size="small"
                         />
                     </View>
                 </View>

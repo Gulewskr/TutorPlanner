@@ -1,5 +1,5 @@
-import express, { Router } from 'express';
-import PaymentsService from '../services/PaymentsService';
+import express, { Request, Router } from 'express';
+import PaymentsService from '../../services/PaymentsService';
 
 /**
  * Typescript don't like merging params so as workaround cast req.params to any
@@ -11,14 +11,34 @@ router.get('/:id', async (req, res) => {
     res.status(200).json(payment);
 });
 
+/**
+ * /students/:studentId/payments
+ *
+ * requestBody:
+ *  price: number;
+ *  date?: string;
+ *
+ * response:
+ *  studentId: number;
+ *  id: number;
+ *  price: number;
+ *  date: Date;
+ */
 router.post('/', async (req, res, next) => {
-    const studentId = Number((req.params as any).studentId);
-    console.log(studentId);
-    const payment = await PaymentsService.addPayment({
-        ...req.body,
-        studentId: Number.isNaN(studentId) ? req.body.studentId : studentId,
-    });
-    res.status(200).json(payment);
+    try {
+        const studentId = Number((req.params as any).studentId);
+        if (Number.isNaN(studentId) || studentId === undefined) {
+            return res.status(200).json('missing studentId');
+        }
+        const payment = await PaymentsService.addPayment({
+            ...req.body,
+            studentId,
+        });
+        res.status(200).json(payment);
+    } catch (e) {
+        res.json(e);
+        res.status(400);
+    }
 });
 
 router.get('/', async (req, res) => {

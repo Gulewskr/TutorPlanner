@@ -1,7 +1,5 @@
-import { StudentDTO } from '@model';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { studentsService } from '@services/students.service';
-import React, { useState } from 'react';
+import React from 'react';
 import { Layout } from 'src/screens/Layout';
 import { StudentTile } from '../components/StudentTile';
 import { StudentsTabParamList } from '../Students';
@@ -21,7 +19,7 @@ export const StudentsList: React.FC<
             title="Studenci"
             hasHeader
         >
-            <ScrollView>
+            <ScrollView styles={{ paddingHorizontal: 10 }}>
                 {students.concat(students).map((student, index) => (
                     <StudentTile
                         key={`${index}-${student.id}`}

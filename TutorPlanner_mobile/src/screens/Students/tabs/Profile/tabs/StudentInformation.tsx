@@ -4,7 +4,6 @@ import React from 'react';
 import { StudentsLayout } from '../Layout';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Input } from '@components/input';
 import { Button } from '@components/button';
 import { Tile } from '@components/tile';
 import { StudentNextLesson } from 'src/screens/Students/components/StudentNextLesson';
@@ -18,7 +17,7 @@ export const StudentInformations: React.FC<
         <StudentsLayout {...props}>
             <View style={styles.double_button_container}>
                 <View style={{ width: '48%' }}>
-                    <Tile color="white" hasShadow>
+                    <Tile color="white" hasShadow centered>
                         <Text>
                             Cena:{' '}
                             <Text style={{ fontWeight: 'bold' }}>
@@ -35,10 +34,11 @@ export const StudentInformations: React.FC<
                         onClick={function (): void {
                             throw new Error('Function not implemented.');
                         }}
+                        size="small"
                     />
                 </View>
                 <View style={{ width: '48%' }}>
-                    <Tile color="white" hasShadow>
+                    <Tile color="white" hasShadow centered>
                         <Text>
                             Bilans:{' '}
                             <Text style={{ fontWeight: 'bold' }}>
@@ -56,6 +56,7 @@ export const StudentInformations: React.FC<
                         onClick={function (): void {
                             throw new Error('Function not implemented.');
                         }}
+                        size="small"
                     />
                 </View>
             </View>

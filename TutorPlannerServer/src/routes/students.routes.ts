@@ -1,6 +1,6 @@
 import express, { Request, Response, Router } from 'express';
 import StudentService from '../services/StudentService';
-import paymentRouter from './payments';
+import paymentRouter from './studentsRoutes/payments.routes';
 import LessonsService from '../services/LessonsService';
 import { StudentsDTO } from '../dto/students';
 
