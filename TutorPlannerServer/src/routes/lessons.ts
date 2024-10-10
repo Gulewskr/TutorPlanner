@@ -3,19 +3,32 @@ import LessonsService from '../services/LessonsService';
 
 const router: Router = express.Router();
 
+export interface Filters {
+    date?: string; // Opcjonalna właściwość date
+}
+
 router.get('/', async (req, res) => {
-    //const filters = {};
-    const lessons = await LessonsService.getLessons(undefined);
-    res.status(200).json(lessons);
+    try {
+        const filters: Filters = {};
+
+        if (req.query.date) {
+            filters.date = req.query.date as string;
+        }
+
+        const lessons = await LessonsService.getLessons(filters);
+        res.status(200).json(lessons);
+    } catch (error) {
+        if (error instanceof Error) {
+            error = error.message;
+            res.status(400).json({
+                message: error,
+            });
+        }
+    }
 });
 
 router.get('/:id', async (req, res) => {
     const lesson = await LessonsService.getLesson(Number(req.params.id));
-    res.status(200).json(lesson);
-});
-
-router.get('/date/:date', async (req, res) => {
-    const lesson = await LessonsService.getLessonsByDay(req.params.date);
     res.status(200).json(lesson);
 });
 

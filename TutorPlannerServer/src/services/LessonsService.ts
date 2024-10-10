@@ -10,6 +10,7 @@ import {
 import { addWeeks } from 'date-fns';
 import { LessonDTO } from '../dto/lessons';
 import { z } from 'zod';
+import { Filters } from '../routes/lessons';
 
 interface LessonInput {
     name: string;
@@ -42,6 +43,11 @@ interface PayedLessonsData {
     sum: number;
 }
 
+function isValidDate(dateString: string): boolean {
+    const date = new Date(dateString);
+    return !isNaN(date.getTime());
+}
+
 class LessonsService {
     public async getLesson(id: number): Promise<Lesson> {
         const lesson = await lessonRepository.getLessonById(id);
@@ -51,7 +57,16 @@ class LessonsService {
         return lesson;
     }
 
-    public async getLessons(filters?: lessonFilters): Promise<Lesson[]> {
+    public async getLessons(filters?: Filters): Promise<Lesson[]> {
+        if (filters?.date) {
+            if (!isValidDate(filters.date)) {
+                throw new Error(
+                    'Invalid date format. Please use a valid date (YYYY-MM-DD).',
+                );
+            }
+            return await lessonRepository.getLessonsByDay(filters.date);
+        }
+
         return await lessonRepository.getAllLessons();
     }
 

@@ -9,7 +9,7 @@ import { Calendar } from '@components/calendar';
 import axios from 'axios';
 import { lessonsService } from '@services/lessons.service';
 import { ScrollView } from '@components/scrool-view';
-import { EventTile, EventWrapper } from '@components/events';
+import { EventWrapper } from '@components/events';
 import { DailyViewWrapper } from '@components/daily calendar';
 
 export type CalendarTabParamList = {
@@ -63,6 +63,7 @@ const MonthlyCalendar: React.FC<
                         paddingHorizontal: 15,
                         gap: 15,
                         alignItems: 'center',
+                        width: '100%',
                     }}
                 >
                     <Button
@@ -72,7 +73,7 @@ const MonthlyCalendar: React.FC<
                         label="Przełącz na widok dzienny"
                     />
                     <Calendar
-                        selectedDay={selectedDay}
+                        day={selectedDay}
                         handleChangeDay={handleChangeDay}
                     />
                     <EventWrapper day={selectedDay} />
@@ -97,7 +98,9 @@ const DailyCalendar: React.FC<
             title="Kalendarz"
             hasHeader
         >
-            <DailyViewWrapper day={selectedDay} onClick={handleChangeDay} />
+            <View style={{ width: '95%' }}>
+                <DailyViewWrapper day={selectedDay} onClick={handleChangeDay} />
+            </View>
             <EventWrapper day={selectedDay} />
         </Layout>
     );

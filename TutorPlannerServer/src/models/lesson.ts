@@ -1,4 +1,5 @@
 import { PrismaClient, Prisma, Event, EventType } from '@prisma/client';
+import { endOfDay, startOfDay } from 'date-fns';
 
 const prisma = new PrismaClient();
 
@@ -93,8 +94,8 @@ const lessonRepository = {
             where: {
                 type: 'LESSON',
                 date: {
-                    gte: new Date(`${date}T00:00:00.000Z`), // Początek dnia
-                    lt: new Date(`${date}T23:59:59.999Z`), // Koniec dnia
+                    gte: startOfDay(date),
+                    lt: endOfDay(date),
                 },
             },
             orderBy: {

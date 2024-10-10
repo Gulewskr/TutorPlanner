@@ -20,15 +20,13 @@ import { MONTHS_NOMINATIVE, WEEKDAYS } from './constraints';
 import { getDayOfWeek } from './utils';
 
 interface CalendarProps {
-    selectedDay: Date;
+    day: Date;
     handleChangeDay: (props: Date) => void;
 }
 
-const Calendar: React.FC<CalendarProps> = ({
-    selectedDay,
-    handleChangeDay,
-}) => {
-    const [controlDate, setControlDate] = useState(new Date());
+const Calendar: React.FC<CalendarProps> = ({ day, handleChangeDay }) => {
+    const [selectedDate, setSelectedDate] = useState(day || new Date());
+    const [controlDate, setControlDate] = useState(selectedDate);
 
     // Temp data :)
     const events = [
@@ -64,13 +62,13 @@ const Calendar: React.FC<CalendarProps> = ({
     };
 
     const handleCalendarChanges = (day: Date) => {
+        day.getMonth() < controlDate.getMonth()
+            ? handlePreviousMonth()
+            : day.getMonth() > controlDate.getMonth()
+              ? handleNextMonth()
+              : '';
         handleChangeDay(day);
-        setControlDate(day);
-    };
-
-    const resetDate = () => {
-        handleChangeDay(new Date());
-        setControlDate(new Date());
+        setSelectedDate(day);
     };
 
     return (
@@ -92,13 +90,21 @@ const Calendar: React.FC<CalendarProps> = ({
                             onClick={handlePreviousMonth}
                             icon="arrowLeft"
                             severity="warning"
+                            size="small"
                         />
                     </View>
                     <View style={{ width: '55%' }}>
-                        <Tile color="white" centered hasShadow={false}>
-                            {MONTHS_NOMINATIVE[controlDate.getMonth()]}
-                            {!isSameYear(controlDate, new Date()) &&
-                                format(controlDate, ' yyyy')}
+                        <Tile
+                            color="white"
+                            centered
+                            hasShadow={false}
+                            height={20}
+                        >
+                            <Text>
+                                {MONTHS_NOMINATIVE[controlDate.getMonth()]}
+                                {!isSameYear(controlDate, new Date()) &&
+                                    format(controlDate, ' yyyy')}
+                            </Text>
                         </Tile>
                     </View>
                     <View>
@@ -108,6 +114,7 @@ const Calendar: React.FC<CalendarProps> = ({
                             onClick={handleNextMonth}
                             icon="arrowRight"
                             severity="warning"
+                            size="small"
                         />
                     </View>
                 </View>
@@ -123,22 +130,14 @@ const Calendar: React.FC<CalendarProps> = ({
                         return (
                             <DayInCalendar
                                 day={day}
-                                key={`calendar-${i}`}
+                                key={`callendar-${i}`}
                                 eventsData={eventsByDate[dateKey]}
                                 isBlackedOut={!isSameMonth(controlDate, day)}
-                                isSelected={isSameDay(selectedDay, day)}
+                                isSelected={isSameDay(selectedDate, day)}
                                 onClick={() => handleCalendarChanges(day)}
                             />
                         );
                     })}
-                </View>
-                <View style={styles.reset_day}>
-                    <Button
-                        label="Dzisiejszy dzień"
-                        size="medium"
-                        hasShadow={false}
-                        onClick={() => resetDate()}
-                    />
                 </View>
             </View>
             <View style={styles.shadow} />
@@ -160,7 +159,7 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        height: 450,
+        height: 400,
         borderRadius: 10,
         zIndex: 1,
         borderWidth: 1,
@@ -173,7 +172,7 @@ const styles = EStyleSheet.create({
         top: 5,
         left: 5,
         width: '100%',
-        height: 450,
+        height: 400,
         borderRadius: 10,
         backgroundColor: '$shadow_color_primary',
         zIndex: 0,
@@ -190,11 +189,5 @@ const styles = EStyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         width: 40,
-    },
-
-    reset_day: {
-        top: 20,
-        left: 3,
-        width: '95%',
     },
 });

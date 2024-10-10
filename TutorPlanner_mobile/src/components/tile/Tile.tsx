@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 type TileColors =
@@ -21,6 +21,8 @@ interface TileProps {
     width?: number;
     centered?: boolean;
     hasShadow?: boolean;
+    onClick?: () => void;
+    height?: number;
 }
 
 const TILE_COLORS: { [key in TileColors]: string } = {
@@ -43,6 +45,8 @@ const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
     color,
     hasShadow = true,
     centered = false,
+    onClick,
+    height,
 }) => {
     const getRandomColorKey = (): string => {
         const keys = Object.keys(TILE_COLORS);
@@ -55,27 +59,36 @@ const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
 
     return (
         <View
-            style={{
-                position: 'relative',
-                width: '100%',
-                minHeight: 50,
-            }}
-            // onLayout={event => {
-            //     const { width } = event.nativeEvent.layout;
-            //     setWidth(width);
-            // }}
+            style={[
+                {
+                    position: 'relative',
+                    width: '100%',
+                    backgroundColor: 'transparent',
+                    minHeight: height || 40,
+                    paddingRight: 5,
+                },
+            ]}
         >
-            <View
+            <Pressable
+                onPress={onClick}
                 style={[
                     styles.content,
                     {
                         backgroundColor: selectedColor,
-                        justifyContent: centered ? 'center' : 'flex-start',
                     },
                 ]}
             >
-                <Text style={styles.text}>{children}</Text>
-            </View>
+                <View
+                    style={[
+                        styles.children,
+                        { justifyContent: centered ? 'center' : 'flex-start' },
+                        { alignItems: centered ? 'center' : 'flex-start' },
+                        { minHeight: height || 40 },
+                    ]}
+                >
+                    {children}
+                </View>
+            </Pressable>
             {hasShadow && <View style={styles.shadow}></View>}
         </View>
     );
@@ -86,26 +99,30 @@ CustomTile.displayName = 'CustomTile';
 export default CustomTile;
 
 const styles = EStyleSheet.create({
+    children: {
+        width: '100%',
+        backgroundColor: 'transparent',
+    },
+
     content: {
         flexDirection: 'row',
         alignItems: 'center',
-        minHeight: 50,
+        width: '100%',
+        minHeight: 40,
         borderWidth: 1,
-
-        borderColor: '#000',
+        borderColor: '$color_black',
         borderRadius: 10,
         backgroundColor: '$color_white',
         paddingHorizontal: 10,
     },
 
-    text: {},
-
     shadow: {
         borderRadius: 10,
-        minHeight: 50,
+        minHeight: 40,
+        height: '100%',
         position: 'absolute',
-        top: 4,
-        left: 4,
+        top: 5,
+        left: 5,
         backgroundColor: '$shadow_color_primary',
         borderWidth: 1,
         width: '100%',

@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { EventTile } from './EventTile';
+import { Text, View } from 'react-native';
 import { lessonsService } from '@services/lessons.service';
 import { ScrollView } from '@components/scrool-view';
+import { Tile } from '@components/tile';
 
 export interface Lesson {
     name: string;
@@ -32,9 +32,17 @@ export const EventWrapper: React.FC<EventWrapperProps> = ({ day }) => {
 
     return (
         <ScrollView>
-            {events.map((event: Lesson, i) => (
-                <EventTile key={i} event={event}></EventTile>
-            ))}
+            <View style={{ width: 320, gap: 10 }}>
+                {events.map((event: Lesson, i) => (
+                    <Tile key={i} color="white">
+                        <Text>
+                            {event.name}
+                            {'\n'}
+                            {event.startHour}-{event.endHour}
+                        </Text>
+                    </Tile>
+                ))}
+            </View>
         </ScrollView>
     );
 };
