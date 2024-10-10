@@ -1,15 +1,11 @@
 import { EventSeriesType, Prisma } from '@prisma/client';
 import { CONFIG } from '../config';
 import { eventSeriesRepository } from '../models/eventSeries';
-import {
-    EventType,
-    Lesson,
-    LessonDAO,
-    lessonRepository,
-} from '../models/lesson';
+import { EventType, Lesson, LessonDAO } from '../models/lesson';
 import { addWeeks } from 'date-fns';
 import { LessonDTO } from '../dto/lessons';
 import { z } from 'zod';
+import { lessonRepository } from '../repositories/lessonsRepository';
 
 interface LessonInput {
     name: string;

@@ -3,6 +3,7 @@ import StudentService from '../services/StudentService';
 import paymentRouter from './studentsRoutes/payments.routes';
 import LessonsService from '../services/LessonsService';
 import { StudentsDTO } from '../dto/students';
+import StudentPaymentsService from '../services/StudentPaymentsService';
 
 const router: Router = express.Router();
 
@@ -33,6 +34,21 @@ router.post('/:studentId', async (req, res) => {
     if (studentId == -1) return;
     const student = await StudentService.updateStudent(studentId, req.body);
     res.status(200).json(student);
+});
+
+router.post('/:studentId/recalculate', async (req, res) => {
+    const studentId = validateStudentId(req, res);
+    if (studentId == -1) {
+        return;
+    }
+    try {
+        const student =
+            await StudentPaymentsService.recalculateStudentBalance(studentId);
+        return res.status(200).json(student);
+    } catch (e) {
+        console.log(e);
+        res.status(400).json(e);
+    }
 });
 
 router.use('/:studentId/payments', paymentRouter);

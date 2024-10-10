@@ -22,10 +22,24 @@ class PaymentsService {
             console.log(error);
         }
     };
-    getAll = async (): Promise<PaymentDTO[] | undefined> => {
+    getAll = async () => await this.getList({});
+    getList = async ({
+        month,
+        year,
+    }: {
+        month?: number;
+        year?: number;
+    }): Promise<PaymentDTO[] | undefined> => {
         try {
-            const response = await axios.get(PAYMENTS_URL);
-            return response.data;
+            if (!month && !year) {
+                const response = await axios.get(PAYMENTS_URL);
+                return response.data;
+            } else {
+                const response = await axios.get(
+                    `${PAYMENTS_URL}?month=${month}&year=${year}`,
+                );
+                return response.data;
+            }
         } catch (error) {
             console.log(error);
         }

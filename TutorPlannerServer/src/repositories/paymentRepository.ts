@@ -31,6 +31,18 @@ export const paymentRepository = {
             },
         });
     },
+    getSumOfPaymentByStudentId: async (studentId: number): Promise<number> => {
+        const res = await prisma.payment.groupBy({
+            where: {
+                studentId: studentId,
+            },
+            _sum: {
+                price: true,
+            },
+            by: 'studentId',
+        });
+        return res[0]?._sum?.price || 0;
+    },
     getPayments: async (
         filter?: Prisma.PaymentWhereInput,
     ): Promise<PaymentWithStudentDAO[]> => {

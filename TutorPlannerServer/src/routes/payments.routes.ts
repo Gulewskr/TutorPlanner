@@ -50,11 +50,6 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-const parseQueryParamNumber = (value?: any): number | undefined => {
-    let parsedNumber: number | undefined = Number(value);
-    return isNaN(parsedNumber) ? undefined : parsedNumber;
-};
-
 /**
  * /payments
  * queryParams:
@@ -65,7 +60,6 @@ router.get('/', async (req, res) => {
     try {
         const { month, year } = req.query;
         if (!month && !year) {
-            console.log('test');
             const payments = await PaymentsService.getFilteredPayments();
             res.status(200).json(payments);
             return;

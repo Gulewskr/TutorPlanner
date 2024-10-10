@@ -1,18 +1,30 @@
 import { Text, View } from 'react-native';
 import { StudentProfileTabParamList } from '../StudentProfile';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StudentsLayout } from '../Layout';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Button } from '@components/button';
 import { Tile } from '@components/tile';
 import { StudentNextLesson } from 'src/screens/Students/components/StudentNextLesson';
+import { studentsService } from '@services/students.service';
+import { StudentDTO } from '@model';
 
 export const StudentInformations: React.FC<
     BottomTabScreenProps<StudentProfileTabParamList, 'Info'>
 > = props => {
     const { navigation, route } = props;
-    const student = route?.params?.student;
+    const [student, setStudent] = useState<StudentDTO>(route?.params?.student);
+
+    useEffect(() => {
+        setStudent(route?.params?.student);
+    }, [route?.params?.student]);
+
+    const reloadBalance = async () => {
+        const res = await studentsService.recalculateBalance(student.id);
+        setStudent(res);
+    };
+
     return (
         <StudentsLayout {...props}>
             <View style={styles.double_button_container}>
@@ -38,15 +50,14 @@ export const StudentInformations: React.FC<
                     />
                 </View>
                 <View style={{ width: '48%' }}>
-                    <Tile color="white" hasShadow centered>
-                        <Text>
-                            Bilans:{' '}
-                            <Text style={{ fontWeight: 'bold' }}>
-                                {0}
-                                zł
-                            </Text>
-                        </Text>
-                    </Tile>
+                    <Button
+                        icon="refresh"
+                        label={`Bilans: ${student.balance}zł`}
+                        onClick={() => {
+                            reloadBalance();
+                        }}
+                        size="small"
+                    />
                 </View>
                 <View style={{ width: '48%' }}>
                     <Button
@@ -54,7 +65,7 @@ export const StudentInformations: React.FC<
                         label="Dodaj wpłate"
                         secondary
                         onClick={function (): void {
-                            throw new Error('Function not implemented.');
+                            //TODO
                         }}
                         size="small"
                     />
