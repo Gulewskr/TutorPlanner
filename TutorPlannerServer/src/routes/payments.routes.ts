@@ -1,5 +1,6 @@
 import express, { Request, Router } from 'express';
 import PaymentsService from '../services/PaymentsService';
+import { parseStudentId } from './studentsRoutes/utils';
 
 /**
  * Typescript don't like merging params so as workaround cast req.params to any
@@ -14,13 +15,17 @@ const getStudentId = (req: Request): number | undefined => {
     return Number.isNaN(studentId) ? req.body?.studentId : studentId;
 };
 
-router.get('/:id', async (req, res) => {
-    const payment = await PaymentsService.getPayment(Number(req.params.id));
-    res.status(200).json(payment);
+router.get('/:id', async (req, res, next) => {
+    try {
+        const payment = await PaymentsService.getPayment(Number(req.params.id));
+        res.status(200).json(payment);
+    } catch (err) {
+        next(err);
+    }
 });
 
 /**
- * /payments
+ * path: /payments
  *
  * requestBody:
  *  studentId: number;
@@ -44,19 +49,18 @@ router.post('/', async (req, res, next) => {
             studentId,
         });
         res.status(200).json(payment);
-    } catch (e) {
-        console.log(e);
-        res.status(400).json(e);
+    } catch (err) {
+        next(err);
     }
 });
 
 /**
- * /payments
+ * path: /payments
  * queryParams:
  *  month eg. 1
  *  year eg. 2024
  */
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
     try {
         const { month, year } = req.query;
         if (!month && !year) {
@@ -83,24 +87,22 @@ router.get('/', async (req, res) => {
             year: yearNumber,
         });
         res.status(200).json(payments);
-    } catch (e) {
-        res.status(400).json(e);
+    } catch (err) {
+        next(err);
     }
 });
 
-router.post('/:studentId/payments/', async (req, res) => {
-    const studentId = Number(req.params.studentId);
-    if (Number.isNaN(studentId)) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'Invalid input. Wrong studentId provided.',
+router.post('/:studentId/payments/', async (req, res, next) => {
+    try {
+        const studentId = parseStudentId(req);
+        const payment = await PaymentsService.addPayment({
+            ...req.body,
+            studentId: studentId,
         });
+        res.status(200).json(payment);
+    } catch (err) {
+        next(err);
     }
-    const payment = await PaymentsService.addPayment({
-        ...req.body,
-        studentId: studentId,
-    });
-    res.status(200).json(payment);
 });
 
 export default router;
