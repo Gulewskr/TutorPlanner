@@ -1,6 +1,5 @@
-import { PrismaClient, Prisma, ContactData } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { Prisma, ContactData } from '@prisma/client';
+import { prisma } from '../db';
 
 const contactDataRepository = {
     getContactDataByStudentId: async (

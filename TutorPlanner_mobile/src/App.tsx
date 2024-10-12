@@ -4,14 +4,16 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Home } from './screens/Home/Home';
 import { Calendar } from './screens/Calendar/Calendar';
-import { Students, StudentsTabParamList } from './screens/Students/Students';
-import { Payments, PaymentsTabParamList } from './screens/Payments/Payments';
+import { Students } from './screens/Students/Students';
+import { Payments } from './screens/Payments/Payments';
 import { Notes } from './screens/Notes/Notes';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Settings } from './screens/Settings/Settings';
-import { Lessons, LessonsTabParamList } from './screens/Lessons/Lessons';
+import { Lessons } from './screens/Lessons/Lessons';
 import { CreatePayment } from './screens/CreatePayment/CreatePayment';
 import { CreateStudent } from './screens/CreateStudent/CreateStudent';
+import { ModalProvider } from 'src/contexts/modalContext';
+import { RootStackParamList } from '@components/ui/navbar';
 
 EStyleSheet.build({
     $color_primary: '#FFA9F1',
@@ -31,53 +33,44 @@ EStyleSheet.build({
     $tile_bgColor: '#F4DDFF',
 });
 
-export type RootStackParamList = {
-    Home: undefined;
-    Calendar: undefined;
-    Students: { screen: keyof StudentsTabParamList; initial: boolean };
-    Payments: {
-        screen: keyof PaymentsTabParamList;
-        initial: boolean;
-    };
-    CreatePayment: undefined;
-    CreateStudent: undefined;
-    Notes: undefined;
-    Settings: undefined;
-    Lessons: { screen: keyof LessonsTabParamList; initial: boolean };
-};
-
-export type NavbarNavigationScreens = keyof RootStackParamList;
-
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const App: React.FC<{}> = () => {
     return (
-        <NavigationContainer>
-            <Stack.Navigator
-                screenOptions={{
-                    animation: 'none',
-                    headerShown: false,
-                }}
-            >
-                <Stack.Screen
-                    name="Home"
-                    component={Home}
-                    options={{
+        <ModalProvider>
+            <NavigationContainer>
+                <Stack.Navigator
+                    screenOptions={{
+                        animation: 'none',
                         headerShown: false,
-                        headerTitleAlign: 'center',
-                        title: 'Welcome',
                     }}
-                />
-                <Stack.Screen name="Calendar" component={Calendar} />
-                <Stack.Screen name="Lessons" component={Lessons} />
-                <Stack.Screen name="Notes" component={Notes} />
-                <Stack.Screen name="Payments" component={Payments} />
-                <Stack.Screen name="Students" component={Students} />
-                <Stack.Screen name="Settings" component={Settings} />
-                <Stack.Screen name="CreatePayment" component={CreatePayment} />
-                <Stack.Screen name="CreateStudent" component={CreateStudent} />
-            </Stack.Navigator>
-        </NavigationContainer>
+                >
+                    <Stack.Screen
+                        name="Home"
+                        component={Home}
+                        options={{
+                            headerShown: false,
+                            headerTitleAlign: 'center',
+                            title: 'Welcome',
+                        }}
+                    />
+                    <Stack.Screen name="Calendar" component={Calendar} />
+                    <Stack.Screen name="Lessons" component={Lessons} />
+                    <Stack.Screen name="Notes" component={Notes} />
+                    <Stack.Screen name="Payments" component={Payments} />
+                    <Stack.Screen name="Students" component={Students} />
+                    <Stack.Screen name="Settings" component={Settings} />
+                    <Stack.Screen
+                        name="CreatePayment"
+                        component={CreatePayment}
+                    />
+                    <Stack.Screen
+                        name="CreateStudent"
+                        component={CreateStudent}
+                    />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </ModalProvider>
     );
 };
 

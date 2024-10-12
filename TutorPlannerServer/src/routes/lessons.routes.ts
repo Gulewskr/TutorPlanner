@@ -1,16 +1,22 @@
 import express, { Router } from 'express';
 import LessonsService from '../services/LessonsService';
 import { parsePaginationParams } from '../utils/utils';
+import { LessonFilters } from '../models/lesson';
 
 const router: Router = express.Router();
 
 /**
- * path: lessons/
+ * path: /lessons?data=2020-01-01
  */
 router.get('/', async (req, res, next) => {
     try {
-        //const filters = {};
-        const lessons = await LessonsService.getLessons(undefined);
+        const filters: LessonFilters = {};
+
+        if (req.query.date) {
+            filters.date = req.query.date as string;
+        }
+
+        const lessons = await LessonsService.getLessons(filters);
         res.status(200).json(lessons);
     } catch (err) {
         next(err);
@@ -43,7 +49,7 @@ router.get('/overdues', async (req, res, next) => {
  */
 router.post('/', async (req, res, next) => {
     try {
-        const lesson = await LessonsService.createLssson(req.body);
+        const lesson = await LessonsService.createLesson(req.body);
         res.status(200).json({
             message: 'Lessons has been created successfully.',
             data: lesson,

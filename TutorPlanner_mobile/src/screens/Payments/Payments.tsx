@@ -1,17 +1,13 @@
-import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { PaymentsSummary } from './tabs/PaymentsSummary';
 import { PaymentCreate } from './tabs/PaymentCreate';
 import { PaymentsHistory } from './tabs/PaymentsHistory';
-
-export type PaymentsTabParamList = {
-    List: undefined;
-    Summary: undefined;
-    History: undefined;
-    Create: undefined;
-};
+import {
+    PaymentsTabParamList,
+    RootStackParamList,
+} from '@components/ui/navbar';
 
 const Tab = createBottomTabNavigator<PaymentsTabParamList>();
 

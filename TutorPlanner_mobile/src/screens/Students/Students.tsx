@@ -1,17 +1,13 @@
 import * as React from 'react';
-import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StudentCreate } from './tabs/StudentCreate';
 import { StudentsList } from './tabs/StudetntsList';
 import { StudentProfile } from './tabs/Profile/StudentProfile';
-import { StudentDTO } from '@model';
-
-export type StudentsTabParamList = {
-    List: undefined;
-    Create: undefined;
-    Profile: { student: StudentDTO };
-};
+import {
+    RootStackParamList,
+    StudentsTabParamList,
+} from '@components/ui/navbar';
 
 const Tab = createBottomTabNavigator<StudentsTabParamList>();
 

@@ -1,6 +1,5 @@
-import { PrismaClient, Prisma, Event } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { Prisma, Event } from '@prisma/client';
+import { prisma } from '../db';
 
 const eventRepository = {
     getEventById: async (id: number): Promise<Event | null> => {

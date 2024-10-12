@@ -2,8 +2,10 @@ import { View, StyleSheet } from 'react-native';
 import { Button } from '@components/button';
 import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../App';
 import { Header } from '@components/header';
+import { EventWrapper } from '@components/complex/events';
+import { ScrollView } from '@components/ui/scrool-view';
+import { RootStackParamList } from '@components/ui/navbar';
 
 export const Home: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Home'>
@@ -61,14 +63,16 @@ export const Home: React.FC<
                     </View>
                 </View>
             </View>
-
-            <View style={styles.timeline}>
-                <Header
-                    rightIcon={'addLesson'}
-                    rightAction={() => 1}
-                    title={'Dzisiejszy plan'}
-                />
-            </View>
+            <ScrollView>
+                <View style={styles.timeline}>
+                    <Header
+                        rightIcon={'addLesson'}
+                        rightAction={() => 1}
+                        title={'Dzisiejszy plan'}
+                    />
+                </View>
+                <EventWrapper day={new Date()} />
+            </ScrollView>
         </Layout>
     );
 };

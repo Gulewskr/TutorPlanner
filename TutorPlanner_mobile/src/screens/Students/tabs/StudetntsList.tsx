@@ -3,7 +3,7 @@ import React from 'react';
 import { Layout } from 'src/screens/Layout';
 import { StudentTile } from '../components/StudentTile';
 import { StudentsTabParamList } from '../Students';
-import { ScrollView } from '@components/scrool-view';
+import { ScrollView } from '@components/ui/scrool-view';
 import { Button } from '@components/button';
 import { useStudents } from 'src/hooks/useStudents';
 

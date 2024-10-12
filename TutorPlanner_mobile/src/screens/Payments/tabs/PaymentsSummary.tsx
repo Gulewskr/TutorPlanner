@@ -5,7 +5,7 @@ import { PaymentsTabParamList } from '../Payments';
 import { PaymentsLayout } from '../PaymentsLayout';
 import { LessonDTO } from '@model';
 import { PaymentTile } from '../components/PaymentTile';
-import { ScrollView } from '@components/scrool-view';
+import { ScrollView } from '@components/ui/scrool-view';
 import { Header } from '@components/header';
 import { Button } from '@components/button';
 import { $color_primary } from '@styles/colors';

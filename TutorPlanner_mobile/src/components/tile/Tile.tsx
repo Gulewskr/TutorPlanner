@@ -64,7 +64,7 @@ const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
                     position: 'relative',
                     width: '100%',
                     backgroundColor: 'transparent',
-                    minHeight: 40,
+                    minHeight: height || 40,
                     paddingRight: 5,
                 },
             ]}
@@ -81,8 +81,11 @@ const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
                 <View
                     style={[
                         styles.children,
-                        { justifyContent: centered ? 'center' : 'flex-start' },
-                        { alignItems: centered ? 'center' : 'flex-start' },
+                        {
+                            justifyContent: centered ? 'center' : 'flex-start',
+                            alignItems: centered ? 'center' : 'flex-start',
+                            minHeight: height || 40,
+                        },
                     ]}
                 >
                     {children}
@@ -100,7 +103,6 @@ export default CustomTile;
 const styles = EStyleSheet.create({
     children: {
         width: '100%',
-        minHeight: 40,
         backgroundColor: 'transparent',
     },
 

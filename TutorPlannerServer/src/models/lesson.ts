@@ -1,23 +1,11 @@
 import { Event, EventType } from '@prisma/client';
-import { LessonDTO } from '../dto/lessons';
+import { LessonDTO } from '../../../TutorPlanner_shared/LessonDTO';
 
 export type LessonDAO = Event & {
     startHour: string;
     endHour: string;
     price: number;
     isPaid: boolean;
-    studentId: number;
-};
-
-export type UpdateLessonInput = {
-    name: string;
-    description: string;
-    startHour: string;
-    endHour: string;
-    price: number;
-    isPaid: boolean;
-    date: Date;
-    isCanceled: boolean;
     studentId: number;
 };
 
@@ -37,4 +25,20 @@ export const toLessonDTO = (data: LessonDAO): LessonDTO => {
     };
 };
 
+export interface LessonFilters {
+    date?: string; // Opcjonalna właściwość date
+}
+
+export interface CreateLessonRequestBody {
+    name: string;
+    description: string;
+    student: number;
+    price: number;
+    date: Date;
+    startHour: string;
+    endHour: string;
+    weekly: boolean;
+}
+
 export { LessonDAO as Lesson, EventType };
+export { LessonDTO };

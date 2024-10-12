@@ -7,12 +7,12 @@ import { parseStudentId } from './studentsRoutes/utils';
  */
 const router: Router = express.Router({ mergeParams: true });
 
-const getStudentId = (req: Request): number | undefined => {
-    if (!req.params) {
-        return req.body?.studentId;
+const getStudentId = (req: Request): number => {
+    const studentId = Number(req.body?.studentId);
+    if (Number.isNaN(studentId)) {
+        throw new Error('Student ID must be a number');
     }
-    const studentId = Number((req.params as any).studentId);
-    return Number.isNaN(studentId) ? req.body?.studentId : studentId;
+    return studentId;
 };
 
 router.get('/:id', async (req, res, next) => {
@@ -41,9 +41,6 @@ router.get('/:id', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
     try {
         const studentId = getStudentId(req);
-        if (studentId === undefined) {
-            return res.status(400).json('missing studentId');
-        }
         const payment = await PaymentsService.addPayment({
             ...req.body,
             studentId,

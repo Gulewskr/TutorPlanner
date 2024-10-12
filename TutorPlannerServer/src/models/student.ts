@@ -1,6 +1,5 @@
-import { PrismaClient, Prisma, Student } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { Prisma, Student } from '@prisma/client';
+import { prisma } from '../db';
 
 const studentRepository = {
     findStudentById: async (studentId: number): Promise<Student | null> => {

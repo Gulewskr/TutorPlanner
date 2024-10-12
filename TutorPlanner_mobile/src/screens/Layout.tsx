@@ -2,9 +2,8 @@ import { View } from 'react-native';
 import { PropsWithChildren } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Navbar } from '@components/navbar';
+import { Navbar, NavbarNavigationScreens } from '@components/ui/navbar';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { NavbarNavigationScreens } from '../App';
 import { Header } from '@components/header';
 import React from 'react';
 

@@ -3,13 +3,13 @@ import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LessonsTabParamList } from './Lessons';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { FormProvider, FormRenderer } from '@components/form-renderer';
+import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
 import { lessonsService } from '@services/lessons.service';
 import { View } from 'react-native';
-import { ScrollView } from '@components/scrool-view';
+import { ScrollView } from '@components/ui/scrool-view';
 import { StudentDTO } from '@model';
 import { useStudents } from 'src/hooks/useStudents';
-import { FormRendererSchema } from '@components/form-renderer/model';
+import { FormRendererSchema } from '@components/complex/form-renderer/model';
 import { getFullName } from 'src/utils/utils';
 
 interface CreateLessonData {

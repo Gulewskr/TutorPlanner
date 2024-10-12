@@ -1,5 +1,5 @@
-import { FormProvider, FormRenderer } from '@components/form-renderer';
-import { FormRendererSchema } from '@components/form-renderer/model';
+import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
+import { FormRendererSchema } from '@components/complex/form-renderer/model';
 import { StudentDTO } from '@model';
 import { paymentsService } from '@services/payments.service';
 import { useStudents } from 'src/hooks/useStudents';

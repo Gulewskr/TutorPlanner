@@ -1,10 +1,9 @@
-import { PrismaClient, Prisma, Payment } from '@prisma/client';
+import { Prisma, Payment } from '@prisma/client';
+import { prisma } from '../db';
 import {
     CreatePaymentDTO,
     PaymentWithStudentDAO,
 } from '../models/payment.model';
-
-const prisma = new PrismaClient();
 
 export const paymentRepository = {
     getPaymentById: async (
