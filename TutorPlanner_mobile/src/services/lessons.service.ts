@@ -48,6 +48,26 @@ class LessonsService {
             throw error;
         }
     };
+    getLessons = async ({
+        month,
+        year,
+    }: { month?: number; year?: number } = {}): Promise<LessonDTO[]> => {
+        try {
+            if (month && year) {
+                const response = await axios.get(LESSONS_URL, {
+                    params: {
+                        month,
+                        year,
+                    },
+                });
+                return response.data;
+            }
+            const response = await axios.get(LESSONS_URL);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    };
     getOverdues = async ({
         month,
         year,
@@ -60,9 +80,12 @@ class LessonsService {
                 const response = await axios.get(`${LESSONS_URL}/overdues`);
                 return response.data;
             } else {
-                const response = await axios.get(
-                    `${LESSONS_URL}/overdues?month=${month}&year=${year}`,
-                );
+                const response = await axios.get(`${LESSONS_URL}/overdues`, {
+                    params: {
+                        month,
+                        year,
+                    },
+                });
                 return response.data;
             }
         } catch (error) {

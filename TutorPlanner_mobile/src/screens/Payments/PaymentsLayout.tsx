@@ -1,8 +1,8 @@
 import { TabItem, Tabs } from '@components/tab';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { PropsWithChildren } from 'react';
-import { PaymentsTabParamList } from './Payments';
 import { Layout } from '../Layout';
+import { PaymentsTabParamList } from '@components/ui/navbar';
 
 const tabs: Array<TabItem<keyof PaymentsTabParamList>> = [
     { id: 'Summary', isExpanded: true, text: 'Podsumowanie', icon: 'payments' },

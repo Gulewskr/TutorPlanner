@@ -27,6 +27,8 @@ export const toLessonDTO = (data: LessonDAO): LessonDTO => {
 
 export interface LessonFilters {
     date?: string; // Opcjonalna właściwość date
+    month?: number;
+    year?: number;
 }
 
 export interface CreateLessonRequestBody {

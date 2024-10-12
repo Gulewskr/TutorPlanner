@@ -7,6 +7,10 @@ const router: Router = express.Router();
 
 /**
  * path: /lessons?data=2020-01-01
+ * queryParams:
+ *  data eg. 2020-01-01
+ *  month: eg. 1
+ *  year: eg. 2020
  */
 router.get('/', async (req, res, next) => {
     try {
@@ -14,6 +18,21 @@ router.get('/', async (req, res, next) => {
 
         if (req.query.date) {
             filters.date = req.query.date as string;
+        }
+
+        if (req.query.month && req.query.year) {
+            const monthNumber = parseInt(req.query.month as string);
+            const yearNumber = parseInt(req.query.year as string);
+
+            if (isNaN(monthNumber) || monthNumber < 1 || monthNumber > 12) {
+                throw new Error('Invalid month.');
+            }
+            if (isNaN(yearNumber) || yearNumber < 1900) {
+                throw new Error('Invalid year.');
+            }
+
+            filters.month = monthNumber;
+            filters.year = yearNumber;
         }
 
         const lessons = await LessonsService.getLessons(filters);

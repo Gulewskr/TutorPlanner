@@ -1,7 +1,6 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
-import { PaymentsTabParamList } from '../Payments';
 import { PaymentsLayout } from '../PaymentsLayout';
 import { PaymentTile } from '../components/PaymentTile';
 import { ScrollView } from '@components/ui/scrool-view';
@@ -13,6 +12,7 @@ import { $color_primary } from '@styles/colors';
 import { usePayments } from '@hooks/usePayments';
 import { OverduesTile } from '../components/OverduesTile';
 import { useUnpaidLessons } from '@hooks/useUnpaidLessons';
+import { PaymentsTabParamList } from '@components/ui/navbar';
 
 export const PaymentsHistory: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'History'>

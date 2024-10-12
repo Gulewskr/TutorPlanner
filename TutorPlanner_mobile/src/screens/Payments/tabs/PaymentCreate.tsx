@@ -1,9 +1,9 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { View } from 'react-native';
-import { PaymentsTabParamList } from '../Payments';
 import { PaymentsLayout } from '../PaymentsLayout';
 import { PaymentCreateForm } from '../components/PaymentCreateForm';
+import { PaymentsTabParamList } from '@components/ui/navbar';
 
 export const PaymentCreate: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'Create'>

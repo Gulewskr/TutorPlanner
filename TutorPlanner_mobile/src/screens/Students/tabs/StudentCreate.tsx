@@ -1,6 +1,6 @@
 import { Layout } from '../../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StudentsTabParamList } from '../Students';
+import { StudentsTabParamList } from '@components/ui/navbar';
 import { StudentCreateForm } from '../components/StudentCreateForm';
 
 export const StudentCreate: React.FC<

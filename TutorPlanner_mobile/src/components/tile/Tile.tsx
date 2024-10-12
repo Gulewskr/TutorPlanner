@@ -1,3 +1,4 @@
+import { $color_primary, $color_secondary } from '@styles/colors';
 import React, { PropsWithChildren, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -14,7 +15,8 @@ type TileColors =
     | 'brightBlue'
     | 'green'
     | 'brightPink'
-    | 'primary';
+    | 'primary'
+    | 'secondary';
 
 interface TileProps {
     color?: TileColors;
@@ -37,7 +39,8 @@ const TILE_COLORS: { [key in TileColors]: string } = {
     brightBlue: '#6DD9F1',
     green: '#6DF1A2',
     brightPink: '#FFA9F1',
-    primary: '#FFA9F1', //$color_primary
+    primary: $color_primary,
+    secondary: $color_secondary,
 };
 
 const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({

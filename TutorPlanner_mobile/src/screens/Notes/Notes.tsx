@@ -1,8 +1,8 @@
 import { Layout } from '../Layout';
-import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Input } from '@components/input';
 import { ScrollView } from 'react-native';
+import { RootStackParamList } from '@components/ui/navbar';
 
 //In next version - disable in first release
 export const Notes: React.FC<

@@ -1,7 +1,6 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
-import { PaymentsTabParamList } from '../Payments';
 import { PaymentsLayout } from '../PaymentsLayout';
 import { LessonDTO } from '@model';
 import { PaymentTile } from '../components/PaymentTile';
@@ -12,6 +11,10 @@ import { $color_primary } from '@styles/colors';
 import { usePayments } from '@hooks/usePayments';
 import { lessonsService } from '@services/lessons.service';
 import { OverduesTile } from '../components/OverduesTile';
+import { PaymentsTabParamList } from '@components/ui/navbar';
+import { Tile } from '@components/tile';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import { getMonth, getYear } from 'date-fns';
 
 export const PaymentsSummary: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'Summary'>
@@ -19,11 +22,34 @@ export const PaymentsSummary: React.FC<
     const { navigation, route } = props;
     const { payments, isLoading } = usePayments();
     const [unpaidLessons, setUnpaidLessons] = useState<LessonDTO[]>([]);
+    const [summaryData, setSummaryDate] = useState<{
+        income: number;
+        expectedIncome: number;
+        lessonsNumber: number;
+    }>({
+        income: 0,
+        expectedIncome: 0,
+        lessonsNumber: 0,
+    });
     const numOfUnpaid = unpaidLessons.length;
 
     const loadData = async () => {
+        const todayDate = new Date();
         const res = await lessonsService.getOverdues();
         setUnpaidLessons(res);
+
+        const lessons = await lessonsService.getLessons({
+            month: getMonth(todayDate) + 1,
+            year: getYear(todayDate),
+        });
+        setSummaryDate({
+            lessonsNumber: lessons.length,
+            income: lessons.reduce(
+                (acc, c) => (c.isPaid ? acc + c.price : acc),
+                0,
+            ),
+            expectedIncome: lessons.reduce((acc, c) => c.price + acc, 0),
+        });
     };
 
     useEffect(() => {
@@ -37,9 +63,40 @@ export const PaymentsSummary: React.FC<
                     paddingHorizontal: 10,
                 }}
             >
+                <Header
+                    title="Bieżący miesiąc"
+                    isCentered
+                    styles={{ height: 30, marginBottom: 10 }}
+                />
+                <Tile color="secondary">
+                    <View style={{ padding: 5 }}>
+                        <View style={styles.fullWidthRow}>
+                            <Text style={styles.headText}>Zarobki</Text>
+                            <Text>
+                                {summaryData.income
+                                    ? `${summaryData.income}zł`
+                                    : '-'}
+                            </Text>
+                        </View>
+                        <View style={styles.fullWidthRow}>
+                            <Text style={styles.headText}>Liczba zajęć</Text>
+                            <Text>
+                                {summaryData.lessonsNumber}
+                                {summaryData.lessonsNumber
+                                    ? `(${summaryData.expectedIncome}zł)`
+                                    : ''}
+                            </Text>
+                        </View>
+                    </View>
+                </Tile>
+                <View style={{ height: 20 }} />
                 <OverduesTile numOfUnpaid={numOfUnpaid} isLoading={false} />
-                <Header title="Podsumowanie" isCentered />
-                <Header title="Ostatnie płatności" isCentered />
+                <View style={{ height: 20 }} />
+                <Header
+                    title="Ostatnie płatności"
+                    isCentered
+                    styles={{ height: 30, marginBottom: 10 }}
+                />
                 {!isLoading ? (
                     <ActivityIndicator size="large" color={$color_primary} />
                 ) : payments.length ? (
@@ -71,3 +128,18 @@ export const PaymentsSummary: React.FC<
         </PaymentsLayout>
     );
 };
+
+const styles = EStyleSheet.create({
+    headText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        width: '50%',
+        textAlign: 'right',
+        paddingRight: 10,
+    },
+    fullWidthRow: {
+        flexDirection: 'row',
+        width: '100%',
+        alignItems: 'center',
+    },
+});

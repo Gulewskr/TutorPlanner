@@ -56,6 +56,16 @@ class LessonsService {
             return await lessonRepository.getLessonsByDay(data);
         }
 
+        if (filters.month && filters.year) {
+            const startOfMonth = new Date(filters.year, filters.month - 1, 1);
+            return await lessonRepository.getLessons({
+                date: {
+                    gte: startOfMonth,
+                    lte: endOfMonth(startOfMonth),
+                },
+            });
+        }
+
         return await lessonRepository.getAllLessons();
     }
 
