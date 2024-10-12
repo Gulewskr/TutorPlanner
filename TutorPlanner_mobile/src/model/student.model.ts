@@ -6,6 +6,7 @@ type StudentDTO = {
     extendedMath: boolean | null;
     description: string | null;
     defaultPrice: number | null;
+    balance: number;
 };
 
 type StudentsDTO = {

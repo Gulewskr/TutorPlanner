@@ -24,14 +24,15 @@ const studentRepository = {
     },
     update: async (
         studentId: number,
-        student: Prisma.StudentCreateInput,
+        student: Prisma.StudentUpdateInput,
     ): Promise<Student> => {
-        return await prisma.student.update({
+        const res = await prisma.student.update({
             data: student,
             where: {
                 id: studentId,
             },
         });
+        return res;
     },
     delete: async (studentId: number): Promise<Student> => {
         return await prisma.student.delete({

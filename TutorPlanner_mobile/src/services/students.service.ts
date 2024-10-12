@@ -47,6 +47,16 @@ class StudentsService {
             };
         }
     };
+    recalculateBalance = async (studentId: number): Promise<StudentDTO> => {
+        try {
+            const response = await axios.post(
+                STUDENTS_URL + `/${studentId}/recalculate`,
+            );
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 export const studentsService = new StudentsService();

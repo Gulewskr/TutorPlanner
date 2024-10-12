@@ -5,9 +5,12 @@ import logger from 'morgan';
 import cors from 'cors';
 
 import router from './routes/index';
-import studentsRouter from './routes/students';
-import lessonsRouter from './routes/lessons';
-import paymentsRouter from './routes/payments';
+import studentsRouter from './routes/students.routes';
+import lessonsRouter from './routes/lessons.routes';
+import paymentsRouter from './routes/payments.routes';
+import { errorHandler } from './middlewares/errorHandler';
+
+// development
 import { addDemoData } from './demoData/addDemoData';
 
 var app: Express = express();
@@ -23,6 +26,7 @@ const corsOption = {
     credentials: false,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 };
+
 app.use(cors(corsOption));
 
 app.use('/', router);
@@ -36,20 +40,7 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
 });
 
 // error handler
-app.use(function (
-    err: Error | any,
-    req: Request,
-    res: Response,
-    next: NextFunction,
-) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-    // render the error page
-    res.status(err.status || 500);
-    res.json(err.message);
-});
+app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

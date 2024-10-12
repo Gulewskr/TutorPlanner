@@ -1,15 +1,12 @@
 import { EventSeriesType, Prisma } from '@prisma/client';
 import { CONFIG } from '../config';
 import { eventSeriesRepository } from '../models/eventSeries';
-import {
-    EventType,
-    Lesson,
-    LessonDAO,
-    lessonRepository,
-} from '../models/lesson';
-import { addWeeks } from 'date-fns';
+import { EventType, Lesson, LessonDAO, toLessonDTO } from '../models/lesson';
+import { addWeeks, endOfMonth } from 'date-fns';
 import { LessonDTO } from '../dto/lessons';
 import { z } from 'zod';
+import { lessonRepository } from '../repositories/lessonsRepository';
+import { Pagable } from '../../../TutorPlanner_shared/Pagable';
 
 interface LessonInput {
     name: string;
@@ -55,6 +52,47 @@ class LessonsService {
         return await lessonRepository.getAllLessons();
     }
 
+    public async getOverdueLessons({
+        studentId,
+        month,
+        year,
+        page,
+        pageSize,
+    }: {
+        studentId?: number;
+        month?: number;
+        year?: number;
+        page?: number;
+        pageSize?: number;
+    }): Promise<LessonDTO[] | Pagable<LessonDTO>> {
+        const filter: Prisma.EventWhereInput = {};
+        if (studentId !== undefined) {
+            filter.studentId = studentId;
+        }
+        if (year && month) {
+            const startOfMonth = new Date(year, month - 1, 1);
+            filter.date = {
+                gte: startOfMonth,
+                lte: endOfMonth(startOfMonth),
+            };
+        }
+        if (page !== undefined || pageSize !== undefined) {
+            const pageResults = await lessonRepository.getPagableLessons({
+                page,
+                pageSize,
+                filter,
+            });
+            return {
+                page: pageResults.page,
+                pageSize: pageResults.pageSize,
+                size: pageResults.size,
+                data: pageResults.data.map(v => toLessonDTO(v)),
+            };
+        }
+        const lessons = await lessonRepository.getLessons(filter);
+        return lessons.map(l => toLessonDTO(l));
+    }
+
     public async getStudentLessons(studnetId: number): Promise<Lesson[]> {
         return await lessonRepository.getLessonsByStudentId(studnetId);
     }
@@ -62,21 +100,21 @@ class LessonsService {
     public async getNotPaidStudentLessons(
         studentId: number,
     ): Promise<LessonDAO[]> {
-        return await lessonRepository.getAllLessons({
-            isPaid: true,
+        return await lessonRepository.getLessons({
             studentId: studentId,
             date: {
                 lt: new Date(),
             },
+            isPaid: false,
         });
     }
 
     public async getPaidStudentLessons(
         studentId: number,
     ): Promise<PayedLessonsData> {
-        const lessons: LessonDAO[] = await lessonRepository.getAllLessons({
-            isPaid: true,
+        const lessons: LessonDAO[] = await lessonRepository.getLessons({
             studentId: studentId,
+            isPaid: true,
         });
         const sum: number = lessons.reduce((a, b): number => b.price + a, 0);
         return {
@@ -88,9 +126,9 @@ class LessonsService {
     public async getNextUnpaidedStudentLessons(
         studentId: number,
     ): Promise<LessonDAO[]> {
-        return await lessonRepository.getAllLessons({
-            isPaid: false,
+        return await lessonRepository.getLessons({
             studentId: studentId,
+            isPaid: false,
         });
     }
 
