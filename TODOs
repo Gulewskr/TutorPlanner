@@ -26,7 +26,7 @@ Spis funkcjonalności wersji 0.5:
 -   [Done] dodawanie płatności
 -   usuwanie płatności
 -   finanse/podsumowanie
-    -   wyświetlenie wszystkich nieopłaconych zajęć
+    -   [Done] wyświetlenie wszystkich nieopłaconych zajęć
     -   wyświetlenie przychodu w aktualnym miesiącu (przychody/wyliczone)
 -   wyświetlanie historii płatności
     -   [Done] lista odnotowanych płatności w danym miesiącu

@@ -1,5 +1,6 @@
 import express, { Router } from 'express';
 import LessonsService from '../services/LessonsService';
+import { parsePaginationParams } from '../utils/utils';
 
 const router: Router = express.Router();
 
@@ -11,6 +12,27 @@ router.get('/', async (req, res, next) => {
         //const filters = {};
         const lessons = await LessonsService.getLessons(undefined);
         res.status(200).json(lessons);
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
+ * path: lessons/overdues?month=1&year=1
+ *
+ * response: LessonDAO[] | Pagable<LessonDAO>>
+ */
+router.get('/overdues', async (req, res, next) => {
+    try {
+        const { month, year } = req.query;
+        const { page, pageSize } = parsePaginationParams(req);
+        const lessons = await LessonsService.getOverdueLessons({
+            month: month ? Number(month) : undefined,
+            year: year ? Number(year) : undefined,
+            page: page,
+            pageSize: pageSize,
+        });
+        return res.status(200).json(lessons);
     } catch (err) {
         next(err);
     }

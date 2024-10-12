@@ -3,23 +3,32 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { PaymentsTabParamList } from '../Payments';
 import { PaymentsLayout } from '../PaymentsLayout';
-import { paymentsService } from '@services/payments.service';
-import { PaymentDTO } from '@model';
+import { LessonDTO } from '@model';
 import { PaymentTile } from '../components/PaymentTile';
 import { ScrollView } from '@components/scrool-view';
 import { Header } from '@components/header';
 import { Button } from '@components/button';
-import { Tile } from '@components/tile';
 import { $color_primary } from '@styles/colors';
 import { usePayments } from '@hooks/usePayments';
+import { lessonsService } from '@services/lessons.service';
+import { OverduesTile } from '../components/OverduesTile';
 
 export const PaymentsSummary: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'Summary'>
 > = props => {
     const { navigation, route } = props;
     const { payments, isLoading } = usePayments();
-    const [unpaidLessons, setUnpaidLessons] = useState<PaymentDTO[]>([]);
+    const [unpaidLessons, setUnpaidLessons] = useState<LessonDTO[]>([]);
     const numOfUnpaid = unpaidLessons.length;
+
+    const loadData = async () => {
+        const res = await lessonsService.getOverdues();
+        setUnpaidLessons(res);
+    };
+
+    useEffect(() => {
+        loadData();
+    }, []);
 
     return (
         <PaymentsLayout {...props}>
@@ -28,17 +37,7 @@ export const PaymentsSummary: React.FC<
                     paddingHorizontal: 10,
                 }}
             >
-                <Header title="Zaległości" isCentered />
-                <Tile color={numOfUnpaid ? 'red' : 'green'} centered>
-                    <Text
-                        style={{
-                            fontSize: 18,
-                            fontWeight: 'bold',
-                        }}
-                    >
-                        {upnpaidPaymentsText(numOfUnpaid)}
-                    </Text>
-                </Tile>
+                <OverduesTile numOfUnpaid={numOfUnpaid} isLoading={false} />
                 <Header title="Podsumowanie" isCentered />
                 <Header title="Ostatnie płatności" isCentered />
                 {!isLoading ? (
@@ -72,6 +71,3 @@ export const PaymentsSummary: React.FC<
         </PaymentsLayout>
     );
 };
-
-const upnpaidPaymentsText = (num: number): string =>
-    `${num ? num : ''}${num == 0 ? 'Wszystkie zajęcia opłacone 🥰' : num > 5 ? ' nieopłaconych zajęć' : ' nieopłacone zajęcia'}`;

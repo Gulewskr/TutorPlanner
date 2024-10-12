@@ -7,9 +7,4 @@ type LessonDTO = Omit<EventDTO, 'type'> & {
     eventSeriesId?: number;
 };
 
-type LessonsDTO = {
-    data: LessonDTO[];
-    size: number;
-};
-
-export { LessonDTO, LessonsDTO };
+export { LessonDTO };

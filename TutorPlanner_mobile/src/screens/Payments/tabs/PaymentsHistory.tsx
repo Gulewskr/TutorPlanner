@@ -1,21 +1,18 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
-import { Layout } from 'src/screens/Layout';
 import { PaymentsTabParamList } from '../Payments';
 import { PaymentsLayout } from '../PaymentsLayout';
-import { PaymentDTO } from '@model';
-import { paymentsService } from '@services/payments.service';
-import { Header } from '@components/header';
 import { PaymentTile } from '../components/PaymentTile';
 import { ScrollView } from '@components/scrool-view';
 import { Button } from '@components/button';
-import { Tile } from '@components/tile';
 import { MONTHS_NOMINATIVE } from '@components/calendar';
-import { addMonths, getMonth, getYear, isSameYear, subMonths } from 'date-fns';
+import { addMonths, getMonth, getYear, isSameYear } from 'date-fns';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { $color_primary } from '@styles/colors';
 import { usePayments } from '@hooks/usePayments';
+import { OverduesTile } from '../components/OverduesTile';
+import { useUnpaidLessons } from '@hooks/useUnpaidLessons';
 
 export const PaymentsHistory: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'History'>
@@ -25,6 +22,14 @@ export const PaymentsHistory: React.FC<
     const month = getMonth(controlDate);
     const year = getYear(controlDate);
 
+    const {
+        unpaidLessons,
+        isLoading: unpaidLessonsLoading,
+        fetchData: fetchUnpaidLessons,
+    } = useUnpaidLessons({
+        month: month + 1,
+        year: year,
+    });
     const { payments, isLoading, fetchData } = usePayments({
         month: month + 1,
         year: year,
@@ -32,6 +37,10 @@ export const PaymentsHistory: React.FC<
 
     useEffect(() => {
         fetchData({
+            month: month + 1,
+            year: year,
+        });
+        fetchUnpaidLessons({
             month: month + 1,
             year: year,
         });
@@ -98,6 +107,11 @@ export const PaymentsHistory: React.FC<
                 ) : (
                     <Text>Brak płatności</Text>
                 )}
+                <OverduesTile
+                    numOfUnpaid={unpaidLessons.length}
+                    lessons={unpaidLessons}
+                    isLoading={unpaidLessonsLoading}
+                />
             </ScrollView>
         </PaymentsLayout>
     );

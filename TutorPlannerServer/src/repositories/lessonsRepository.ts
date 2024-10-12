@@ -1,5 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 import { LessonDAO, UpdateLessonInput } from '../models/lesson';
+import { Pagable } from '../../../TutorPlanner_shared/Pagable';
 
 const prisma = new PrismaClient();
 
@@ -39,18 +40,61 @@ export const lessonRepository = {
             },
         })) as LessonDAO[];
     },
-    getAllLessons: async (
-        filter?: Prisma.EventWhereInput,
-    ): Promise<LessonDAO[]> => {
+    getAllLessons: async (): Promise<LessonDAO[]> => {
         return (await prisma.event.findMany({
             where: {
-                ...filter,
                 type: 'LESSON',
             },
             orderBy: {
                 date: 'asc',
             },
         })) as LessonDAO[];
+    },
+    getLessons: async (
+        filter: Prisma.EventWhereInput,
+    ): Promise<LessonDAO[]> => {
+        filter.type = 'LESSON';
+
+        return (await prisma.event.findMany({
+            where: filter,
+            orderBy: {
+                date: 'asc',
+            },
+        })) as LessonDAO[];
+    },
+    getPagableLessons: async ({
+        pageSize,
+        page,
+        filter: systemFilter,
+    }: {
+        pageSize?: number;
+        page?: number;
+        filter?: Prisma.EventWhereInput;
+    }): Promise<Pagable<LessonDAO>> => {
+        const filter: Prisma.EventWhereInput = systemFilter || {};
+        filter.type = 'LESSON';
+
+        const startIndex = page && pageSize ? page * pageSize : undefined;
+
+        const amount = await prisma.event.count({
+            where: filter,
+        });
+
+        const data = (await prisma.event.findMany({
+            skip: startIndex,
+            take: pageSize,
+            where: filter,
+            orderBy: {
+                date: 'asc',
+            },
+        })) as LessonDAO[];
+
+        return {
+            data: data,
+            size: amount,
+            page: page || 0,
+            pageSize: pageSize || amount,
+        };
     },
     getLessonsInTimeFrame: async (
         startDate: Date,
