@@ -6,13 +6,26 @@ import { Layout } from 'src/screens/Layout';
 import { getFullName } from 'src/utils/utils';
 
 const tabs: Array<TabItem<keyof StudentProfileTabParamList>> = [
-    { id: 'Info', isExpanded: true, text: 'Informacje', icon: 'studentCap' },
-    { id: 'Lessons', isExpanded: true, text: 'Lista zajęć', icon: 'pencil' },
+    {
+        id: 'Info',
+        isExpanded: true,
+        text: 'Informacje',
+        icon: 'studentCap',
+        hasHiddenLabel: 'whenNotActive',
+    },
+    {
+        id: 'Lessons',
+        isExpanded: true,
+        text: 'Lista zajęć',
+        icon: 'list',
+        hasHiddenLabel: 'whenNotActive',
+    },
     {
         id: 'Analise',
         isExpanded: true,
         text: 'Analiza',
         icon: 'calendar',
+        hasHiddenLabel: 'whenNotActive',
     },
 ];
 

@@ -9,7 +9,7 @@ const tabs: Array<TabItem<keyof PaymentsTabParamList>> = [
     { id: 'History', isExpanded: true, text: 'Historia', icon: 'diagram' },
     {
         id: 'Create',
-        hasHiddenLabel: true,
+        hasHiddenLabel: 'always',
         isExpanded: true,
         text: 'Tab',
         icon: 'addPayment',

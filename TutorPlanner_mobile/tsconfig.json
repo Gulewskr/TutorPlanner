@@ -21,6 +21,9 @@
       "@hooks/*": [
         "src/hooks/*"
       ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
     },
     "forceConsistentCasingInFileNames": true,
     "types": ["node"]

@@ -23,3 +23,13 @@ export const parsePaginationParams = (req: Request) => {
         pageSize: size ? parseInt(size as string) : undefined,
     };
 };
+
+export const parseDate = (dateString: string): Date => {
+    const date = new Date(dateString);
+    if (!isValid(date)) {
+        throw new Error(
+            'Invalid date format. Please use a valid date (YYYY-MM-DD).',
+        );
+    }
+    return date;
+};

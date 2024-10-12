@@ -22,12 +22,12 @@ Spis funkcjonalności wersji 0.5:
 -   profil ucznia - historia
 -   profil ucznia - dodawanie płatności
     -   modal do zmiany podstawowej ceny za zajęcia
-    -   najblizsze zajecia
+    -   [Done] najblizsze zajecia
 -   [Done] dodawanie płatności
 -   usuwanie płatności
 -   finanse/podsumowanie
     -   [Done] wyświetlenie wszystkich nieopłaconych zajęć
-    -   wyświetlenie przychodu w aktualnym miesiącu (przychody/wyliczone)
+    -   [Done] wyświetlenie przychodu w aktualnym miesiącu (przychody/wyliczone)
 -   wyświetlanie historii płatności
     -   [Done] lista odnotowanych płatności w danym miesiącu
     -   lista nieopłaconych zajęć w danym

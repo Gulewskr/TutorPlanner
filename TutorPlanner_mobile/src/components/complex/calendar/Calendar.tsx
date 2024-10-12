@@ -6,6 +6,7 @@ import {
     addDays,
     addMonths,
     format,
+    isBefore,
     isSameDay,
     isSameMonth,
     isSameYear,
@@ -18,6 +19,7 @@ import { DayEventsData } from './model';
 import { DayInCalendar } from './DayInCalendar';
 import { MONTHS_NOMINATIVE, WEEKDAYS } from './constraints';
 import { getDayOfWeek } from './utils';
+import { getDateWithoutTZ } from '@utils/dateUtils';
 
 interface CalendarProps {
     day: Date;
@@ -62,13 +64,14 @@ const Calendar: React.FC<CalendarProps> = ({ day, handleChangeDay }) => {
     };
 
     const handleCalendarChanges = (day: Date) => {
-        day.getMonth() < controlDate.getMonth()
-            ? handlePreviousMonth()
-            : day.getMonth() > controlDate.getMonth()
-              ? handleNextMonth()
-              : '';
-        handleChangeDay(day);
-        setSelectedDate(day);
+        const date = getDateWithoutTZ(day);
+        if (!isSameMonth(date, controlDate)) {
+            isBefore(date, controlDate)
+                ? handlePreviousMonth()
+                : handleNextMonth();
+        }
+        handleChangeDay(date);
+        setSelectedDate(date);
     };
 
     return (

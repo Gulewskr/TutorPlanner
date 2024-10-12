@@ -10,35 +10,34 @@ import {
     LessonFilters,
     toLessonDTO,
 } from '../models/lesson';
-import { addWeeks, endOfMonth, isValid } from 'date-fns';
+import { addWeeks, endOfMonth } from 'date-fns';
 import { z } from 'zod';
 import { lessonRepository } from '../repositories/lessonsRepository';
 import { Pagable } from '../../../TutorPlanner_shared/Pagable';
+import { parseDate } from '../utils/utils';
+
+const HOUR_REGEX = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+const isValidHourFormat = (key: string) => {
+    if (!HOUR_REGEX.test(key)) {
+        throw new Error(`Invalid hour format - 00:00 - ${key}`);
+    }
+};
 
 const LessonInputSchema = z.object({
     name: z.string(),
-    description: z.string().nullable(),
+    description: z.string().nullish(),
     student: z.number(),
     price: z.number(),
     date: z.date(),
     startHour: z.string(),
     endHour: z.string(),
-    weekly: z.boolean(),
+    weekly: z.boolean().nullish(),
 });
 
 interface PayedLessonsData {
     lessons: LessonDAO[];
     sum: number;
-}
-
-function parseDate(dateString: string): Date {
-    const date = new Date(dateString);
-    if (!isValid(date)) {
-        throw new Error(
-            'Invalid date format. Please use a valid date (YYYY-MM-DD).',
-        );
-    }
-    return date;
 }
 
 class LessonsService {
@@ -140,6 +139,12 @@ class LessonsService {
         };
     }
 
+    public async getNextStudentLessons(
+        studentId: number,
+    ): Promise<LessonDAO | undefined> {
+        return await lessonRepository.getNextLessonByStudentId(studentId);
+    }
+
     public async getNextUnpaidedStudentLessons(
         studentId: number,
     ): Promise<LessonDAO[]> {
@@ -163,12 +168,18 @@ class LessonsService {
         lesson: CreateLessonRequestBody,
     ): Promise<LessonDTO> {
         LessonInputSchema.parse(lesson);
+        // not works when used with zod regex
+        isValidHourFormat(lesson.startHour);
+        isValidHourFormat(lesson.endHour);
         if (!lesson.weekly) {
             const createdLesson = await lessonRepository.create({
                 name: lesson.name,
+                description: lesson.description,
                 date: lesson.date,
                 type: EventType.LESSON,
                 price: lesson.price,
+                startHour: lesson.startHour,
+                endHour: lesson.endHour,
                 student: {
                     connect: {
                         id: lesson.student,

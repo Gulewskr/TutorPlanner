@@ -14,6 +14,7 @@ export const EventsList: React.FC<EventsListProps> = ({ day }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     const getEvents = useCallback(async () => {
+        console.log(day);
         const response = await lessonsService.getLessonsInDay(day);
         setEvents(response);
         setIsLoading(false);

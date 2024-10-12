@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import LessonsService from '../services/LessonsService';
-import { parsePaginationParams } from '../utils/utils';
+import { parseDate, parsePaginationParams } from '../utils/utils';
 import { LessonFilters } from '../models/lesson';
 
 const router: Router = express.Router();
@@ -68,7 +68,10 @@ router.get('/overdues', async (req, res, next) => {
  */
 router.post('/', async (req, res, next) => {
     try {
-        const lesson = await LessonsService.createLesson(req.body);
+        const body = req.body;
+        body.date = parseDate(body.date);
+
+        const lesson = await LessonsService.createLesson(body);
         res.status(200).json({
             message: 'Lessons has been created successfully.',
             data: lesson,

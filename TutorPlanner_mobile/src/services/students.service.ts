@@ -1,4 +1,4 @@
-import { ErrorResponse, StudentDTO, StudentsDTO } from '@model';
+import { ErrorResponse, LessonDTO, StudentDTO, StudentsDTO } from '@model';
 import { STUDENTS_URL } from './config';
 import { axios } from './baseService';
 import { AxiosError } from 'axios';
@@ -41,6 +41,22 @@ class StudentsService {
                     message: error.message,
                 };
             }
+            return {
+                status: 400,
+                message: 'Error',
+            };
+        }
+    };
+    getNextStudentLesson = async (
+        studnetId: number,
+    ): Promise<LessonDTO | undefined | ErrorResponse> => {
+        try {
+            const response = await axios.get(
+                `${STUDENTS_URL}/${studnetId}/lessons/next`,
+            );
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
             return {
                 status: 400,
                 message: 'Error',

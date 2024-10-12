@@ -168,6 +168,30 @@ export const lessonRepository = {
             },
         })) as LessonDAO[];
     },
+    getNextLessonByStudentId: async (
+        studentId: number,
+    ): Promise<LessonDAO | undefined> => {
+        try {
+            return (await prisma.event.findFirstOrThrow({
+                where: {
+                    studentId: studentId,
+                    type: 'LESSON',
+                    date: {
+                        gte: new Date(),
+                    },
+                },
+                orderBy: {
+                    date: 'asc',
+                },
+            })) as LessonDAO;
+        } catch (e: any) {
+            if ('code' in e && e.code === 'P2025') {
+                return undefined;
+            }
+            console.log(JSON.stringify(e));
+            throw new Error('lesson not found');
+        }
+    },
     getPagableLessons: async ({
         pageSize,
         page,

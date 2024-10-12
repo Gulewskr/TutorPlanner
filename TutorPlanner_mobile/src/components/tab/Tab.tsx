@@ -14,7 +14,7 @@ export interface TabItem<T> {
     id: T;
     isExpanded: boolean;
     text: string;
-    hasHiddenLabel?: boolean;
+    hasHiddenLabel?: 'always' | 'whenNotActive';
     icon?: ICON_NAME;
 }
 
@@ -28,6 +28,10 @@ const CustomTabs: React.FC<PropsWithChildren<TabProps>> = ({
             <View style={styles.content}>
                 {tabs.map((tab, index) => {
                     const isActive = tab.id === activeTab;
+                    const hiddenLabel =
+                        tab.hasHiddenLabel === 'always' ||
+                        (!isActive && tab.hasHiddenLabel === 'whenNotActive');
+
                     return (
                         <TouchableOpacity
                             onPress={() => changeActiveTab(index)}
@@ -44,8 +48,7 @@ const CustomTabs: React.FC<PropsWithChildren<TabProps>> = ({
                                 style={[
                                     styles.text,
                                     (!isActive && !tab.isExpanded) ||
-                                        (tab.hasHiddenLabel &&
-                                            styles.hidden_text),
+                                        (hiddenLabel && styles.hidden_text),
                                     isActive && styles.active_text,
                                 ]}
                             >
