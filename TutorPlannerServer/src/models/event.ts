@@ -25,13 +25,6 @@ const eventRepository = {
             },
         });
     },
-    getEventsInDay: async (date: Date): Promise<Event[]> => {
-        return await prisma.event.findMany({
-            where: {
-                date,
-            },
-        });
-    },
     createEvent: async (event: Prisma.EventCreateInput): Promise<Event> => {
         return await prisma.event.create({
             data: event,

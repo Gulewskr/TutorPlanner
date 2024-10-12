@@ -1,4 +1,4 @@
-import { FormProvider, FormRenderer } from '@components/form-renderer';
+import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
 import { studentsService } from '@services/students.service';
 
 //TODO - extendend fields

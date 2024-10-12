@@ -34,7 +34,7 @@ class LessonsService {
             throw error;
         }
     };
-    getLessonsInDay = async (date: Date) => {
+    getLessonsInDay = async (date: Date): Promise<LessonDTO[]> => {
         try {
             if (!date) throw new Error('Missing data');
             const formattedDate = date.toISOString().split('T')[0]; // np 2024-10-05

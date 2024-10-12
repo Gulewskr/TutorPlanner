@@ -1,5 +1,5 @@
 import { Event, EventType } from '@prisma/client';
-import { LessonDTO } from '../dto/lessons';
+import { LessonDTO } from '../../../TutorPlanner_shared/LessonDTO';
 
 export type LessonDAO = Event & {
     startHour: string;
@@ -41,3 +41,4 @@ export interface CreateLessonRequestBody {
 }
 
 export { LessonDAO as Lesson, EventType };
+export { LessonDTO };

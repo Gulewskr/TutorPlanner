@@ -1,6 +1,4 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
-import { ModalRendererSchema } from './model';
-import { Text, View } from 'react-native';
 import { ModalRenderer } from './ModalRenderer';
 
 interface ModalContextProps {
@@ -36,7 +34,6 @@ export const ModalProvider = ({ children }: React.PropsWithChildren) => {
                     onCancel={() => setIsOpen(false)}
                 />
             )}
-
             {children}
         </ModalContext.Provider>
     );

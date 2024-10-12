@@ -9,5 +9,5 @@ export type LessonDTO = {
     price: number;
     isPaid: boolean;
     studentId: number;
-    eventSeriesId: number | null;
+    eventSeriesId?: number;
 };

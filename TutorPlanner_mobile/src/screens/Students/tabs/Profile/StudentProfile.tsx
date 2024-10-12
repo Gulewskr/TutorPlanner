@@ -1,4 +1,3 @@
-import { StudentsTabParamList } from '../../Students';
 import {
     BottomTabScreenProps,
     createBottomTabNavigator,
@@ -7,6 +6,7 @@ import { StudentInformations } from './tabs/StudentInformation';
 import { StudentAnalise } from './tabs/StudentAnalise';
 import { StudentLessons } from './tabs/StudentLessons';
 import { StudentDTO } from '@model';
+import { StudentsTabParamList } from '@components/ui/navbar';
 
 export type StudentProfileTabParamList = {
     Info: {

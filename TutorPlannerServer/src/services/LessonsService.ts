@@ -6,11 +6,11 @@ import {
     EventType,
     Lesson,
     LessonDAO,
+    LessonDTO,
     LessonFilters,
     toLessonDTO,
 } from '../models/lesson';
 import { addWeeks, endOfMonth, isValid } from 'date-fns';
-import { LessonDTO } from '../dto/lessons';
 import { z } from 'zod';
 import { lessonRepository } from '../repositories/lessonsRepository';
 import { Pagable } from '../../../TutorPlanner_shared/Pagable';

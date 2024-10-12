@@ -1,9 +1,5 @@
-import { Button } from '@components/button';
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import { useModalContext } from './ModalProvider';
-import { ModalRendererSchema } from './model';
 import { Icon } from '@components/icon';
 
 interface ModalRendererProps {

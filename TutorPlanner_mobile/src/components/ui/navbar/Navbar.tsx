@@ -3,8 +3,8 @@ import { View, TouchableOpacity } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Svg, Defs, Rect, Mask, Circle, Line } from 'react-native-svg';
-import { NavbarNavigationScreens } from '../../App';
 import { Icon, ICON_NAME } from '@components/icon';
+import { NavbarNavigationScreens } from './tabs';
 
 interface NavbarItemProps {
     name: NavbarNavigationScreens;

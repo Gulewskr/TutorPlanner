@@ -1,23 +1,12 @@
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 import { Layout } from '../Layout';
-import { RootStackParamList } from '../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Button } from '@components/button';
-import { Calendar } from '@components/calendar';
-import axios from 'axios';
-import { lessonsService } from '@services/lessons.service';
-import { ScrollView } from '@components/scrool-view';
-import { EventWrapper } from '@components/events';
-import { DailyViewWrapper } from '@components/daily calendar';
-
-export type CalendarTabParamList = {
-    MonthlyCalendar: undefined;
-    DailyCalendar: undefined;
-    Create: undefined;
-    Event: { id: string };
-};
+import { DailyCalendar } from './tabs/DailyCalendar';
+import { MonthlyCalendar } from './tabs/MonthlyCalendar';
+import { CalendarTabParamList } from './calendarTabs';
+import { RootStackParamList } from '@components/ui/navbar';
 
 const Tab = createBottomTabNavigator<CalendarTabParamList>();
 
@@ -40,67 +29,6 @@ export const RootCalendar: React.FC<
             <Tab.Screen name="Event" component={EventDetails} />
             <Tab.Screen name="Create" component={CreateEvent} />
         </Tab.Navigator>
-    );
-};
-
-const MonthlyCalendar: React.FC<
-    NativeStackScreenProps<CalendarTabParamList, 'MonthlyCalendar'>
-> = ({ navigation, route }) => {
-    const [selectedDay, setSelectedDay] = useState(new Date());
-    const handleChangeDay = (newDay: Date) => {
-        setSelectedDay(newDay);
-    };
-    return (
-        <Layout
-            navigation={navigation}
-            route={'Calendar'}
-            title="Kalendarz"
-            hasHeader
-        >
-            <ScrollView>
-                <View
-                    style={{
-                        paddingHorizontal: 15,
-                        gap: 15,
-                        alignItems: 'center',
-                        width: '100%',
-                    }}
-                >
-                    <Button
-                        onClick={() => navigation.navigate('DailyCalendar')}
-                        hasShadow
-                        icon="calendar"
-                        label="Przełącz na widok dzienny"
-                    />
-                    <Calendar
-                        day={selectedDay}
-                        handleChangeDay={handleChangeDay}
-                    />
-                    <EventWrapper day={selectedDay} />
-                </View>
-            </ScrollView>
-        </Layout>
-    );
-};
-
-const DailyCalendar: React.FC<
-    NativeStackScreenProps<CalendarTabParamList, 'DailyCalendar'>
-> = ({ navigation, route }) => {
-    const [selectedDay, setSelectedDay] = useState<Date>(new Date());
-
-    const handleChangeDay = (day: Date) => {
-        setSelectedDay(day);
-    };
-    return (
-        <Layout
-            navigation={navigation}
-            route={'Calendar'}
-            title="Kalendarz"
-            hasHeader
-        >
-            <DailyViewWrapper day={selectedDay} onClick={handleChangeDay} />
-            <EventWrapper day={selectedDay} />
-        </Layout>
     );
 };
 
