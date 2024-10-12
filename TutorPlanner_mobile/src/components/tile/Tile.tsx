@@ -81,9 +81,11 @@ const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
                 <View
                     style={[
                         styles.children,
-                        { justifyContent: centered ? 'center' : 'flex-start' },
-                        { alignItems: centered ? 'center' : 'flex-start' },
-                        { minHeight: height || 40 },
+                        {
+                            justifyContent: centered ? 'center' : 'flex-start',
+                            alignItems: centered ? 'center' : 'flex-start',
+                            minHeight: height || 40,
+                        },
                     ]}
                 >
                     {children}

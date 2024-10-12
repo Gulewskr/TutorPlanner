@@ -1,0 +1,49 @@
+import { PAYMENTS_URL } from './config';
+import { axios } from './baseService';
+import { PaymentDTO } from '@model';
+
+interface PaymentCreateRequestBody {
+    studentId: number;
+    price: number;
+    date?: string;
+}
+
+class PaymentsService {
+    create = async (
+        body: PaymentCreateRequestBody,
+    ): Promise<PaymentDTO | undefined> => {
+        try {
+            if (!body.studentId || !body.price) {
+                throw new Error(`Missing data`);
+            }
+            const response = await axios.post(PAYMENTS_URL, body);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    getAll = async () => await this.getList({});
+    getList = async ({
+        month,
+        year,
+    }: {
+        month?: number;
+        year?: number;
+    }): Promise<PaymentDTO[] | undefined> => {
+        try {
+            if (!month && !year) {
+                const response = await axios.get(PAYMENTS_URL);
+                return response.data;
+            } else {
+                const response = await axios.get(
+                    `${PAYMENTS_URL}?month=${month}&year=${year}`,
+                );
+                return response.data;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+}
+
+export const paymentsService = new PaymentsService();

@@ -31,12 +31,14 @@ const StudentNextLesson: React.FC<StudentNextLessonProps> = ({ studentId }) => {
             {nextLesson ? (
                 <Pressable onPress={navigateToCallendar}>
                     <Tile>
-                        {
-                            //TODO - fix formatting
-                        }
-                        {nextLesson.name} {nextLesson.startHour}
-                        {' - '}
-                        {nextLesson.date.toString()}
+                        <Text>
+                            {
+                                //TODO - fix formatting
+                            }
+                            {nextLesson.name} {nextLesson.startHour}
+                            {' - '}
+                            {nextLesson.date.toString()}
+                        </Text>
                     </Tile>
                 </Pressable>
             ) : (

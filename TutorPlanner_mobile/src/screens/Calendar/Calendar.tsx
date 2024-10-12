@@ -98,9 +98,7 @@ const DailyCalendar: React.FC<
             title="Kalendarz"
             hasHeader
         >
-            <View style={{ width: '95%' }}>
-                <DailyViewWrapper day={selectedDay} onClick={handleChangeDay} />
-            </View>
+            <DailyViewWrapper day={selectedDay} onClick={handleChangeDay} />
             <EventWrapper day={selectedDay} />
         </Layout>
     );

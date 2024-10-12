@@ -2,26 +2,18 @@ import { EventSeriesType, Prisma } from '@prisma/client';
 import { CONFIG } from '../config';
 import { eventSeriesRepository } from '../models/eventSeries';
 import {
+    CreateLessonRequestBody,
     EventType,
     Lesson,
     LessonDAO,
-    lessonRepository,
+    LessonFilters,
+    toLessonDTO,
 } from '../models/lesson';
-import { addWeeks } from 'date-fns';
+import { addWeeks, endOfMonth, isValid } from 'date-fns';
 import { LessonDTO } from '../dto/lessons';
 import { z } from 'zod';
-import { Filters } from '../routes/lessons';
-
-interface LessonInput {
-    name: string;
-    description: string;
-    student: number;
-    price: number;
-    date: Date;
-    startHour: string;
-    endHour: string;
-    weekly: boolean;
-}
+import { lessonRepository } from '../repositories/lessonsRepository';
+import { Pagable } from '../../../TutorPlanner_shared/Pagable';
 
 const LessonInputSchema = z.object({
     name: z.string(),
@@ -34,18 +26,19 @@ const LessonInputSchema = z.object({
     weekly: z.boolean(),
 });
 
-interface lessonFilters {
-    //TOOD
-}
-
 interface PayedLessonsData {
     lessons: LessonDAO[];
     sum: number;
 }
 
-function isValidDate(dateString: string): boolean {
+function parseDate(dateString: string): Date {
     const date = new Date(dateString);
-    return !isNaN(date.getTime());
+    if (!isValid(date)) {
+        throw new Error(
+            'Invalid date format. Please use a valid date (YYYY-MM-DD).',
+        );
+    }
+    return date;
 }
 
 class LessonsService {
@@ -57,21 +50,54 @@ class LessonsService {
         return lesson;
     }
 
-    public async getLessons(filters?: Filters): Promise<Lesson[]> {
-        if (filters?.date) {
-            if (!isValidDate(filters.date)) {
-                throw new Error(
-                    'Invalid date format. Please use a valid date (YYYY-MM-DD).',
-                );
-            }
-            return await lessonRepository.getLessonsByDay(filters.date);
+    public async getLessons(filters: LessonFilters): Promise<Lesson[]> {
+        if (filters.date) {
+            const data = parseDate(filters.date);
+            return await lessonRepository.getLessonsByDay(data);
         }
 
         return await lessonRepository.getAllLessons();
     }
 
-    public async getLessonsByDay(date: string): Promise<Lesson[]> {
-        return await lessonRepository.getLessonsByDay(date);
+    public async getOverdueLessons({
+        studentId,
+        month,
+        year,
+        page,
+        pageSize,
+    }: {
+        studentId?: number;
+        month?: number;
+        year?: number;
+        page?: number;
+        pageSize?: number;
+    }): Promise<LessonDTO[] | Pagable<LessonDTO>> {
+        const filter: Prisma.EventWhereInput = {};
+        if (studentId !== undefined) {
+            filter.studentId = studentId;
+        }
+        if (year && month) {
+            const startOfMonth = new Date(year, month - 1, 1);
+            filter.date = {
+                gte: startOfMonth,
+                lte: endOfMonth(startOfMonth),
+            };
+        }
+        if (page !== undefined || pageSize !== undefined) {
+            const pageResults = await lessonRepository.getPagableLessons({
+                page,
+                pageSize,
+                filter,
+            });
+            return {
+                page: pageResults.page,
+                pageSize: pageResults.pageSize,
+                size: pageResults.size,
+                data: pageResults.data.map(v => toLessonDTO(v)),
+            };
+        }
+        const lessons = await lessonRepository.getLessons(filter);
+        return lessons.map(l => toLessonDTO(l));
     }
 
     public async getStudentLessons(studnetId: number): Promise<Lesson[]> {
@@ -81,21 +107,21 @@ class LessonsService {
     public async getNotPaidStudentLessons(
         studentId: number,
     ): Promise<LessonDAO[]> {
-        return await lessonRepository.getAllLessons({
-            isPaid: true,
+        return await lessonRepository.getLessons({
             studentId: studentId,
             date: {
                 lt: new Date(),
             },
+            isPaid: false,
         });
     }
 
     public async getPaidStudentLessons(
         studentId: number,
     ): Promise<PayedLessonsData> {
-        const lessons: LessonDAO[] = await lessonRepository.getAllLessons({
-            isPaid: true,
+        const lessons: LessonDAO[] = await lessonRepository.getLessons({
             studentId: studentId,
+            isPaid: true,
         });
         const sum: number = lessons.reduce((a, b): number => b.price + a, 0);
         return {
@@ -107,15 +133,15 @@ class LessonsService {
     public async getNextUnpaidedStudentLessons(
         studentId: number,
     ): Promise<LessonDAO[]> {
-        return await lessonRepository.getAllLessons({
-            isPaid: false,
+        return await lessonRepository.getLessons({
             studentId: studentId,
+            isPaid: false,
         });
     }
 
     public async addUserLesson(
         studnetId: number,
-        lesson: LessonInput,
+        lesson: CreateLessonRequestBody,
     ): Promise<LessonDTO> {
         return await this.createLesson({
             ...lesson,
@@ -123,10 +149,12 @@ class LessonsService {
         });
     }
 
-    public async createLesson(lesson: LessonInput): Promise<LessonDTO> {
+    public async createLesson(
+        lesson: CreateLessonRequestBody,
+    ): Promise<LessonDTO> {
         LessonInputSchema.parse(lesson);
         if (!lesson.weekly) {
-            const createdLesson = await lessonRepository.createLesson({
+            const createdLesson = await lessonRepository.create({
                 name: lesson.name,
                 date: lesson.date,
                 type: EventType.LESSON,
@@ -174,7 +202,7 @@ class LessonsService {
                 });
                 lessonDate = addWeeks(lessonDate, 1);
             }
-            await lessonRepository.createLessons(inputData);
+            await lessonRepository.bulkCreate(inputData);
             return {
                 name: lesson.name,
                 date: lesson.date,
@@ -193,29 +221,29 @@ class LessonsService {
 
     public async updateLesson(
         lessonId: number,
-        data: Partial<LessonInput>,
+        data: Partial<CreateLessonRequestBody>,
     ): Promise<void> {
         //TODO
-        await lessonRepository.updateLesson(lessonId, {
+        await lessonRepository.update(lessonId, {
             isOverridden: true,
         });
     }
 
     public async updateLessonSeries(
         lessonId: number,
-        data: Partial<LessonInput>,
+        data: Partial<CreateLessonRequestBody>,
     ): Promise<void> {
         await lessonRepository.updateLessonSeriesByEventId(lessonId, data);
     }
 
     public async markLessonAsPaid(lessonId: number): Promise<void> {
-        await lessonRepository.updateLesson(lessonId, {
+        await lessonRepository.update(lessonId, {
             isPaid: true,
         });
     }
 
     public async cancelLesson(lessonId: number): Promise<void> {
-        await lessonRepository.updateLesson(lessonId, { isCanceled: true });
+        await lessonRepository.update(lessonId, { isCanceled: true });
     }
 }
 

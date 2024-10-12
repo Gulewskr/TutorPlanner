@@ -1,14 +1,16 @@
 import { Prisma } from '@prisma/client';
-import { Payment, paymentRepository } from '../models/payment';
-import { validateDateFormat } from '../utils/utils';
+import { Payment } from '../models/payment.model';
+import {
+    PaymentInput,
+    validatePaymentInput,
+} from '../validators/payments/paymentInput';
+import { endOfMonth } from 'date-fns';
+import { paymentRepository } from '../repositories/paymentRepository';
 
-interface PaymentInput {
-    studentId: number;
-    price: number;
-    date?: string;
+interface Filters {
+    month: number;
+    year: number;
 }
-
-interface Filters {}
 
 class PaymentsService {
     public async getPayment(id: number): Promise<Payment> {
@@ -20,7 +22,18 @@ class PaymentsService {
     }
 
     public async getFilteredPayments(filters?: Filters): Promise<Payment[]> {
-        return await paymentRepository.getPayments(filters);
+        if (!filters) {
+            return await paymentRepository.getPayments();
+        }
+
+        const startOfMonth = new Date(filters.year, filters.month - 1, 1);
+
+        return await paymentRepository.getPayments({
+            date: {
+                gte: startOfMonth,
+                lte: endOfMonth(startOfMonth),
+            },
+        });
     }
 
     public async getStudentPayments(studentId: number): Promise<Payment[]> {
@@ -28,16 +41,8 @@ class PaymentsService {
     }
 
     public async addPayment(data: PaymentInput): Promise<Payment> {
-        const paymentDate = validateDateFormat(data.date);
-        const payment = await paymentRepository.createPayment({
-            price: data.price,
-            date: paymentDate,
-            student: {
-                connect: {
-                    id: data.studentId,
-                },
-            },
-        });
+        const parsedData = validatePaymentInput(data);
+        const payment = await paymentRepository.createPayment(parsedData);
         return payment;
     }
 

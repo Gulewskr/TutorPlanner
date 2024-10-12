@@ -160,8 +160,8 @@ const styles = (
         shadow: {
             borderRadius: 10,
             position: 'absolute',
-            top: 4,
-            left: 4,
+            top: 5,
+            left: 5,
             backgroundColor: isDisabled
                 ? '$color_disabled_primary'
                 : secondary

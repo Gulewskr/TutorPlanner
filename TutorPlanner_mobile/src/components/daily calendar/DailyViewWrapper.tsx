@@ -23,25 +23,45 @@ export const DailyViewWrapper: React.FC<DayProps> = ({ day, onClick }) => {
                 const selected = offset === 0;
 
                 return (
-                    <Tile
+                    <View
                         key={offset}
-                        color={selected ? 'brightPink' : 'white'}
-                        onClick={() => onClick(adjustedDay)}
-                        centered
-                        height={75}
+                        style={{
+                            width: 60,
+                        }}
                     >
-                        <Text
-                            style={[styles.text_day, selected && styles.active]}
+                        <Tile
+                            color={selected ? 'brightPink' : 'white'}
+                            onClick={() => onClick(adjustedDay)}
+                            centered
+                            height={75}
                         >
-                            {dayOfWeek}
-                        </Text>
-                        <Text
-                            style={[styles.text_num, selected && styles.active]}
-                        >
-                            {adjustedDay.getDate()}
-                        </Text>
-                        <Icon icon="calendar" />
-                    </Tile>
+                            <View
+                                style={{
+                                    flexDirection: 'column',
+                                    gap: 2,
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Text
+                                    style={[
+                                        styles.text_day,
+                                        selected && styles.active,
+                                    ]}
+                                >
+                                    {dayOfWeek}
+                                </Text>
+                                <Text
+                                    style={[
+                                        styles.text_num,
+                                        selected && styles.active,
+                                    ]}
+                                >
+                                    {adjustedDay.getDate()}
+                                </Text>
+                                <Icon icon="calendar" size="sm" />
+                            </View>
+                        </Tile>
+                    </View>
                 );
             })}
         </View>
@@ -52,9 +72,9 @@ const styles = EStyleSheet.create({
     container: {
         flexDirection: 'row',
         gap: 10,
-        width: 60,
-
-        alignSelf: 'flex-start',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
     active: {

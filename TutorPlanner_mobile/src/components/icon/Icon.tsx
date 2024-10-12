@@ -35,6 +35,7 @@ type ICON_NAME =
     | 'pencil'
     | 'phone'
     | 'plus'
+    | 'refresh'
     | 'settings'
     | 'settingsPanel'
     | 'studentCap'
@@ -72,6 +73,7 @@ const iconsMap: { [key in ICON_NAME]: any } = {
     pencil: require('../../assets/icons/pencil.png'),
     phone: require('../../assets/icons/phone.png'),
     plus: require('../../assets/icons/plus.png'),
+    refresh: require('../../assets/icons/refresh.png'),
     settings: require('../../assets/icons/settings.png'),
     settingsPanel: require('../../assets/icons/settingsPanel.png'),
     studentCap: require('../../assets/icons/studentCap.png'),

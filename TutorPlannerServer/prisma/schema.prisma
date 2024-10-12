@@ -19,6 +19,7 @@ model Student {
     extendedMath Boolean?
     description  String?
     defaultPrice Float?
+    balance      Float         @default(0)
     ContactData  ContactData[]
     Payment      Payment[]
     Event        Event[]

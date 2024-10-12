@@ -14,6 +14,7 @@ interface HeaderProps {
     rightIcon?: ICON_NAME;
     subtitle?: string;
     title?: string;
+    styles?: any;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -26,11 +27,12 @@ const Header: React.FC<HeaderProps> = ({
     rightIcon,
     rightAction,
     isCentered: centered = false,
+    styles: customStyles,
 }) => {
     const leftActionActive = !isLeftActionDisabled && leftAction;
 
     return (
-        <View style={styles.header}>
+        <View style={[styles.header, customStyles && customStyles]}>
             {leftActionActive && (
                 <View style={styles.left_icon}>
                     <Button
