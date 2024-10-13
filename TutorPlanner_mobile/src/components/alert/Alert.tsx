@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
-    Modal,
     Text,
     View,
     TouchableWithoutFeedback,
@@ -18,6 +17,20 @@ interface AlertProps {
     time?: number;
 }
 
+//TODO - move colors to colors.ts
+const getBgColor = (severity: AlertSeverity) => {
+    switch (severity) {
+        case 'danger':
+            return '#FF6B6B';
+        case 'success':
+            return '#BAFCA2';
+        case 'warning':
+        case 'info':
+        default:
+            return '#F4DDFF';
+    }
+};
+
 const CustomAlert: React.FC<AlertProps> = ({
     message,
     visible,
@@ -26,8 +39,9 @@ const CustomAlert: React.FC<AlertProps> = ({
     time,
 }) => {
     const animation = useRef(new Animated.Value(0)).current;
+    const [isVisible, setIsVisible] = useState(true);
 
-    const animationDuration = (time ?? 5) * 1000;
+    const animationDuration = time || 3000;
 
     useEffect(() => {
         if (visible) {
@@ -41,62 +55,48 @@ const CustomAlert: React.FC<AlertProps> = ({
             }).start();
 
             const timer = setTimeout(() => {
-                console.log('test...');
+                setIsVisible(false);
                 onClose();
-                console.log('test-end...');
             }, animationDuration);
             return () => clearTimeout(timer);
         }
-    }, [visible, onClose, animation]);
+    }, []);
 
     const animatedWidth = animation.interpolate({
         inputRange: [0, 1],
         outputRange: ['0%', '100%'],
     });
 
-    const backgroundColor =
-        severity === 'success'
-            ? '#BAFCA2'
-            : severity === 'danger'
-              ? '#FF6B6B'
-              : '#F4DDFF';
     const animatedColor = '#5E5E5E80';
 
+    const bgColor = useMemo(() => getBgColor(severity), [severity]);
+
     return (
-        <Modal
-            animationType="fade"
-            transparent={true}
-            visible={visible}
-            onRequestClose={onClose}
+        <View
+            style={{
+                width: '100%',
+                height: 'auto',
+                minHeight: 40,
+                display: isVisible ? 'flex' : 'none',
+            }}
         >
             <TouchableWithoutFeedback onPress={onClose}>
-                <View style={styles.container}>
-                    <TouchableWithoutFeedback>
-                        <View style={styles.messageWrapper}>
-                            <View
-                                style={[
-                                    styles.backgroundColor,
-                                    { backgroundColor },
-                                ]}
-                            >
-                                <Animated.View
-                                    style={[
-                                        styles.animatedColor,
-                                        {
-                                            width: animatedWidth,
-                                            backgroundColor: animatedColor,
-                                        },
-                                    ]}
-                                />
-                            </View>
-                            <View style={styles.message}>
-                                <Text style={styles.text}>{message}</Text>
-                            </View>
-                        </View>
-                    </TouchableWithoutFeedback>
+                <View style={[styles.container, { backgroundColor: bgColor }]}>
+                    <Animated.View
+                        style={[
+                            styles.animatedColor,
+                            {
+                                width: animatedWidth,
+                                backgroundColor: animatedColor,
+                            },
+                        ]}
+                    />
+                    <View style={styles.message}>
+                        <Text style={styles.text}>{message}</Text>
+                    </View>
                 </View>
             </TouchableWithoutFeedback>
-        </Modal>
+        </View>
     );
 };
 CustomAlert.displayName = 'CustomAlert';
@@ -109,6 +109,9 @@ const styles = EStyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.2)',
+        borderWidth: 1,
+        borderRadius: 10,
+        borderColor: '$color_black',
     },
 
     messageWrapper: {

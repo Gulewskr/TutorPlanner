@@ -1,7 +1,11 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
-import { ModalRenderer } from './modalContext/ModalRenderer';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import { Alert, AlertSeverity } from '@components/alert';
-import { View } from 'react-native';
 
 interface AlertContextProps {
     isVisible: boolean;
@@ -10,11 +14,13 @@ interface AlertContextProps {
         severity?: AlertSeverity;
         time?: number;
     }) => void;
+    alerts: React.ReactNode[];
 }
 
 const defaultModalContext: AlertContextProps = {
     isVisible: false,
     showAlert: () => {},
+    alerts: [],
 };
 
 const AlertContext: React.Context<AlertContextProps> =
@@ -23,8 +29,8 @@ const AlertContext: React.Context<AlertContextProps> =
 export const useAlert = () => useContext(AlertContext);
 
 export const AlertProvider = ({ children }: React.PropsWithChildren) => {
-    const [isVisible, setIsVisible] = useState(false);
     const [alerts, setAlerts] = useState<React.ReactNode[]>([]);
+    const [alertsToRemove, setAlertsToRemove] = useState<string[]>([]);
 
     const handleCreateAlert = ({
         message,
@@ -35,45 +41,48 @@ export const AlertProvider = ({ children }: React.PropsWithChildren) => {
         severity?: AlertSeverity;
         time?: number;
     }) => {
-        console.log('creating alert...');
+        const alertKey = message + (Math.random() * 10000).toFixed();
         setAlerts(a => {
-            a.push(
+            return [
                 <Alert
-                    key={message}
+                    key={alertKey}
                     message={message}
                     time={time}
                     severity={severity || 'info'}
                     visible={true}
-                    onClose={() => handleRemoveAlert(message)}
+                    onClose={() => handleRemoveAlert(alertKey)}
                 />,
-            );
-            return a;
+                ...a,
+            ];
         });
+        setTimeout(() => handleRemoveAlert(alertKey), time || 3000);
     };
 
     const handleRemoveAlert = (alertKey: string) => {
-        setAlerts(a => {
-            console.log('deleting...');
-            const index = a.findIndex(
-                v =>
-                    v &&
-                    typeof v === 'object' &&
-                    'key' in v &&
-                    v.key === alertKey,
-            );
-            console.log(index);
-            console.log(a);
-            a.splice(index, 1);
-            console.log(a);
-            return a;
+        setAlertsToRemove(list => {
+            return [...list, alertKey];
         });
     };
 
+    useEffect(() => {
+        if (alerts.length && alertsToRemove.length === alerts.length) {
+            setAlerts([]);
+            setAlertsToRemove([]);
+            console.log('alerts cleared');
+            //alerts.every(
+            //    alert =>
+            //        alert &&
+            //        typeof alert === 'object' &&
+            //        'key' in alert &&
+            //        alertsToRemove.includes(alert.key || ''),
+            //);
+        }
+    }, [alertsToRemove, alerts]);
+
     return (
         <AlertContext.Provider
-            value={{ isVisible, showAlert: handleCreateAlert }}
+            value={{ isVisible: true, showAlert: handleCreateAlert, alerts }}
         >
-            <>{alerts && alerts.map(alert => alert)}</>
             {children}
         </AlertContext.Provider>
     );

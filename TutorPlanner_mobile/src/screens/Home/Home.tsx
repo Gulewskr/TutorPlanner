@@ -7,30 +7,19 @@ import { EventWrapper } from '@components/complex/events';
 import { ScrollView } from '@components/ui/scrool-view';
 import { RootStackParamList } from '@components/ui/navbar';
 import { useAlert } from '@contexts/AlertContext';
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 
 export const Home: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Home'>
 > = ({ navigation, route }) => {
-    /*
-    TODO - make this work
-    
     const { showAlert } = useAlert();
+    const today = useMemo(() => new Date(), []);
 
-    useEffect(() => {
-        showAlert({
-            message: 'test alert 1',
-            severity: 'success',
-        });
-        showAlert({
-            message: 'test alert 2',
-            severity: 'danger',
-        });
+    const handleAddAlert = () => {
         showAlert({
             message: 'test alert 3',
         });
-    }, []);
-    */
+    };
 
     return (
         <Layout
@@ -90,6 +79,7 @@ export const Home: React.FC<
                         </View>
                     </View>
                 </View>
+                <Button onClick={handleAddAlert} label="test alert" />
                 <View style={styles.timeline}>
                     <Header
                         rightIcon={'addLesson'}
@@ -97,7 +87,7 @@ export const Home: React.FC<
                         title={'Dzisiejszy plan'}
                     />
                 </View>
-                <EventWrapper day={new Date()} />
+                <EventWrapper day={today} />
             </ScrollView>
         </Layout>
     );
