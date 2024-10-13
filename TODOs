@@ -7,8 +7,8 @@ Spis funkcjonalności wersji 0.5:
 -   ekran główny
     -   lista z wydarzeniami danego dnia
 -   kalendarz
-    -   lista z wydarzeniami danego dnia
-    -   widok dzienny
+    -   [PARTIALY DONE] lista z wydarzeniami danego dnia
+    -   [PARTIALY DONE] widok dzienny
 -   dodawanie wydarzen
 -   edycja wydarzen
     -   modal do podglądu szczegółów wydarzenia

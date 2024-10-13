@@ -211,7 +211,7 @@ class LessonsService {
             let lessonDate = lesson.date;
             while (lessonDate < CONFIG.MAX_LESSONS_DATE) {
                 inputData.push({
-                    date: lesson.date,
+                    date: lessonDate,
                     type: EventType.LESSON,
                     name: lesson.name,
                     description: lesson.description,

@@ -24,6 +24,9 @@
       "@utils/*": [
         "src/utils/*"
       ],
+      "@contexts/*": [
+        "src/contexts/*"
+      ],
     },
     "forceConsistentCasingInFileNames": true,
     "types": ["node"]

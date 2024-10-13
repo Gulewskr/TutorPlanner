@@ -1,19 +1,22 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import EStyleSheet from 'react-native-extended-stylesheet';
+//screens
 import { Home } from './screens/Home/Home';
 import { Calendar } from './screens/Calendar/Calendar';
 import { Students } from './screens/Students/Students';
 import { Payments } from './screens/Payments/Payments';
 import { Notes } from './screens/Notes/Notes';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import { Settings } from './screens/Settings/Settings';
 import { Lessons } from './screens/Lessons/Lessons';
 import { CreatePayment } from './screens/CreatePayment/CreatePayment';
 import { CreateStudent } from './screens/CreateStudent/CreateStudent';
-import { ModalProvider } from 'src/contexts/modalContext';
+//components
 import { RootStackParamList } from '@components/ui/navbar';
+//contexts
+import { ModalProvider } from '@contexts/modalContext';
+import { AlertProvider } from '@contexts/AlertContext';
 
 EStyleSheet.build({
     $color_primary: '#FFA9F1',
@@ -38,38 +41,40 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const App: React.FC<{}> = () => {
     return (
         <ModalProvider>
-            <NavigationContainer>
-                <Stack.Navigator
-                    screenOptions={{
-                        animation: 'none',
-                        headerShown: false,
-                    }}
-                >
-                    <Stack.Screen
-                        name="Home"
-                        component={Home}
-                        options={{
+            <AlertProvider>
+                <NavigationContainer>
+                    <Stack.Navigator
+                        screenOptions={{
+                            animation: 'none',
                             headerShown: false,
-                            headerTitleAlign: 'center',
-                            title: 'Welcome',
                         }}
-                    />
-                    <Stack.Screen name="Calendar" component={Calendar} />
-                    <Stack.Screen name="Lessons" component={Lessons} />
-                    <Stack.Screen name="Notes" component={Notes} />
-                    <Stack.Screen name="Payments" component={Payments} />
-                    <Stack.Screen name="Students" component={Students} />
-                    <Stack.Screen name="Settings" component={Settings} />
-                    <Stack.Screen
-                        name="CreatePayment"
-                        component={CreatePayment}
-                    />
-                    <Stack.Screen
-                        name="CreateStudent"
-                        component={CreateStudent}
-                    />
-                </Stack.Navigator>
-            </NavigationContainer>
+                    >
+                        <Stack.Screen
+                            name="Home"
+                            component={Home}
+                            options={{
+                                headerShown: false,
+                                headerTitleAlign: 'center',
+                                title: 'Welcome',
+                            }}
+                        />
+                        <Stack.Screen name="Calendar" component={Calendar} />
+                        <Stack.Screen name="Lessons" component={Lessons} />
+                        <Stack.Screen name="Notes" component={Notes} />
+                        <Stack.Screen name="Payments" component={Payments} />
+                        <Stack.Screen name="Students" component={Students} />
+                        <Stack.Screen name="Settings" component={Settings} />
+                        <Stack.Screen
+                            name="CreatePayment"
+                            component={CreatePayment}
+                        />
+                        <Stack.Screen
+                            name="CreateStudent"
+                            component={CreateStudent}
+                        />
+                    </Stack.Navigator>
+                </NavigationContainer>
+            </AlertProvider>
         </ModalProvider>
     );
 };

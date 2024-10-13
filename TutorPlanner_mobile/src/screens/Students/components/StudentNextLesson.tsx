@@ -1,7 +1,6 @@
 import { Header } from '@components/header';
 import { Tile } from '@components/tile';
 import { LessonDTO } from '@model';
-import { lessonsService } from '@services/lessons.service';
 import { studentsService } from '@services/students.service';
 import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react';

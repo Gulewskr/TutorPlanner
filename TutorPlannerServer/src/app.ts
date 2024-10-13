@@ -8,6 +8,8 @@ import router from './routes/index';
 import studentsRouter from './routes/students.routes';
 import lessonsRouter from './routes/lessons.routes';
 import paymentsRouter from './routes/payments.routes';
+import eventsRouter from './routes/events.routes';
+import calendarRouter from './routes/calendar.routes';
 import { errorHandler } from './middlewares/errorHandler';
 
 // development
@@ -31,6 +33,8 @@ app.use(cors(corsOption));
 
 app.use('/', router);
 app.use('/students', studentsRouter);
+app.use('/events', eventsRouter);
+app.use('/calendar', calendarRouter);
 app.use('/lessons', lessonsRouter);
 app.use('/payments', paymentsRouter);
 

@@ -14,12 +14,14 @@ import {
     subDays,
     subMonths,
 } from 'date-fns';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { DayEventsData } from './model';
 import { DayInCalendar } from './DayInCalendar';
 import { MONTHS_NOMINATIVE, WEEKDAYS } from './constraints';
 import { getDayOfWeek } from './utils';
 import { getDateWithoutTZ } from '@utils/dateUtils';
+import { calendarService } from '@services/calendar.service';
+import { EventDTO } from '../../../../../TutorPlanner_shared/EventDTO';
 
 interface CalendarProps {
     day: Date;
@@ -29,13 +31,19 @@ interface CalendarProps {
 const Calendar: React.FC<CalendarProps> = ({ day, handleChangeDay }) => {
     const [selectedDate, setSelectedDate] = useState(day || new Date());
     const [controlDate, setControlDate] = useState(selectedDate);
+    const [events, setEvents] = useState<EventDTO[]>([]);
 
-    // Temp data :)
-    const events = [
-        { date: subDays(new Date(), 4) },
-        { date: addDays(new Date(), 1) },
-        { date: addDays(new Date(), 1) },
-    ];
+    const loadMonthData = async () => {
+        const data = await calendarService.getMonthlyData(
+            controlDate.getMonth() + 1,
+            controlDate.getFullYear(),
+        );
+        setEvents(data.events);
+    };
+
+    useEffect(() => {
+        loadMonthData();
+    }, [controlDate.getMonth()]);
 
     const eventsByDate = useMemo(() => {
         return events.reduce<{ [key: string]: DayEventsData }>((acc, event) => {

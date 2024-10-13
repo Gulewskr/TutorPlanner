@@ -8,20 +8,21 @@ import {
     Easing,
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { AlertSeverity } from './model';
 
 interface AlertProps {
-    children: React.ReactNode;
-    type: string;
+    message: string;
+    severity: AlertSeverity;
     visible: boolean;
     onClose: () => void;
     time?: number;
 }
 
 const CustomAlert: React.FC<AlertProps> = ({
-    children,
-    type,
+    message,
     visible,
     onClose,
+    severity,
     time,
 }) => {
     const animation = useRef(new Animated.Value(0)).current;
@@ -39,7 +40,11 @@ const CustomAlert: React.FC<AlertProps> = ({
                 useNativeDriver: false,
             }).start();
 
-            const timer = setTimeout(onClose, animationDuration);
+            const timer = setTimeout(() => {
+                console.log('test...');
+                onClose();
+                console.log('test-end...');
+            }, animationDuration);
             return () => clearTimeout(timer);
         }
     }, [visible, onClose, animation]);
@@ -50,9 +55,9 @@ const CustomAlert: React.FC<AlertProps> = ({
     });
 
     const backgroundColor =
-        type === 'success'
+        severity === 'success'
             ? '#BAFCA2'
-            : type === 'fail'
+            : severity === 'danger'
               ? '#FF6B6B'
               : '#F4DDFF';
     const animatedColor = '#5E5E5E80';
@@ -85,7 +90,7 @@ const CustomAlert: React.FC<AlertProps> = ({
                                 />
                             </View>
                             <View style={styles.message}>
-                                <Text style={styles.text}>{children}</Text>
+                                <Text style={styles.text}>{message}</Text>
                             </View>
                         </View>
                     </TouchableWithoutFeedback>
