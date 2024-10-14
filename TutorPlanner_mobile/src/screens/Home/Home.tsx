@@ -17,7 +17,7 @@ export const Home: React.FC<
 
     const handleAddAlert = () => {
         showAlert({
-            message: 'test alert 3',
+            message: `test alert ${(Math.random() * 1000) % 10000}`,
         });
     };
 

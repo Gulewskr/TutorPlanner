@@ -30,7 +30,6 @@ export const useAlert = () => useContext(AlertContext);
 
 export const AlertProvider = ({ children }: React.PropsWithChildren) => {
     const [alerts, setAlerts] = useState<React.ReactNode[]>([]);
-    const [alertsToRemove, setAlertsToRemove] = useState<string[]>([]);
 
     const handleCreateAlert = ({
         message,
@@ -44,6 +43,7 @@ export const AlertProvider = ({ children }: React.PropsWithChildren) => {
         const alertKey = message + (Math.random() * 10000).toFixed();
         setAlerts(a => {
             return [
+                ...a,
                 <Alert
                     key={alertKey}
                     message={message}
@@ -52,32 +52,14 @@ export const AlertProvider = ({ children }: React.PropsWithChildren) => {
                     visible={true}
                     onClose={() => handleRemoveAlert(alertKey)}
                 />,
-                ...a,
             ];
         });
         setTimeout(() => handleRemoveAlert(alertKey), time || 3000);
     };
 
     const handleRemoveAlert = (alertKey: string) => {
-        setAlertsToRemove(list => {
-            return [...list, alertKey];
-        });
+        setAlerts(t => t.slice(1));
     };
-
-    useEffect(() => {
-        if (alerts.length && alertsToRemove.length === alerts.length) {
-            setAlerts([]);
-            setAlertsToRemove([]);
-            console.log('alerts cleared');
-            //alerts.every(
-            //    alert =>
-            //        alert &&
-            //        typeof alert === 'object' &&
-            //        'key' in alert &&
-            //        alertsToRemove.includes(alert.key || ''),
-            //);
-        }
-    }, [alertsToRemove, alerts]);
 
     return (
         <AlertContext.Provider
