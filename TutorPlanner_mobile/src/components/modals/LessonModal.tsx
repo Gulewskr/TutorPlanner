@@ -1,6 +1,7 @@
 import { Button } from '@components/button';
 import { CheckboxTile } from '@components/checkbox';
 import { Tile } from '@components/tile';
+import { useConfirmModal } from '@contexts/confirmModalContext';
 import { LessonDTO } from '@model';
 import React from 'react';
 import { Text, View } from 'react-native';
@@ -15,6 +16,13 @@ export const LessonModal: React.FC<LessonModalProps> = ({
     event,
     onDelete,
 }) => {
+    const { setConfirmIsOpen, setMessage, setOnConfirm } = useConfirmModal();
+    const handleDeleteEvent = () => {
+        setConfirmIsOpen(true);
+        setMessage(`Usunąć ${event.name}?`);
+        setOnConfirm(() => () => onDelete(event.id));
+    };
+
     return (
         <View style={styles.container}>
             <View style={{ bottom: 5 }}>
@@ -59,7 +67,7 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                     <Button
                         icon="trash"
                         size="small"
-                        onClick={() => onDelete(event.id)}
+                        onClick={handleDeleteEvent}
                         label="Usuń"
                     />
                 </View>

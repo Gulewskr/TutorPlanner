@@ -17,6 +17,7 @@ import { RootStackParamList } from '@components/ui/navbar';
 //contexts
 import { ModalProvider } from '@contexts/modalContext';
 import { AlertProvider } from '@contexts/AlertContext';
+import { ConfirmModalProvider } from '@contexts/confirmModalContext';
 
 EStyleSheet.build({
     $color_primary: '#FFA9F1',
@@ -40,42 +41,56 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const App: React.FC<{}> = () => {
     return (
-        <ModalProvider>
-            <AlertProvider>
-                <NavigationContainer>
-                    <Stack.Navigator
-                        screenOptions={{
-                            animation: 'none',
-                            headerShown: false,
-                        }}
-                    >
-                        <Stack.Screen
-                            name="Home"
-                            component={Home}
-                            options={{
+        <NavigationContainer>
+            <ConfirmModalProvider>
+                <ModalProvider>
+                    <AlertProvider>
+                        <Stack.Navigator
+                            screenOptions={{
+                                animation: 'none',
                                 headerShown: false,
-                                headerTitleAlign: 'center',
-                                title: 'Welcome',
                             }}
-                        />
-                        <Stack.Screen name="Calendar" component={Calendar} />
-                        <Stack.Screen name="Lessons" component={Lessons} />
-                        <Stack.Screen name="Notes" component={Notes} />
-                        <Stack.Screen name="Payments" component={Payments} />
-                        <Stack.Screen name="Students" component={Students} />
-                        <Stack.Screen name="Settings" component={Settings} />
-                        <Stack.Screen
-                            name="CreatePayment"
-                            component={CreatePayment}
-                        />
-                        <Stack.Screen
-                            name="CreateStudent"
-                            component={CreateStudent}
-                        />
-                    </Stack.Navigator>
-                </NavigationContainer>
-            </AlertProvider>
-        </ModalProvider>
+                        >
+                            <Stack.Screen
+                                name="Home"
+                                component={Home}
+                                options={{
+                                    headerShown: false,
+                                    headerTitleAlign: 'center',
+                                    title: 'Welcome',
+                                }}
+                            />
+                            <Stack.Screen
+                                name="Calendar"
+                                component={Calendar}
+                            />
+                            <Stack.Screen name="Lessons" component={Lessons} />
+                            <Stack.Screen name="Notes" component={Notes} />
+                            <Stack.Screen
+                                name="Payments"
+                                component={Payments}
+                            />
+                            <Stack.Screen
+                                name="Students"
+                                component={Students}
+                            />
+                            <Stack.Screen
+                                name="Settings"
+                                component={Settings}
+                            />
+                            <Stack.Screen
+                                name="CreatePayment"
+                                component={CreatePayment}
+                            />
+                            <Stack.Screen
+                                name="CreateStudent"
+                                component={CreateStudent}
+                            />
+                        </Stack.Navigator>
+                    </AlertProvider>
+                </ModalProvider>
+            </ConfirmModalProvider>
+        </NavigationContainer>
     );
 };
 
