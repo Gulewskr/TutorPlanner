@@ -20,7 +20,19 @@ export type NavbarNavigationScreens = keyof RootStackParamList;
 export type StudentsTabParamList = {
     List: undefined;
     Create: undefined;
-    Profile: { student: StudentDTO };
+    Profile: { screen: keyof StudentProfileTabParamList; student: StudentDTO };
+};
+
+export type StudentProfileTabParamList = {
+    Info: {
+        student: StudentDTO;
+    };
+    Lessons: {
+        student: StudentDTO;
+    };
+    Analise: {
+        student: StudentDTO;
+    };
     Edit: { student: StudentDTO };
 };
 

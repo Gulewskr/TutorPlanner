@@ -5,20 +5,12 @@ import {
 import { StudentInformations } from './tabs/StudentInformation';
 import { StudentAnalise } from './tabs/StudentAnalise';
 import { StudentLessons } from './tabs/StudentLessons';
-import { StudentDTO } from '@model';
-import { StudentsTabParamList } from '@components/ui/navbar';
-
-export type StudentProfileTabParamList = {
-    Info: {
-        student: StudentDTO;
-    };
-    Lessons: {
-        student: StudentDTO;
-    };
-    Analise: {
-        student: StudentDTO;
-    };
-};
+import {
+    StudentProfileTabParamList,
+    StudentsTabParamList,
+} from '@components/ui/navbar';
+import { StudentEdit } from './tabs/StudentEdit';
+export type { StudentProfileTabParamList };
 
 const Tab = createBottomTabNavigator<StudentProfileTabParamList>();
 
@@ -49,6 +41,11 @@ export const StudentProfile: React.FC<
             <Tab.Screen
                 name="Analise"
                 component={StudentAnalise}
+                initialParams={route.params}
+            />
+            <Tab.Screen
+                name="Edit"
+                component={StudentEdit}
                 initialParams={route.params}
             />
         </Tab.Navigator>

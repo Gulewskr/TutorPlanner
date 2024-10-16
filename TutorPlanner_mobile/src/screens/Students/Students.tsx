@@ -8,7 +8,6 @@ import {
     RootStackParamList,
     StudentsTabParamList,
 } from '@components/ui/navbar';
-import { StudentEdit } from './tabs/StudentEdit';
 
 const Tab = createBottomTabNavigator<StudentsTabParamList>();
 
@@ -29,7 +28,6 @@ export const Students: React.FC<
             <Tab.Screen name="List" component={StudentsList} />
             <Tab.Screen name="Profile" component={StudentProfile} />
             <Tab.Screen name="Create" component={StudentCreate} />
-            <Tab.Screen name="Edit" component={StudentEdit} />
         </Tab.Navigator>
     );
 };

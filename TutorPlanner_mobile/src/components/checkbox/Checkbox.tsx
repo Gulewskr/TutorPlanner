@@ -7,6 +7,7 @@ import { Tile } from '@components/tile';
 interface CheckboxProps {
     label?: string;
     onChange: (v: boolean) => void;
+    defaultValue?: boolean;
 }
 
 const CheckboxTile: React.FC<CheckboxProps> = props => {
@@ -17,8 +18,12 @@ const CheckboxTile: React.FC<CheckboxProps> = props => {
     );
 };
 
-const Checkbox: React.FC<CheckboxProps> = ({ label, onChange }) => {
-    const [isChecked, setIsChecked] = useState(false);
+const Checkbox: React.FC<CheckboxProps> = ({
+    defaultValue = false,
+    label,
+    onChange,
+}) => {
+    const [isChecked, setIsChecked] = useState(defaultValue);
 
     const toggleCheckbox = () => {
         setIsChecked(!isChecked);
@@ -32,10 +37,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ label, onChange }) => {
                 onPress={toggleCheckbox}
             >
                 <View style={[styles.checkbox, isChecked && styles.checked]}>
-                    {
-                        //TODO change icon to checkmark
-                        isChecked && <Icon icon="plus" size="xxs" />
-                    }
+                    {isChecked && <Icon icon="check" size="xxs" />}
                 </View>
             </TouchableOpacity>
             {label && <Text style={styles.label}>{label}</Text>}

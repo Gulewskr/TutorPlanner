@@ -15,6 +15,11 @@ interface HourInputProps {
         startHour: string;
         endHour: string;
     }) => void;
+    //TODO - handle default value seems to be not simple
+    defaultValue?: {
+        startHour: string;
+        endHour: string;
+    };
 }
 
 const initialValue = () => {
@@ -28,6 +33,7 @@ const CustomInput: React.FC<HourInputProps> = ({
     icon,
     label,
     onChange,
+    defaultValue,
 }) => {
     const [width, setWidth] = useState(0);
     const [showStartHourPicker, setStartHourPicker] = useState<boolean>(false);

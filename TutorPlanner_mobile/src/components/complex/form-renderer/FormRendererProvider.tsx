@@ -44,6 +44,7 @@ export const useFormContext = (
                                 onFieldChange={(v: string) => {
                                     handleDataChange(fieldName, v);
                                 }}
+                                initialValue={schema.initValue[fieldName]}
                             />
                         );
                     },

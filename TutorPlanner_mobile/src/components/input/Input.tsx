@@ -7,6 +7,7 @@ export interface InputProps {
     placeholder?: string;
     icon?: ICON_NAME;
     label?: string;
+    defaultValue?: string;
     value?: string;
     //TODO - make this required later
     onChange?: (value: string) => void;
@@ -17,6 +18,7 @@ const CustomInput: React.FC<InputProps> = ({
     icon,
     label,
     onChange,
+    defaultValue,
 }) => {
     const [width, setWidth] = useState(0);
 
@@ -35,6 +37,7 @@ const CustomInput: React.FC<InputProps> = ({
                     style={styles.textInput}
                     placeholder={placeholder}
                     onChangeText={onChange}
+                    defaultValue={defaultValue}
                 />
             </View>
 

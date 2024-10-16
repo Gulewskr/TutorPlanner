@@ -15,6 +15,7 @@ interface CheckboxProps {
     icon?: ICON_NAME;
     value?: string;
     options?: DropdownOption[];
+    defaultValue?: any;
 }
 
 const Dropdown: React.FC<CheckboxProps> = ({
@@ -23,10 +24,16 @@ const Dropdown: React.FC<CheckboxProps> = ({
     icon,
     options,
     onChange,
+    defaultValue,
 }) => {
     const [selectedValue, setSelectedValue] = useState<
         DropdownOption | undefined
-    >(undefined);
+    >(() => {
+        if (!options || !defaultValue) {
+            return undefined;
+        }
+        return options.find(opt => opt.value == defaultValue);
+    });
     const [openMenu, setOpenMenu] = useState(false);
 
     const handleChange = (opt: DropdownOption) => {

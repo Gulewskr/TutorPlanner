@@ -5,28 +5,24 @@ import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { getFullName } from 'src/utils/utils';
 import { Tile } from '@components/tile';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 interface StudentTileProps {
     student: StudentDTO;
     onClick: () => void;
+    actions: ActionProps[];
 }
 
 interface ActionProps {
     icon: ICON_NAME;
-    action: number;
+    onClick: () => void;
 }
 
-const StudentTile: React.FC<StudentTileProps> = ({ student, onClick }) => {
-    const actions: Array<ActionProps> = [
-        { icon: 'messenger', action: 1 },
-        { icon: 'oneNote', action: 2 },
-        { icon: 'pencil', action: 3 },
-    ];
-
-    const handleAction = (num: number) => {
-        console.log(num);
-    };
-
+const StudentTile: React.FC<StudentTileProps> = ({
+    student,
+    onClick,
+    actions,
+}) => {
     return (
         <View
             style={{
@@ -37,14 +33,15 @@ const StudentTile: React.FC<StudentTileProps> = ({ student, onClick }) => {
                 <View style={styles.content}>
                     <Text style={styles.text}>{getFullName(student)}</Text>
                     <View style={styles.buttons}>
-                        {actions.map((action, index) => (
-                            <Pressable
-                                key={`${index}-action`}
-                                onPress={() => handleAction(action.action)}
-                            >
-                                <Icon icon={action.icon}></Icon>
-                            </Pressable>
-                        ))}
+                        {actions &&
+                            actions.map(({ icon, onClick }, index) => (
+                                <Pressable
+                                    key={`${index}-action`}
+                                    onPress={onClick}
+                                >
+                                    <Icon icon={icon}></Icon>
+                                </Pressable>
+                            ))}
                     </View>
                 </View>
             </Tile>

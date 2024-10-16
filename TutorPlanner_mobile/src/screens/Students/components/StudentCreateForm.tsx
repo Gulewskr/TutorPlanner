@@ -1,33 +1,68 @@
 import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
+import { useAlert } from '@contexts/AlertContext';
+import { StudentDTO } from '@model';
 import { studentsService } from '@services/students.service';
 
 //TODO - extendend fields
-interface CreateLessonData {
+interface StudentFormData {
     firstname: string;
     lastname: string;
     price: string;
 }
 
-const defaultData: CreateLessonData = {
+const defaultData: StudentFormData = {
     firstname: '',
     lastname: '',
     price: '80',
 };
 
-export const StudentCreateForm: React.FC<{ onCancel: () => void }> = ({
+interface StudentFormProps {
+    onCancel: () => void;
+    type?: 'create' | 'edit';
+    cb?: (response: StudentDTO) => void;
+    data?: StudentFormData;
+    id?: number;
+}
+
+export const StudentCreateForm: React.FC<StudentFormProps> = ({
     onCancel,
+    type = 'create',
+    cb,
+    data = defaultData,
+    id,
 }) => {
-    const handleSubmit = async (data: CreateLessonData): Promise<void> => {
+    const { showAlert } = useAlert();
+
+    const handleSubmit = async (data: StudentFormData): Promise<void> => {
         try {
-            const response = await studentsService.create({
-                firstname: data.firstname,
-                surename: data.lastname,
-                defaultPrice: Number(data.price),
-            });
+            const response =
+                type === 'create'
+                    ? await studentsService.create({
+                          firstname: data.firstname,
+                          surename: data.lastname,
+                          defaultPrice: Number(data.price),
+                      })
+                    : await studentsService.create({
+                          firstname: data.firstname,
+                          surename: data.lastname,
+                          defaultPrice: Number(data.price),
+                      });
             //TODO - move to event in callendar
             console.log(response);
+            if ('id' in response) {
+                cb?.(response);
+            } else {
+                showAlert({
+                    message: response.message,
+                    severity: 'danger',
+                });
+            }
         } catch (e) {
             //TODO - display toast with error notification
+            showAlert({
+                message: 'Błąd zapisu do bazy danych.',
+                severity: 'danger',
+            });
         }
     };
 
@@ -36,7 +71,7 @@ export const StudentCreateForm: React.FC<{ onCancel: () => void }> = ({
             <FormRenderer
                 schema={{
                     title: 'Dodaj ucznia',
-                    initValue: defaultData,
+                    initValue: data,
                     fields: {
                         firstname: {
                             component: 'input',

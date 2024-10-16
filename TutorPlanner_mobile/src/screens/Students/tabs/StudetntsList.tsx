@@ -24,11 +24,24 @@ export const StudentsList: React.FC<
                     <StudentTile
                         key={`${index}-${student.id}`}
                         student={student}
+                        actions={[
+                            /*
+                            { icon: 'messenger', onClick: () => {} },
+                            { icon: 'oneNote', onClick: () => {} },
+                            */
+                            {
+                                icon: 'pencil',
+                                onClick: () =>
+                                    navigation.jumpTo('Profile', {
+                                        screen: 'Edit',
+                                        student: student,
+                                    }),
+                            },
+                        ]}
                         onClick={() =>
                             navigation.jumpTo('Profile', {
-                                //@ts-ignore
                                 screen: 'Info',
-                                params: { student: student },
+                                student: student,
                             })
                         }
                     />
