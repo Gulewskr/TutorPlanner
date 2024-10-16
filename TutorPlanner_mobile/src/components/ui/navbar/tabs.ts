@@ -21,6 +21,7 @@ export type StudentsTabParamList = {
     List: undefined;
     Create: undefined;
     Profile: { student: StudentDTO };
+    Edit: { student: StudentDTO };
 };
 
 export type LessonsTabParamList = {
