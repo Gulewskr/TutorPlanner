@@ -16,7 +16,7 @@ import { errorHandler } from './middlewares/errorHandler';
 import { addDemoData } from './demoData/addDemoData';
 
 var app: Express = express();
-const port = process.env || 3000;
+const port = process.env.PORT || 3000;
 
 app.use(logger('dev'));
 app.use(express.json());

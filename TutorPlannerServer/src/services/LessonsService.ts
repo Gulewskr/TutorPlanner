@@ -240,6 +240,10 @@ class LessonsService {
         }
     }
 
+    public async deleteLesson(lessonId: number): Promise<LessonDAO> {
+        return await lessonRepository.deleteLesson(lessonId);
+    }
+
     public async updateLesson(
         lessonId: number,
         data: Partial<CreateLessonRequestBody>,

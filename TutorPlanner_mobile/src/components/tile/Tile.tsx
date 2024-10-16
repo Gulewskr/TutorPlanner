@@ -85,7 +85,7 @@ const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
                     style={[
                         styles.children,
                         {
-                            justifyContent: centered ? 'center' : 'flex-start',
+                            justifyContent: 'center',
                             alignItems: centered ? 'center' : 'flex-start',
                             minHeight: height || 40,
                         },

@@ -42,6 +42,19 @@ router.get('/', async (req, res, next) => {
     }
 });
 
+router.delete('/:id', async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        const deletedLesson = await LessonsService.deleteLesson(+id);
+        res.status(200).json({
+            data: deletedLesson,
+            message: 'Lesson deleted successfully',
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
 /**
  * path: lessons/overdues?month=1&year=1
  *

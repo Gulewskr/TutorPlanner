@@ -17,14 +17,14 @@ interface AlertContextProps {
     alerts: React.ReactNode[];
 }
 
-const defaultModalContext: AlertContextProps = {
+const defaultAlertContext: AlertContextProps = {
     isVisible: false,
     showAlert: () => {},
     alerts: [],
 };
 
 const AlertContext: React.Context<AlertContextProps> =
-    createContext(defaultModalContext);
+    createContext(defaultAlertContext);
 
 export const useAlert = () => useContext(AlertContext);
 
