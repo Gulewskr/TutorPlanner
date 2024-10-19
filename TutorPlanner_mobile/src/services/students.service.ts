@@ -47,6 +47,29 @@ class StudentsService {
             };
         }
     };
+    update = async (
+        studnetId: number,
+        data: CreateStudentRequestData,
+    ): Promise<StudentDTO | ErrorResponse> => {
+        try {
+            const response = await axios.post(
+                `${STUDENTS_URL}/${studnetId}`,
+                data,
+            );
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                return {
+                    status: error.status || 400,
+                    message: error.message,
+                };
+            }
+            return {
+                status: 400,
+                message: 'Error',
+            };
+        }
+    };
     getNextStudentLesson = async (
         studnetId: number,
     ): Promise<LessonDTO | undefined | ErrorResponse> => {

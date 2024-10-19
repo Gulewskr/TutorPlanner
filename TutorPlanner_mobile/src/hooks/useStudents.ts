@@ -3,6 +3,7 @@ import { studentsService } from '@services/students.service';
 import { useEffect, useState } from 'react';
 
 export const useStudents = () => {
+    const [loading, setLoading] = useState(true);
     const [students, setStudents] = useState<StudentDTO[]>([]);
 
     useEffect(() => {
@@ -12,7 +13,11 @@ export const useStudents = () => {
     const initData = async (): Promise<void> => {
         const response = await studentsService.getStudentsList();
         setStudents(response.data);
+        setLoading(false);
     };
 
-    return students;
+    return {
+        data: students,
+        loading,
+    };
 };

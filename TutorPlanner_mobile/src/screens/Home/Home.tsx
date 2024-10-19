@@ -50,7 +50,10 @@ export const Home: React.FC<
                             <Button
                                 icon="addStudent"
                                 onClick={() =>
-                                    navigation.navigate('CreateStudent')
+                                    navigation.navigate('Students', {
+                                        screen: 'Create',
+                                        initial: true,
+                                    })
                                 }
                                 label="Dodaj ucznia"
                                 width={160}

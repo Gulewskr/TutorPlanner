@@ -13,7 +13,7 @@ interface StudentFormData {
 const defaultData: StudentFormData = {
     firstname: '',
     lastname: '',
-    price: '80',
+    price: '',
 };
 
 interface StudentFormProps {
@@ -24,7 +24,7 @@ interface StudentFormProps {
     id?: number;
 }
 
-export const StudentCreateForm: React.FC<StudentFormProps> = ({
+export const StudentForm: React.FC<StudentFormProps> = ({
     onCancel,
     type = 'create',
     cb,
@@ -32,23 +32,28 @@ export const StudentCreateForm: React.FC<StudentFormProps> = ({
     id,
 }) => {
     const { showAlert } = useAlert();
+    const isCreateMode = type === 'create';
 
     const handleSubmit = async (data: StudentFormData): Promise<void> => {
         try {
-            const response =
-                type === 'create'
-                    ? await studentsService.create({
-                          firstname: data.firstname,
-                          surename: data.lastname,
-                          defaultPrice: Number(data.price),
-                      })
-                    : await studentsService.create({
-                          firstname: data.firstname,
-                          surename: data.lastname,
-                          defaultPrice: Number(data.price),
-                      });
-            //TODO - move to event in callendar
-            console.log(response);
+            let response;
+            if (isCreateMode) {
+                response = await studentsService.create({
+                    firstname: data.firstname,
+                    surename: data.lastname,
+                    defaultPrice: Number(data.price),
+                });
+            } else {
+                if (id == undefined) {
+                    throw new Error(`Brak id studenta do zaktualizowania.`);
+                }
+                response = await studentsService.update(id, {
+                    firstname: data.firstname,
+                    surename: data.lastname,
+                    defaultPrice: Number(data.price),
+                });
+            }
+
             if ('id' in response) {
                 cb?.(response);
             } else {
@@ -58,7 +63,6 @@ export const StudentCreateForm: React.FC<StudentFormProps> = ({
                 });
             }
         } catch (e) {
-            //TODO - display toast with error notification
             showAlert({
                 message: 'Błąd zapisu do bazy danych.',
                 severity: 'danger',
@@ -99,6 +103,7 @@ export const StudentCreateForm: React.FC<StudentFormProps> = ({
                 }}
                 onSubmit={handleSubmit}
                 onCancel={onCancel}
+                confirmLabel={isCreateMode ? 'Dodaj' : 'Zapisz'}
             />
         </FormProvider>
     );

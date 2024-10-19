@@ -9,12 +9,16 @@ interface FormRendererProps {
     schema: FormRendererSchema;
     onSubmit: (data: any) => void;
     onCancel: () => void;
+    cancelLabel?: string;
+    confirmLabel?: string;
 }
 
 export const FormRenderer: React.FunctionComponent<FormRendererProps> = ({
     schema,
     onCancel,
     onSubmit,
+    cancelLabel = 'Anuluj',
+    confirmLabel = 'Dodaj',
 }) => {
     const { formData, FormBody } = useFormContext(schema);
 
@@ -32,13 +36,17 @@ export const FormRenderer: React.FunctionComponent<FormRendererProps> = ({
             {FormBody}
             <View style={styles.double_button_container}>
                 <View style={{ width: '50%' }}>
-                    <Button icon="cancel" onClick={onCancel} label="Anuluj" />
+                    <Button
+                        icon="cancel"
+                        onClick={onCancel}
+                        label={cancelLabel}
+                    />
                 </View>
                 <View style={{ width: '50%' }}>
                     <Button
                         icon="checkbox"
                         onClick={() => onSubmit(formData)}
-                        label="Dodaj"
+                        label={confirmLabel}
                     />
                 </View>
             </View>

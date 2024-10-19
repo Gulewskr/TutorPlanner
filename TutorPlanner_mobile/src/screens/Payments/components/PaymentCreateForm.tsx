@@ -1,5 +1,6 @@
 import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
 import { FormRendererSchema } from '@components/complex/form-renderer/model';
+import { useStudentsContext } from '@contexts/StudentContext';
 import { StudentDTO } from '@model';
 import { paymentsService } from '@services/payments.service';
 import { useStudents } from 'src/hooks/useStudents';
@@ -21,7 +22,7 @@ const defaultData: CreatePaymentData = {
 export const PaymentCreateForm: React.FC<{ onCancel: () => void }> = ({
     onCancel,
 }) => {
-    const students = useStudents();
+    const { data: students } = useStudentsContext();
     const handleSubmit = async (data: CreatePaymentData): Promise<void> => {
         try {
             console.log(data);

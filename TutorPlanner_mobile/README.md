@@ -5,7 +5,7 @@ React native application with typescript 😎
 ## Developement set up steps:
 
 1. Create **.env** file\
-   API_URL=%YOUR_API_URL%\
+   EXPO_PUBLIC_API_URL=%YOUR_API_URL%\
    fe. http://10.10.10.10:3000
 2. Install needed packages:\
    **'npm install'**

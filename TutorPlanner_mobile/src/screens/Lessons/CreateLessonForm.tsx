@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { LessonsTabParamList } from './Lessons';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
 import { lessonsService } from '@services/lessons.service';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { ScrollView } from '@components/ui/scrool-view';
 import { StudentDTO } from '@model';
-import { useStudents } from 'src/hooks/useStudents';
 import { FormRendererSchema } from '@components/complex/form-renderer/model';
 import { getFullName } from 'src/utils/utils';
+import { LessonsTabParamList } from '@components/ui/navbar';
+import { useStudentsContext } from '@contexts/StudentContext';
+import { $color_primary } from '@styles/colors';
 
 interface CreateLessonData {
     name: string;
@@ -41,7 +42,7 @@ const defaultData: CreateLessonData = {
 export const CreateLessonForm: React.FC<
     NativeStackScreenProps<LessonsTabParamList, 'Create'>
 > = ({ navigation, route }) => {
-    const students = useStudents();
+    const { loading, data: students } = useStudentsContext();
     const handleSubmit = async (data: CreateLessonData): Promise<void> => {
         try {
             const response = await lessonsService.create({
@@ -73,17 +74,21 @@ export const CreateLessonForm: React.FC<
             hasHeader
             hasHeaderSeperated
         >
-            <FormProvider>
-                <ScrollView>
-                    <View style={styles.form_container}>
-                        <FormRenderer
-                            schema={getFormSchema(students)}
-                            onSubmit={handleSubmit}
-                            onCancel={handleCancel}
-                        />
-                    </View>
-                </ScrollView>
-            </FormProvider>
+            {loading ? (
+                <ActivityIndicator size="large" color={$color_primary} />
+            ) : (
+                <FormProvider>
+                    <ScrollView>
+                        <View style={styles.form_container}>
+                            <FormRenderer
+                                schema={getFormSchema(students)}
+                                onSubmit={handleSubmit}
+                                onCancel={handleCancel}
+                            />
+                        </View>
+                    </ScrollView>
+                </FormProvider>
+            )}
         </Layout>
     );
 };

@@ -3,16 +3,15 @@ import { StudentDTO } from '@model';
 export type RootStackParamList = {
     Home: undefined;
     Calendar: undefined;
-    Students: { screen: keyof StudentsTabParamList; initial: boolean };
+    Students: { screen: keyof StudentsTabParamList; initial?: boolean };
     Payments: {
         screen: keyof PaymentsTabParamList;
-        initial: boolean;
+        initial?: boolean;
     };
     CreatePayment: undefined;
-    CreateStudent: undefined;
     Notes: undefined;
     Settings: undefined;
-    Lessons: { screen: keyof LessonsTabParamList; initial: boolean };
+    Lessons: { screen: keyof LessonsTabParamList; initial?: boolean };
 };
 
 export type NavbarNavigationScreens = keyof RootStackParamList;
@@ -20,7 +19,11 @@ export type NavbarNavigationScreens = keyof RootStackParamList;
 export type StudentsTabParamList = {
     List: undefined;
     Create: undefined;
-    Profile: { screen: keyof StudentProfileTabParamList; student: StudentDTO };
+    Profile: {
+        screen: keyof StudentProfileTabParamList;
+        student: StudentDTO;
+        initial?: boolean;
+    };
 };
 
 export type StudentProfileTabParamList = {
@@ -33,7 +36,10 @@ export type StudentProfileTabParamList = {
     Analise: {
         student: StudentDTO;
     };
-    Edit: { student: StudentDTO };
+    Edit: {
+        student: StudentDTO;
+        inProfile?: boolean;
+    };
 };
 
 export type LessonsTabParamList = {

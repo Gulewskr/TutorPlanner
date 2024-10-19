@@ -27,6 +27,13 @@ const tabs: Array<TabItem<keyof StudentProfileTabParamList>> = [
         icon: 'calendar',
         hasHiddenLabel: 'whenNotActive',
     },
+    {
+        id: 'Edit',
+        isExpanded: true,
+        text: 'Edit',
+        icon: 'pencil',
+        hasHiddenLabel: 'always',
+    },
 ];
 
 export const StudentsLayout: React.FC<
@@ -48,7 +55,10 @@ export const StudentsLayout: React.FC<
                 tabs={tabs}
                 activeTab={route.name}
                 changeActiveTab={index =>
-                    navigation.jumpTo(tabs[index].id, { ...route.params })
+                    navigation.jumpTo(tabs[index].id, {
+                        ...route.params,
+                        inProfile: true,
+                    })
                 }
             />
             {children}

@@ -1,7 +1,7 @@
 import { Layout } from '../../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StudentsTabParamList } from '@components/ui/navbar';
-import { StudentCreateForm } from '../components/StudentCreateForm';
+import { StudentForm } from '../components/StudentForm';
 import { View } from 'react-native';
 
 export const StudentCreate: React.FC<
@@ -16,7 +16,7 @@ export const StudentCreate: React.FC<
             hasHeaderSeperated
         >
             <View style={{ padding: 15, width: '100%' }}>
-                <StudentCreateForm onCancel={navigation.goBack} />
+                <StudentForm onCancel={navigation.goBack} />
             </View>
         </Layout>
     );
