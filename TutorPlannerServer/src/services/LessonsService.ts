@@ -187,6 +187,7 @@ class LessonsService {
                 },
             });
             return {
+                id: createdLesson.id,
                 name: createdLesson.name,
                 date: createdLesson.date,
                 isCanceled: createdLesson.isCanceled,
@@ -224,17 +225,20 @@ class LessonsService {
                 lessonDate = addWeeks(lessonDate, 1);
             }
             await lessonRepository.bulkCreate(inputData);
+            const createdLesson =
+                await lessonRepository.getNextLessonBySeriesId(series.id);
             return {
-                name: lesson.name,
-                date: lesson.date,
-                isCanceled: false,
-                isOverridden: false,
-                description: lesson.description || '',
-                startHour: series.startHour || lesson.startHour,
-                endHour: series.endHour || lesson.endHour,
-                price: lesson.price,
+                id: createdLesson.id,
+                name: createdLesson.name,
+                date: createdLesson.date,
+                isCanceled: createdLesson.isCanceled,
+                isOverridden: createdLesson.isOverridden,
+                description: createdLesson.description || '',
+                startHour: createdLesson.startHour,
+                endHour: createdLesson.endHour,
+                price: createdLesson.price,
                 isPaid: false,
-                studentId: lesson.student,
+                studentId: createdLesson.studentId,
                 eventSeriesId: series.id,
             };
         }

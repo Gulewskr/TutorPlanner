@@ -77,7 +77,6 @@ class StudentsService {
             const response = await axios.get(
                 `${STUDENTS_URL}/${studnetId}/lessons/next`,
             );
-            console.log(response.data);
             return response.data;
         } catch (error) {
             return {

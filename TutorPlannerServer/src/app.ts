@@ -50,6 +50,11 @@ app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
 
-addDemoData();
+try {
+    addDemoData();
+} catch (e) {
+    console.log(JSON.stringify(e));
+    console.log('Error: Not able to add demo data!');
+}
 
 module.exports = app;

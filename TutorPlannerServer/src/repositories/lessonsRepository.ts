@@ -192,6 +192,20 @@ export const lessonRepository = {
             throw new Error('lesson not found');
         }
     },
+    getNextLessonBySeriesId: async (seriesId: number): Promise<LessonDAO> => {
+        return (await prisma.event.findFirstOrThrow({
+            where: {
+                eventSeriesId: seriesId,
+                type: 'LESSON',
+                date: {
+                    gte: new Date(),
+                },
+            },
+            orderBy: {
+                date: 'asc',
+            },
+        })) as LessonDAO;
+    },
     getPagableLessons: async ({
         pageSize,
         page,

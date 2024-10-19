@@ -1,19 +1,14 @@
 import { createContext, useContext, useState } from 'react';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import { ConfirmModal } from './ConfirmModalRenderer';
+import { ConfirmModal, ConfirmModalProps } from './ConfirmModalRenderer';
+
+type OpenModalProps = Omit<ConfirmModalProps, 'onCancel' | 'hideModal'>;
 
 interface ConfirmModalContextProps {
-    confirmIsOpen: boolean;
-    setConfirmIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setOnConfirm: React.Dispatch<React.SetStateAction<(() => void) | null>>;
-    setMessage: React.Dispatch<React.SetStateAction<string>>;
+    openModal: (data: OpenModalProps) => void;
 }
 
 const defaultConfirmModalContext: ConfirmModalContextProps = {
-    confirmIsOpen: false,
-    setConfirmIsOpen: () => {},
-    setMessage: () => {},
-    setOnConfirm: () => {},
+    openModal: (data: OpenModalProps) => {},
 };
 
 const ConfirmModalContext: React.Context<ConfirmModalContextProps> =
@@ -23,24 +18,29 @@ export const useConfirmModal = () => useContext(ConfirmModalContext);
 
 export const ConfirmModalProvider = ({ children }: React.PropsWithChildren) => {
     const [confirmIsOpen, setConfirmIsOpen] = useState(false);
-    const [onConfirm, setOnConfirm] = useState<(() => void) | null>(null);
+    const [onConfirm, setOnConfirm] = useState<() => void>(() => {});
     const [message, setMessage] = useState<string>(
         'Czy na pewno chcesz potwierdzić akcję?',
     );
+
+    const openModal = (data: OpenModalProps) => {
+        setConfirmIsOpen(true);
+        setOnConfirm(data.onConfirm);
+        setMessage(data.message);
+    };
+
     return (
         <ConfirmModalContext.Provider
             value={{
-                confirmIsOpen,
-                setConfirmIsOpen,
-                setOnConfirm,
-                setMessage,
+                openModal,
             }}
         >
-            {confirmIsOpen && onConfirm && (
+            {confirmIsOpen && (
                 <ConfirmModal
                     message={message}
                     onConfirm={onConfirm}
                     onCancel={() => setConfirmIsOpen(false)}
+                    hideModal={() => setConfirmIsOpen(false)}
                 />
             )}
             {children}

@@ -1,15 +1,14 @@
 import { Button } from '@components/button';
-import { Icon } from '@components/icon';
-import { LessonDTO } from '@model';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import { useConfirmModal } from './ConfirmModalProvider';
+import Modal from 'react-native-modal';
+import { StyleSheet, Text, View } from 'react-native';
+import { $color_primary } from '@styles/colors';
 
-interface ConfirmModalProps {
+export interface ConfirmModalProps {
     onConfirm: (props?: any) => void;
     onCancel: (props?: any) => void;
+    hideModal: () => void;
     color?: string;
     message: string;
 }
@@ -17,11 +16,11 @@ interface ConfirmModalProps {
 export const ConfirmModal: React.FC<ConfirmModalProps> = ({
     message,
     onConfirm,
+    hideModal,
     color = '#F16DDC',
     onCancel,
 }) => {
     const navigation = useNavigation();
-    const { setConfirmIsOpen } = useConfirmModal();
 
     const handleConfirm = () => {
         onConfirm();
@@ -40,42 +39,47 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
         //         }),
         //     );
 
-        setConfirmIsOpen(false);
+        hideModal();
     };
 
     return (
-        <Modal transparent={true} animationType="slide">
-            <View style={styles.modalOverlay}>
-                <View style={[styles.modalContent, { backgroundColor: color }]}>
-                    <View style={styles.container}>
-                        <Text style={styles.label}>Potwierdź Akcję</Text>
-                        <Text style={styles.message}>{message}</Text>
-                        <View style={styles.double_button_container}>
-                            <View style={{ width: '50%' }}>
-                                <Button
-                                    icon="cancel"
-                                    size="small"
-                                    onClick={onCancel}
-                                    label="Anuluj"
-                                />
-                            </View>
-                            <View style={{ width: '50%' }}>
-                                <Button
-                                    icon="checkbox"
-                                    size="small"
-                                    onClick={handleConfirm}
-                                    label="Akceptuj"
-                                />
-                            </View>
-                        </View>
+        <Modal
+            isVisible={true}
+            coverScreen={true}
+            deviceHeight={1000}
+            backdropColor={'#8f6387'}
+            statusBarTranslucent
+        >
+            <View style={[styles.modalContent, { backgroundColor: color }]}>
+                <Text style={styles.label}>{message}</Text>
+                {/*<Text style={styles.message}>{message}</Text>*/}
+                <View style={{ flex: 1 }} />
+                <View style={styles.double_button_container}>
+                    <View style={{ width: '50%' }}>
+                        <Button
+                            icon="cancel"
+                            size="small"
+                            onClick={onCancel}
+                            label="Anuluj"
+                        />
                     </View>
+                    <View style={{ width: '50%' }}>
+                        <Button
+                            icon="checkbox"
+                            size="small"
+                            onClick={handleConfirm}
+                            label="Potwierdź"
+                        />
+                    </View>
+                </View>
+                {/*
                     <TouchableOpacity
                         onPress={onCancel}
                         style={styles.closeButton}
                     >
                         <Icon icon="cancel" />
                     </TouchableOpacity>
-                </View>
+                    */}
             </View>
         </Modal>
     );
@@ -88,11 +92,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-        width: '90%',
         padding: 20,
         borderRadius: 10,
         elevation: 5,
         gap: 10,
+        minHeight: 200,
         borderWidth: 1,
         borderColor: '#000',
         alignItems: 'center',
@@ -104,10 +108,6 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         borderRadius: 5,
-    },
-    container: {
-        alignItems: 'center',
-        gap: 5,
     },
     label: {
         fontSize: 20,

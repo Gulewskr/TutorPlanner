@@ -16,11 +16,12 @@ export const LessonModal: React.FC<LessonModalProps> = ({
     event,
     onDelete,
 }) => {
-    const { setConfirmIsOpen, setMessage, setOnConfirm } = useConfirmModal();
+    const { openModal } = useConfirmModal();
     const handleDeleteEvent = () => {
-        setConfirmIsOpen(true);
-        setMessage(`Usunąć ${event.name}?`);
-        setOnConfirm(() => () => onDelete(event.id));
+        openModal({
+            message: `Usunąć ${event.name}?`,
+            onConfirm: () => onDelete(event.id),
+        });
     };
 
     return (

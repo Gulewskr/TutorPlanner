@@ -39,7 +39,16 @@ const StudentTile: React.FC<StudentTileProps> = ({
                                     key={`${index}-action`}
                                     onPress={onClick}
                                 >
-                                    <Icon icon={icon}></Icon>
+                                    <View
+                                        style={{
+                                            height: '100%',
+                                            alignItems: 'center',
+                                            width: 40,
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        <Icon icon={icon}></Icon>
+                                    </View>
                                 </Pressable>
                             ))}
                     </View>
@@ -62,7 +71,6 @@ const styles = EStyleSheet.create({
 
     buttons: {
         flexDirection: 'row',
-        gap: 10,
     },
 });
 

@@ -11,6 +11,7 @@ export type LessonDAO = Event & {
 
 export const toLessonDTO = (data: LessonDAO): LessonDTO => {
     return {
+        id: data.id,
         date: data.date,
         name: data.name,
         description: data.description || '',

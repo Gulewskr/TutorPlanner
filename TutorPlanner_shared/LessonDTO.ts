@@ -1,4 +1,5 @@
 export type LessonDTO = {
+    id: number;
     date: Date;
     name: string;
     description: string;
