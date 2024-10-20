@@ -21,6 +21,7 @@ export const PaymentsSummary: React.FC<
 > = props => {
     const { navigation, route } = props;
     const { payments, isLoading } = usePayments();
+    const [unpaidLoading, setUnpaidLoading] = useState(true);
     const [unpaidLessons, setUnpaidLessons] = useState<LessonDTO[]>([]);
     const [summaryData, setSummaryDate] = useState<{
         income: number;
@@ -37,6 +38,7 @@ export const PaymentsSummary: React.FC<
         const todayDate = new Date();
         const res = await lessonsService.getOverdues();
         setUnpaidLessons(res);
+        setUnpaidLoading(false);
 
         const lessons = await lessonsService.getLessons({
             month: getMonth(todayDate) + 1,
@@ -90,7 +92,10 @@ export const PaymentsSummary: React.FC<
                     </View>
                 </Tile>
                 <View style={{ height: 20 }} />
-                <OverduesTile numOfUnpaid={numOfUnpaid} isLoading={false} />
+                <OverduesTile
+                    numOfUnpaid={numOfUnpaid}
+                    isLoading={unpaidLoading}
+                />
                 <View style={{ height: 20 }} />
                 <Header
                     title="Ostatnie płatności"

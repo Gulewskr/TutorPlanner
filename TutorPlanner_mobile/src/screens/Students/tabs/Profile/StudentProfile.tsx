@@ -10,6 +10,8 @@ import {
     StudentsTabParamList,
 } from '@components/ui/navbar';
 import { StudentEdit } from './tabs/StudentEdit';
+import { StudentCreateLessons } from './tabs/StudentCreateLessons';
+import { StudentAddPayment } from './tabs/StudentAddPayment';
 export type { StudentProfileTabParamList };
 
 const Tab = createBottomTabNavigator<StudentProfileTabParamList>();
@@ -39,6 +41,11 @@ export const StudentProfile: React.FC<
                 initialParams={route.params}
             />
             <Tab.Screen
+                name="CreateLessons"
+                component={StudentCreateLessons}
+                initialParams={route.params}
+            />
+            <Tab.Screen
                 name="Analise"
                 component={StudentAnalise}
                 initialParams={route.params}
@@ -46,6 +53,11 @@ export const StudentProfile: React.FC<
             <Tab.Screen
                 name="Edit"
                 component={StudentEdit}
+                initialParams={route.params}
+            />
+            <Tab.Screen
+                name="CreatePayment"
+                component={StudentAddPayment}
                 initialParams={route.params}
             />
         </Tab.Navigator>

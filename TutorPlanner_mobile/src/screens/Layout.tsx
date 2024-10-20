@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { KeyboardAvoidingView, View } from 'react-native';
 import { PropsWithChildren } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -90,17 +90,19 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
                 pointerEvents="none"
             />
             */}
-                <View
+
+                <KeyboardAvoidingView
                     style={[
                         styles.content,
                         {
                             marginTop: hasHeader ? 90 : 0,
                         },
                     ]}
+                    behavior="padding"
                 >
                     {hasHeaderSeperated && <View style={styles.verticalLine} />}
                     {children}
-                </View>
+                </KeyboardAvoidingView>
                 <LinearGradient
                     colors={[
                         'transparent',

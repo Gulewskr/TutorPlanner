@@ -25,6 +25,23 @@ export const StudentInformations: React.FC<
         setStudent(res);
     };
 
+    const goToCreateLesson = (): void =>
+        navigation.jumpTo('CreateLessons', {
+            student: student,
+        });
+    const goToLessonsList = (): void =>
+        navigation.jumpTo('Lessons', {
+            student: student,
+        });
+    const goToEdit = (): void =>
+        navigation.jumpTo('Edit', {
+            student: student,
+        });
+    const goToAddPayment = (): void =>
+        navigation.jumpTo('CreatePayment', {
+            student: student,
+        });
+
     return (
         <StudentsLayout {...props}>
             <View style={styles.double_button_container}>
@@ -33,7 +50,7 @@ export const StudentInformations: React.FC<
                         <Text>
                             Cena:{' '}
                             <Text style={{ fontWeight: 'bold' }}>
-                                {student.defaultPrice}
+                                {student.defaultPrice || 0}
                                 zł
                             </Text>
                         </Text>
@@ -41,11 +58,9 @@ export const StudentInformations: React.FC<
                 </View>
                 <View style={{ width: '48%' }}>
                     <Button
-                        icon="addPayment"
-                        label="Zmień cenę"
-                        onClick={function (): void {
-                            throw new Error('Function not implemented.');
-                        }}
+                        icon="pencil"
+                        label="Edytuj"
+                        onClick={goToEdit}
                         size="small"
                     />
                 </View>
@@ -64,9 +79,7 @@ export const StudentInformations: React.FC<
                         icon="addPayment"
                         label="Dodaj wpłate"
                         secondary
-                        onClick={function (): void {
-                            //TODO
-                        }}
+                        onClick={goToAddPayment}
                         size="small"
                     />
                 </View>
@@ -78,9 +91,7 @@ export const StudentInformations: React.FC<
                         icon="addLesson"
                         label="Dodaj zajęcia"
                         secondary
-                        onClick={function (): void {
-                            throw new Error('Function not implemented.');
-                        }}
+                        onClick={goToCreateLesson}
                     />
                 </View>
                 <View style={{ width: '48%' }}>
@@ -88,9 +99,7 @@ export const StudentInformations: React.FC<
                         icon="list"
                         label="Lista zajęć"
                         secondary
-                        onClick={function (): void {
-                            throw new Error('Function not implemented.');
-                        }}
+                        onClick={goToLessonsList}
                     />
                 </View>
             </View>

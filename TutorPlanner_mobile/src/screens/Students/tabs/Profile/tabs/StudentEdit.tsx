@@ -54,7 +54,9 @@ export const StudentEdit: React.FC<
             <View style={containerStyle}>
                 <StudentForm
                     type="edit"
-                    onCancel={navigation.goBack}
+                    onCancel={() =>
+                        navigation.jumpTo('Info', { student: student })
+                    }
                     data={{
                         firstname: student.firstname,
                         lastname: student.surename,

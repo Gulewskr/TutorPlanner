@@ -1,3 +1,4 @@
+import React from 'react';
 import { Icon, ICON_NAME } from '@components/icon';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -63,8 +64,16 @@ const Button: React.FC<ButtonProps> = ({
                 }}
             >
                 <View style={style.content}>
-                    {icon && <Icon icon={icon} />}
-                    {isIconButton || <Text style={style.text}>{label}</Text>}
+                    {icon && (
+                        <>
+                            <Icon icon={icon} />
+                        </>
+                    )}
+                    {isIconButton || (
+                        <View style={{ flex: 1, alignItems: 'center' }}>
+                            <Text style={style.text}>{label}</Text>
+                        </View>
+                    )}
                 </View>
             </Pressable>
             {hasShadow && (

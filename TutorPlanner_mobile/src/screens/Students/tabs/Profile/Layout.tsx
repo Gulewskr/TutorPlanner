@@ -27,6 +27,7 @@ const tabs: Array<TabItem<keyof StudentProfileTabParamList>> = [
         icon: 'calendar',
         hasHiddenLabel: 'whenNotActive',
     },
+    /*
     {
         id: 'Edit',
         isExpanded: true,
@@ -34,6 +35,7 @@ const tabs: Array<TabItem<keyof StudentProfileTabParamList>> = [
         icon: 'pencil',
         hasHiddenLabel: 'always',
     },
+    */
 ];
 
 export const StudentsLayout: React.FC<

@@ -33,19 +33,18 @@ export const OverduesTile: React.FC<OverduesTileProps> = ({
                         fontWeight: 'bold',
                     }}
                 >
-                    {upnpaidPaymentsText(numOfUnpaid)}
+                    {isLoading
+                        ? 'Ładowanie...'
+                        : upnpaidPaymentsText(numOfUnpaid)}
                 </Text>
             </Tile>
-            {isLoading ? (
-                <ActivityIndicator size="large" color={$color_primary} />
-            ) : (
+            {!isLoading &&
                 lessons &&
                 lessons.map((p, i) => (
                     <Text key={i}>
                         {p.name} {JSON.stringify(p)}
                     </Text>
-                ))
-            )}
+                ))}
         </>
     );
 };

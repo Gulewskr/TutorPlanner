@@ -25,13 +25,11 @@ export const PaymentCreateForm: React.FC<{ onCancel: () => void }> = ({
     const { data: students } = useStudentsContext();
     const handleSubmit = async (data: CreatePaymentData): Promise<void> => {
         try {
-            console.log(data);
             const response = await paymentsService.create({
                 studentId: Number(data.student),
                 price: Number(data.price),
                 date: data.date,
             });
-            console.log(response);
             //TODO - onSuccess
         } catch (e) {
             //TODO - onError
@@ -50,7 +48,7 @@ export const PaymentCreateForm: React.FC<{ onCancel: () => void }> = ({
 };
 
 const getFormSchema = (students: StudentDTO[]): FormRendererSchema => ({
-    title: 'Dodaj zajęcia',
+    title: 'Dodaj płatność',
     initValue: defaultData,
     fields: {
         student: {

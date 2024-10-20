@@ -210,7 +210,7 @@ class LessonsService {
             });
             const inputData: Prisma.EventCreateManyInput[] = [];
             let lessonDate = lesson.date;
-            while (lessonDate < CONFIG.MAX_LESSONS_DATE) {
+            while (lessonDate < CONFIG.MAX_DATE) {
                 inputData.push({
                     date: lessonDate,
                     type: EventType.LESSON,

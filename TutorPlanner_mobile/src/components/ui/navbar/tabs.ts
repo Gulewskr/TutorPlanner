@@ -39,6 +39,13 @@ export type StudentProfileTabParamList = {
     Edit: {
         student: StudentDTO;
         inProfile?: boolean;
+        onCancel?: () => void;
+    };
+    CreateLessons: {
+        student: StudentDTO;
+    };
+    CreatePayment: {
+        student: StudentDTO;
     };
 };
 
