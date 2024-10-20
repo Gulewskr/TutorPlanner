@@ -21,6 +21,18 @@
             "adaptiveIcon": {
                 "foregroundImage": "./src/assets/adaptive-icon.png",
                 "backgroundColor": "#ffffff"
+            },
+            "datePicker": {
+              "colorAccent": {
+                "light": "#FF5722"
+              },
+              "textColorPrimary": {
+                "light": "#FF5722"
+              }
+            },
+            "timePicker": {
+              "background": {"light": "#FF5722", "dark": "#383838"},
+              "numbersBackgroundColor": {"light": "#FF5722", "dark": "#383838"}
             }
         },
         "assets": ["./src/assets/"],
@@ -31,7 +43,9 @@
         "plugins": [
             "expo-updates",
             "expo-asset",
-            "./plugins/withNavigationBarColor.js"
+            "@react-native-community/datetimepicker",
+            "./plugins/withNavigationBarColor.js",
+            "./plugins/withDatePickerColor.js"
         ],
         "packagerOpts": {
             "config": "metro.config.js",

@@ -88,8 +88,7 @@ const FORM_SCHEMA: FormRendererSchema = {
             },
         },
         date: {
-            //TODO change to datepicker
-            component: 'input',
+            component: 'datepicker',
             componentProps: {
                 label: 'Data',
                 icon: 'calendar',

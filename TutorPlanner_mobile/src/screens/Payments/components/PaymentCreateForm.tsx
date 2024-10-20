@@ -3,7 +3,6 @@ import { FormRendererSchema } from '@components/complex/form-renderer/model';
 import { useStudentsContext } from '@contexts/StudentContext';
 import { StudentDTO } from '@model';
 import { paymentsService } from '@services/payments.service';
-import { useStudents } from 'src/hooks/useStudents';
 import { getFullName } from 'src/utils/utils';
 
 //TODO - extendend fields
@@ -72,8 +71,7 @@ const getFormSchema = (students: StudentDTO[]): FormRendererSchema => ({
             },
         },
         date: {
-            //TODO change to datepicker
-            component: 'input',
+            component: 'datepicker',
             componentProps: {
                 label: 'Data',
                 icon: 'calendar',

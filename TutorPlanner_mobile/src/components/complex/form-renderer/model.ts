@@ -8,7 +8,8 @@ export type FormRendererComponents =
     | 'checkbox-tile'
     | 'dropdown'
     | 'input'
-    | 'hour-input';
+    | 'hour-input'
+    | 'datepicker';
 
 export interface FormRendererSchema {
     title?: string;

@@ -3,6 +3,7 @@ import { HourInput, Input } from '@components/input';
 import { FormRendererComponents } from './model';
 import { Checkbox, CheckboxTile } from '@components/checkbox';
 import { Dropdown } from '@components/dropdown';
+import { Datepicker } from '@components/datepicker';
 
 interface FieldWrapperProps {
     component: FormRendererComponents;
@@ -45,6 +46,14 @@ export const FieldWrapper: React.FC<FieldWrapperProps> = ({
         case 'dropdown':
             return (
                 <Dropdown
+                    defaultValue={initialValue}
+                    {...componentProps}
+                    onChange={onFieldChange}
+                />
+            );
+        case 'datepicker':
+            return (
+                <Datepicker
                     defaultValue={initialValue}
                     {...componentProps}
                     onChange={onFieldChange}

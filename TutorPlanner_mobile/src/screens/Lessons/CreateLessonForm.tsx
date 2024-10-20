@@ -132,8 +132,7 @@ const getFormSchema = (students: StudentDTO[]): FormRendererSchema => ({
             },
         },
         date: {
-            //TODO change to datepicker
-            component: 'input',
+            component: 'datepicker',
             componentProps: {
                 label: 'Data',
                 icon: 'calendar',
