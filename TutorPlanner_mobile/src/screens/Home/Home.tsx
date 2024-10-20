@@ -6,20 +6,12 @@ import { Header } from '@components/header';
 import { EventWrapper } from '@components/complex/events';
 import { ScrollView } from '@components/ui/scrool-view';
 import { RootStackParamList } from '@components/ui/navbar';
-import { useAlert } from '@contexts/AlertContext';
 import { useMemo } from 'react';
 
 export const Home: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Home'>
 > = ({ navigation, route }) => {
-    const { showAlert } = useAlert();
     const today = useMemo(() => new Date(), []);
-
-    const handleAddAlert = () => {
-        showAlert({
-            message: `test alert ${(Math.random() * 1000) % 10000}`,
-        });
-    };
 
     return (
         <Layout
@@ -82,7 +74,6 @@ export const Home: React.FC<
                         </View>
                     </View>
                 </View>
-                <Button onClick={handleAddAlert} label="test alert" />
                 <View style={styles.timeline}>
                     <Header
                         rightIcon={'addLesson'}

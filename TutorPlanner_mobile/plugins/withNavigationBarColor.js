@@ -17,12 +17,12 @@ const withNavigationBarColor = config => {
                 item => item.$.name === 'android:navigationBarColor',
             );
             if (existingItem) {
-                existingItem._ = '@android:color/white';
+                existingItem._ = '@android:color/transparent';
             } else {
                 appThemeStyle.item.push(
                     AndroidConfig.Resources.buildResourceItem({
                         name: 'android:navigationBarColor',
-                        value: '@android:color/white',
+                        value: '@android:color/transparent',
                     }),
                 );
             }
@@ -37,12 +37,12 @@ const withNavigationBarColor = config => {
                 item => item.$.name === 'android:navigationBarColor',
             );
             if (existingItem) {
-                existingItem._ = '@android:color/white';
+                existingItem._ = '@android:color/transparent';
             } else {
                 themeStyle.item.push(
                     AndroidConfig.Resources.buildResourceItem({
                         name: 'android:navigationBarColor',
-                        value: '@android:color/white',
+                        value: '@android:color/transparent',
                     }),
                 );
             }

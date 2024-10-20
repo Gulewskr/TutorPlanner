@@ -1,5 +1,5 @@
 import { Button } from '@components/button';
-import { useNavigation } from '@react-navigation/native';
+import { DarkTheme, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Modal, StyleSheet, Text, View } from 'react-native';
 
@@ -42,7 +42,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
 
     return (
         <Modal
-            transparent
+            transparent={true}
             statusBarTranslucent
             onRequestClose={onCancel}
             presentationStyle="overFullScreen"
@@ -62,6 +62,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
                                 label="Anuluj"
                             />
                         </View>
+                        <View style={{ flex: 1 }} />
                         <View style={{ width: '50%' }}>
                             <Button
                                 icon="checkbox"
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        padding: 15,
     },
     modalContent: {
         padding: 20,
@@ -110,13 +112,14 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     label: {
+        width: '100%',
         fontSize: 20,
     },
     message: { fontSize: 16, textAlign: 'center' },
     double_button_container: {
+        width: '100%',
         marginBottom: 10,
         display: 'flex',
-        width: '100%',
         flexDirection: 'row',
         gap: 5,
     },
