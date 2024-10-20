@@ -1,9 +1,7 @@
 import { Button } from '@components/button';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import Modal from 'react-native-modal';
-import { StyleSheet, Text, View } from 'react-native';
-import { $color_primary } from '@styles/colors';
+import { Modal, StyleSheet, Text, View } from 'react-native';
 
 export interface ConfirmModalProps {
     onConfirm: (props?: any) => void;
@@ -44,35 +42,36 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
 
     return (
         <Modal
-            isVisible={true}
-            coverScreen={true}
-            deviceHeight={1000}
-            backdropColor={'#8f6387'}
+            transparent
             statusBarTranslucent
+            onRequestClose={onCancel}
+            presentationStyle="overFullScreen"
+            hardwareAccelerated
         >
-            <View style={[styles.modalContent, { backgroundColor: color }]}>
-                <Text style={styles.label}>{message}</Text>
-                {/*<Text style={styles.message}>{message}</Text>*/}
-                <View style={{ flex: 1 }} />
-                <View style={styles.double_button_container}>
-                    <View style={{ width: '50%' }}>
-                        <Button
-                            icon="cancel"
-                            size="small"
-                            onClick={onCancel}
-                            label="Anuluj"
-                        />
+            <View style={styles.modalOverlay}>
+                <View style={[styles.modalContent, { backgroundColor: color }]}>
+                    <Text style={styles.label}>{message}</Text>
+                    {/*<Text style={styles.message}>{message}</Text>*/}
+                    <View style={{ flex: 1 }} />
+                    <View style={styles.double_button_container}>
+                        <View style={{ width: '50%' }}>
+                            <Button
+                                icon="cancel"
+                                size="small"
+                                onClick={onCancel}
+                                label="Anuluj"
+                            />
+                        </View>
+                        <View style={{ width: '50%' }}>
+                            <Button
+                                icon="checkbox"
+                                size="small"
+                                onClick={() => handleConfirm()}
+                                label="Potwierdź"
+                            />
+                        </View>
                     </View>
-                    <View style={{ width: '50%' }}>
-                        <Button
-                            icon="checkbox"
-                            size="small"
-                            onClick={handleConfirm}
-                            label="Potwierdź"
-                        />
-                    </View>
-                </View>
-                {/*
+                    {/*
                     <TouchableOpacity
                         onPress={onCancel}
                         style={styles.closeButton}
@@ -80,6 +79,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
                         <Icon icon="cancel" />
                     </TouchableOpacity>
                     */}
+                </View>
             </View>
         </Modal>
     );
@@ -121,7 +121,3 @@ const styles = StyleSheet.create({
         gap: 5,
     },
 });
-
-// const styles = EStyleSheet.create({
-//
-// });

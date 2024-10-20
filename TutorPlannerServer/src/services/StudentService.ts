@@ -57,6 +57,9 @@ class StudentService {
     ): Promise<Student> {
         return await studentRepository.update(studentId, student);
     }
+    public async disableStudent(studentId: number): Promise<Student> {
+        return await studentRepository.disable(studentId);
+    }
 }
 
 export default new StudentService();

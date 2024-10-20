@@ -28,7 +28,11 @@
             "bundler": "metro",
             "favicon": "./src/assets/favicon.png"
         },
-        "plugins": ["expo-updates", "expo-asset"],
+        "plugins": [
+            "expo-updates",
+            "expo-asset",
+            "./plugins/withNavigationBarColor.js"
+        ],
         "packagerOpts": {
             "config": "metro.config.js",
             "sourceExts": ["ts", "tsx", "scss", "sass"]

@@ -10,10 +10,18 @@ const studentRepository = {
         });
     },
     count: async (): Promise<number> => {
-        return await prisma.student.count();
+        return await prisma.student.count({
+            where: {
+                isActive: true,
+            },
+        });
     },
     findAll: async (): Promise<Student[]> => {
-        return await prisma.student.findMany();
+        return await prisma.student.findMany({
+            where: {
+                isActive: true,
+            },
+        });
     },
     create: async (student: Prisma.StudentCreateInput): Promise<Student> => {
         const createdStudent = await prisma.student.create({
@@ -32,6 +40,16 @@ const studentRepository = {
             },
         });
         return res;
+    },
+    disable: async (studentId: number): Promise<Student> => {
+        return await prisma.student.update({
+            data: {
+                isActive: false,
+            },
+            where: {
+                id: studentId,
+            },
+        });
     },
     delete: async (studentId: number): Promise<Student> => {
         return await prisma.student.delete({

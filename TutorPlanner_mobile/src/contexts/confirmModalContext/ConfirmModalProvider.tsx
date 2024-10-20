@@ -25,7 +25,7 @@ export const ConfirmModalProvider = ({ children }: React.PropsWithChildren) => {
 
     const openModal = (data: OpenModalProps) => {
         setConfirmIsOpen(true);
-        setOnConfirm(data.onConfirm);
+        setOnConfirm(() => data.onConfirm);
         setMessage(data.message);
     };
 

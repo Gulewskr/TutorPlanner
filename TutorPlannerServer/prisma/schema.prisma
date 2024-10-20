@@ -20,6 +20,7 @@ model Student {
     description  String?
     defaultPrice Float?
     balance      Float         @default(0)
+    isActive     Boolean       @default(true)
     ContactData  ContactData[]
     Payment      Payment[]
     Event        Event[]

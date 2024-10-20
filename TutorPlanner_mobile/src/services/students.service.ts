@@ -95,6 +95,23 @@ class StudentsService {
             throw error;
         }
     };
+    delete = async (studnetId: number): Promise<StudentDTO | ErrorResponse> => {
+        try {
+            const response = await axios.delete(`${STUDENTS_URL}/${studnetId}`);
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                return {
+                    status: error.status || 400,
+                    message: error.message,
+                };
+            }
+            return {
+                status: 400,
+                message: 'Error',
+            };
+        }
+    };
 }
 
 export const studentsService = new StudentsService();

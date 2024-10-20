@@ -12,7 +12,7 @@ import type { Prisma } from '@prisma/client';
 
 export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCommitted','RepeatableRead','Serializable']);
 
-export const StudentScalarFieldEnumSchema = z.enum(['id','firstname','surename','class','extendedMath','description','defaultPrice','balance']);
+export const StudentScalarFieldEnumSchema = z.enum(['id','firstname','surename','class','extendedMath','description','defaultPrice','balance','isActive']);
 
 export const ContactDataScalarFieldEnumSchema = z.enum(['id','type','value','studentId']);
 
@@ -55,6 +55,7 @@ export const StudentSchema = z.object({
   description: z.string().nullable(),
   defaultPrice: z.number().nullable(),
   balance: z.number(),
+  isActive: z.boolean(),
 })
 
 export type Student = z.infer<typeof StudentSchema>
@@ -164,6 +165,7 @@ export const StudentSelectSchema: z.ZodType<Prisma.StudentSelect> = z.object({
   description: z.boolean().optional(),
   defaultPrice: z.boolean().optional(),
   balance: z.boolean().optional(),
+  isActive: z.boolean().optional(),
   ContactData: z.union([z.boolean(),z.lazy(() => ContactDataFindManyArgsSchema)]).optional(),
   Payment: z.union([z.boolean(),z.lazy(() => PaymentFindManyArgsSchema)]).optional(),
   Event: z.union([z.boolean(),z.lazy(() => EventFindManyArgsSchema)]).optional(),
@@ -294,6 +296,7 @@ export const StudentWhereInputSchema: z.ZodType<Prisma.StudentWhereInput> = z.ob
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   defaultPrice: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   balance: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
+  isActive: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   ContactData: z.lazy(() => ContactDataListRelationFilterSchema).optional(),
   Payment: z.lazy(() => PaymentListRelationFilterSchema).optional(),
   Event: z.lazy(() => EventListRelationFilterSchema).optional()
@@ -308,6 +311,7 @@ export const StudentOrderByWithRelationInputSchema: z.ZodType<Prisma.StudentOrde
   description: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   defaultPrice: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   balance: z.lazy(() => SortOrderSchema).optional(),
+  isActive: z.lazy(() => SortOrderSchema).optional(),
   ContactData: z.lazy(() => ContactDataOrderByRelationAggregateInputSchema).optional(),
   Payment: z.lazy(() => PaymentOrderByRelationAggregateInputSchema).optional(),
   Event: z.lazy(() => EventOrderByRelationAggregateInputSchema).optional()
@@ -328,6 +332,7 @@ export const StudentWhereUniqueInputSchema: z.ZodType<Prisma.StudentWhereUniqueI
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   defaultPrice: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   balance: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
+  isActive: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   ContactData: z.lazy(() => ContactDataListRelationFilterSchema).optional(),
   Payment: z.lazy(() => PaymentListRelationFilterSchema).optional(),
   Event: z.lazy(() => EventListRelationFilterSchema).optional()
@@ -342,6 +347,7 @@ export const StudentOrderByWithAggregationInputSchema: z.ZodType<Prisma.StudentO
   description: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   defaultPrice: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   balance: z.lazy(() => SortOrderSchema).optional(),
+  isActive: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => StudentCountOrderByAggregateInputSchema).optional(),
   _avg: z.lazy(() => StudentAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => StudentMaxOrderByAggregateInputSchema).optional(),
@@ -361,6 +367,7 @@ export const StudentScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Stude
   description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   defaultPrice: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   balance: z.union([ z.lazy(() => FloatWithAggregatesFilterSchema),z.number() ]).optional(),
+  isActive: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
 }).strict();
 
 export const ContactDataWhereInputSchema: z.ZodType<Prisma.ContactDataWhereInput> = z.object({
@@ -669,6 +676,7 @@ export const StudentCreateInputSchema: z.ZodType<Prisma.StudentCreateInput> = z.
   description: z.string().optional().nullable(),
   defaultPrice: z.number().optional().nullable(),
   balance: z.number().optional(),
+  isActive: z.boolean().optional(),
   ContactData: z.lazy(() => ContactDataCreateNestedManyWithoutStudentInputSchema).optional(),
   Payment: z.lazy(() => PaymentCreateNestedManyWithoutStudentInputSchema).optional(),
   Event: z.lazy(() => EventCreateNestedManyWithoutStudentInputSchema).optional()
@@ -683,6 +691,7 @@ export const StudentUncheckedCreateInputSchema: z.ZodType<Prisma.StudentUnchecke
   description: z.string().optional().nullable(),
   defaultPrice: z.number().optional().nullable(),
   balance: z.number().optional(),
+  isActive: z.boolean().optional(),
   ContactData: z.lazy(() => ContactDataUncheckedCreateNestedManyWithoutStudentInputSchema).optional(),
   Payment: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutStudentInputSchema).optional(),
   Event: z.lazy(() => EventUncheckedCreateNestedManyWithoutStudentInputSchema).optional()
@@ -696,6 +705,7 @@ export const StudentUpdateInputSchema: z.ZodType<Prisma.StudentUpdateInput> = z.
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   defaultPrice: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   balance: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isActive: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   ContactData: z.lazy(() => ContactDataUpdateManyWithoutStudentNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUpdateManyWithoutStudentNestedInputSchema).optional(),
   Event: z.lazy(() => EventUpdateManyWithoutStudentNestedInputSchema).optional()
@@ -710,6 +720,7 @@ export const StudentUncheckedUpdateInputSchema: z.ZodType<Prisma.StudentUnchecke
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   defaultPrice: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   balance: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isActive: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   ContactData: z.lazy(() => ContactDataUncheckedUpdateManyWithoutStudentNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUncheckedUpdateManyWithoutStudentNestedInputSchema).optional(),
   Event: z.lazy(() => EventUncheckedUpdateManyWithoutStudentNestedInputSchema).optional()
@@ -723,7 +734,8 @@ export const StudentCreateManyInputSchema: z.ZodType<Prisma.StudentCreateManyInp
   extendedMath: z.boolean().optional().nullable(),
   description: z.string().optional().nullable(),
   defaultPrice: z.number().optional().nullable(),
-  balance: z.number().optional()
+  balance: z.number().optional(),
+  isActive: z.boolean().optional()
 }).strict();
 
 export const StudentUpdateManyMutationInputSchema: z.ZodType<Prisma.StudentUpdateManyMutationInput> = z.object({
@@ -734,6 +746,7 @@ export const StudentUpdateManyMutationInputSchema: z.ZodType<Prisma.StudentUpdat
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   defaultPrice: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   balance: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isActive: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const StudentUncheckedUpdateManyInputSchema: z.ZodType<Prisma.StudentUncheckedUpdateManyInput> = z.object({
@@ -745,6 +758,7 @@ export const StudentUncheckedUpdateManyInputSchema: z.ZodType<Prisma.StudentUnch
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   defaultPrice: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   balance: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isActive: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const ContactDataCreateInputSchema: z.ZodType<Prisma.ContactDataCreateInput> = z.object({
@@ -1102,6 +1116,11 @@ export const FloatFilterSchema: z.ZodType<Prisma.FloatFilter> = z.object({
   not: z.union([ z.number(),z.lazy(() => NestedFloatFilterSchema) ]).optional(),
 }).strict();
 
+export const BoolFilterSchema: z.ZodType<Prisma.BoolFilter> = z.object({
+  equals: z.boolean().optional(),
+  not: z.union([ z.boolean(),z.lazy(() => NestedBoolFilterSchema) ]).optional(),
+}).strict();
+
 export const ContactDataListRelationFilterSchema: z.ZodType<Prisma.ContactDataListRelationFilter> = z.object({
   every: z.lazy(() => ContactDataWhereInputSchema).optional(),
   some: z.lazy(() => ContactDataWhereInputSchema).optional(),
@@ -1145,7 +1164,8 @@ export const StudentCountOrderByAggregateInputSchema: z.ZodType<Prisma.StudentCo
   extendedMath: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   defaultPrice: z.lazy(() => SortOrderSchema).optional(),
-  balance: z.lazy(() => SortOrderSchema).optional()
+  balance: z.lazy(() => SortOrderSchema).optional(),
+  isActive: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const StudentAvgOrderByAggregateInputSchema: z.ZodType<Prisma.StudentAvgOrderByAggregateInput> = z.object({
@@ -1162,7 +1182,8 @@ export const StudentMaxOrderByAggregateInputSchema: z.ZodType<Prisma.StudentMaxO
   extendedMath: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   defaultPrice: z.lazy(() => SortOrderSchema).optional(),
-  balance: z.lazy(() => SortOrderSchema).optional()
+  balance: z.lazy(() => SortOrderSchema).optional(),
+  isActive: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const StudentMinOrderByAggregateInputSchema: z.ZodType<Prisma.StudentMinOrderByAggregateInput> = z.object({
@@ -1173,7 +1194,8 @@ export const StudentMinOrderByAggregateInputSchema: z.ZodType<Prisma.StudentMinO
   extendedMath: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   defaultPrice: z.lazy(() => SortOrderSchema).optional(),
-  balance: z.lazy(() => SortOrderSchema).optional()
+  balance: z.lazy(() => SortOrderSchema).optional(),
+  isActive: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const StudentSumOrderByAggregateInputSchema: z.ZodType<Prisma.StudentSumOrderByAggregateInput> = z.object({
@@ -1270,6 +1292,14 @@ export const FloatWithAggregatesFilterSchema: z.ZodType<Prisma.FloatWithAggregat
   _sum: z.lazy(() => NestedFloatFilterSchema).optional(),
   _min: z.lazy(() => NestedFloatFilterSchema).optional(),
   _max: z.lazy(() => NestedFloatFilterSchema).optional()
+}).strict();
+
+export const BoolWithAggregatesFilterSchema: z.ZodType<Prisma.BoolWithAggregatesFilter> = z.object({
+  equals: z.boolean().optional(),
+  not: z.union([ z.boolean(),z.lazy(() => NestedBoolWithAggregatesFilterSchema) ]).optional(),
+  _count: z.lazy(() => NestedIntFilterSchema).optional(),
+  _min: z.lazy(() => NestedBoolFilterSchema).optional(),
+  _max: z.lazy(() => NestedBoolFilterSchema).optional()
 }).strict();
 
 export const EnumContactTypeFilterSchema: z.ZodType<Prisma.EnumContactTypeFilter> = z.object({
@@ -1383,11 +1413,6 @@ export const DateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.DateTimeWithAg
   _max: z.lazy(() => NestedDateTimeFilterSchema).optional()
 }).strict();
 
-export const BoolFilterSchema: z.ZodType<Prisma.BoolFilter> = z.object({
-  equals: z.boolean().optional(),
-  not: z.union([ z.boolean(),z.lazy(() => NestedBoolFilterSchema) ]).optional(),
-}).strict();
-
 export const EnumEventTypeFilterSchema: z.ZodType<Prisma.EnumEventTypeFilter> = z.object({
   equals: z.lazy(() => EventTypeSchema).optional(),
   in: z.lazy(() => EventTypeSchema).array().optional(),
@@ -1476,14 +1501,6 @@ export const EventSumOrderByAggregateInputSchema: z.ZodType<Prisma.EventSumOrder
   eventSeriesId: z.lazy(() => SortOrderSchema).optional(),
   price: z.lazy(() => SortOrderSchema).optional(),
   studentId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const BoolWithAggregatesFilterSchema: z.ZodType<Prisma.BoolWithAggregatesFilter> = z.object({
-  equals: z.boolean().optional(),
-  not: z.union([ z.boolean(),z.lazy(() => NestedBoolWithAggregatesFilterSchema) ]).optional(),
-  _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedBoolFilterSchema).optional(),
-  _max: z.lazy(() => NestedBoolFilterSchema).optional()
 }).strict();
 
 export const EnumEventTypeWithAggregatesFilterSchema: z.ZodType<Prisma.EnumEventTypeWithAggregatesFilter> = z.object({
@@ -1671,6 +1688,10 @@ export const FloatFieldUpdateOperationsInputSchema: z.ZodType<Prisma.FloatFieldU
   divide: z.number().optional()
 }).strict();
 
+export const BoolFieldUpdateOperationsInputSchema: z.ZodType<Prisma.BoolFieldUpdateOperationsInput> = z.object({
+  set: z.boolean().optional()
+}).strict();
+
 export const ContactDataUpdateManyWithoutStudentNestedInputSchema: z.ZodType<Prisma.ContactDataUpdateManyWithoutStudentNestedInput> = z.object({
   create: z.union([ z.lazy(() => ContactDataCreateWithoutStudentInputSchema),z.lazy(() => ContactDataCreateWithoutStudentInputSchema).array(),z.lazy(() => ContactDataUncheckedCreateWithoutStudentInputSchema),z.lazy(() => ContactDataUncheckedCreateWithoutStudentInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => ContactDataCreateOrConnectWithoutStudentInputSchema),z.lazy(() => ContactDataCreateOrConnectWithoutStudentInputSchema).array() ]).optional(),
@@ -1809,10 +1830,6 @@ export const StudentCreateNestedOneWithoutEventInputSchema: z.ZodType<Prisma.Stu
   create: z.union([ z.lazy(() => StudentCreateWithoutEventInputSchema),z.lazy(() => StudentUncheckedCreateWithoutEventInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => StudentCreateOrConnectWithoutEventInputSchema).optional(),
   connect: z.lazy(() => StudentWhereUniqueInputSchema).optional()
-}).strict();
-
-export const BoolFieldUpdateOperationsInputSchema: z.ZodType<Prisma.BoolFieldUpdateOperationsInput> = z.object({
-  set: z.boolean().optional()
 }).strict();
 
 export const EnumEventTypeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumEventTypeFieldUpdateOperationsInput> = z.object({
@@ -1963,6 +1980,11 @@ export const NestedFloatFilterSchema: z.ZodType<Prisma.NestedFloatFilter> = z.ob
   not: z.union([ z.number(),z.lazy(() => NestedFloatFilterSchema) ]).optional(),
 }).strict();
 
+export const NestedBoolFilterSchema: z.ZodType<Prisma.NestedBoolFilter> = z.object({
+  equals: z.boolean().optional(),
+  not: z.union([ z.boolean(),z.lazy(() => NestedBoolFilterSchema) ]).optional(),
+}).strict();
+
 export const NestedIntWithAggregatesFilterSchema: z.ZodType<Prisma.NestedIntWithAggregatesFilter> = z.object({
   equals: z.number().optional(),
   in: z.number().array().optional(),
@@ -2064,6 +2086,14 @@ export const NestedFloatWithAggregatesFilterSchema: z.ZodType<Prisma.NestedFloat
   _max: z.lazy(() => NestedFloatFilterSchema).optional()
 }).strict();
 
+export const NestedBoolWithAggregatesFilterSchema: z.ZodType<Prisma.NestedBoolWithAggregatesFilter> = z.object({
+  equals: z.boolean().optional(),
+  not: z.union([ z.boolean(),z.lazy(() => NestedBoolWithAggregatesFilterSchema) ]).optional(),
+  _count: z.lazy(() => NestedIntFilterSchema).optional(),
+  _min: z.lazy(() => NestedBoolFilterSchema).optional(),
+  _max: z.lazy(() => NestedBoolFilterSchema).optional()
+}).strict();
+
 export const NestedEnumContactTypeFilterSchema: z.ZodType<Prisma.NestedEnumContactTypeFilter> = z.object({
   equals: z.lazy(() => ContactTypeSchema).optional(),
   in: z.lazy(() => ContactTypeSchema).array().optional(),
@@ -2106,24 +2136,11 @@ export const NestedDateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.NestedDa
   _max: z.lazy(() => NestedDateTimeFilterSchema).optional()
 }).strict();
 
-export const NestedBoolFilterSchema: z.ZodType<Prisma.NestedBoolFilter> = z.object({
-  equals: z.boolean().optional(),
-  not: z.union([ z.boolean(),z.lazy(() => NestedBoolFilterSchema) ]).optional(),
-}).strict();
-
 export const NestedEnumEventTypeFilterSchema: z.ZodType<Prisma.NestedEnumEventTypeFilter> = z.object({
   equals: z.lazy(() => EventTypeSchema).optional(),
   in: z.lazy(() => EventTypeSchema).array().optional(),
   notIn: z.lazy(() => EventTypeSchema).array().optional(),
   not: z.union([ z.lazy(() => EventTypeSchema),z.lazy(() => NestedEnumEventTypeFilterSchema) ]).optional(),
-}).strict();
-
-export const NestedBoolWithAggregatesFilterSchema: z.ZodType<Prisma.NestedBoolWithAggregatesFilter> = z.object({
-  equals: z.boolean().optional(),
-  not: z.union([ z.boolean(),z.lazy(() => NestedBoolWithAggregatesFilterSchema) ]).optional(),
-  _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedBoolFilterSchema).optional(),
-  _max: z.lazy(() => NestedBoolFilterSchema).optional()
 }).strict();
 
 export const NestedEnumEventTypeWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumEventTypeWithAggregatesFilter> = z.object({
@@ -2370,6 +2387,7 @@ export const StudentCreateWithoutContactDataInputSchema: z.ZodType<Prisma.Studen
   description: z.string().optional().nullable(),
   defaultPrice: z.number().optional().nullable(),
   balance: z.number().optional(),
+  isActive: z.boolean().optional(),
   Payment: z.lazy(() => PaymentCreateNestedManyWithoutStudentInputSchema).optional(),
   Event: z.lazy(() => EventCreateNestedManyWithoutStudentInputSchema).optional()
 }).strict();
@@ -2383,6 +2401,7 @@ export const StudentUncheckedCreateWithoutContactDataInputSchema: z.ZodType<Pris
   description: z.string().optional().nullable(),
   defaultPrice: z.number().optional().nullable(),
   balance: z.number().optional(),
+  isActive: z.boolean().optional(),
   Payment: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutStudentInputSchema).optional(),
   Event: z.lazy(() => EventUncheckedCreateNestedManyWithoutStudentInputSchema).optional()
 }).strict();
@@ -2411,6 +2430,7 @@ export const StudentUpdateWithoutContactDataInputSchema: z.ZodType<Prisma.Studen
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   defaultPrice: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   balance: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isActive: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   Payment: z.lazy(() => PaymentUpdateManyWithoutStudentNestedInputSchema).optional(),
   Event: z.lazy(() => EventUpdateManyWithoutStudentNestedInputSchema).optional()
 }).strict();
@@ -2424,6 +2444,7 @@ export const StudentUncheckedUpdateWithoutContactDataInputSchema: z.ZodType<Pris
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   defaultPrice: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   balance: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isActive: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   Payment: z.lazy(() => PaymentUncheckedUpdateManyWithoutStudentNestedInputSchema).optional(),
   Event: z.lazy(() => EventUncheckedUpdateManyWithoutStudentNestedInputSchema).optional()
 }).strict();
@@ -2436,6 +2457,7 @@ export const StudentCreateWithoutPaymentInputSchema: z.ZodType<Prisma.StudentCre
   description: z.string().optional().nullable(),
   defaultPrice: z.number().optional().nullable(),
   balance: z.number().optional(),
+  isActive: z.boolean().optional(),
   ContactData: z.lazy(() => ContactDataCreateNestedManyWithoutStudentInputSchema).optional(),
   Event: z.lazy(() => EventCreateNestedManyWithoutStudentInputSchema).optional()
 }).strict();
@@ -2449,6 +2471,7 @@ export const StudentUncheckedCreateWithoutPaymentInputSchema: z.ZodType<Prisma.S
   description: z.string().optional().nullable(),
   defaultPrice: z.number().optional().nullable(),
   balance: z.number().optional(),
+  isActive: z.boolean().optional(),
   ContactData: z.lazy(() => ContactDataUncheckedCreateNestedManyWithoutStudentInputSchema).optional(),
   Event: z.lazy(() => EventUncheckedCreateNestedManyWithoutStudentInputSchema).optional()
 }).strict();
@@ -2477,6 +2500,7 @@ export const StudentUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.StudentUpd
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   defaultPrice: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   balance: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isActive: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   ContactData: z.lazy(() => ContactDataUpdateManyWithoutStudentNestedInputSchema).optional(),
   Event: z.lazy(() => EventUpdateManyWithoutStudentNestedInputSchema).optional()
 }).strict();
@@ -2490,6 +2514,7 @@ export const StudentUncheckedUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.S
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   defaultPrice: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   balance: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isActive: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   ContactData: z.lazy(() => ContactDataUncheckedUpdateManyWithoutStudentNestedInputSchema).optional(),
   Event: z.lazy(() => EventUncheckedUpdateManyWithoutStudentNestedInputSchema).optional()
 }).strict();
@@ -2532,6 +2557,7 @@ export const StudentCreateWithoutEventInputSchema: z.ZodType<Prisma.StudentCreat
   description: z.string().optional().nullable(),
   defaultPrice: z.number().optional().nullable(),
   balance: z.number().optional(),
+  isActive: z.boolean().optional(),
   ContactData: z.lazy(() => ContactDataCreateNestedManyWithoutStudentInputSchema).optional(),
   Payment: z.lazy(() => PaymentCreateNestedManyWithoutStudentInputSchema).optional()
 }).strict();
@@ -2545,6 +2571,7 @@ export const StudentUncheckedCreateWithoutEventInputSchema: z.ZodType<Prisma.Stu
   description: z.string().optional().nullable(),
   defaultPrice: z.number().optional().nullable(),
   balance: z.number().optional(),
+  isActive: z.boolean().optional(),
   ContactData: z.lazy(() => ContactDataUncheckedCreateNestedManyWithoutStudentInputSchema).optional(),
   Payment: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutStudentInputSchema).optional()
 }).strict();
@@ -2609,6 +2636,7 @@ export const StudentUpdateWithoutEventInputSchema: z.ZodType<Prisma.StudentUpdat
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   defaultPrice: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   balance: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isActive: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   ContactData: z.lazy(() => ContactDataUpdateManyWithoutStudentNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUpdateManyWithoutStudentNestedInputSchema).optional()
 }).strict();
@@ -2622,6 +2650,7 @@ export const StudentUncheckedUpdateWithoutEventInputSchema: z.ZodType<Prisma.Stu
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   defaultPrice: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   balance: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isActive: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   ContactData: z.lazy(() => ContactDataUncheckedUpdateManyWithoutStudentNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUncheckedUpdateManyWithoutStudentNestedInputSchema).optional()
 }).strict();

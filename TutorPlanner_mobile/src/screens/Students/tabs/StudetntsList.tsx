@@ -11,17 +11,33 @@ import { CheckboxTile } from '@components/checkbox';
 import { ScrollView, View } from 'react-native';
 import { useConfirmModal } from '@contexts/confirmModalContext';
 import { getFullName } from '@utils/utils';
+import { studentsService } from '@services/students.service';
+import { useAlert } from '@contexts/AlertContext';
+import { StudentDTO } from '@model';
 
 export const StudentsList: React.FC<
     BottomTabScreenProps<StudentsTabParamList, 'List'>
 > = ({ navigation, route }) => {
     const [controlEnabled, setControlEnabled] = useState(false);
 
-    const { loading, data: students } = useStudentsContext();
+    const { loading, data: students, fetch } = useStudentsContext();
     const { openModal } = useConfirmModal();
+    const { showAlert } = useAlert();
 
-    const handleDeleteEvent = (id: number) => {
-        console.log(`DELETE STUDENT ${id}`);
+    const handleDeleteEvent = async (stud: StudentDTO) => {
+        try {
+            await studentsService.delete(stud.id);
+            await fetch();
+            showAlert({
+                message: `Usunięto ${getFullName(stud)}`,
+                severity: 'info',
+            });
+        } catch (err) {
+            showAlert({
+                message: `Błąd servera`,
+                severity: 'danger',
+            });
+        }
     };
 
     return (
@@ -46,9 +62,9 @@ export const StudentsList: React.FC<
                                 controlEnabled
                                     ? [
                                           /*
-                                { icon: 'messenger', onClick: () => {} },
-                                { icon: 'oneNote', onClick: () => {} },
-                                */
+                                            { icon: 'messenger', onClick: () => {} },
+                                            { icon: 'oneNote', onClick: () => {} },
+                                        */
                                           {
                                               icon: 'pencil',
                                               onClick: () => {
@@ -66,7 +82,7 @@ export const StudentsList: React.FC<
                                                       message: `Czy chcesz usunąć ${getFullName(student)}`,
                                                       onConfirm: () => {
                                                           handleDeleteEvent(
-                                                              student.id,
+                                                              student,
                                                           );
                                                       },
                                                   });

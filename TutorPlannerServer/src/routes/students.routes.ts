@@ -43,6 +43,16 @@ router.post('/:studentId', async (req, res, next) => {
     }
 });
 
+router.delete('/:studentId', async (req, res, next) => {
+    try {
+        const studentId = parseStudentId(req);
+        const student = await StudentService.disableStudent(studentId);
+        res.status(200).json(student);
+    } catch (err) {
+        next(err);
+    }
+});
+
 router.post('/:studentId/recalculate', async (req, res, next) => {
     try {
         const studentId = parseStudentId(req);

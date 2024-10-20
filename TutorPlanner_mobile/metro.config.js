@@ -1,5 +1,4 @@
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
-const withNavigationBarColor = require('./withNavigationBarColor.js');
 
 const defaultConfig = getDefaultConfig(__dirname, {
     isCSSEnabled: true,
@@ -25,7 +24,6 @@ const config = {
         assetExts: [...assetExts.filter(ext => ext !== 'svg'), 'png'],
         sourceExts: [...sourceExts, 'scss', 'sass', 'svg'],
     },
-    plugins: [withNavigationBarColor],
 };
 
 module.exports = mergeConfig(defaultConfig, config);
