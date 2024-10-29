@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import { FieldWrapper } from './FieldWrapper';
 import { FormRendererSchema } from './model';
 import { View } from 'react-native';
@@ -6,6 +12,7 @@ import { View } from 'react-native';
 interface FormContextProps {
     formData: any; //Init form data
     handleDataChange: (name: string, value: any) => void;
+    setInitialFormData: (value: any) => void;
 }
 
 interface FormContextHookProps {
@@ -16,6 +23,7 @@ interface FormContextHookProps {
 const defaultFormContext: FormContextProps = {
     formData: undefined,
     handleDataChange: (name: string, value: any) => {},
+    setInitialFormData: (value: any) => {},
 };
 
 // Create a context for the form
@@ -26,7 +34,13 @@ const FormContext: React.Context<FormContextProps> =
 export const useFormContext = (
     schema: FormRendererSchema,
 ): FormContextHookProps => {
-    const { formData, handleDataChange } = useContext(FormContext);
+    const { formData, handleDataChange, setInitialFormData } =
+        useContext(FormContext);
+
+    useEffect(() => {
+        setInitialFormData(schema.initValue);
+    }, []);
+
     const [formBody] = useMemo(() => {
         if (!handleDataChange) {
             throw new Error('useForm must be used within a FormProvider');
@@ -71,6 +85,10 @@ export const FormProvider = ({ children }: React.PropsWithChildren) => {
         }));
     };
 
+    const setInitialFormData = (value: any) => {
+        setFormData(value);
+    };
+
     const validate = (data: any, schema: FormRendererSchema) => {
         //TODO
     };
@@ -80,6 +98,7 @@ export const FormProvider = ({ children }: React.PropsWithChildren) => {
             value={{
                 formData,
                 handleDataChange,
+                setInitialFormData,
             }}
         >
             {children}

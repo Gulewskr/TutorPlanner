@@ -12,6 +12,8 @@ import {
 import { StudentEdit } from './tabs/StudentEdit';
 import { StudentCreateLessons } from './tabs/StudentCreateLessons';
 import { StudentAddPayment } from './tabs/StudentAddPayment';
+import { useStudentContext } from './StudentContext';
+import { useEffect } from 'react';
 export type { StudentProfileTabParamList };
 
 const Tab = createBottomTabNavigator<StudentProfileTabParamList>();
@@ -19,6 +21,12 @@ const Tab = createBottomTabNavigator<StudentProfileTabParamList>();
 export const StudentProfile: React.FC<
     BottomTabScreenProps<StudentsTabParamList, 'Profile'>
 > = ({ navigation, route }) => {
+    const { refresh } = useStudentContext();
+    useEffect(
+        () => refresh(route.params.student.id),
+        [route.params.student.id],
+    );
+
     return (
         <Tab.Navigator
             initialRouteName="Info"
@@ -30,36 +38,16 @@ export const StudentProfile: React.FC<
             }}
             backBehavior="history"
         >
-            <Tab.Screen
-                name="Info"
-                component={StudentInformations}
-                initialParams={route.params}
-            />
-            <Tab.Screen
-                name="Lessons"
-                component={StudentLessons}
-                initialParams={route.params}
-            />
-            <Tab.Screen
-                name="CreateLessons"
-                component={StudentCreateLessons}
-                initialParams={route.params}
-            />
-            <Tab.Screen
-                name="Analise"
-                component={StudentAnalise}
-                initialParams={route.params}
-            />
+            <Tab.Screen name="Info" component={StudentInformations} />
+            <Tab.Screen name="Lessons" component={StudentLessons} />
+            <Tab.Screen name="CreateLessons" component={StudentCreateLessons} />
+            <Tab.Screen name="Analise" component={StudentAnalise} />
             <Tab.Screen
                 name="Edit"
                 component={StudentEdit}
                 initialParams={route.params}
             />
-            <Tab.Screen
-                name="CreatePayment"
-                component={StudentAddPayment}
-                initialParams={route.params}
-            />
+            <Tab.Screen name="CreatePayment" component={StudentAddPayment} />
         </Tab.Navigator>
     );
 };

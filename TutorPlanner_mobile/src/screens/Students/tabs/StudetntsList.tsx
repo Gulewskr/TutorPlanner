@@ -8,7 +8,7 @@ import { StudentsTabParamList } from '@components/ui/navbar';
 import { useStudentsContext } from '@contexts/StudentContext';
 import { LoadWrapper } from '@components/loader';
 import { CheckboxTile } from '@components/checkbox';
-import { ScrollView, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useConfirmModal } from '@contexts/confirmModalContext';
 import { getFullName } from '@utils/utils';
 import { studentsService } from '@services/students.service';
@@ -40,65 +40,79 @@ export const StudentsList: React.FC<
         }
     };
 
+    const handleMoveToStudentProfile = (stud: StudentDTO) => {
+
+        navigation.jumpTo('Profile', {
+            screen: 'Info'
+        });
+    }
+
     return (
         <Layout
             navigation={navigation.getParent()}
             route={'Students'}
-            title="Studenci"
+            title="Lista uczniów"
             hasHeader
         >
             <View style={{ padding: 10 }}>
-                <CheckboxTile onChange={setControlEnabled} label="modyfikuj" />
+                <CheckboxTile
+                    onChange={setControlEnabled}
+                    label="Włącz edycje"
+                />
             </View>
             <CustomScrollView
                 styles={{ paddingHorizontal: 10, marginBottom: 100 }}
             >
                 <LoadWrapper loading={loading}>
-                    {students.map(student => (
-                        <StudentTile
-                            key={`${student.id}`}
-                            student={student}
-                            actions={
-                                controlEnabled
-                                    ? [
-                                          /*
+                    {students ? (
+                        students.map(student => (
+                            <StudentTile
+                                key={`${student.id}`}
+                                student={student}
+                                actions={
+                                    controlEnabled
+                                        ? [
+                                              /*
                                             { icon: 'messenger', onClick: () => {} },
                                             { icon: 'oneNote', onClick: () => {} },
                                         */
-                                          {
-                                              icon: 'pencil',
-                                              onClick: () => {
-                                                  navigation.jumpTo('Profile', {
-                                                      screen: 'Edit',
-                                                      student: student,
-                                                      initial: true,
-                                                  });
+                                              {
+                                                  icon: 'pencil',
+                                                  onClick: () => {
+                                                      navigation.jumpTo(
+                                                          'Profile',
+                                                          {
+                                                              screen: 'Edit',
+                                                              student: student,
+                                                              initial: true,
+                                                          },
+                                                      );
+                                                  },
                                               },
-                                          },
-                                          {
-                                              icon: 'trash',
-                                              onClick: () => {
-                                                  openModal({
-                                                      message: `Czy chcesz usunąć ${getFullName(student)}`,
-                                                      onConfirm: () => {
-                                                          handleDeleteEvent(
-                                                              student,
-                                                          );
-                                                      },
-                                                  });
+                                              {
+                                                  icon: 'trash',
+                                                  onClick: () => {
+                                                      openModal({
+                                                          message: `Czy chcesz usunąć ${getFullName(student)}`,
+                                                          onConfirm: () => {
+                                                              handleDeleteEvent(
+                                                                  student,
+                                                              );
+                                                          },
+                                                      });
+                                                  },
                                               },
-                                          },
-                                      ]
-                                    : []
-                            }
-                            onClick={() =>
-                                navigation.jumpTo('Profile', {
-                                    screen: 'Info',
-                                    student: student,
-                                })
-                            }
-                        />
-                    ))}
+                                          ]
+                                        : []
+                                }
+                                onClick={() =>
+                                    
+                                }
+                            />
+                        ))
+                    ) : (
+                        <Text>Brak danych</Text>
+                    )}
                 </LoadWrapper>
                 <Button
                     onClick={() => navigation.jumpTo('Create')}

@@ -29,8 +29,8 @@ class LessonsService {
             const response = await axios.post(LESSONS_URL, body);
             return response.data;
         } catch (error) {
-            console.log('create lesson error');
-            console.log(JSON.stringify(error, null, 2));
+            console.log(body);
+            console.log(error);
             throw error;
         }
     };

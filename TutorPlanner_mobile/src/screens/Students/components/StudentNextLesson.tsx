@@ -8,28 +8,13 @@ import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 interface StudentNextLessonProps {
-    studentId: number;
+    lesson?: LessonDTO;
 }
 
-const StudentNextLesson: React.FC<StudentNextLessonProps> = ({ studentId }) => {
-    const [nextLesson, setNextLesson] = useState<LessonDTO | undefined>(() => {
-        return undefined;
-    });
-
+const StudentNextLesson: React.FC<StudentNextLessonProps> = ({ lesson }) => {
     const navigateToCallendar = () => {
         //TODO - rather should open event modal and then -> `show in callendar`
     };
-
-    const loadData = async () => {
-        const data = await studentsService.getNextStudentLesson(studentId);
-        if (data && 'name' in data) {
-            setNextLesson(data);
-        }
-    };
-
-    useEffect(() => {
-        loadData();
-    }, [studentId]);
 
     return (
         <View
@@ -40,14 +25,14 @@ const StudentNextLesson: React.FC<StudentNextLessonProps> = ({ studentId }) => {
             }}
         >
             <Header title="Najbliższe zajęcia" isCentered />
-            {nextLesson ? (
+            {lesson ? (
                 <Pressable onPress={navigateToCallendar}>
                     <Tile>
                         <Text>
-                            {nextLesson.name}{' '}
-                            {`(${nextLesson.startHour} - ${nextLesson.endHour})`}
+                            {lesson.name}{' '}
+                            {`(${lesson.startHour} - ${lesson.endHour})`}
                         </Text>
-                        <Text>{format(nextLesson.date, 'yyyy-MM-dd')}</Text>
+                        <Text>{format(lesson.date, 'yyyy-MM-dd')}</Text>
                     </Tile>
                 </Pressable>
             ) : (

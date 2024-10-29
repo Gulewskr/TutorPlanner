@@ -21,32 +21,21 @@ export type StudentsTabParamList = {
     Create: undefined;
     Profile: {
         screen: keyof StudentProfileTabParamList;
-        student: StudentDTO;
         initial?: boolean;
     };
 };
 
 export type StudentProfileTabParamList = {
-    Info: {
-        student: StudentDTO;
-    };
-    Lessons: {
-        student: StudentDTO;
-    };
-    Analise: {
-        student: StudentDTO;
-    };
+    Info: undefined;
+    Lessons: undefined;
+    Analise: undefined;
     Edit: {
         student: StudentDTO;
         inProfile?: boolean;
         onCancel?: () => void;
     };
-    CreateLessons: {
-        student: StudentDTO;
-    };
-    CreatePayment: {
-        student: StudentDTO;
-    };
+    CreateLessons: undefined;
+    CreatePayment: undefined;
 };
 
 export type LessonsTabParamList = {

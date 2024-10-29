@@ -1,6 +1,6 @@
 import { Text, View } from 'react-native';
 import { StudentProfileTabParamList } from '../StudentProfile';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { StudentsLayout } from '../Layout';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -9,38 +9,28 @@ import { Tile } from '@components/tile';
 import { StudentNextLesson } from 'src/screens/Students/components/StudentNextLesson';
 import { studentsService } from '@services/students.service';
 import { StudentDTO } from '@model';
+import { useStudentContext } from '../StudentContext';
 
 export const StudentInformations: React.FC<
     BottomTabScreenProps<StudentProfileTabParamList, 'Info'>
 > = props => {
     const { navigation, route } = props;
-    const [student, setStudent] = useState<StudentDTO>(route?.params?.student);
+    const { data, recalculate, refresh, loading } = useStudentContext();
 
-    useEffect(() => {
-        setStudent(route?.params?.student);
-    }, [route?.params?.student]);
+    const { student, studentNextLesson } = data;
 
     const reloadBalance = async () => {
-        const res = await studentsService.recalculateBalance(student.id);
-        setStudent(res);
+        student && recalculate(student.id);
     };
 
-    const goToCreateLesson = (): void =>
-        navigation.jumpTo('CreateLessons', {
-            student: student,
-        });
-    const goToLessonsList = (): void =>
-        navigation.jumpTo('Lessons', {
-            student: student,
-        });
+    const goToCreateLesson = (): void => navigation.jumpTo('CreateLessons');
+    const goToLessonsList = (): void => navigation.jumpTo('Lessons');
     const goToEdit = (): void =>
+        student &&
         navigation.jumpTo('Edit', {
             student: student,
         });
-    const goToAddPayment = (): void =>
-        navigation.jumpTo('CreatePayment', {
-            student: student,
-        });
+    const goToAddPayment = (): void => navigation.jumpTo('CreatePayment');
 
     return (
         <StudentsLayout {...props}>
@@ -50,7 +40,7 @@ export const StudentInformations: React.FC<
                         <Text>
                             Cena:{' '}
                             <Text style={{ fontWeight: 'bold' }}>
-                                {student.defaultPrice || 0}
+                                {student?.defaultPrice || 0}
                                 zł
                             </Text>
                         </Text>
@@ -67,7 +57,7 @@ export const StudentInformations: React.FC<
                 <View style={{ width: '48%' }}>
                     <Button
                         icon="refresh"
-                        label={`Bilans: ${student.balance}zł`}
+                        label={`Bilans: ${student?.balance || 0}zł`}
                         onClick={() => {
                             reloadBalance();
                         }}
@@ -84,7 +74,7 @@ export const StudentInformations: React.FC<
                     />
                 </View>
             </View>
-            <StudentNextLesson studentId={student.id} />
+            <StudentNextLesson lesson={studentNextLesson} />
             <View style={styles.double_button_container}>
                 <View style={{ width: '48%' }}>
                     <Button

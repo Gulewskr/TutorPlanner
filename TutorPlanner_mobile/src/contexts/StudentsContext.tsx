@@ -2,17 +2,19 @@ import { StudentDTO } from '@model';
 import { studentsService } from '@services/students.service';
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
-type StudnetContextProps = {
+interface ServerDataContext<T> {
     loading: boolean;
-    data?: StudentDTO;
-    fetch: (studId: number) => Promise<void>;
-    error?: any;
-};
+    data: T;
+    fetch: () => Promise<void>;
+    error?: any; //TODO error object
+}
+
+type StudnetContextProps = ServerDataContext<StudentDTO[]>;
 
 // Create the DataContext
 export const StudentContext = createContext<StudnetContextProps>({
     loading: true,
-    data: undefined,
+    data: [],
     fetch: function (): Promise<void> {
         throw new Error('Function not implemented.');
     },
@@ -22,22 +24,24 @@ export const useStudentsContext = () => useContext(StudentContext);
 
 export const StudentsProvider = ({ children }: React.PropsWithChildren) => {
     const [loading, setLoading] = useState(false);
-    const [studentData, setStudentData] = useState<StudentDTO | undefined>();
+    const [students, setStudents] = useState<StudentDTO[]>([]);
 
-    const fetchData = async (studId: number): Promise<void> => {
+    const fetchData = async (): Promise<void> => {
         setLoading(true);
-        const response = await studentsService.getStudent(studId);
+        const response = await studentsService.getStudentsList();
         setLoading(false);
-        if (response) {
-            setStudentData(response);
-        }
+        setStudents(response.data);
     };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
         <StudentContext.Provider
             value={{
                 loading: loading,
-                data: studentData,
+                data: students,
                 fetch: fetchData,
             }}
         >
