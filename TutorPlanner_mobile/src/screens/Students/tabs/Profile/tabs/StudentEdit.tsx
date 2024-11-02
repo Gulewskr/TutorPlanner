@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { StudentProfileTabParamList } from '@components/ui/navbar';
 import { useAlert } from '@contexts/AlertContext';
-import { useStudentsContext } from '@contexts/StudentContext';
+import { useStudentsContext } from '@contexts/StudentsContext';
 import { StudentDTO } from '@model';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { getFullName } from '@utils/utils';
@@ -38,6 +38,7 @@ export const StudentEdit: React.FC<
     const { fetch: refreshStudentsData } = useStudentsContext();
     const {
         data: { student: studentContext },
+        refresh,
     } = useStudentContext();
     const { showAlert } = useAlert();
 
@@ -45,6 +46,7 @@ export const StudentEdit: React.FC<
 
     const handleStudentUpdate = (data: StudentDTO) => {
         refreshStudentsData();
+        refresh();
         showAlert({
             message: `Zaktualizowano dane ucznia.`,
             severity: 'success',
@@ -57,7 +59,7 @@ export const StudentEdit: React.FC<
     ) : (
         <>
             {inProfile ? (
-                <StudentsLayout {...props}>
+                <StudentsLayout {...props} student={student}>
                     {FormHeader}
                     <View style={containerStyle}>
                         <StudentForm

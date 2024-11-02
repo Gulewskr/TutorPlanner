@@ -4,6 +4,7 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { PropsWithChildren } from 'react';
 import { Layout } from 'src/screens/Layout';
 import { getFullName } from 'src/utils/utils';
+import { StudentDTO } from '@model';
 
 const tabs: Array<TabItem<keyof StudentProfileTabParamList>> = [
     {
@@ -43,14 +44,16 @@ export const StudentsLayout: React.FC<
         BottomTabScreenProps<
             StudentProfileTabParamList,
             keyof StudentProfileTabParamList
-        >
+        > & {
+            student: StudentDTO;
+        }
     >
-> = ({ navigation, route, children }) => {
+> = ({ navigation, route, children, student }) => {
     return (
         <Layout
             navigation={navigation.getParent()}
             route={'Students'}
-            title={getFullName(route.params.student)}
+            title={getFullName(student)}
             hasHeader
         >
             <Tabs
@@ -60,6 +63,7 @@ export const StudentsLayout: React.FC<
                     navigation.jumpTo(tabs[index].id, {
                         ...route.params,
                         inProfile: true,
+                        student: student,
                     })
                 }
             />

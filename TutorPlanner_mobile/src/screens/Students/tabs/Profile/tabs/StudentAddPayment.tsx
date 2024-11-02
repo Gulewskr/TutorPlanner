@@ -14,7 +14,7 @@ export const StudentAddPayment: React.FC<
     } = useStudentContext();
 
     return (
-        <StudentsLayout {...props}>
+        <StudentsLayout {...props} student={student}>
             <AddStudentPayment student={student!} navigation={navigation} />
         </StudentsLayout>
     );

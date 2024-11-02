@@ -7,6 +7,7 @@ import { DailyCalendar } from './tabs/DailyCalendar';
 import { MonthlyCalendar } from './tabs/MonthlyCalendar';
 import { CalendarTabParamList } from './calendarTabs';
 import { RootStackParamList } from '@components/ui/navbar';
+import { CalendarProvider } from './CalendarContext';
 
 const Tab = createBottomTabNavigator<CalendarTabParamList>();
 
@@ -14,21 +15,26 @@ export const RootCalendar: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Calendar'>
 > = ({ navigation, route }) => {
     return (
-        <Tab.Navigator
-            initialRouteName="MonthlyCalendar"
-            screenOptions={{
-                headerShown: false,
-                tabBarStyle: {
-                    display: 'none',
-                },
-            }}
-            backBehavior="history"
-        >
-            <Tab.Screen name="MonthlyCalendar" component={MonthlyCalendar} />
-            <Tab.Screen name="DailyCalendar" component={DailyCalendar} />
-            <Tab.Screen name="Event" component={EventDetails} />
-            <Tab.Screen name="Create" component={CreateEvent} />
-        </Tab.Navigator>
+        <CalendarProvider>
+            <Tab.Navigator
+                initialRouteName="MonthlyCalendar"
+                screenOptions={{
+                    headerShown: false,
+                    tabBarStyle: {
+                        display: 'none',
+                    },
+                }}
+                backBehavior="history"
+            >
+                <Tab.Screen
+                    name="MonthlyCalendar"
+                    component={MonthlyCalendar}
+                />
+                <Tab.Screen name="DailyCalendar" component={DailyCalendar} />
+                <Tab.Screen name="Event" component={EventDetails} />
+                <Tab.Screen name="Create" component={CreateEvent} />
+            </Tab.Navigator>
+        </CalendarProvider>
     );
 };
 

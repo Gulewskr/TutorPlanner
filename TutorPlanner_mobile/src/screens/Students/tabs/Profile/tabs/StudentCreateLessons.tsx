@@ -14,7 +14,7 @@ export const StudentCreateLessons: React.FC<
     } = useStudentContext();
 
     return (
-        <StudentsLayout {...props}>
+        <StudentsLayout {...props} student={student}>
             <LoadWrapper loading={student === undefined}>
                 <CreateStudentLesson
                     key={`${student?.id}-${student?.defaultPrice}`}

@@ -33,7 +33,7 @@ export const StudentInformations: React.FC<
     const goToAddPayment = (): void => navigation.jumpTo('CreatePayment');
 
     return (
-        <StudentsLayout {...props}>
+        <StudentsLayout {...props} student={student}>
             <View style={styles.double_button_container}>
                 <View style={{ width: '48%' }}>
                     <Tile color="white" hasShadow centered>

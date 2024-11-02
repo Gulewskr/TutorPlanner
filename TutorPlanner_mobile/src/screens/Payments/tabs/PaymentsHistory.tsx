@@ -5,7 +5,7 @@ import { PaymentsLayout } from '../PaymentsLayout';
 import { PaymentTile } from '../components/PaymentTile';
 import { ScrollView } from '@components/ui/scrool-view';
 import { Button } from '@components/button';
-import { MONTHS_NOMINATIVE } from '@components/complex/calendar';
+import { MONTHS_NOMINATIVE } from 'src/screens/Calendar/components/calendar';
 import { addMonths, getMonth, getYear, isSameYear } from 'date-fns';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { $color_primary } from '@styles/colors';

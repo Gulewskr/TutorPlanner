@@ -5,7 +5,7 @@ import { StudentTile } from '../components/StudentTile';
 import { ScrollView as CustomScrollView } from '@components/ui/scrool-view';
 import { Button } from '@components/button';
 import { StudentsTabParamList } from '@components/ui/navbar';
-import { useStudentsContext } from '@contexts/StudentContext';
+import { useStudentsContext } from '@contexts/StudentsContext';
 import { LoadWrapper } from '@components/loader';
 import { CheckboxTile } from '@components/checkbox';
 import { Text, View } from 'react-native';
@@ -41,11 +41,11 @@ export const StudentsList: React.FC<
     };
 
     const handleMoveToStudentProfile = (stud: StudentDTO) => {
-
         navigation.jumpTo('Profile', {
-            screen: 'Info'
+            screen: 'Info',
+            student: stud,
         });
-    }
+    };
 
     return (
         <Layout
@@ -72,10 +72,8 @@ export const StudentsList: React.FC<
                                 actions={
                                     controlEnabled
                                         ? [
-                                              /*
-                                            { icon: 'messenger', onClick: () => {} },
-                                            { icon: 'oneNote', onClick: () => {} },
-                                        */
+                                              //{ icon: 'messenger', onClick: () => {} },
+                                              //{ icon: 'oneNote', onClick: () => {} },
                                               {
                                                   icon: 'pencil',
                                                   onClick: () => {
@@ -83,8 +81,8 @@ export const StudentsList: React.FC<
                                                           'Profile',
                                                           {
                                                               screen: 'Edit',
-                                                              student: student,
                                                               initial: true,
+                                                              student: student,
                                                           },
                                                       );
                                                   },
@@ -106,7 +104,7 @@ export const StudentsList: React.FC<
                                         : []
                                 }
                                 onClick={() =>
-                                    
+                                    handleMoveToStudentProfile(student)
                                 }
                             />
                         ))

@@ -134,9 +134,13 @@ const styles = (
                     ? pressed
                         ? '$color_func'
                         : '$color_func'
-                    : pressed
-                      ? '$color_primary_hover'
-                      : '$color_primary',
+                    : severity == 'error'
+                      ? pressed
+                          ? '#FF6B6B'
+                          : '#FF6B6B'
+                      : pressed
+                        ? '$color_primary_hover'
+                        : '$color_primary',
             position: 'relative',
             shadowColor: '#000000',
             elevation: 3,

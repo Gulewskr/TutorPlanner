@@ -22,7 +22,8 @@ import { RootStackParamList } from '@components/ui/navbar';
 import { ModalProvider } from '@contexts/modalContext';
 import { AlertProvider } from '@contexts/AlertContext';
 import { ConfirmModalProvider } from '@contexts/confirmModalContext';
-import { StudentsProvider } from '@contexts/StudentContext';
+import { StudentsProvider } from '@contexts/StudentsContext';
+import { StudentProvider } from '@contexts/StudentContext';
 
 EStyleSheet.build({
     $color_primary: '#FFA9F1',
@@ -55,47 +56,52 @@ const App: React.FC<{}> = () => {
                 <ModalProvider>
                     <AlertProvider>
                         <StudentsProvider>
-                            <Stack.Navigator
-                                screenOptions={{
-                                    animation: 'none',
-                                    headerShown: false,
-                                }}
-                            >
-                                <Stack.Screen
-                                    name="Home"
-                                    component={Home}
-                                    options={{
+                            <StudentProvider>
+                                <Stack.Navigator
+                                    screenOptions={{
+                                        animation: 'none',
                                         headerShown: false,
-                                        headerTitleAlign: 'center',
-                                        title: 'Welcome',
                                     }}
-                                />
-                                <Stack.Screen
-                                    name="Calendar"
-                                    component={Calendar}
-                                />
-                                <Stack.Screen
-                                    name="Lessons"
-                                    component={Lessons}
-                                />
-                                <Stack.Screen name="Notes" component={Notes} />
-                                <Stack.Screen
-                                    name="Payments"
-                                    component={Payments}
-                                />
-                                <Stack.Screen
-                                    name="Students"
-                                    component={Students}
-                                />
-                                <Stack.Screen
-                                    name="Settings"
-                                    component={Settings}
-                                />
-                                <Stack.Screen
-                                    name="CreatePayment"
-                                    component={CreatePayment}
-                                />
-                            </Stack.Navigator>
+                                >
+                                    <Stack.Screen
+                                        name="Home"
+                                        component={Home}
+                                        options={{
+                                            headerShown: false,
+                                            headerTitleAlign: 'center',
+                                            title: 'Welcome',
+                                        }}
+                                    />
+                                    <Stack.Screen
+                                        name="Calendar"
+                                        component={Calendar}
+                                    />
+                                    <Stack.Screen
+                                        name="Lessons"
+                                        component={Lessons}
+                                    />
+                                    <Stack.Screen
+                                        name="Notes"
+                                        component={Notes}
+                                    />
+                                    <Stack.Screen
+                                        name="Payments"
+                                        component={Payments}
+                                    />
+                                    <Stack.Screen
+                                        name="Students"
+                                        component={Students}
+                                    />
+                                    <Stack.Screen
+                                        name="Settings"
+                                        component={Settings}
+                                    />
+                                    <Stack.Screen
+                                        name="CreatePayment"
+                                        component={CreatePayment}
+                                    />
+                                </Stack.Navigator>
+                            </StudentProvider>
                         </StudentsProvider>
                     </AlertProvider>
                 </ModalProvider>

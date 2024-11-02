@@ -22,6 +22,7 @@ export type StudentsTabParamList = {
     Profile: {
         screen: keyof StudentProfileTabParamList;
         initial?: boolean;
+        student: StudentDTO;
     };
 };
 

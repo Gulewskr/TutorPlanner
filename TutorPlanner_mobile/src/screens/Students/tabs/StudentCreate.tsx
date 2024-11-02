@@ -4,7 +4,7 @@ import { StudentForm } from '../components/StudentForm';
 import { View } from 'react-native';
 import { StudentDTO } from '@model';
 import { useAlert } from '@contexts/AlertContext';
-import { useStudentsContext } from '@contexts/StudentContext';
+import { useStudentsContext } from '@contexts/StudentsContext';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 export const StudentCreate: React.FC<

@@ -13,7 +13,7 @@ export const StudentAnalise: React.FC<
     } = useStudentContext();
 
     return (
-        <StudentsLayout {...props}>
+        <StudentsLayout {...props} student={student}>
             <Text>This is {student?.id}'s profile</Text>
         </StudentsLayout>
     );

@@ -1,5 +1,5 @@
 import { Button } from '@components/button';
-import { CheckboxTile } from '@components/checkbox';
+//import { CheckboxTile } from '@components/checkbox';
 import { Tile } from '@components/tile';
 import { useConfirmModal } from '@contexts/confirmModalContext';
 import { LessonDTO } from '@model';
@@ -32,7 +32,6 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                     {event.startHour} - {event.endHour}
                 </Text>
             </View>
-
             <View style={styles.double_container}>
                 <View style={{ width: '50%' }}>
                     <Tile color="white">
@@ -41,37 +40,47 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                 </View>
                 <View style={{ width: '50%' }}>
                     <Button
-                        icon="addPayment"
+                        icon="pencil"
                         size="small"
                         onClick={() => console.log(1)}
-                        label="Zmień opłatę"
+                        label="Edytuj"
+                        severity="warning"
                     />
                 </View>
             </View>
-            <CheckboxTile onChange={() => console.log(1)} label="Opłacone" />
+            {event.isPaid ? (
+                <Tile color="green">
+                    <Text>Opłacone</Text>
+                </Tile>
+            ) : (
+                <Tile color="red">
+                    <Text>Nieopłacone</Text>
+                </Tile>
+            )}
             <Button
                 onClick={() => console.log(1)}
                 icon="students"
                 size="small"
                 label="Profil ucznia"
+                secondary
             />
-            <View style={[styles.double_container, { marginTop: 30 }]}>
-                <View style={{ width: '50%' }}>
-                    <Button
-                        icon="pencil"
-                        size="small"
-                        onClick={() => console.log(event)}
-                        label="Edytuj"
-                    />
-                </View>
-                <View style={{ width: '50%' }}>
+            <View style={{ marginTop: 30, width: '50%' }}>
+                {event.isCanceled ? (
                     <Button
                         icon="trash"
                         size="small"
                         onClick={handleDeleteEvent}
                         label="Usuń"
+                        severity="error"
                     />
-                </View>
+                ) : (
+                    <Button
+                        size="small"
+                        onClick={() => console.log(event)}
+                        label="Anuluj zajęcia"
+                        severity="error"
+                    />
+                )}
             </View>
         </View>
     );

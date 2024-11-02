@@ -6,6 +6,7 @@ type StudnetContextProps = {
     loading: boolean;
     data?: StudentDTO;
     fetch: (studId: number) => Promise<void>;
+    selectStudent: (student: StudentDTO) => void;
     error?: any;
 };
 
@@ -16,11 +17,14 @@ export const StudentContext = createContext<StudnetContextProps>({
     fetch: function (): Promise<void> {
         throw new Error('Function not implemented.');
     },
+    selectStudent: (student: StudentDTO) => {
+        throw new Error('Function not implemented.');
+    },
 });
 
-export const useStudentsContext = () => useContext(StudentContext);
+export const useStudentContext = () => useContext(StudentContext);
 
-export const StudentsProvider = ({ children }: React.PropsWithChildren) => {
+export const StudentProvider = ({ children }: React.PropsWithChildren) => {
     const [loading, setLoading] = useState(false);
     const [studentData, setStudentData] = useState<StudentDTO | undefined>();
 
@@ -33,12 +37,17 @@ export const StudentsProvider = ({ children }: React.PropsWithChildren) => {
         }
     };
 
+    const selectStudent = async (student: StudentDTO): Promise<void> => {
+        setStudentData(student);
+    };
+
     return (
         <StudentContext.Provider
             value={{
                 loading: loading,
                 data: studentData,
                 fetch: fetchData,
+                selectStudent,
             }}
         >
             {children}
