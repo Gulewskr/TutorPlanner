@@ -1,4 +1,10 @@
-import { ErrorResponse, LessonDTO, StudentDTO, StudentsDTO } from '@model';
+import {
+    ErrorResponse,
+    LessonDTO,
+    StudentDTO,
+    StudentLessonsData,
+    StudentsDTO,
+} from '@model';
 import { STUDENTS_URL } from './config';
 import { axios } from './baseService';
 import { AxiosError } from 'axios';
@@ -91,7 +97,7 @@ class StudentsService {
             return undefined;
         }
     };
-    getStudentLessons = async (
+    getStudentLessonsList = async (
         studnetId: number,
     ): Promise<LessonDTO[] | undefined> => {
         try {
@@ -102,6 +108,14 @@ class StudentsService {
         } catch (error) {
             return undefined;
         }
+    };
+    getStudentLessonsData = async (
+        studnetId: number,
+    ): Promise<StudentLessonsData> => {
+        const response = await axios.get(
+            `${STUDENTS_URL}/${studnetId}/profile/lessons`,
+        );
+        return response.data;
     };
     recalculateBalance = async (studentId: number): Promise<StudentDTO> => {
         try {

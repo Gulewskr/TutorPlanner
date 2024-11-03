@@ -1,5 +1,5 @@
 import { EventSeriesType, Prisma } from '@prisma/client';
-import { addWeeks, endOfMonth } from 'date-fns';
+import { addWeeks, endOfMonth, getDay } from 'date-fns';
 import { CONFIG } from '../config';
 import { eventSeriesRepository } from '../models/eventSeries';
 import {
@@ -9,6 +9,7 @@ import {
     LessonDAO,
     LessonDTO,
     LessonFilters,
+    mapEventSeriesToLessonSeriesDTO,
     toLessonDTO,
 } from '../models/lesson';
 import { lessonRepository } from '../repositories/lessonsRepository';
@@ -20,6 +21,7 @@ import {
     LessonUpdateInputSchema,
 } from '../validators/lessons/lesson';
 import { LessonSeriesUpdateInputSchema } from '../validators/lessons/lessonSeries';
+import { LessonSeriesDTO } from '../../../TutorPlanner_shared/LessonDTO';
 
 interface PayedLessonsData {
     lessons: LessonDAO[];
@@ -111,6 +113,14 @@ class LessonsService {
         return await lessonRepository.getLessonsByStudentId(studnetId);
     }
 
+    public async getStudentWeeklyLessons(
+        studnetId: number,
+    ): Promise<LessonSeriesDTO[]> {
+        const res =
+            await lessonRepository.getLessonsSeriesByStudentId(studnetId);
+        return res.map(l => mapEventSeriesToLessonSeriesDTO(l));
+    }
+
     public async getNotPaidStudentLessons(
         studentId: number,
     ): Promise<LessonDAO[]> {
@@ -165,30 +175,32 @@ class LessonsService {
     public async createLesson(
         lesson: CreateLessonRequestBody,
     ): Promise<LessonDTO> {
-        LessonCreateInputSchema.parse(lesson);
-        if (!lesson.weekly) {
+        const lessonInputData = LessonCreateInputSchema.parse(lesson);
+        if (!lessonInputData.weekly) {
             const createdLesson = await lessonRepository.create({
-                name: lesson.name,
-                description: lesson.description,
-                date: lesson.date,
-                type: EventType.LESSON,
-                price: lesson.price,
-                startHour: lesson.startHour,
-                endHour: lesson.endHour,
+                name: lessonInputData.name,
+                description: lessonInputData.description,
+                date: lessonInputData.date,
+                eventType: EventType.LESSON,
+                price: lessonInputData.price,
+                startHour: lessonInputData.startHour,
+                endHour: lessonInputData.endHour,
                 student: {
                     connect: {
-                        id: lesson.student,
+                        id: lessonInputData.student,
                     },
                 },
             });
             return toLessonDTO(createdLesson);
         } else {
             const series = await eventSeriesRepository.createEventSeries({
-                name: lesson.name,
-                description: lesson.description,
-                startHour: lesson.startHour,
-                endHour: lesson.endHour,
+                name: lessonInputData.name,
+                description: lessonInputData.description,
+                startHour: lessonInputData.startHour,
+                endHour: lessonInputData.endHour,
                 type: EventSeriesType.WEEKLY,
+                pattern: JSON.stringify([getDay(lesson.date)]),
+                studentId: lessonInputData.student,
                 isCanceled: false,
             });
             const inputData: Prisma.EventCreateManyInput[] = [];
@@ -196,7 +208,7 @@ class LessonsService {
             while (lessonDate < CONFIG.MAX_DATE) {
                 inputData.push({
                     date: lessonDate,
-                    type: EventType.LESSON,
+                    eventType: EventType.LESSON,
                     name: lesson.name,
                     description: lesson.description,
                     startHour: lesson.startHour,

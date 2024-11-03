@@ -50,11 +50,10 @@ model Payment {
 }
 
 model Event {
-    id           Int       @id @default(autoincrement())
+    id           Int      @id @default(autoincrement())
     date         DateTime
-    isCanceled   Boolean   @default(false)
-    isOverridden Boolean   @default(false)
-    type         EventType
+    isCanceled   Boolean  @default(false)
+    isOverridden Boolean  @default(false)
 
     eventSeriesId Int?
     eventSeries   EventSeries? @relation(fields: [eventSeriesId], references: [id])
@@ -64,6 +63,7 @@ model Event {
     description String?
     startHour   Int?
     endHour     Int?
+    eventType   EventType @default(LESSON)
 
     //LessonData
     price     Float?
@@ -76,6 +76,10 @@ model EventSeries {
     id         Int             @id @default(autoincrement())
     type       EventSeriesType
     pattern    String?
+    //DAILY - none
+    //WEEKLY - arrays of days 
+    //MONTHLY - array of days
+    //YEARLY - full date
     startDate  DateTime?
     endDate    DateTime?
     isCanceled Boolean         @default(false)
@@ -85,10 +89,10 @@ model EventSeries {
     description String?
     startHour   Int?
     endHour     Int?
+    eventType   EventType @default(LESSON)
 
     //LessonData
     price     Float?
-    isPaid    Boolean? @default(false)
     studentId Int?
 
     events Event[]

@@ -1,10 +1,10 @@
-import { LessonDTO, StudentDTO } from '@model';
+import { LessonDTO, StudentDTO, StudentLessonsData } from '@model';
 import { studentsService } from '@services/students.service';
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
 interface StudentProfileData {
     student: StudentDTO;
-    studentLessons?: LessonDTO[];
+    studentLessons: StudentLessonsData;
     studentNextLesson?: LessonDTO;
 }
 
@@ -31,7 +31,13 @@ const undefinedStudent: StudentDTO = {
 // Create the DataContext
 export const StudentContext = createContext<StudnetContextProps>({
     loading: true,
-    data: { student: undefinedStudent },
+    data: {
+        student: undefinedStudent,
+        studentLessons: {
+            weeklyLessons: [],
+            currentMonth: [],
+        },
+    },
     refresh: () => {},
     recalculate: (studentId: number) => {},
     refreshLessons: (studentId: number) => {},
@@ -47,6 +53,10 @@ export const StudentContextProvider = ({
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<StudentProfileData>({
         student: undefinedStudent,
+        studentLessons: {
+            weeklyLessons: [],
+            currentMonth: [],
+        },
     });
 
     useEffect(() => {
@@ -79,11 +89,15 @@ export const StudentContextProvider = ({
     };
 
     const fetchStudentLessons = async (studentId: number): Promise<void> => {
-        const res = await studentsService.getStudentLessons(studentId);
-        setData(p => ({
-            ...p,
-            studentLessons: res,
-        }));
+        try {
+            const res = await studentsService.getStudentLessonsData(studentId);
+            setData(p => ({
+                ...p,
+                studentLessons: res,
+            }));
+        } catch (e) {
+            console.log('Błąd pobierania danych studenta');
+        }
     };
 
     const fetchStudentNextLesson = async (studentId: number): Promise<void> => {

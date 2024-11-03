@@ -7,7 +7,7 @@ export const toEventDTO = (data: EventDAO): EventDTO => ({
     date: data.date,
     isCanceled: data.isCanceled,
     isOverridden: data.isOverridden,
-    type: data.type,
+    eventType: data.eventType,
     eventSeriesId: data.eventSeriesId || undefined,
     description: data.description || '',
     startHour: data.startHour || 0,

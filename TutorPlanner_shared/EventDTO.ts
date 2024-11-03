@@ -4,7 +4,7 @@ export type EventDTO = {
     date: Date;
     isCanceled: boolean;
     isOverridden: boolean;
-    type: 'LESSON' | 'DEFAULT';
+    eventType: 'LESSON' | 'DEFAULT';
     eventSeriesId?: number;
     description?: string;
     startHour?: number;

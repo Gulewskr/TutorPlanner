@@ -1,12 +1,9 @@
+import React from 'react';
 import { Header } from '@components/header';
-import { Tile } from '@components/tile';
 import { LessonDTO } from '@model';
-import { studentsService } from '@services/students.service';
-import { mapHourValueToText } from '@utils/dateUtils';
-import { format } from 'date-fns';
-import React, { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { LessonTile } from '../../Lessons/components/LessonTile';
 
 interface StudentNextLessonProps {
     lesson?: LessonDTO;
@@ -29,13 +26,7 @@ const StudentNextLesson: React.FC<StudentNextLessonProps> = ({ lesson }) => {
             <Header title="Najbliższe zajęcia" isCentered />
             {lesson ? (
                 <Pressable onPress={navigateToCallendar}>
-                    <Tile>
-                        <Text>
-                            {lesson.name}{' '}
-                            {`(${mapHourValueToText(lesson.startHour)} - ${mapHourValueToText(lesson.endHour)})`}
-                        </Text>
-                        <Text>{format(lesson.date, 'yyyy-MM-dd')}</Text>
-                    </Tile>
+                    <LessonTile lesson={lesson} />
                 </Pressable>
             ) : (
                 <Text>Brak zaplanowanych zajęć</Text>

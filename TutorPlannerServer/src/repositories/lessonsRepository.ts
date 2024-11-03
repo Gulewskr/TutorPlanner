@@ -1,6 +1,6 @@
-import { Prisma } from '@prisma/client';
+import { EventSeries, Prisma } from '@prisma/client';
 import { prisma } from '../db';
-import { CreateLessonRequestBody, LessonDAO } from '../models/lesson';
+import { LessonDAO } from '../models/lesson';
 import { Pagable } from '../../../TutorPlanner_shared/Pagable';
 import { endOfDay, startOfDay } from 'date-fns';
 
@@ -10,7 +10,7 @@ export const lessonRepository = {
         return (await prisma.event.create({
             data: {
                 ...lesson,
-                type: 'LESSON',
+                eventType: 'LESSON',
             },
         })) as LessonDAO;
     },
@@ -24,7 +24,7 @@ export const lessonRepository = {
     getLessonById: async (id: number): Promise<LessonDAO | null> => {
         return (await prisma.event.findFirst({
             where: {
-                type: 'LESSON',
+                eventType: 'LESSON',
                 id: id,
             },
         })) as LessonDAO;
@@ -32,15 +32,25 @@ export const lessonRepository = {
     getLessonsByStudentId: async (studentId: number): Promise<LessonDAO[]> => {
         return (await prisma.event.findMany({
             where: {
-                type: 'LESSON',
+                eventType: 'LESSON',
                 studentId: studentId,
             },
         })) as LessonDAO[];
     },
+    getLessonsSeriesByStudentId: async (
+        studentId: number,
+    ): Promise<EventSeries[]> => {
+        return await prisma.eventSeries.findMany({
+            where: {
+                eventType: 'LESSON',
+                studentId: studentId,
+            },
+        });
+    },
     getLessonByEventSeriesId: async (id: number): Promise<LessonDAO[]> => {
         return (await prisma.event.findMany({
             where: {
-                type: 'LESSON',
+                eventType: 'LESSON',
                 eventSeriesId: id,
             },
         })) as LessonDAO[];
@@ -48,7 +58,7 @@ export const lessonRepository = {
     getAllLessons: async (): Promise<LessonDAO[]> => {
         return (await prisma.event.findMany({
             where: {
-                type: 'LESSON',
+                eventType: 'LESSON',
             },
             orderBy: {
                 date: 'asc',
@@ -61,7 +71,7 @@ export const lessonRepository = {
     ): Promise<LessonDAO[]> => {
         return (await prisma.event.findMany({
             where: {
-                type: 'LESSON',
+                eventType: 'LESSON',
                 date: {
                     gte: startDate,
                     lte: endDate,
@@ -75,7 +85,7 @@ export const lessonRepository = {
     getLessonsByDay: async (date: Date): Promise<LessonDAO[]> => {
         return (await prisma.event.findMany({
             where: {
-                type: 'LESSON',
+                eventType: 'LESSON',
                 date: {
                     gte: startOfDay(date),
                     lt: endOfDay(date),
@@ -95,7 +105,7 @@ export const lessonRepository = {
             data: lesson,
             where: {
                 id: id,
-                type: 'LESSON',
+                eventType: 'LESSON',
             },
         })) as LessonDAO;
     },
@@ -108,7 +118,7 @@ export const lessonRepository = {
                 id: {
                     in: lessonsId,
                 },
-                type: 'LESSON',
+                eventType: 'LESSON',
             },
             data: lesson,
         });
@@ -166,7 +176,7 @@ export const lessonRepository = {
     getLessons: async (
         filter: Prisma.EventWhereInput,
     ): Promise<LessonDAO[]> => {
-        filter.type = 'LESSON';
+        filter.eventType = 'LESSON';
 
         return (await prisma.event.findMany({
             where: filter,
@@ -182,7 +192,7 @@ export const lessonRepository = {
             return (await prisma.event.findFirstOrThrow({
                 where: {
                     studentId: studentId,
-                    type: 'LESSON',
+                    eventType: 'LESSON',
                     date: {
                         gte: new Date(),
                     },
@@ -203,7 +213,7 @@ export const lessonRepository = {
         return (await prisma.event.findFirstOrThrow({
             where: {
                 eventSeriesId: seriesId,
-                type: 'LESSON',
+                eventType: 'LESSON',
                 date: {
                     gte: new Date(),
                 },
@@ -223,7 +233,7 @@ export const lessonRepository = {
         filter?: Prisma.EventWhereInput;
     }): Promise<Pagable<LessonDAO>> => {
         const filter: Prisma.EventWhereInput = systemFilter || {};
-        filter.type = 'LESSON';
+        filter.eventType = 'LESSON';
 
         const startIndex = page && pageSize ? page * pageSize : undefined;
 
@@ -252,7 +262,7 @@ export const lessonRepository = {
     ): Promise<number> => {
         const res = await prisma.event.groupBy({
             where: {
-                type: 'LESSON',
+                eventType: 'LESSON',
                 studentId: studentId,
                 date: {
                     lte: new Date(),
@@ -270,7 +280,7 @@ export const lessonRepository = {
     ): Promise<LessonDAO[]> => {
         return (await prisma.event.findMany({
             where: {
-                type: 'LESSON',
+                eventType: 'LESSON',
                 studentId: studentId,
                 isPaid: false,
                 date: {

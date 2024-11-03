@@ -12,3 +12,14 @@ export type LessonDTO = {
     studentId: number;
     eventSeriesId?: number;
 };
+
+export type LessonSeriesDTO = {
+    id: number;
+    daysOfWeek: number[];
+    name: string;
+    description: string;
+    startHour: number;
+    endHour: number;
+    price: number;
+    studentId: number;
+};

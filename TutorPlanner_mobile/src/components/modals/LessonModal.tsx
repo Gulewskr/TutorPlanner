@@ -11,10 +11,10 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 interface LessonModalProps {
     lesson: LessonDTO;
-    goToStudentProfile: () => void;
+    goToStudentProfile?: () => void;
     goToEditForm: () => void;
     //Probably to remove
-    onDelete: (num: number) => void;
+    onDelete?: (num: number) => void;
 }
 
 export const LessonModal: React.FC<LessonModalProps> = ({
@@ -51,16 +51,18 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                     )}
                 </View>
             </View>
-            <Button
-                onClick={() => {
-                    setIsOpen(false);
-                    goToStudentProfile();
-                }}
-                icon="students"
-                size="small"
-                label="Profil ucznia"
-                secondary
-            />
+            {goToStudentProfile && (
+                <Button
+                    onClick={() => {
+                        setIsOpen(false);
+                        goToStudentProfile();
+                    }}
+                    icon="students"
+                    size="small"
+                    label="Profil ucznia"
+                    secondary
+                />
+            )}
             <View style={{ marginTop: 30, width: '100%' }}>
                 <Button
                     icon="pencil"
