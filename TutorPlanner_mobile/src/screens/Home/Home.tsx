@@ -7,10 +7,12 @@ import { EventsList } from '@components/complex/eventslist';
 import { ScrollView } from '@components/ui/scrool-view';
 import { RootStackParamList } from '@components/ui/navbar';
 import { useMemo } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 
 export const Home: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Home'>
 > = ({ navigation, route }) => {
+    const isFocused = useIsFocused();
     const today = useMemo(() => new Date(), []);
 
     return (
@@ -22,67 +24,69 @@ export const Home: React.FC<
             title="Witaj, Natalcia!"
             subtitle="Dziś jest wspaniały dzień do działania :)"
         >
-            <ScrollView>
-                <View style={styles.controlPanel}>
-                    <View style={styles.double_button_container}>
-                        <View style={{ width: '50%' }}>
-                            <Button
-                                icon="addLesson"
-                                onClick={() =>
-                                    navigation.navigate('Lessons', {
-                                        screen: 'Create',
-                                        initial: true,
-                                    })
-                                }
-                                label="Dodaj zajęcia"
-                                width={160}
-                            />
+            {isFocused && (
+                <ScrollView>
+                    <View style={styles.controlPanel}>
+                        <View style={styles.double_button_container}>
+                            <View style={{ width: '50%' }}>
+                                <Button
+                                    icon="addLesson"
+                                    onClick={() =>
+                                        navigation.navigate('Lessons', {
+                                            screen: 'Create',
+                                            initial: true,
+                                        })
+                                    }
+                                    label="Dodaj zajęcia"
+                                    width={160}
+                                />
+                            </View>
+                            <View style={{ width: '50%' }}>
+                                <Button
+                                    icon="addStudent"
+                                    onClick={() =>
+                                        navigation.navigate('Students', {
+                                            screen: 'Create',
+                                            initial: true,
+                                        })
+                                    }
+                                    label="Dodaj ucznia"
+                                    width={160}
+                                />
+                            </View>
                         </View>
-                        <View style={{ width: '50%' }}>
-                            <Button
-                                icon="addStudent"
-                                onClick={() =>
-                                    navigation.navigate('Students', {
-                                        screen: 'Create',
-                                        initial: true,
-                                    })
-                                }
-                                label="Dodaj ucznia"
-                                width={160}
-                            />
+                        <View style={styles.double_button_container}>
+                            <View style={{ width: '50%' }}>
+                                <Button
+                                    icon="addPayment"
+                                    onClick={() =>
+                                        navigation.navigate('CreatePayment')
+                                    }
+                                    label="Dodaj płatność"
+                                    width={160}
+                                />
+                            </View>
+                            <View style={{ width: '50%' }}>
+                                <Button
+                                    icon="notes"
+                                    onClick={() => 1}
+                                    label="Dodaj notatkę"
+                                    disabled={true}
+                                    width={160}
+                                />
+                            </View>
                         </View>
                     </View>
-                    <View style={styles.double_button_container}>
-                        <View style={{ width: '50%' }}>
-                            <Button
-                                icon="addPayment"
-                                onClick={() =>
-                                    navigation.navigate('CreatePayment')
-                                }
-                                label="Dodaj płatność"
-                                width={160}
-                            />
-                        </View>
-                        <View style={{ width: '50%' }}>
-                            <Button
-                                icon="notes"
-                                onClick={() => 1}
-                                label="Dodaj notatkę"
-                                disabled={true}
-                                width={160}
-                            />
-                        </View>
+                    <View style={styles.timeline}>
+                        <Header
+                            rightIcon={'addLesson'}
+                            rightAction={() => 1}
+                            title={'Dzisiejszy plan'}
+                        />
                     </View>
-                </View>
-                <View style={styles.timeline}>
-                    <Header
-                        rightIcon={'addLesson'}
-                        rightAction={() => 1}
-                        title={'Dzisiejszy plan'}
-                    />
-                </View>
-                <EventsList day={today} navigation={navigation} />
-            </ScrollView>
+                    <EventsList day={today} navigation={navigation} />
+                </ScrollView>
+            )}
         </Layout>
     );
 };

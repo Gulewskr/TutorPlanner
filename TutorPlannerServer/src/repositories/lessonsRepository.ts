@@ -113,36 +113,43 @@ export const lessonRepository = {
             data: lesson,
         });
     },
-    //TODO move to EventSeriesService
     updateLessonSeriesByEventId: async (
         id: number,
-        lesson: Partial<CreateLessonRequestBody>,
+        lesson: {
+            name: string;
+            description?: string | null;
+            startHour: number;
+            endHour: number;
+            price: number;
+            student: number;
+        },
     ): Promise<void> => {
         //TODO - transaction
-        const eventSeries = await prisma.event.findFirst({
-            select: {
-                eventSeriesId: true,
+        await prisma.eventSeries.update({
+            data: {
+                name: lesson.name,
+                description: lesson.description,
+                startHour: lesson.startHour,
+                endHour: lesson.endHour,
+                price: lesson.price,
+                studentId: lesson.student,
             },
             where: {
                 id: id,
             },
         });
-        if (eventSeries == null || eventSeries.eventSeriesId == null) {
-            throw new Error('Bad Input event not found');
-        }
-        await prisma.eventSeries.update({
-            data: lesson,
-            where: {
-                id: eventSeries.eventSeriesId,
-            },
-        });
         await prisma.event.updateMany({
             data: {
-                ...lesson,
+                name: lesson.name,
+                description: lesson.description,
+                startHour: lesson.startHour,
+                endHour: lesson.endHour,
+                price: lesson.price,
+                studentId: lesson.student,
             },
             where: {
                 isOverridden: false,
-                eventSeriesId: eventSeries.eventSeriesId,
+                eventSeriesId: id,
                 date: {
                     gte: new Date(),
                 },

@@ -22,7 +22,6 @@ class LessonsService {
             const response = await axios.post(LESSONS_URL, body);
             return response.data;
         } catch (error) {
-            console.log(body);
             console.log(error);
             throw error;
         }
@@ -32,9 +31,6 @@ class LessonsService {
         body: Partial<LessonCreateRequestBody>,
     ): Promise<LessonDTO> => {
         try {
-            console.log(lessonId);
-            console.log(body);
-            throw new Error();
             const response = await axios.put(
                 `${LESSONS_URL}/${lessonId}`,
                 body,
@@ -50,10 +46,7 @@ class LessonsService {
         body: Partial<LessonCreateRequestBody>,
     ): Promise<LessonDTO> => {
         try {
-            console.log(seriesId);
-            console.log(body);
-            throw new Error();
-            const response = await axios.post(
+            const response = await axios.put(
                 `${LESSONS_URL}/series/${seriesId}`,
                 body,
             );

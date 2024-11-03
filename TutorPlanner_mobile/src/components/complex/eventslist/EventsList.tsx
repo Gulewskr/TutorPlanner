@@ -8,8 +8,6 @@ import { useModalContext } from '@contexts/modalContext';
 import { LessonModal } from '@components/modals';
 import axios from 'axios';
 import { LESSONS_URL } from '@services/config';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '@components/ui/navbar';
 import { mapHourValueToText } from '@utils/dateUtils';
 
 interface EventsListProps {
@@ -22,16 +20,26 @@ export const EventsList: React.FC<EventsListProps> = ({ day, navigation }) => {
     const [isLoading, setIsLoading] = useState(true);
     const { setIsOpen, setModalBody } = useModalContext();
 
-    const getEvents = useCallback(async () => {
-        console.log(day);
+    const getEvents = async () => {
         const response = await lessonsService.getLessonsInDay(day);
-        setEvents(response);
+        setEvents(
+            response.sort((a, b) => {
+                const start = a.startHour - b.startHour;
+                if (start === 0) {
+                    return a.endHour - b.endHour;
+                }
+                return start;
+            }),
+        );
         setIsLoading(false);
-    }, [day]);
+    };
 
     useEffect(() => {
+        setIsLoading(true);
+        const intervalId = setInterval(getEvents, 5000);
         getEvents();
-    }, [getEvents]);
+        return () => clearInterval(intervalId);
+    }, [day]);
 
     const handleDeleteEvent = async (eventId: number) => {
         try {

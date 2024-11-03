@@ -77,17 +77,24 @@ export const EditLessonForm: React.FC<
         loadData();
     }, [route.params.lessonId]);
 
-    const successAlert = () =>
+    const onSuccess = () => {
         showAlert({
             message: 'Zapisano zmiany',
             severity: 'success',
         });
+        navigation.goBack();
+    };
 
-    const errorAlert = () =>
+    const onError = () => {
         showAlert({
             message: 'Błąd zapisu',
             severity: 'danger',
         });
+    };
+
+    const onCancel = (): void => {
+        navigation.goBack();
+    };
 
     const handleSubmit = async (data: CreateLessonData): Promise<void> => {
         try {
@@ -104,17 +111,17 @@ export const EditLessonForm: React.FC<
                     startHour: data.hour.startHour,
                     endHour: data.hour.endHour,
                 });
-                successAlert();
+                onSuccess();
             }
         } catch (e) {
-            errorAlert();
+            onError();
         }
     };
 
     const handleLessonSeriesUpdate = async (): Promise<void> => {
         try {
             if (!dataToSave) {
-                return errorAlert();
+                return onError();
             }
             await lessonsService.updateSeries(selectedLesson!.eventSeriesId!, {
                 name: dataToSave.name,
@@ -125,16 +132,16 @@ export const EditLessonForm: React.FC<
                 startHour: dataToSave.hour.startHour,
                 endHour: dataToSave.hour.endHour,
             });
-            successAlert();
+            onSuccess();
         } catch (e) {
-            errorAlert();
+            onError();
         }
     };
 
     const handleLessonSingleEntryUpdate = async (): Promise<void> => {
         try {
             if (!dataToSave) {
-                return errorAlert();
+                return onError();
             }
             await lessonsService.update(selectedLesson!.id, {
                 name: dataToSave.name,
@@ -145,14 +152,10 @@ export const EditLessonForm: React.FC<
                 startHour: dataToSave.hour.startHour,
                 endHour: dataToSave.hour.endHour,
             });
-            successAlert();
+            onSuccess();
         } catch (e) {
-            errorAlert();
+            onError();
         }
-    };
-
-    const handleCancel = (): void => {
-        navigation.goBack();
     };
 
     return (
@@ -184,13 +187,15 @@ export const EditLessonForm: React.FC<
                                                 selectedLesson,
                                             )}
                                             onSubmit={handleSubmit}
-                                            onCancel={handleCancel}
+                                            onCancel={onCancel}
                                             confirmLabel={'Zapisz'}
                                         />
                                         <Button
                                             label="Anuluj zajęcia"
                                             severity="error"
-                                            onClick={() => setPage(0)}
+                                            onClick={() => {
+                                                //TODO - open confirm dialog to cancel lesson
+                                            }}
                                         />
                                     </View>
                                 ) : (
@@ -216,9 +221,7 @@ export const EditLessonForm: React.FC<
                                         />
                                         <Button
                                             label="Cofnij"
-                                            onClick={() => {
-                                                //TODO - open confirm dialog to cancel lesson
-                                            }}
+                                            onClick={() => setPage(0)}
                                         />
                                     </View>
                                 )

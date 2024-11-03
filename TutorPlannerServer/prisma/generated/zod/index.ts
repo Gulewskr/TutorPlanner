@@ -20,7 +20,7 @@ export const PaymentScalarFieldEnumSchema = z.enum(['id','studentId','price','da
 
 export const EventScalarFieldEnumSchema = z.enum(['id','date','isCanceled','isOverridden','type','eventSeriesId','name','description','startHour','endHour','price','isPaid','studentId']);
 
-export const EventSeriesScalarFieldEnumSchema = z.enum(['id','type','pattern','startDate','endDate','isCanceled','name','description','startHour','endHour']);
+export const EventSeriesScalarFieldEnumSchema = z.enum(['id','type','pattern','startDate','endDate','isCanceled','name','description','startHour','endHour','price','isPaid','studentId']);
 
 export const SortOrderSchema = z.enum(['asc','desc']);
 
@@ -123,6 +123,9 @@ export const EventSeriesSchema = z.object({
   description: z.string().nullable(),
   startHour: z.number().int().nullable(),
   endHour: z.number().int().nullable(),
+  price: z.number().nullable(),
+  isPaid: z.boolean().nullable(),
+  studentId: z.number().int().nullable(),
 })
 
 export type EventSeries = z.infer<typeof EventSeriesSchema>
@@ -275,6 +278,9 @@ export const EventSeriesSelectSchema: z.ZodType<Prisma.EventSeriesSelect> = z.ob
   description: z.boolean().optional(),
   startHour: z.boolean().optional(),
   endHour: z.boolean().optional(),
+  price: z.boolean().optional(),
+  isPaid: z.boolean().optional(),
+  studentId: z.boolean().optional(),
   events: z.union([z.boolean(),z.lazy(() => EventFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => EventSeriesCountOutputTypeArgsSchema)]).optional(),
 }).strict()
@@ -597,6 +603,9 @@ export const EventSeriesWhereInputSchema: z.ZodType<Prisma.EventSeriesWhereInput
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   startHour: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   endHour: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  price: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  isPaid: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
+  studentId: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   events: z.lazy(() => EventListRelationFilterSchema).optional()
 }).strict();
 
@@ -611,6 +620,9 @@ export const EventSeriesOrderByWithRelationInputSchema: z.ZodType<Prisma.EventSe
   description: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   startHour: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   endHour: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  price: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  isPaid: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  studentId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   events: z.lazy(() => EventOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
@@ -631,6 +643,9 @@ export const EventSeriesWhereUniqueInputSchema: z.ZodType<Prisma.EventSeriesWher
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   startHour: z.union([ z.lazy(() => IntNullableFilterSchema),z.number().int() ]).optional().nullable(),
   endHour: z.union([ z.lazy(() => IntNullableFilterSchema),z.number().int() ]).optional().nullable(),
+  price: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  isPaid: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
+  studentId: z.union([ z.lazy(() => IntNullableFilterSchema),z.number().int() ]).optional().nullable(),
   events: z.lazy(() => EventListRelationFilterSchema).optional()
 }).strict());
 
@@ -645,6 +660,9 @@ export const EventSeriesOrderByWithAggregationInputSchema: z.ZodType<Prisma.Even
   description: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   startHour: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   endHour: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  price: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  isPaid: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  studentId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   _count: z.lazy(() => EventSeriesCountOrderByAggregateInputSchema).optional(),
   _avg: z.lazy(() => EventSeriesAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => EventSeriesMaxOrderByAggregateInputSchema).optional(),
@@ -666,6 +684,9 @@ export const EventSeriesScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.E
   description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   startHour: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   endHour: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  price: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  isPaid: z.union([ z.lazy(() => BoolNullableWithAggregatesFilterSchema),z.boolean() ]).optional().nullable(),
+  studentId: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
 }).strict();
 
 export const StudentCreateInputSchema: z.ZodType<Prisma.StudentCreateInput> = z.object({
@@ -968,6 +989,9 @@ export const EventSeriesCreateInputSchema: z.ZodType<Prisma.EventSeriesCreateInp
   description: z.string().optional().nullable(),
   startHour: z.number().int().optional().nullable(),
   endHour: z.number().int().optional().nullable(),
+  price: z.number().optional().nullable(),
+  isPaid: z.boolean().optional().nullable(),
+  studentId: z.number().int().optional().nullable(),
   events: z.lazy(() => EventCreateNestedManyWithoutEventSeriesInputSchema).optional()
 }).strict();
 
@@ -982,6 +1006,9 @@ export const EventSeriesUncheckedCreateInputSchema: z.ZodType<Prisma.EventSeries
   description: z.string().optional().nullable(),
   startHour: z.number().int().optional().nullable(),
   endHour: z.number().int().optional().nullable(),
+  price: z.number().optional().nullable(),
+  isPaid: z.boolean().optional().nullable(),
+  studentId: z.number().int().optional().nullable(),
   events: z.lazy(() => EventUncheckedCreateNestedManyWithoutEventSeriesInputSchema).optional()
 }).strict();
 
@@ -995,6 +1022,9 @@ export const EventSeriesUpdateInputSchema: z.ZodType<Prisma.EventSeriesUpdateInp
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   startHour: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   endHour: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isPaid: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  studentId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   events: z.lazy(() => EventUpdateManyWithoutEventSeriesNestedInputSchema).optional()
 }).strict();
 
@@ -1009,6 +1039,9 @@ export const EventSeriesUncheckedUpdateInputSchema: z.ZodType<Prisma.EventSeries
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   startHour: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   endHour: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isPaid: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  studentId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   events: z.lazy(() => EventUncheckedUpdateManyWithoutEventSeriesNestedInputSchema).optional()
 }).strict();
 
@@ -1022,7 +1055,10 @@ export const EventSeriesCreateManyInputSchema: z.ZodType<Prisma.EventSeriesCreat
   name: z.string(),
   description: z.string().optional().nullable(),
   startHour: z.number().int().optional().nullable(),
-  endHour: z.number().int().optional().nullable()
+  endHour: z.number().int().optional().nullable(),
+  price: z.number().optional().nullable(),
+  isPaid: z.boolean().optional().nullable(),
+  studentId: z.number().int().optional().nullable()
 }).strict();
 
 export const EventSeriesUpdateManyMutationInputSchema: z.ZodType<Prisma.EventSeriesUpdateManyMutationInput> = z.object({
@@ -1035,6 +1071,9 @@ export const EventSeriesUpdateManyMutationInputSchema: z.ZodType<Prisma.EventSer
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   startHour: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   endHour: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isPaid: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  studentId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const EventSeriesUncheckedUpdateManyInputSchema: z.ZodType<Prisma.EventSeriesUncheckedUpdateManyInput> = z.object({
@@ -1048,6 +1087,9 @@ export const EventSeriesUncheckedUpdateManyInputSchema: z.ZodType<Prisma.EventSe
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   startHour: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   endHour: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isPaid: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  studentId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const IntFilterSchema: z.ZodType<Prisma.IntFilter> = z.object({
@@ -1561,13 +1603,18 @@ export const EventSeriesCountOrderByAggregateInputSchema: z.ZodType<Prisma.Event
   name: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   startHour: z.lazy(() => SortOrderSchema).optional(),
-  endHour: z.lazy(() => SortOrderSchema).optional()
+  endHour: z.lazy(() => SortOrderSchema).optional(),
+  price: z.lazy(() => SortOrderSchema).optional(),
+  isPaid: z.lazy(() => SortOrderSchema).optional(),
+  studentId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const EventSeriesAvgOrderByAggregateInputSchema: z.ZodType<Prisma.EventSeriesAvgOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   startHour: z.lazy(() => SortOrderSchema).optional(),
-  endHour: z.lazy(() => SortOrderSchema).optional()
+  endHour: z.lazy(() => SortOrderSchema).optional(),
+  price: z.lazy(() => SortOrderSchema).optional(),
+  studentId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const EventSeriesMaxOrderByAggregateInputSchema: z.ZodType<Prisma.EventSeriesMaxOrderByAggregateInput> = z.object({
@@ -1580,7 +1627,10 @@ export const EventSeriesMaxOrderByAggregateInputSchema: z.ZodType<Prisma.EventSe
   name: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   startHour: z.lazy(() => SortOrderSchema).optional(),
-  endHour: z.lazy(() => SortOrderSchema).optional()
+  endHour: z.lazy(() => SortOrderSchema).optional(),
+  price: z.lazy(() => SortOrderSchema).optional(),
+  isPaid: z.lazy(() => SortOrderSchema).optional(),
+  studentId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const EventSeriesMinOrderByAggregateInputSchema: z.ZodType<Prisma.EventSeriesMinOrderByAggregateInput> = z.object({
@@ -1593,13 +1643,18 @@ export const EventSeriesMinOrderByAggregateInputSchema: z.ZodType<Prisma.EventSe
   name: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   startHour: z.lazy(() => SortOrderSchema).optional(),
-  endHour: z.lazy(() => SortOrderSchema).optional()
+  endHour: z.lazy(() => SortOrderSchema).optional(),
+  price: z.lazy(() => SortOrderSchema).optional(),
+  isPaid: z.lazy(() => SortOrderSchema).optional(),
+  studentId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const EventSeriesSumOrderByAggregateInputSchema: z.ZodType<Prisma.EventSeriesSumOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   startHour: z.lazy(() => SortOrderSchema).optional(),
-  endHour: z.lazy(() => SortOrderSchema).optional()
+  endHour: z.lazy(() => SortOrderSchema).optional(),
+  price: z.lazy(() => SortOrderSchema).optional(),
+  studentId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const EnumEventSeriesTypeWithAggregatesFilterSchema: z.ZodType<Prisma.EnumEventSeriesTypeWithAggregatesFilter> = z.object({
@@ -2536,7 +2591,10 @@ export const EventSeriesCreateWithoutEventsInputSchema: z.ZodType<Prisma.EventSe
   name: z.string(),
   description: z.string().optional().nullable(),
   startHour: z.number().int().optional().nullable(),
-  endHour: z.number().int().optional().nullable()
+  endHour: z.number().int().optional().nullable(),
+  price: z.number().optional().nullable(),
+  isPaid: z.boolean().optional().nullable(),
+  studentId: z.number().int().optional().nullable()
 }).strict();
 
 export const EventSeriesUncheckedCreateWithoutEventsInputSchema: z.ZodType<Prisma.EventSeriesUncheckedCreateWithoutEventsInput> = z.object({
@@ -2549,7 +2607,10 @@ export const EventSeriesUncheckedCreateWithoutEventsInputSchema: z.ZodType<Prism
   name: z.string(),
   description: z.string().optional().nullable(),
   startHour: z.number().int().optional().nullable(),
-  endHour: z.number().int().optional().nullable()
+  endHour: z.number().int().optional().nullable(),
+  price: z.number().optional().nullable(),
+  isPaid: z.boolean().optional().nullable(),
+  studentId: z.number().int().optional().nullable()
 }).strict();
 
 export const EventSeriesCreateOrConnectWithoutEventsInputSchema: z.ZodType<Prisma.EventSeriesCreateOrConnectWithoutEventsInput> = z.object({
@@ -2610,6 +2671,9 @@ export const EventSeriesUpdateWithoutEventsInputSchema: z.ZodType<Prisma.EventSe
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   startHour: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   endHour: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isPaid: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  studentId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const EventSeriesUncheckedUpdateWithoutEventsInputSchema: z.ZodType<Prisma.EventSeriesUncheckedUpdateWithoutEventsInput> = z.object({
@@ -2623,6 +2687,9 @@ export const EventSeriesUncheckedUpdateWithoutEventsInputSchema: z.ZodType<Prism
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   startHour: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   endHour: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isPaid: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  studentId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const StudentUpsertWithoutEventInputSchema: z.ZodType<Prisma.StudentUpsertWithoutEventInput> = z.object({
