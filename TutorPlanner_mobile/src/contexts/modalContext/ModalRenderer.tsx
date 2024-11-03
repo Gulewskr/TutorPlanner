@@ -1,22 +1,30 @@
 import React from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from '@components/icon';
+import {
+    $color_primary,
+    $color_primary_shadow,
+    $color_secondary,
+} from '@styles/colors';
 
 interface ModalRendererProps {
     modalBody: React.ReactNode;
-    color?: string;
     onCancel: () => void;
 }
 
 export const ModalRenderer: React.FunctionComponent<ModalRendererProps> = ({
     modalBody,
-    color = '#F16DDC',
     onCancel,
 }) => {
     return (
-        <Modal transparent={true} animationType="slide">
+        <Modal transparent={true} animationType="fade">
             <View style={styles.modalOverlay}>
-                <View style={[styles.modalContent, { backgroundColor: color }]}>
+                <View
+                    style={[
+                        styles.modalContent,
+                        { backgroundColor: $color_primary },
+                    ]}
+                >
                     {modalBody}
                     <TouchableOpacity
                         onPress={onCancel}

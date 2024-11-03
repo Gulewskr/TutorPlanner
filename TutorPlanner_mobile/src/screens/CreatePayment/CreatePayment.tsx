@@ -16,7 +16,10 @@ export const CreatePayment: React.FC<
             hasHeaderSeperated
         >
             <View style={{ padding: 15, width: '100%' }}>
-                <PaymentCreateForm onCancel={navigation.goBack} />
+                <PaymentCreateForm
+                    onCancel={navigation.goBack}
+                    cb={() => navigation.goBack()}
+                />
             </View>
         </Layout>
     );

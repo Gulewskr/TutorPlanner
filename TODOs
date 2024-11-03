@@ -16,13 +16,11 @@ Spis funkcjonalności wersji 0.5:
 -   [DONE] dodawanie zajęć do kalendarzu
 -   [DONE] przegladanie listy uczniów
 -   [DONE] dodawnie uczniów
--   edycja ucznia
--   usuwanie ucznia
+-   [Done] edycja ucznia
+-   [Done] usuwanie ucznia
 -   profil ucznia - główne dane
 -   profil ucznia - historia
--   profil ucznia - dodawanie płatności
-    -   modal do zmiany podstawowej ceny za zajęcia
-    -   [Done] najblizsze zajecia
+-   [Done] profil ucznia - dodawanie płatności
 -   [Done] dodawanie płatności
 -   usuwanie płatności
 -   finanse/podsumowanie
@@ -31,6 +29,8 @@ Spis funkcjonalności wersji 0.5:
 -   wyświetlanie historii płatności
     -   [Done] lista odnotowanych płatności w danym miesiącu
     -   lista nieopłaconych zajęć w danym
+ 
+- obliczanie balansu przy dodaniu/edycji/usunięciu płatności
 
 Zmiany przeniesione do następnej wersji:
 

@@ -1,9 +1,13 @@
-import { Event, EventType } from '@prisma/client';
-import { LessonDTO } from '../../../TutorPlanner_shared/LessonDTO';
+import { Event, EventSeries, EventType } from '@prisma/client';
+import {
+    LessonDTO,
+    LessonSeriesDTO,
+} from '../../../TutorPlanner_shared/LessonDTO';
+import { MAX_HOUR } from '../validators/constraints';
 
 export type LessonDAO = Event & {
-    startHour: string;
-    endHour: string;
+    startHour: number;
+    endHour: number;
     price: number;
     isPaid: boolean;
     studentId: number;
@@ -26,6 +30,31 @@ export const toLessonDTO = (data: LessonDAO): LessonDTO => {
     };
 };
 
+export const mapEventSeriesToLessonSeriesDTO = (
+    data: EventSeries,
+): LessonSeriesDTO => {
+    if (!data.studentId) {
+        throw new Error('Missing student data');
+    }
+    if (!data.pattern) {
+        throw new Error('Missing data data');
+    }
+    const days = JSON.parse(data.pattern);
+    if (!Array.isArray(days)) {
+        throw new Error('Wrong data pattern');
+    }
+    return {
+        id: data.id,
+        daysOfWeek: days,
+        name: data.name,
+        description: data.description || '',
+        startHour: data.startHour || 0,
+        endHour: data.endHour || MAX_HOUR,
+        price: data.price || 0,
+        studentId: data.studentId,
+    };
+};
+
 export interface LessonFilters {
     date?: string; // Opcjonalna właściwość date
     month?: number;
@@ -38,8 +67,8 @@ export interface CreateLessonRequestBody {
     student: number;
     price: number;
     date: Date;
-    startHour: string;
-    endHour: string;
+    startHour: number;
+    endHour: number;
     weekly: boolean;
 }
 

@@ -1,6 +1,7 @@
 import express, { Request, Router } from 'express';
 import PaymentsService from '../services/PaymentsService';
 import { parseStudentId } from './studentsRoutes/utils';
+import StudentPaymentsService from '../services/StudentPaymentsService';
 
 /**
  * Typescript don't like merging params so as workaround cast req.params to any
@@ -45,6 +46,40 @@ router.post('/', async (req, res, next) => {
             ...req.body,
             studentId,
         });
+        await StudentPaymentsService.recalculateStudentBalance(studentId);
+        res.status(200).json(payment);
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
+ * path: /payments/:paymentId
+ */
+router.put('/:id', async (req, res, next) => {
+    try {
+        const studentId = getStudentId(req);
+        const payment = await PaymentsService.updatePayment(
+            Number(req.params.id),
+            {
+                ...req.body,
+                studentId,
+            },
+        );
+        res.status(200).json(payment);
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
+ * path: /payments/:paymentId
+ */
+router.delete('/:id', async (req, res, next) => {
+    try {
+        const payment = await PaymentsService.deletePayment(
+            Number(req.params.id),
+        );
         res.status(200).json(payment);
     } catch (err) {
         next(err);
@@ -96,6 +131,7 @@ router.post('/:studentId/payments/', async (req, res, next) => {
             ...req.body,
             studentId: studentId,
         });
+        await StudentPaymentsService.recalculateStudentBalance(studentId);
         res.status(200).json(payment);
     } catch (err) {
         next(err);

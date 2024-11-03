@@ -1,4 +1,4 @@
-import express, { NextFunction, Router } from 'express';
+import express, { Router } from 'express';
 import StudentService from '../services/StudentService';
 import paymentRouter from './studentsRoutes/payments.routes';
 import lessonsRouter from './studentsRoutes/lessons.routes';
@@ -6,6 +6,7 @@ import { StudentsDTO } from '../dto/students';
 import StudentPaymentsService from '../services/StudentPaymentsService';
 import { parseStudentId } from './studentsRoutes/utils';
 import { errorHandler } from '../middlewares/errorHandler';
+import StudentProfileService from '../services/StudentProfileService';
 
 const router: Router = express.Router();
 
@@ -66,6 +67,21 @@ router.post('/:studentId/recalculate', async (req, res, next) => {
 
 router.use('/:studentId/payments', paymentRouter);
 router.use('/:studentId/lessons', lessonsRouter);
+
+/**
+ * path: students/:studentId/profile/lessons
+ *
+ * returns StudentLessonsData
+ */
+router.get('/:studentId/profile/lessons', async (req, res, next) => {
+    try {
+        const studentId = parseStudentId(req);
+        const lessons = await StudentProfileService.getLessonsData(studentId);
+        res.status(200).json(lessons);
+    } catch (err) {
+        next(err);
+    }
+});
 
 router.use(errorHandler);
 

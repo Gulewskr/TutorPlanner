@@ -1,4 +1,5 @@
 import { EventSeriesType, Prisma } from '@prisma/client';
+import { addWeeks, endOfMonth, getDay } from 'date-fns';
 import { CONFIG } from '../config';
 import { eventSeriesRepository } from '../models/eventSeries';
 import {
@@ -8,32 +9,19 @@ import {
     LessonDAO,
     LessonDTO,
     LessonFilters,
+    mapEventSeriesToLessonSeriesDTO,
     toLessonDTO,
 } from '../models/lesson';
-import { addWeeks, endOfMonth } from 'date-fns';
-import { z } from 'zod';
 import { lessonRepository } from '../repositories/lessonsRepository';
 import { Pagable } from '../../../TutorPlanner_shared/Pagable';
 import { parseDate } from '../utils/utils';
-
-const HOUR_REGEX = /^([01]\d|2[0-3]):([0-5]\d)$/;
-
-const isValidHourFormat = (key: string) => {
-    if (!HOUR_REGEX.test(key)) {
-        throw new Error(`Invalid hour format - 00:00 - ${key}`);
-    }
-};
-
-const LessonInputSchema = z.object({
-    name: z.string(),
-    description: z.string().nullish(),
-    student: z.number(),
-    price: z.number(),
-    date: z.date(),
-    startHour: z.string(),
-    endHour: z.string(),
-    weekly: z.boolean().nullish(),
-});
+// validators
+import {
+    LessonCreateInputSchema,
+    LessonUpdateInputSchema,
+} from '../validators/lessons/lesson';
+import { LessonSeriesUpdateInputSchema } from '../validators/lessons/lessonSeries';
+import { LessonSeriesDTO } from '../../../TutorPlanner_shared/LessonDTO';
 
 interface PayedLessonsData {
     lessons: LessonDAO[];
@@ -66,6 +54,18 @@ class LessonsService {
         }
 
         return await lessonRepository.getAllLessons();
+    }
+
+    public async getCurrentOverdueLessons(): Promise<
+        LessonDTO[] | Pagable<LessonDTO>
+    > {
+        const lessons = await lessonRepository.getLessons({
+            isPaid: false,
+            date: {
+                lte: new Date(),
+            },
+        });
+        return lessons.map(l => toLessonDTO(l));
     }
 
     public async getOverdueLessons({
@@ -111,6 +111,14 @@ class LessonsService {
 
     public async getStudentLessons(studnetId: number): Promise<Lesson[]> {
         return await lessonRepository.getLessonsByStudentId(studnetId);
+    }
+
+    public async getStudentWeeklyLessons(
+        studnetId: number,
+    ): Promise<LessonSeriesDTO[]> {
+        const res =
+            await lessonRepository.getLessonsSeriesByStudentId(studnetId);
+        return res.map(l => mapEventSeriesToLessonSeriesDTO(l));
     }
 
     public async getNotPaidStudentLessons(
@@ -167,45 +175,32 @@ class LessonsService {
     public async createLesson(
         lesson: CreateLessonRequestBody,
     ): Promise<LessonDTO> {
-        LessonInputSchema.parse(lesson);
-        // not works when used with zod regex
-        isValidHourFormat(lesson.startHour);
-        isValidHourFormat(lesson.endHour);
-        if (!lesson.weekly) {
+        const lessonInputData = LessonCreateInputSchema.parse(lesson);
+        if (!lessonInputData.weekly) {
             const createdLesson = await lessonRepository.create({
-                name: lesson.name,
-                description: lesson.description,
-                date: lesson.date,
-                type: EventType.LESSON,
-                price: lesson.price,
-                startHour: lesson.startHour,
-                endHour: lesson.endHour,
+                name: lessonInputData.name,
+                description: lessonInputData.description,
+                date: lessonInputData.date,
+                eventType: EventType.LESSON,
+                price: lessonInputData.price,
+                startHour: lessonInputData.startHour,
+                endHour: lessonInputData.endHour,
                 student: {
                     connect: {
-                        id: lesson.student,
+                        id: lessonInputData.student,
                     },
                 },
             });
-            return {
-                id: createdLesson.id,
-                name: createdLesson.name,
-                date: createdLesson.date,
-                isCanceled: createdLesson.isCanceled,
-                isOverridden: createdLesson.isOverridden,
-                description: createdLesson.description || '',
-                startHour: createdLesson.startHour,
-                endHour: createdLesson.endHour,
-                price: createdLesson.price,
-                isPaid: false,
-                studentId: createdLesson.studentId,
-            };
+            return toLessonDTO(createdLesson);
         } else {
             const series = await eventSeriesRepository.createEventSeries({
-                name: lesson.name,
-                description: lesson.description,
-                startHour: lesson.startHour,
-                endHour: lesson.endHour,
+                name: lessonInputData.name,
+                description: lessonInputData.description,
+                startHour: lessonInputData.startHour,
+                endHour: lessonInputData.endHour,
                 type: EventSeriesType.WEEKLY,
+                pattern: JSON.stringify([getDay(lesson.date)]),
+                studentId: lessonInputData.student,
                 isCanceled: false,
             });
             const inputData: Prisma.EventCreateManyInput[] = [];
@@ -213,7 +208,7 @@ class LessonsService {
             while (lessonDate < CONFIG.MAX_DATE) {
                 inputData.push({
                     date: lessonDate,
-                    type: EventType.LESSON,
+                    eventType: EventType.LESSON,
                     name: lesson.name,
                     description: lesson.description,
                     startHour: lesson.startHour,
@@ -227,20 +222,10 @@ class LessonsService {
             await lessonRepository.bulkCreate(inputData);
             const createdLesson =
                 await lessonRepository.getNextLessonBySeriesId(series.id);
-            return {
-                id: createdLesson.id,
-                name: createdLesson.name,
-                date: createdLesson.date,
-                isCanceled: createdLesson.isCanceled,
-                isOverridden: createdLesson.isOverridden,
-                description: createdLesson.description || '',
-                startHour: createdLesson.startHour,
-                endHour: createdLesson.endHour,
-                price: createdLesson.price,
-                isPaid: false,
-                studentId: createdLesson.studentId,
-                eventSeriesId: series.id,
-            };
+            const lessonDTO = toLessonDTO(createdLesson);
+            lessonDTO.isPaid = false;
+            lessonDTO.eventSeriesId = series.id;
+            return lessonDTO;
         }
     }
 
@@ -251,18 +236,34 @@ class LessonsService {
     public async updateLesson(
         lessonId: number,
         data: Partial<CreateLessonRequestBody>,
-    ): Promise<void> {
-        //TODO
-        await lessonRepository.update(lessonId, {
+    ): Promise<LessonDTO> {
+        const updateData = LessonUpdateInputSchema.parse(data);
+        const createdLesson = await lessonRepository.update(lessonId, {
+            name: updateData.name,
+            date: updateData.date,
+            startHour: updateData.startHour,
+            endHour: updateData.endHour,
+            price: updateData.price,
+            student: {
+                connect: {
+                    id: updateData.student,
+                },
+            },
+            description: updateData.description,
             isOverridden: true,
         });
+        return toLessonDTO(createdLesson);
     }
 
     public async updateLessonSeries(
         lessonId: number,
         data: Partial<CreateLessonRequestBody>,
     ): Promise<void> {
-        await lessonRepository.updateLessonSeriesByEventId(lessonId, data);
+        const updateData = LessonSeriesUpdateInputSchema.parse(data);
+        await lessonRepository.updateLessonSeriesByEventId(
+            lessonId,
+            updateData,
+        );
     }
 
     public async markLessonAsPaid(lessonId: number): Promise<void> {

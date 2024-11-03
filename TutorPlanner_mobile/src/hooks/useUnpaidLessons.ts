@@ -13,11 +13,11 @@ export const useUnpaidLessons = (filter?: Filter) => {
 
     const loadData = async (filter?: Filter) => {
         const response = filter
-            ? await lessonsService.getOverdues({
-                  month: filter?.month + 1,
+            ? await lessonsService.getNotPaidLessonsByMonthAndYear({
+                  month: filter?.month,
                   year: filter?.year,
               })
-            : await lessonsService.getOverdues();
+            : await lessonsService.getNotPaidLessonsByMonthAndYear();
         setUnpaidLessons(response);
         setIsLoading(false);
     };

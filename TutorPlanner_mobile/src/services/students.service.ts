@@ -1,4 +1,10 @@
-import { ErrorResponse, LessonDTO, StudentDTO, StudentsDTO } from '@model';
+import {
+    ErrorResponse,
+    LessonDTO,
+    StudentDTO,
+    StudentLessonsData,
+    StudentsDTO,
+} from '@model';
 import { STUDENTS_URL } from './config';
 import { axios } from './baseService';
 import { AxiosError } from 'axios';
@@ -13,6 +19,15 @@ interface CreateStudentRequestData {
 }
 
 class StudentsService {
+    getStudent = async (studentId: number): Promise<StudentDTO | undefined> => {
+        try {
+            const response = await axios.get(`${STUDENTS_URL}/${studentId}`);
+            return response.data;
+        } catch (error) {
+            console.log(JSON.stringify(error, null, 2));
+            return undefined;
+        }
+    };
     getStudentsList = async (): Promise<StudentsDTO> => {
         try {
             const response = await axios.get(STUDENTS_URL);
@@ -72,18 +87,35 @@ class StudentsService {
     };
     getNextStudentLesson = async (
         studnetId: number,
-    ): Promise<LessonDTO | undefined | ErrorResponse> => {
+    ): Promise<LessonDTO | undefined> => {
         try {
             const response = await axios.get(
                 `${STUDENTS_URL}/${studnetId}/lessons/next`,
             );
             return response.data;
         } catch (error) {
-            return {
-                status: 400,
-                message: 'Error',
-            };
+            return undefined;
         }
+    };
+    getStudentLessonsList = async (
+        studnetId: number,
+    ): Promise<LessonDTO[] | undefined> => {
+        try {
+            const response = await axios.get(
+                `${STUDENTS_URL}/${studnetId}/lessons`,
+            );
+            return response.data;
+        } catch (error) {
+            return undefined;
+        }
+    };
+    getStudentLessonsData = async (
+        studnetId: number,
+    ): Promise<StudentLessonsData> => {
+        const response = await axios.get(
+            `${STUDENTS_URL}/${studnetId}/profile/lessons`,
+        );
+        return response.data;
     };
     recalculateBalance = async (studentId: number): Promise<StudentDTO> => {
         try {

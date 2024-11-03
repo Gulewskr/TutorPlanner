@@ -93,7 +93,9 @@ export const CreateStudentLesson: React.FC<CreateStudentLessonForm> = ({
                             ...FORM_SCHEMA,
                             initValue: {
                                 ...FORM_SCHEMA.initValue,
-                                price: student.defaultPrice,
+                                //TODO add numberInput to handle numbers by default
+                                price: `${student.defaultPrice}`,
+                                name: `Korepetycje ${student.firstname}`,
                             },
                         }}
                         onSubmit={handleSubmit}

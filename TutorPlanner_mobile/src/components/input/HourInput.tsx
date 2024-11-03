@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity } from 'react-native';
 import { ICON_NAME } from '@components/icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { mapDateToHourValue, mapHourValueToDate } from '@utils/dateUtils';
 
 interface HourInputProps {
     placeholder?: string;
@@ -12,17 +13,20 @@ interface HourInputProps {
         startHour,
         endHour,
     }: {
-        startHour: string;
-        endHour: string;
+        startHour: number;
+        endHour: number;
     }) => void;
     //TODO - handle default value seems to be not simple
     defaultValue?: {
-        startHour: string;
-        endHour: string;
+        startHour: number;
+        endHour: number;
     };
 }
 
-const initialValue = () => {
+const initialValue = (value?: number) => {
+    if (value) {
+        return mapHourValueToDate(value);
+    }
     const initialTime = new Date();
     initialTime.setHours(0, 0, 0, 0); // Set hours and minutes to 00:00
     return initialTime;
@@ -37,9 +41,11 @@ const CustomInput: React.FC<HourInputProps> = ({
 }) => {
     const [width, setWidth] = useState(0);
     const [showStartHourPicker, setStartHourPicker] = useState<boolean>(false);
-    const [startHour, setstartHour] = useState(initialValue());
+    const [startHour, setstartHour] = useState(
+        initialValue(defaultValue?.startHour),
+    );
     const [showEndHourPicker, setEndHourPicker] = useState<boolean>(false);
-    const [endHour, setEndHour] = useState(initialValue());
+    const [endHour, setEndHour] = useState(initialValue(defaultValue?.endHour));
 
     const formatTime = (date: Date): string => {
         const hours = date.getHours().toString().padStart(2, '0');
@@ -49,8 +55,8 @@ const CustomInput: React.FC<HourInputProps> = ({
 
     useEffect(() => {
         onChange({
-            startHour: formatTime(startHour),
-            endHour: formatTime(endHour),
+            startHour: mapDateToHourValue(startHour),
+            endHour: mapDateToHourValue(endHour),
         });
     }, [startHour, endHour]);
 

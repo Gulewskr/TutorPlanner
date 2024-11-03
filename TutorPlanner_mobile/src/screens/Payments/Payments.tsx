@@ -8,6 +8,7 @@ import {
     PaymentsTabParamList,
     RootStackParamList,
 } from '@components/ui/navbar';
+import { PaymentEdit } from './tabs/PaymentEdit';
 
 const Tab = createBottomTabNavigator<PaymentsTabParamList>();
 
@@ -27,6 +28,7 @@ export const Payments: React.FC<
             <Tab.Screen name="Summary" component={PaymentsSummary} />
             <Tab.Screen name="History" component={PaymentsHistory} />
             <Tab.Screen name="Create" component={PaymentCreate} />
+            <Tab.Screen name="Edit" component={PaymentEdit} />
         </Tab.Navigator>
     );
 };
