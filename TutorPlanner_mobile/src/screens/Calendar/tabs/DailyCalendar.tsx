@@ -1,4 +1,4 @@
-import { EventWrapper } from '@components/complex/events';
+import { EventWrapper } from '@components/complex/eventslist';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { useEffect, useState } from 'react';
 import { DaySelector } from '../components/DaySelector';

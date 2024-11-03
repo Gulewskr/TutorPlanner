@@ -42,7 +42,10 @@ export const StudentEdit: React.FC<
     } = useStudentContext();
     const { showAlert } = useAlert();
 
-    const student = useMemo(() => studentParam || studentContext, []);
+    const student = useMemo(
+        () => studentParam || studentContext,
+        [studentParam],
+    );
 
     const handleStudentUpdate = (data: StudentDTO) => {
         refreshStudentsData();

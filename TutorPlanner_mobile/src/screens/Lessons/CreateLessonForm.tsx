@@ -10,8 +10,9 @@ import { StudentDTO } from '@model';
 import { FormRendererSchema } from '@components/complex/form-renderer/model';
 import { getFullName } from 'src/utils/utils';
 import { LessonsTabParamList } from '@components/ui/navbar';
-import { useStudentsContext } from '@contexts/StudentContext';
 import { $color_primary } from '@styles/colors';
+import { useStudentsContext } from '@contexts/StudentsContext';
+import { useAlert } from '@contexts/AlertContext';
 
 interface CreateLessonData {
     name: string;
@@ -42,10 +43,11 @@ const defaultData: CreateLessonData = {
 export const CreateLessonForm: React.FC<
     NativeStackScreenProps<LessonsTabParamList, 'Create'>
 > = ({ navigation, route }) => {
+    const { showAlert } = useAlert();
     const { loading, data: students } = useStudentsContext();
     const handleSubmit = async (data: CreateLessonData): Promise<void> => {
         try {
-            const response = await lessonsService.create({
+            await lessonsService.create({
                 name: data.name,
                 description: data.description,
                 student: Number(data.student),
@@ -55,10 +57,16 @@ export const CreateLessonForm: React.FC<
                 endHour: data.hour.endHour,
                 weekly: data.isWeekly,
             });
-            //TODO - move to event in callendar
-            console.log(response);
+            showAlert({
+                message: 'Pomyślnie dodano zajęcia',
+                severity: 'success',
+            });
+            navigation.goBack();
         } catch (e) {
-            //TODO - display toast with error notification
+            showAlert({
+                message: 'Błąd zapisu',
+                severity: 'danger',
+            });
         }
     };
 

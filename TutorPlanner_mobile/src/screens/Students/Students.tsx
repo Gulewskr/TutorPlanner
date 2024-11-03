@@ -8,7 +8,6 @@ import {
     RootStackParamList,
     StudentsTabParamList,
 } from '@components/ui/navbar';
-import { StudentContextProvider } from './tabs/Profile/StudentContext';
 
 const Tab = createBottomTabNavigator<StudentsTabParamList>();
 
@@ -16,21 +15,19 @@ export const Students: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Students'>
 > = ({ navigation, route }) => {
     return (
-        <StudentContextProvider>
-            <Tab.Navigator
-                initialRouteName="List"
-                screenOptions={{
-                    headerShown: false,
-                    tabBarStyle: {
-                        display: 'none',
-                    },
-                }}
-                backBehavior="history"
-            >
-                <Tab.Screen name="List" component={StudentsList} />
-                <Tab.Screen name="Profile" component={StudentProfile} />
-                <Tab.Screen name="Create" component={StudentCreate} />
-            </Tab.Navigator>
-        </StudentContextProvider>
+        <Tab.Navigator
+            initialRouteName="List"
+            screenOptions={{
+                headerShown: false,
+                tabBarStyle: {
+                    display: 'none',
+                },
+            }}
+            backBehavior="history"
+        >
+            <Tab.Screen name="List" component={StudentsList} />
+            <Tab.Screen name="Profile" component={StudentProfile} />
+            <Tab.Screen name="Create" component={StudentCreate} />
+        </Tab.Navigator>
     );
 };

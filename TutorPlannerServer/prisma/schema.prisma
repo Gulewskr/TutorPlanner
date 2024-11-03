@@ -62,8 +62,8 @@ model Event {
     //Generic data
     name        String
     description String?
-    startHour   String?
-    endHour     String?
+    startHour   Int?
+    endHour     Int?
 
     //LessonData
     price     Float?
@@ -82,8 +82,8 @@ model EventSeries {
 
     name        String
     description String?
-    startHour   String?
-    endHour     String?
+    startHour   Int?
+    endHour     Int?
 
     events Event[]
 }

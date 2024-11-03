@@ -62,6 +62,20 @@ router.delete('/:id', async (req, res, next) => {
  */
 router.get('/overdues', async (req, res, next) => {
     try {
+        const lessons = await LessonsService.getCurrentOverdueLessons();
+        return res.status(200).json(lessons);
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
+ * path: lessons/notpaid?month=1&year=1
+ *
+ * response: LessonDAO[] | Pagable<LessonDAO>>
+ */
+router.get('/notpaid', async (req, res, next) => {
+    try {
         const { month, year } = req.query;
         const { page, pageSize } = parsePaginationParams(req);
         const lessons = await LessonsService.getOverdueLessons({

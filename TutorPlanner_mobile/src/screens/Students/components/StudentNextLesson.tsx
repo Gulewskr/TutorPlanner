@@ -2,6 +2,7 @@ import { Header } from '@components/header';
 import { Tile } from '@components/tile';
 import { LessonDTO } from '@model';
 import { studentsService } from '@services/students.service';
+import { mapHourValueToText } from '@utils/dateUtils';
 import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -21,6 +22,7 @@ const StudentNextLesson: React.FC<StudentNextLessonProps> = ({ lesson }) => {
             style={{
                 position: 'relative',
                 width: '100%',
+                paddingHorizontal: 15,
                 alignItems: 'center',
             }}
         >
@@ -30,7 +32,7 @@ const StudentNextLesson: React.FC<StudentNextLessonProps> = ({ lesson }) => {
                     <Tile>
                         <Text>
                             {lesson.name}{' '}
-                            {`(${lesson.startHour} - ${lesson.endHour})`}
+                            {`(${mapHourValueToText(lesson.startHour)} - ${mapHourValueToText(lesson.endHour)})`}
                         </Text>
                         <Text>{format(lesson.date, 'yyyy-MM-dd')}</Text>
                     </Tile>

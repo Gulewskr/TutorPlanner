@@ -2,7 +2,6 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import { MONTHS_NOMINATIVE, WEEKDAYS } from '../components/calendar';
-import { EventWrapper } from '@components/complex/events';
 import { Button } from '@components/button';
 import { CalendarLayout } from '../CalendarLayout';
 import { CalendarTabParamList } from '../calendarTabs';
@@ -25,6 +24,7 @@ import { DayInCalendar } from '../components/calendar/DayInCalendar';
 import { getDayOfWeek } from '../components/calendar/utils';
 import { useCalendarContext } from '../CalendarContext';
 import { $color_primary, $color_primary_shadow } from '@styles/colors';
+import { EventsList } from '@components/complex/eventslist';
 
 const CALENDAR_WEEKS = [0, 1, 2, 3, 4, 5];
 const WEEK_DAYS_RANGE = [0, 1, 2, 3, 4, 5, 6];
@@ -205,7 +205,10 @@ export const MonthlyCalendar: React.FC<
                         </View>
                         <View style={styles.shadow} />
                     </View>
-                    <EventWrapper day={selectedDate} />
+                    <EventsList
+                        day={selectedDate}
+                        navigation={navigation.getParent()}
+                    />
                 </View>
             </ScrollView>
         </CalendarLayout>

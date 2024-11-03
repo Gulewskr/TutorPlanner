@@ -17,7 +17,7 @@ export const ModalRenderer: React.FunctionComponent<ModalRendererProps> = ({
     onCancel,
 }) => {
     return (
-        <Modal transparent={true} animationType="slide">
+        <Modal transparent={true} animationType="fade">
             <View style={styles.modalOverlay}>
                 <View
                     style={[

@@ -1,4 +1,4 @@
-import express, { NextFunction, Router } from 'express';
+import express, { Router } from 'express';
 import StudentService from '../services/StudentService';
 import paymentRouter from './studentsRoutes/payments.routes';
 import lessonsRouter from './studentsRoutes/lessons.routes';

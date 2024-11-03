@@ -24,14 +24,16 @@ const isValidHourFormat = (key: string) => {
     }
 };
 
+const MAX_HOUR = 60 * 24;
+
 const LessonInputSchema = z.object({
     name: z.string(),
     description: z.string().nullish(),
     student: z.number(),
     price: z.number(),
     date: z.date(),
-    startHour: z.string(),
-    endHour: z.string(),
+    startHour: z.number().min(0).max(MAX_HOUR),
+    endHour: z.number().min(0).max(MAX_HOUR),
     weekly: z.boolean().nullish(),
 });
 
@@ -66,6 +68,18 @@ class LessonsService {
         }
 
         return await lessonRepository.getAllLessons();
+    }
+
+    public async getCurrentOverdueLessons(): Promise<
+        LessonDTO[] | Pagable<LessonDTO>
+    > {
+        const lessons = await lessonRepository.getLessons({
+            isPaid: false,
+            date: {
+                lte: new Date(),
+            },
+        });
+        return lessons.map(l => toLessonDTO(l));
     }
 
     public async getOverdueLessons({
@@ -168,9 +182,6 @@ class LessonsService {
         lesson: CreateLessonRequestBody,
     ): Promise<LessonDTO> {
         LessonInputSchema.parse(lesson);
-        // not works when used with zod regex
-        isValidHourFormat(lesson.startHour);
-        isValidHourFormat(lesson.endHour);
         if (!lesson.weekly) {
             const createdLesson = await lessonRepository.create({
                 name: lesson.name,

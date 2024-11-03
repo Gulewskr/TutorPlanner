@@ -1,6 +1,6 @@
 import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
 import { FormRendererSchema } from '@components/complex/form-renderer/model';
-import { useStudentsContext } from '@contexts/StudentContext';
+import { useStudentsContext } from '@contexts/StudentsContext';
 import { StudentDTO } from '@model';
 import { paymentsService } from '@services/payments.service';
 import { getFullName } from 'src/utils/utils';

@@ -15,6 +15,7 @@ import { PaymentsTabParamList } from '@components/ui/navbar';
 import { Tile } from '@components/tile';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { getMonth, getYear } from 'date-fns';
+import { useOverdues } from '@hooks/useOverdues';
 
 export const PaymentsSummary: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'Summary'>
@@ -22,7 +23,6 @@ export const PaymentsSummary: React.FC<
     const { navigation, route } = props;
     const { payments, isLoading } = usePayments();
     const [unpaidLoading, setUnpaidLoading] = useState(true);
-    const [unpaidLessons, setUnpaidLessons] = useState<LessonDTO[]>([]);
     const [summaryData, setSummaryDate] = useState<{
         income: number;
         expectedIncome: number;
@@ -32,12 +32,12 @@ export const PaymentsSummary: React.FC<
         expectedIncome: 0,
         lessonsNumber: 0,
     });
-    const numOfUnpaid = unpaidLessons.length;
+
+    const { overdueLessons } = useOverdues();
+    const numOfUnpaid = overdueLessons.length;
 
     const loadData = async () => {
         const todayDate = new Date();
-        const res = await lessonsService.getOverdues();
-        setUnpaidLessons(res);
         setUnpaidLoading(false);
 
         const lessons = await lessonsService.getLessons({

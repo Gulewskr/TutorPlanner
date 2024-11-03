@@ -45,10 +45,32 @@ const Checkbox: React.FC<CheckboxProps> = ({
     );
 };
 
+interface StaticCheckboxProps {
+    label?: string;
+    isChecked: boolean;
+}
+
+const StaticCheckboxTile: React.FC<StaticCheckboxProps> = ({
+    label,
+    isChecked,
+}) => {
+    return (
+        <Tile color="white">
+            <View style={styles.container}>
+                <View style={[styles.checkbox, isChecked && styles.checked]}>
+                    {isChecked && <Icon icon="check" size="xxs" />}
+                </View>
+                {label && <Text style={styles.label}>{label}</Text>}
+            </View>
+        </Tile>
+    );
+};
+
 Checkbox.displayName = 'Checkbox';
 CheckboxTile.displayName = 'CheckboxTile';
+StaticCheckboxTile.displayName = 'StaticCheckboxTile';
 
-export { CheckboxTile };
+export { CheckboxTile, StaticCheckboxTile };
 export default Checkbox;
 
 const styles = EStyleSheet.create({

@@ -64,16 +64,8 @@ const Button: React.FC<ButtonProps> = ({
                 }}
             >
                 <View style={style.content}>
-                    {icon && (
-                        <>
-                            <Icon icon={icon} />
-                        </>
-                    )}
-                    {isIconButton || (
-                        <View style={{ flex: 1, alignItems: 'center' }}>
-                            <Text style={style.text}>{label}</Text>
-                        </View>
-                    )}
+                    {icon && <Icon icon={icon} />}
+                    {isIconButton || <Text style={style.text}>{label}</Text>}
                 </View>
             </Pressable>
             {hasShadow && (

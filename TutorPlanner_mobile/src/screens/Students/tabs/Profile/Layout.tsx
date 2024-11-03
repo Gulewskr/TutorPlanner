@@ -12,15 +12,15 @@ const tabs: Array<TabItem<keyof StudentProfileTabParamList>> = [
         isExpanded: true,
         text: 'Informacje',
         icon: 'studentCap',
-        hasHiddenLabel: 'whenNotActive',
     },
     {
         id: 'Lessons',
         isExpanded: true,
         text: 'Lista zajęć',
         icon: 'list',
-        hasHiddenLabel: 'whenNotActive',
     },
+    /*
+    // Przeniesione do v2
     {
         id: 'Analise',
         isExpanded: true,
@@ -28,7 +28,7 @@ const tabs: Array<TabItem<keyof StudentProfileTabParamList>> = [
         icon: 'calendar',
         hasHiddenLabel: 'whenNotActive',
     },
-    /*
+    */
     {
         id: 'Edit',
         isExpanded: true,
@@ -36,7 +36,6 @@ const tabs: Array<TabItem<keyof StudentProfileTabParamList>> = [
         icon: 'pencil',
         hasHiddenLabel: 'always',
     },
-    */
 ];
 
 export const StudentsLayout: React.FC<

@@ -7,8 +7,8 @@ export type EventDTO = {
     type: 'LESSON' | 'DEFAULT';
     eventSeriesId?: number;
     description?: string;
-    startHour?: string;
-    endHour?: string;
+    startHour?: number;
+    endHour?: number;
     price?: number;
     isPaid?: boolean;
     studentId?: number;

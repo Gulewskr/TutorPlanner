@@ -23,7 +23,7 @@ export const StudentCreate: React.FC<
         navigation.getParent()?.navigate('Students', {
             screen: 'Profile',
             params: {
-                student: data,
+                studentId: data.id,
             },
         });
     };

@@ -45,7 +45,7 @@ const TILE_COLORS: { [key in TileColors]: string } = {
 
 const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
     children,
-    color,
+    color = 'white',
     hasShadow = true,
     centered = false,
     onClick,

@@ -22,7 +22,7 @@ export type StudentsTabParamList = {
     Profile: {
         screen: keyof StudentProfileTabParamList;
         initial?: boolean;
-        student: StudentDTO;
+        studentId: number;
     };
 };
 
@@ -42,6 +42,9 @@ export type StudentProfileTabParamList = {
 export type LessonsTabParamList = {
     List: undefined;
     Create: undefined;
+    Edit: {
+        lessonId: number;
+    };
 };
 
 export type PaymentsTabParamList = {

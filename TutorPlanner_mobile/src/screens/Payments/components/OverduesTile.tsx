@@ -1,9 +1,10 @@
 import { Header } from '@components/header';
 import { Tile } from '@components/tile';
 import { LessonDTO } from '@model';
-import { $color_primary } from '@styles/colors';
+import { mapHourValueToText } from '@utils/dateUtils';
+import { format } from 'date-fns';
 import React from 'react';
-import { ActivityIndicator, Text } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 interface OverduesTileProps {
     numOfUnpaid: number;
@@ -26,7 +27,11 @@ export const OverduesTile: React.FC<OverduesTileProps> = ({
                 isCentered
                 styles={{ height: 30, marginBottom: 10 }}
             />
-            <Tile color={numOfUnpaid ? 'red' : 'green'} centered>
+            <Tile
+                color={numOfUnpaid ? 'red' : 'green'}
+                hasShadow={false}
+                centered
+            >
                 <Text
                     style={{
                         fontSize: 18,
@@ -38,13 +43,35 @@ export const OverduesTile: React.FC<OverduesTileProps> = ({
                         : upnpaidPaymentsText(numOfUnpaid)}
                 </Text>
             </Tile>
-            {!isLoading &&
-                lessons &&
-                lessons.map((p, i) => (
-                    <Text key={i}>
-                        {p.name} {JSON.stringify(p)}
-                    </Text>
-                ))}
+            {!isLoading && lessons && (
+                <ScrollView
+                    nestedScrollEnabled={true}
+                    style={{ marginTop: 10 }}
+                >
+                    <View style={{ gap: 10, marginTop: 10 }}>
+                        {lessons.map((lesson, i) => (
+                            <Tile key={i} color="white">
+                                <View
+                                    style={{
+                                        paddingVertical: 3,
+                                        paddingHorizontal: 10,
+                                    }}
+                                >
+                                    <Text style={{ fontWeight: 'bold' }}>
+                                        {lesson.name}
+                                    </Text>
+                                    <Text>
+                                        {format(lesson.date, 'yyyy-MM-dd')}
+                                        {'  '}
+                                        {mapHourValueToText(lesson.startHour)}-
+                                        {mapHourValueToText(lesson.endHour)}
+                                    </Text>
+                                </View>
+                            </Tile>
+                        ))}
+                    </View>
+                </ScrollView>
+            )}
         </>
     );
 };

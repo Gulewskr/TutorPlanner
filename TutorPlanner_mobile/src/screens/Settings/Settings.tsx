@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Text } from 'react-native';
 import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@components/ui/navbar';
+import { Button } from '@components/button';
 
 export const Settings: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Settings'>
@@ -14,7 +14,12 @@ export const Settings: React.FC<
             title="Ustawienia"
             hasHeader
         >
-            <Text>This is Settings</Text>
+            <Button
+                label="Oblicz ponownie bilanse uczniów"
+                onClick={() => {
+                    //TODO
+                }}
+            />
         </Layout>
     );
 };

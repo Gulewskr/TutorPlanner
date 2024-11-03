@@ -8,12 +8,16 @@ import { useModalContext } from '@contexts/modalContext';
 import { LessonModal } from '@components/modals';
 import axios from 'axios';
 import { LESSONS_URL } from '@services/config';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '@components/ui/navbar';
+import { mapHourValueToText } from '@utils/dateUtils';
 
 interface EventsListProps {
     day: Date;
+    navigation: any;
 }
 
-export const EventsList: React.FC<EventsListProps> = ({ day }) => {
+export const EventsList: React.FC<EventsListProps> = ({ day, navigation }) => {
     const [events, setEvents] = useState<LessonDTO[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const { setIsOpen, setModalBody } = useModalContext();
@@ -40,9 +44,28 @@ export const EventsList: React.FC<EventsListProps> = ({ day }) => {
         }
     };
 
-    const handleShowEventModal = (event: LessonDTO) => {
+    const handleShowEventModal = (lesson: LessonDTO) => {
         setModalBody(
-            <LessonModal event={event} onDelete={handleDeleteEvent} />,
+            <LessonModal
+                lesson={lesson}
+                onDelete={handleDeleteEvent}
+                goToStudentProfile={() => {
+                    navigation.navigate('Students', {
+                        screen: 'Profile',
+                        params: {
+                            studentId: lesson.studentId,
+                        },
+                    });
+                }}
+                goToEditForm={() => {
+                    navigation.navigate('Lessons', {
+                        screen: 'Edit',
+                        params: {
+                            lessonId: lesson.id,
+                        },
+                    });
+                }}
+            />,
         );
         setIsOpen(true);
     };
@@ -70,7 +93,8 @@ export const EventsList: React.FC<EventsListProps> = ({ day }) => {
                                         {event.name}
                                     </Text>
                                     <Text>
-                                        {event.startHour}-{event.endHour}
+                                        {mapHourValueToText(event.startHour)}-
+                                        {mapHourValueToText(event.endHour)}
                                     </Text>
                                 </View>
                             </Tile>

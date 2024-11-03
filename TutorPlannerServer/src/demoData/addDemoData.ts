@@ -139,15 +139,15 @@ const getStudentContacts = (
 };
 
 const getStudentLesson = (student: Student) => {
-    const startHour = getRandomNumberInRange(10, 20);
+    const startHour = getRandomNumberInRange(8, 20) * 60;
     return {
         name: `Korepetycje ${getNickname(student.firstname, student.surename)}`,
         description: '',
         student: student.id,
         price: student.defaultPrice || 0,
         date: getRandomDateInThisWeek(),
-        startHour: `${startHour}:00`,
-        endHour: `${startHour + 1}:00`,
+        startHour: startHour,
+        endHour: startHour + 60,
         weekly: true,
     };
 };

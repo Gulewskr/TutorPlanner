@@ -21,7 +21,7 @@ export const StudentProfile: React.FC<
     BottomTabScreenProps<StudentsTabParamList, 'Profile'>
 > = ({ navigation, route }) => {
     return (
-        <StudentContextProvider student={route.params.student}>
+        <StudentContextProvider studentId={route.params.studentId}>
             <Tab.Navigator
                 initialRouteName="Info"
                 screenOptions={{

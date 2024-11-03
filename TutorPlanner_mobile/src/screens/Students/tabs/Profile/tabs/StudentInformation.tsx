@@ -37,32 +37,10 @@ export const StudentInformations: React.FC<
             <View style={styles.double_button_container}>
                 <View style={{ width: '48%' }}>
                     <Tile color="white" hasShadow centered>
-                        <Text>
-                            Cena:{' '}
-                            <Text style={{ fontWeight: 'bold' }}>
-                                {student?.defaultPrice || 0}
-                                zł
-                            </Text>
+                        <Text style={{ fontWeight: 'bold' }}>
+                            Bilans: {student?.balance || 0}zł
                         </Text>
                     </Tile>
-                </View>
-                <View style={{ width: '48%' }}>
-                    <Button
-                        icon="pencil"
-                        label="Edytuj"
-                        onClick={goToEdit}
-                        size="small"
-                    />
-                </View>
-                <View style={{ width: '48%' }}>
-                    <Button
-                        icon="refresh"
-                        label={`Bilans: ${student?.balance || 0}zł`}
-                        onClick={() => {
-                            reloadBalance();
-                        }}
-                        size="small"
-                    />
                 </View>
                 <View style={{ width: '48%' }}>
                     <Button
@@ -73,6 +51,27 @@ export const StudentInformations: React.FC<
                         size="small"
                     />
                 </View>
+                {/*
+                <View style={{ width: '48%' }}>
+                    <Button
+                        icon="refresh"
+                        label={`Bilans: ${student?.balance || 0}zł`}
+                        onClick={() => {
+                            reloadBalance();
+                        }}
+                        size="small"
+                    />
+                </View>
+                <View style={{ width: '58%' }}>
+                    <Button
+                        icon="addPayment"
+                        label="Dodaj wpłate"
+                        secondary
+                        onClick={goToAddPayment}
+                        size="small"
+                    />
+                </View>
+                */}
             </View>
             <StudentNextLesson lesson={studentNextLesson} />
             <View style={styles.double_button_container}>

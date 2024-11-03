@@ -13,6 +13,7 @@ import { usePayments } from '@hooks/usePayments';
 import { OverduesTile } from '../components/OverduesTile';
 import { useUnpaidLessons } from '@hooks/useUnpaidLessons';
 import { PaymentsTabParamList } from '@components/ui/navbar';
+import { useOverdues } from '@hooks/useOverdues';
 
 export const PaymentsHistory: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'History'>
@@ -27,21 +28,21 @@ export const PaymentsHistory: React.FC<
         isLoading: unpaidLessonsLoading,
         fetchData: fetchUnpaidLessons,
     } = useUnpaidLessons({
-        month: month + 1,
+        month: month,
         year: year,
     });
     const { payments, isLoading, fetchData } = usePayments({
-        month: month + 1,
+        month: month,
         year: year,
     });
 
     useEffect(() => {
         fetchData({
-            month: month + 1,
+            month: month,
             year: year,
         });
         fetchUnpaidLessons({
-            month: month + 1,
+            month: month,
             year: year,
         });
     }, [controlDate]);
@@ -52,8 +53,8 @@ export const PaymentsHistory: React.FC<
 
     return (
         <PaymentsLayout {...props}>
-            <ScrollView
-                styles={{
+            <View
+                style={{
                     paddingHorizontal: 10,
                 }}
             >
@@ -112,7 +113,7 @@ export const PaymentsHistory: React.FC<
                     lessons={unpaidLessons}
                     isLoading={unpaidLessonsLoading}
                 />
-            </ScrollView>
+            </View>
         </PaymentsLayout>
     );
 };

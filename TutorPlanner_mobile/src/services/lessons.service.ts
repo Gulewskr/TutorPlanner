@@ -1,5 +1,5 @@
 import { LessonDTO } from '@model';
-import { LESSONS_URL } from './config';
+import { LESSONS_URL, STUDENTS_URL } from './config';
 import { axios } from './baseService';
 
 interface LessonCreateRequestBody {
@@ -16,20 +16,49 @@ interface LessonCreateRequestBody {
 class LessonsService {
     create = async (body: LessonCreateRequestBody): Promise<LessonDTO> => {
         try {
-            if (
-                !body.name ||
-                !body.student ||
-                !body.date ||
-                !body.price ||
-                !body.startHour ||
-                !body.endHour
-            ) {
+            if (!body.name || !body.student || !body.date || !body.price) {
                 throw new Error(`Missing data`);
             }
             const response = await axios.post(LESSONS_URL, body);
             return response.data;
         } catch (error) {
             console.log(body);
+            console.log(error);
+            throw error;
+        }
+    };
+    update = async (
+        lessonId: number,
+        body: Partial<LessonCreateRequestBody>,
+    ): Promise<LessonDTO> => {
+        try {
+            console.log(lessonId);
+            console.log(body);
+            throw new Error();
+            const response = await axios.put(
+                `${LESSONS_URL}/${lessonId}`,
+                body,
+            );
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
+    updateSeries = async (
+        seriesId: number,
+        body: Partial<LessonCreateRequestBody>,
+    ): Promise<LessonDTO> => {
+        try {
+            console.log(seriesId);
+            console.log(body);
+            throw new Error();
+            const response = await axios.post(
+                `${LESSONS_URL}/series/${seriesId}`,
+                body,
+            );
+            return response.data;
+        } catch (error) {
             console.log(error);
             throw error;
         }
@@ -45,6 +74,15 @@ class LessonsService {
             });
             return response.data;
         } catch (error) {
+            throw error;
+        }
+    };
+    getLesson = async (lessonId: number): Promise<LessonDTO> => {
+        try {
+            const response = await axios.get(`${LESSONS_URL}/${lessonId}`);
+            return response.data;
+        } catch (error) {
+            console.log(error);
             throw error;
         }
     };
@@ -68,7 +106,7 @@ class LessonsService {
             throw error;
         }
     };
-    getOverdues = async ({
+    getNotPaidLessonsByMonthAndYear = async ({
         month,
         year,
     }: {
@@ -77,15 +115,31 @@ class LessonsService {
     } = {}): Promise<LessonDTO[]> => {
         try {
             if (!month && !year) {
-                const response = await axios.get(`${LESSONS_URL}/overdues`);
+                const response = await axios.get(`${LESSONS_URL}/notpaid`);
                 return response.data;
             } else {
-                const response = await axios.get(`${LESSONS_URL}/overdues`, {
+                const response = await axios.get(`${LESSONS_URL}/notpaid`, {
                     params: {
                         month,
                         year,
                     },
                 });
+                return response.data;
+            }
+        } catch (error) {
+            console.log(JSON.stringify(error, null, 2));
+            throw error;
+        }
+    };
+    getOverdues = async (studentId?: number): Promise<LessonDTO[]> => {
+        try {
+            if (studentId) {
+                const response = await axios.get(
+                    `${STUDENTS_URL}/${studentId}/lessons/overdues`,
+                );
+                return response.data;
+            } else {
+                const response = await axios.get(`${LESSONS_URL}/overdues`);
                 return response.data;
             }
         } catch (error) {

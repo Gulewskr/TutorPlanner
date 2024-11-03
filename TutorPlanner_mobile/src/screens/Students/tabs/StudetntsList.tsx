@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { Layout } from 'src/screens/Layout';
 import { StudentTile } from '../components/StudentTile';
@@ -24,6 +24,10 @@ export const StudentsList: React.FC<
     const { openModal } = useConfirmModal();
     const { showAlert } = useAlert();
 
+    useEffect(() => {
+        fetch();
+    }, []);
+
     const handleDeleteEvent = async (stud: StudentDTO) => {
         try {
             await studentsService.delete(stud.id);
@@ -43,7 +47,7 @@ export const StudentsList: React.FC<
     const handleMoveToStudentProfile = (stud: StudentDTO) => {
         navigation.jumpTo('Profile', {
             screen: 'Info',
-            student: stud,
+            studentId: stud.id,
         });
     };
 
@@ -82,7 +86,12 @@ export const StudentsList: React.FC<
                                                           {
                                                               screen: 'Edit',
                                                               initial: true,
-                                                              student: student,
+                                                              studentId:
+                                                                  student.id,
+                                                              params: {
+                                                                  student:
+                                                                      student,
+                                                              },
                                                           },
                                                       );
                                                   },

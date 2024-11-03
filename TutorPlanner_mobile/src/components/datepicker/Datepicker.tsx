@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { Icon, ICON_NAME } from '@components/icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { formatDate, parse } from 'date-fns';
+import { format, parse } from 'date-fns';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 export interface DatepickerProps {
     placeholder?: string;
     icon?: ICON_NAME;
     label?: string;
-    defaultValue?: string;
+    defaultValue?: string | Date;
     value?: string;
     //TODO - make this required later
     onChange?: (value?: string) => void;
@@ -22,14 +22,17 @@ const Datepicker: React.FC<DatepickerProps> = ({
     label,
     onChange,
     defaultValue,
-    format = 'yyyy-MM-dd',
+    format: datePattern = 'yyyy-MM-dd',
 }) => {
     const initialValue = (): Date => {
         try {
             if (!defaultValue) {
                 return new Date();
             }
-            return parse(defaultValue, format, new Date());
+            if (typeof defaultValue === 'string' && defaultValue.length < 12) {
+                return parse(defaultValue, datePattern, new Date());
+            }
+            return new Date(defaultValue);
         } catch (e) {
             return new Date();
         }
@@ -38,7 +41,7 @@ const Datepicker: React.FC<DatepickerProps> = ({
     const [width, setWidth] = useState(0);
     const [showPicker, setShowPicker] = useState<boolean>(false);
     const [date, setDate] = useState(initialValue());
-    const [dateText, setDateText] = useState(defaultValue);
+    const [dateText, setDateText] = useState('');
 
     const onDateChange = (event: Event, selectedDate?: Date) => {
         //@ts-ignore
@@ -47,11 +50,16 @@ const Datepicker: React.FC<DatepickerProps> = ({
         } else if (selectedDate) {
             setShowPicker(false); // Hide the picker after time selection
             setDate(selectedDate); // Update the time state
-            const formatedDate = formatDate(selectedDate, format);
+        }
+    };
+
+    useEffect(() => {
+        if (date) {
+            const formatedDate = format(date, datePattern);
             onChange?.(formatedDate);
             setDateText(formatedDate);
         }
-    };
+    }, [date]);
 
     return (
         <View

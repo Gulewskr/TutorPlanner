@@ -3,7 +3,7 @@ import { Button } from '@components/button';
 import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Header } from '@components/header';
-import { EventWrapper } from '@components/complex/events';
+import { EventsList } from '@components/complex/eventslist';
 import { ScrollView } from '@components/ui/scrool-view';
 import { RootStackParamList } from '@components/ui/navbar';
 import { useMemo } from 'react';
@@ -81,7 +81,7 @@ export const Home: React.FC<
                         title={'Dzisiejszy plan'}
                     />
                 </View>
-                <EventWrapper day={today} />
+                <EventsList day={today} navigation={navigation} />
             </ScrollView>
         </Layout>
     );

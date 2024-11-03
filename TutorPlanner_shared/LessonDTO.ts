@@ -3,8 +3,8 @@ export type LessonDTO = {
     date: Date;
     name: string;
     description: string;
-    startHour: string;
-    endHour: string;
+    startHour: number;
+    endHour: number;
     isCanceled: boolean;
     isOverridden: boolean;
     price: number;

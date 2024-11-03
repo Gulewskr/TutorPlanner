@@ -42,23 +42,20 @@ export const useStudentContext = () => useContext(StudentContext);
 
 export const StudentContextProvider = ({
     children,
-    student,
-}: React.PropsWithChildren<{ student: StudentDTO }>) => {
+    studentId,
+}: React.PropsWithChildren<{ studentId: number }>) => {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<StudentProfileData>({
-        student: student,
+        student: undefinedStudent,
     });
 
     useEffect(() => {
-        if (student) {
-            const studentId = student.id;
-            setLoading(true);
-            fetchStudentData(studentId);
-            fetchStudentLessons(studentId);
-            fetchStudentNextLesson(studentId);
-            setLoading(false);
-        }
-    }, [student]);
+        setLoading(true);
+        fetchStudentData(studentId);
+        fetchStudentLessons(studentId);
+        fetchStudentNextLesson(studentId);
+        setLoading(false);
+    }, [studentId]);
 
     const refresh = async (): Promise<void> => {
         const studentId = data.student.id;
