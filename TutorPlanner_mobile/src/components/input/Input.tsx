@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, Image } from 'react-native';
+import { Text, View, TextInput } from 'react-native';
 import { Icon, ICON_NAME } from '@components/icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -7,7 +7,7 @@ export interface InputProps {
     placeholder?: string;
     icon?: ICON_NAME;
     label?: string;
-    defaultValue?: string;
+    defaultValue?: string | number;
     value?: string;
     //TODO - make this required later
     onChange?: (value: string) => void;
@@ -37,7 +37,7 @@ const CustomInput: React.FC<InputProps> = ({
                     style={styles.textInput}
                     placeholder={placeholder}
                     onChangeText={onChange}
-                    defaultValue={defaultValue}
+                    defaultValue={String(defaultValue)}
                 />
             </View>
 

@@ -52,7 +52,7 @@ export const LessonsList: React.FC<LessonsListProps> = ({
                     </View>
                 </ScrollView>
             ) : (
-                <Text>Brak wydarzeń</Text>
+                <Text>Brak zajęć</Text>
             )}
         </View>
     );

@@ -14,7 +14,7 @@ export const useUnpaidLessons = (filter?: Filter) => {
     const loadData = async (filter?: Filter) => {
         const response = filter
             ? await lessonsService.getNotPaidLessonsByMonthAndYear({
-                  month: filter?.month + 1,
+                  month: filter?.month,
                   year: filter?.year,
               })
             : await lessonsService.getNotPaidLessonsByMonthAndYear();

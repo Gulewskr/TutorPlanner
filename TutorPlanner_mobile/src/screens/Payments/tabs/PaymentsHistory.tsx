@@ -1,27 +1,39 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import { PaymentsLayout } from '../PaymentsLayout';
 import { PaymentTile } from '../components/PaymentTile';
-import { ScrollView } from '@components/ui/scrool-view';
 import { Button } from '@components/button';
 import { MONTHS_NOMINATIVE } from 'src/screens/Calendar/components/calendar';
-import { addMonths, getMonth, getYear, isSameYear } from 'date-fns';
+import { addMonths, getMonth, getYear, isBefore, isSameYear } from 'date-fns';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { $color_primary } from '@styles/colors';
 import { usePayments } from '@hooks/usePayments';
 import { OverduesTile } from '../components/OverduesTile';
 import { useUnpaidLessons } from '@hooks/useUnpaidLessons';
 import { PaymentsTabParamList } from '@components/ui/navbar';
-import { useOverdues } from '@hooks/useOverdues';
+import { PaymentDTO } from '@model';
+import { useModalContext } from '@contexts/modalContext';
+import { PaymentModal } from '@components/modals/PaymentModal';
+import { useAlert } from '@contexts/AlertContext';
+import { getFullName } from '@utils/utils';
+import { paymentsService } from '@services/payments.service';
+import { useConfirmModal } from '@contexts/confirmModalContext';
+import { LoadWrapper } from '@components/loader';
 
 export const PaymentsHistory: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'History'>
 > = props => {
     const { navigation, route } = props;
     const [controlDate, setControlDate] = useState(new Date());
+    const [isFutureMonth, setIsFutureMonth] = useState(false);
+    const today = useMemo(() => new Date(), []);
     const month = getMonth(controlDate);
     const year = getYear(controlDate);
+
+    const { setIsOpen, setModalBody } = useModalContext();
+    const { openModal } = useConfirmModal();
+    const { showAlert } = useAlert();
 
     const {
         unpaidLessons,
@@ -31,24 +43,82 @@ export const PaymentsHistory: React.FC<
         month: month,
         year: year,
     });
-    const { payments, isLoading, fetchData } = usePayments({
+    const { payments, isLoading, fetchPayments } = usePayments({
         month: month,
         year: year,
     });
 
+    const loadData = () => {
+        fetchPayments({
+            month: month + 1,
+            year: year,
+        });
+        if (
+            controlDate.getFullYear() < today.getFullYear() ||
+            (controlDate.getFullYear() === today.getFullYear() &&
+                controlDate.getMonth() <= today.getMonth())
+        ) {
+            fetchUnpaidLessons({
+                month: month + 1,
+                year: year,
+            });
+            setIsFutureMonth(false);
+        } else {
+            setIsFutureMonth(true);
+        }
+    };
+
     useEffect(() => {
-        fetchData({
-            month: month,
-            year: year,
-        });
-        fetchUnpaidLessons({
-            month: month,
-            year: year,
-        });
+        loadData();
     }, [controlDate]);
 
     const handleMonthChange = async (num: number) => {
         setControlDate(addMonths(controlDate, num));
+    };
+
+    const handlePaymentDelete = async (id: number) => {
+        try {
+            await paymentsService.delete(id);
+            setIsOpen(false);
+            loadData();
+            showAlert({
+                message: 'Usunięto',
+                severity: 'info',
+            });
+        } catch (e) {
+            showAlert({
+                message: 'Błąd',
+                severity: 'danger',
+            });
+        }
+    };
+
+    const handleOpenPaymentModal = (payment: PaymentDTO) => {
+        setModalBody(
+            <PaymentModal
+                payment={payment}
+                goToEditForm={() => {
+                    navigation.navigate('Edit', {
+                        payment: payment,
+                    });
+                }}
+                goToStudentProfile={() => {
+                    navigation.getParent()?.navigate('Students', {
+                        screen: 'Profile',
+                        params: {
+                            studentId: payment.student.id,
+                        },
+                    });
+                }}
+                onDelete={() => {
+                    openModal({
+                        message: `Czy na pewno chcesz usunąć płatność ${getFullName(payment.student)}?`,
+                        onConfirm: () => handlePaymentDelete(payment.id),
+                    });
+                }}
+            />,
+        );
+        setIsOpen(true);
     };
 
     return (
@@ -91,28 +161,39 @@ export const PaymentsHistory: React.FC<
                         }}
                     />
                 </View>
-                {!isLoading ? (
-                    <ActivityIndicator size="large" color={$color_primary} />
-                ) : payments.length ? (
-                    payments.map(p => (
-                        <PaymentTile
-                            key={p.id}
-                            payment={p}
-                            onClick={function (): void {
-                                console.log(
-                                    `Open modal - payment edit. ${p.id}`,
-                                );
-                            }}
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View
+                        style={{
+                            alignItems: 'center',
+                            marginBottom: 20,
+                        }}
+                    >
+                        <LoadWrapper loading={!isLoading} size="large">
+                            {payments.length ? (
+                                payments.map(p => (
+                                    <PaymentTile
+                                        key={p.id}
+                                        payment={p}
+                                        onClick={() =>
+                                            handleOpenPaymentModal(p)
+                                        }
+                                    />
+                                ))
+                            ) : (
+                                <Text>Brak płatności</Text>
+                            )}
+                        </LoadWrapper>
+                    </View>
+                    {isFutureMonth || (
+                        <OverduesTile
+                            lessons={unpaidLessons.filter(lesson =>
+                                isBefore(lesson.date, new Date()),
+                            )}
+                            isLoading={unpaidLessonsLoading}
+                            navigation={navigation}
                         />
-                    ))
-                ) : (
-                    <Text>Brak płatności</Text>
-                )}
-                <OverduesTile
-                    numOfUnpaid={unpaidLessons.length}
-                    lessons={unpaidLessons}
-                    isLoading={unpaidLessonsLoading}
-                />
+                    )}
+                </ScrollView>
             </View>
         </PaymentsLayout>
     );

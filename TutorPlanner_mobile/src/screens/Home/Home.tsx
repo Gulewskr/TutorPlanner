@@ -2,12 +2,12 @@ import { View, StyleSheet, Alert } from 'react-native';
 import { Button } from '@components/button';
 import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useIsFocused } from '@react-navigation/native';
 import { Header } from '@components/header';
 import { EventsList } from '@components/complex/eventslist';
 import { ScrollView } from '@components/ui/scrool-view';
 import { RootStackParamList } from '@components/ui/navbar';
 import { useMemo } from 'react';
-import { useIsFocused } from '@react-navigation/native';
 
 export const Home: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Home'>

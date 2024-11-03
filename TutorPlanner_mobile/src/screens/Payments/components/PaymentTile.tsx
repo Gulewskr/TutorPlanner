@@ -35,7 +35,7 @@ export const PaymentTile: React.FC<StudentTileProps> = ({
                         {getFullName(student)} {payment.price}zł
                     </Text>
                     <Text style={styles.text}>
-                        {format(payment.date, 'yyyy-MM-dd hh-mm')}
+                        {format(payment.date, 'yyyy-MM-dd')}
                     </Text>
                 </View>
             </Tile>

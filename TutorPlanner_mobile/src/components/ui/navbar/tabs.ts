@@ -1,4 +1,4 @@
-import { StudentDTO } from '@model';
+import { PaymentDTO, StudentDTO } from '@model';
 
 export type RootStackParamList = {
     Home: undefined;
@@ -52,4 +52,7 @@ export type PaymentsTabParamList = {
     Summary: undefined;
     History: undefined;
     Create: undefined;
+    Edit: {
+        payment: PaymentDTO;
+    };
 };

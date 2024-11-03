@@ -28,10 +28,10 @@ export const usePayments = (filter?: PaymentsFilter) => {
         loadData(filter);
     }, []);
 
-    const fetchData = (props?: PaymentsFilter) => {
+    const fetchPayments = (props?: PaymentsFilter) => {
         setDataLoaded(false);
         loadData(props);
     };
 
-    return { payments, isLoading, fetchData };
+    return { payments, isLoading, fetchPayments };
 };

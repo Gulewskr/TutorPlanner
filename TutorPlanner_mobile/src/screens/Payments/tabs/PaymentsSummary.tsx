@@ -1,8 +1,8 @@
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { useEffect, useState } from 'react';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { useIsFocused } from '@react-navigation/native';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { PaymentsLayout } from '../PaymentsLayout';
-import { LessonDTO } from '@model';
 import { PaymentTile } from '../components/PaymentTile';
 import { ScrollView } from '@components/ui/scrool-view';
 import { Header } from '@components/header';
@@ -16,12 +16,18 @@ import { Tile } from '@components/tile';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { getMonth, getYear } from 'date-fns';
 import { useOverdues } from '@hooks/useOverdues';
+import { useModalContext } from '@contexts/modalContext';
+import { PaymentDTO } from '@model';
+import { PaymentModal } from '@components/modals/PaymentModal';
+import { useConfirmModal } from '@contexts/confirmModalContext';
+import { getFullName } from '@utils/utils';
+import { paymentsService } from '@services/payments.service';
+import { useAlert } from '@contexts/AlertContext';
 
 export const PaymentsSummary: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'Summary'>
 > = props => {
     const { navigation, route } = props;
-    const { payments, isLoading } = usePayments();
     const [unpaidLoading, setUnpaidLoading] = useState(true);
     const [summaryData, setSummaryDate] = useState<{
         income: number;
@@ -33,12 +39,17 @@ export const PaymentsSummary: React.FC<
         lessonsNumber: 0,
     });
 
+    const isFocused = useIsFocused();
+    const { payments, isLoading, fetchPayments } = usePayments();
     const { overdueLessons } = useOverdues();
-    const numOfUnpaid = overdueLessons.length;
+    const { setIsOpen, setModalBody } = useModalContext();
+    const { openModal } = useConfirmModal();
+    const { showAlert } = useAlert();
 
     const loadData = async () => {
+        setUnpaidLoading(true);
+        fetchPayments();
         const todayDate = new Date();
-        setUnpaidLoading(false);
 
         const lessons = await lessonsService.getLessons({
             month: getMonth(todayDate) + 1,
@@ -52,17 +63,66 @@ export const PaymentsSummary: React.FC<
             ),
             expectedIncome: lessons.reduce((acc, c) => c.price + acc, 0),
         });
+        setUnpaidLoading(false);
+    };
+
+    const handlePaymentDelete = async (id: number) => {
+        try {
+            await paymentsService.delete(id);
+            setIsOpen(false);
+            loadData();
+            showAlert({
+                message: 'Usunięto',
+                severity: 'danger',
+            });
+        } catch (e) {
+            showAlert({
+                message: 'Błąd',
+                severity: 'danger',
+            });
+        }
+    };
+
+    const handleShowEventModal = (payment: PaymentDTO) => {
+        setModalBody(
+            <PaymentModal
+                payment={payment}
+                goToEditForm={() => {
+                    navigation.navigate('Edit', {
+                        payment: payment,
+                    });
+                }}
+                goToStudentProfile={() => {
+                    navigation.getParent()?.navigate('Students', {
+                        screen: 'Profile',
+                        params: {
+                            studentId: payment.student.id,
+                        },
+                    });
+                }}
+                onDelete={() => {
+                    openModal({
+                        message: `Czy na pewno chcesz usunąć płatność ${getFullName(payment.student)}?`,
+                        onConfirm: () => handlePaymentDelete(payment.id),
+                    });
+                }}
+            />,
+        );
+        setIsOpen(true);
     };
 
     useEffect(() => {
-        loadData();
-    }, []);
+        if (isFocused) {
+            loadData();
+        }
+    }, [isFocused]);
 
     return (
         <PaymentsLayout {...props}>
             <ScrollView
                 styles={{
                     paddingHorizontal: 10,
+                    marginBottom: 100,
                 }}
             >
                 <Header
@@ -93,12 +153,17 @@ export const PaymentsSummary: React.FC<
                 </Tile>
                 <View style={{ height: 20 }} />
                 <OverduesTile
-                    numOfUnpaid={numOfUnpaid}
+                    lessons={overdueLessons}
                     isLoading={unpaidLoading}
+                    navigation={navigation}
                 />
                 <View style={{ height: 20 }} />
                 <Header
-                    title="Ostatnie płatności"
+                    title={
+                        payments.length > 5
+                            ? 'Ostatnie 5 płatności'
+                            : 'Ostatnie płatności'
+                    }
                     isCentered
                     styles={{ height: 30, marginBottom: 10 }}
                 />
@@ -110,14 +175,9 @@ export const PaymentsSummary: React.FC<
                             <PaymentTile
                                 key={p.id}
                                 payment={p}
-                                onClick={function (): void {
-                                    console.log(
-                                        `Open modal - payment edit. ${p.id}`,
-                                    );
-                                }}
+                                onClick={() => handleShowEventModal(p)}
                             />
                         ))}
-                        {payments.length > 5 && <Text>...</Text>}
                     </>
                 ) : (
                     <Text>Brak płatności</Text>

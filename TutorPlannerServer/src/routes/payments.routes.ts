@@ -54,6 +54,39 @@ router.post('/', async (req, res, next) => {
 });
 
 /**
+ * path: /payments/:paymentId
+ */
+router.put('/:id', async (req, res, next) => {
+    try {
+        const studentId = getStudentId(req);
+        const payment = await PaymentsService.updatePayment(
+            Number(req.params.id),
+            {
+                ...req.body,
+                studentId,
+            },
+        );
+        res.status(200).json(payment);
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
+ * path: /payments/:paymentId
+ */
+router.delete('/:id', async (req, res, next) => {
+    try {
+        const payment = await PaymentsService.deletePayment(
+            Number(req.params.id),
+        );
+        res.status(200).json(payment);
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
  * path: /payments
  * queryParams:
  *  month eg. 1
