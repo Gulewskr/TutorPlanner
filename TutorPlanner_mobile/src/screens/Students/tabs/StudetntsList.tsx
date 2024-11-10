@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { Layout } from 'src/screens/Layout';
+import { Layout } from '@screens/Layout';
 import { StudentTile } from '../components/StudentTile';
 import { ScrollView as CustomScrollView } from '@components/ui/scrool-view';
 import { Button } from '@components/button';

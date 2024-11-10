@@ -1,13 +1,12 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { PaymentsLayout } from '../PaymentsLayout';
 import { PaymentTile } from '../components/PaymentTile';
 import { Button } from '@components/button';
-import { MONTHS_NOMINATIVE } from 'src/screens/Calendar/components/calendar';
+import { MONTHS_NOMINATIVE } from '@screens/Calendar/components/calendar';
 import { addMonths, getMonth, getYear, isBefore, isSameYear } from 'date-fns';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { $color_primary } from '@styles/colors';
 import { usePayments } from '@hooks/usePayments';
 import { OverduesTile } from '../components/OverduesTile';
 import { useUnpaidLessons } from '@hooks/useUnpaidLessons';

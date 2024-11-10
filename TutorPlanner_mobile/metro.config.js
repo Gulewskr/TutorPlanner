@@ -1,4 +1,5 @@
-const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const { mergeConfig } = require('@react-native/metro-config');
+const { getDefaultConfig } = require('expo/metro-config');
 
 const defaultConfig = getDefaultConfig(__dirname, {
     isCSSEnabled: true,
@@ -6,10 +7,14 @@ const defaultConfig = getDefaultConfig(__dirname, {
 
 const {
     resolver: { sourceExts, assetExts },
-} = getDefaultConfig(__dirname, {
-    isCSSEnabled: true,
-});
+} = defaultConfig;
 
+/**
+ * Metro configuration
+ * https://metrobundler.dev/docs/configuration
+ *
+ * @type {import('metro-config').MetroConfig}
+ */
 const config = {
     transformer: {
         babelTransformerPath: require.resolve('./transformer.js'),
@@ -26,4 +31,9 @@ const config = {
     },
 };
 
-module.exports = mergeConfig(defaultConfig, config);
+module.exports = mergeConfig(
+    getDefaultConfig(__dirname, {
+        isCSSEnabled: true,
+    }),
+    config,
+);

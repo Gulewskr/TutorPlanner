@@ -1,4 +1,4 @@
-import { WEEKDAYS_JS } from 'src/screens/Calendar/components/calendar';
+import { WEEKDAYS_JS } from '@screens/Calendar/components/calendar';
 import { Icon } from '@components/icon';
 import { Tile } from '@components/tile';
 import { View, Text } from 'react-native';

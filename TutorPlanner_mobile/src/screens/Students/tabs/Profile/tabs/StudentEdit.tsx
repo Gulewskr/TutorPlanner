@@ -6,8 +6,8 @@ import { StudentDTO } from '@model';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { getFullName } from '@utils/utils';
 import { Text, View, ViewStyle } from 'react-native';
-import { Layout } from 'src/screens/Layout';
-import { StudentForm } from 'src/screens/Students/components/StudentForm';
+import { Layout } from '@screens/Layout';
+import { StudentForm } from '@screens/Students/components/StudentForm';
 import { StudentsLayout } from '../Layout';
 import { useStudentContext } from '../StudentContext';
 

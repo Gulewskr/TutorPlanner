@@ -7,7 +7,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { paymentsService } from '@services/payments.service';
 import { format } from 'date-fns';
 import { useMemo } from 'react';
-import { getFullName } from 'src/utils/utils';
+import { getFullName } from '@utils/utils';
 
 //TODO - extendend fields
 interface CreatePaymentData {
