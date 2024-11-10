@@ -1,10 +1,10 @@
-import { EventWrapper } from '@components/complex/eventslist';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { useEffect, useState } from 'react';
 import { DaySelector } from '../components/DaySelector';
-import { Layout } from 'src/screens/Layout';
+import { Layout } from '@screens/Layout';
 import { CalendarTabParamList } from '../calendarTabs';
 import { useCalendarContext } from '../CalendarContext';
+import { EventsList } from '@components/complex/eventslist';
 
 export const DailyCalendar: React.FC<
     BottomTabScreenProps<CalendarTabParamList, 'DailyCalendar'>
@@ -36,7 +36,10 @@ export const DailyCalendar: React.FC<
                 onClick={selectDate}
                 calendarData={calendarData}
             />
-            <EventWrapper day={selectedDate} />
+            <EventsList
+                day={selectedDate}
+                navigation={navigation.getParent()}
+            />
         </Layout>
     );
 };

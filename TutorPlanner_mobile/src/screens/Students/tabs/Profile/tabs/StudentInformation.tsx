@@ -1,14 +1,12 @@
+import React from 'react';
 import { Text, View } from 'react-native';
 import { StudentProfileTabParamList } from '../StudentProfile';
-import React, { useEffect, useMemo, useState } from 'react';
 import { StudentsLayout } from '../Layout';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Button } from '@components/button';
 import { Tile } from '@components/tile';
-import { StudentNextLesson } from 'src/screens/Students/components/StudentNextLesson';
-import { studentsService } from '@services/students.service';
-import { StudentDTO } from '@model';
+import { StudentNextLesson } from '@screens/Students/components/StudentNextLesson';
 import { useStudentContext } from '../StudentContext';
 
 export const StudentInformations: React.FC<

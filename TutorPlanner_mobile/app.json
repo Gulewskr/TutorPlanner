@@ -1,55 +1,69 @@
 {
-    "expo": {
-        "name": "TutorPlanner_mobile",
-        "slug": "TutorPlanner_mobile",
-        "version": "1.0.0",
-        "orientation": "portrait",
-        "icon": "./src/assets/icon.png",
-        "userInterfaceStyle": "automatic",
-        "splash": {
-            "image": "./src/assets/splash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
+  "expo": {
+    "name": "TutorPlanner_mobile",
+    "slug": "TutorPlanner_mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./src/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.tutorplanner.mobile",
+      "versionCode": 2,
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "datePicker": {
+        "colorAccent": {
+          "light": "#FF5722"
         },
-        "assetBundlePatterns": ["**/*"],
-        "ios": {
-            "supportsTablet": true
-        },
-        "android": {
-            "package": "com.tutorplanner.mobile",
-            "versionCode": 0.5,
-            "adaptiveIcon": {
-                "foregroundImage": "./src/assets/adaptive-icon.png",
-                "backgroundColor": "#ffffff"
-            },
-            "datePicker": {
-              "colorAccent": {
-                "light": "#FF5722"
-              },
-              "textColorPrimary": {
-                "light": "#FF5722"
-              }
-            },
-            "timePicker": {
-              "background": {"light": "#FF5722", "dark": "#383838"},
-              "numbersBackgroundColor": {"light": "#FF5722", "dark": "#383838"}
-            }
-        },
-        "assets": ["./src/assets/"],
-        "web": {
-            "bundler": "metro",
-            "favicon": "./src/assets/favicon.png"
-        },
-        "plugins": [
-            "expo-updates",
-            "expo-asset",
-            "@react-native-community/datetimepicker",
-            "./plugins/withNavigationBarColor.js",
-            "./plugins/withDatePickerColor.js"
-        ],
-        "packagerOpts": {
-            "config": "metro.config.js",
-            "sourceExts": ["ts", "tsx", "scss", "sass"]
+        "textColorPrimary": {
+          "light": "#FF5722"
         }
+      },
+      "timePicker": {
+        "background": {
+          "light": "#FF5722",
+          "dark": "#383838"
+        },
+        "numbersBackgroundColor": {
+          "light": "#FF5722",
+          "dark": "#383838"
+        }
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./src/assets/favicon.png"
+    },
+    "plugins": [
+      "expo-updates",
+      "expo-asset"
+    ],
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": [
+        "ts",
+        "tsx",
+        "scss",
+        "sass"
+      ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "69cc1eaa-5a71-422f-9f82-cf5dbde37bda"
+      }
     }
+  }
 }

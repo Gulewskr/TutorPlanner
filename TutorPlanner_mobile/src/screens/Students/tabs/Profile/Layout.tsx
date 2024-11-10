@@ -2,8 +2,8 @@ import { TabItem, Tabs } from '@components/tab';
 import { StudentProfileTabParamList } from './StudentProfile';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { PropsWithChildren } from 'react';
-import { Layout } from 'src/screens/Layout';
-import { getFullName } from 'src/utils/utils';
+import { Layout } from '@screens/Layout';
+import { getFullName } from '@utils/utils';
 import { StudentDTO } from '@model';
 
 const tabs: Array<TabItem<keyof StudentProfileTabParamList>> = [

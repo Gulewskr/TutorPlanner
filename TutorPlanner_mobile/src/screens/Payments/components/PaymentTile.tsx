@@ -3,7 +3,7 @@ import { PaymentDTO } from '@model';
 import { format } from 'date-fns';
 import { Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { getFullName } from 'src/utils/utils';
+import { getFullName } from '@utils/utils';
 
 interface StudentTileProps {
     payment: PaymentDTO;

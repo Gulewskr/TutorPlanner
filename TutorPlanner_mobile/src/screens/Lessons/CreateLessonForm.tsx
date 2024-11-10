@@ -8,7 +8,7 @@ import { ActivityIndicator, View } from 'react-native';
 import { ScrollView } from '@components/ui/scrool-view';
 import { StudentDTO } from '@model';
 import { FormRendererSchema } from '@components/complex/form-renderer/model';
-import { getFullName } from 'src/utils/utils';
+import { getFullName } from '@utils/utils';
 import { LessonsTabParamList } from '@components/ui/navbar';
 import { $color_primary } from '@styles/colors';
 import { useStudentsContext } from '@contexts/StudentsContext';
