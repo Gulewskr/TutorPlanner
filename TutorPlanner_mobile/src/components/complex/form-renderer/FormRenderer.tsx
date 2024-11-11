@@ -1,5 +1,5 @@
 import { Button } from '@components/button';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useFormContext } from './FormRendererProvider';
@@ -7,7 +7,7 @@ import { FormRendererSchema } from './model';
 
 interface FormRendererProps {
     schema: FormRendererSchema;
-    onSubmit: (data: any) => void;
+    onSubmit: (data: any) => void | Promise<void>;
     onCancel: () => void;
     cancelLabel?: string;
     confirmLabel?: string;
@@ -21,6 +21,14 @@ export const FormRenderer: React.FunctionComponent<FormRendererProps> = ({
     confirmLabel = 'Dodaj',
 }) => {
     const { formData, FormBody } = useFormContext(schema);
+    const [sendingData, setSendingData] = useState(false);
+
+    const handleSubmit = async () => {
+        setSendingData(true);
+        console.log('test');
+        await onSubmit(formData);
+        setSendingData(false);
+    };
 
     return (
         <View
@@ -45,8 +53,9 @@ export const FormRenderer: React.FunctionComponent<FormRendererProps> = ({
                 <View style={{ width: '50%' }}>
                     <Button
                         icon="checkbox"
-                        onClick={() => onSubmit(formData)}
+                        onClick={handleSubmit}
                         label={confirmLabel}
+                        disabled={sendingData}
                     />
                 </View>
             </View>

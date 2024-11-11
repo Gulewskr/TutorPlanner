@@ -62,6 +62,20 @@ router.delete('/:id', async (req, res, next) => {
  */
 router.get('/overdues', async (req, res, next) => {
     try {
+        const lessons = await LessonsService.getCurrentOverdueLessons();
+        return res.status(200).json(lessons);
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
+ * path: lessons/notpaid?month=1&year=1
+ *
+ * response: LessonDAO[] | Pagable<LessonDAO>>
+ */
+router.get('/notpaid', async (req, res, next) => {
+    try {
         const { month, year } = req.query;
         const { page, pageSize } = parsePaginationParams(req);
         const lessons = await LessonsService.getOverdueLessons({
@@ -111,28 +125,37 @@ router.get('/:id', async (req, res, next) => {
  */
 router.put('/:id', async (req, res, next) => {
     try {
-        if (req.query.session) {
-            await LessonsService.updateLessonSeries(
-                Number(req.params.id),
-                req.body,
-            );
-            const lesson = await LessonsService.getLesson(
-                Number(req.params.id),
-            );
-            res.status(200).json({
-                message: 'Lessons has been updated successfully.',
-                data: lesson,
-            });
-        } else {
-            const lesson = await LessonsService.updateLesson(
-                Number(req.params.id),
-                req.body,
-            );
-            res.status(200).json({
-                message: 'Lessons has been updated successfully.',
-                data: lesson,
-            });
-        }
+        const body = req.body;
+        body.date = parseDate(body.date);
+
+        const lesson = await LessonsService.updateLesson(
+            Number(req.params.id),
+            body,
+        );
+        res.status(200).json({
+            message: 'Lessons has been updated successfully.',
+            data: lesson,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+/*
+ * path: /lessons/series/:id
+ */
+router.put('/series/:id', async (req, res, next) => {
+    try {
+        const seriesId = Number(req.params.id);
+        const body = req.body;
+        body.date = parseDate(body.date);
+
+        await LessonsService.updateLessonSeries(seriesId, body);
+        const lesson = await LessonsService.getLesson(seriesId);
+        res.status(200).json({
+            message: 'Lessons has been updated successfully.',
+            data: lesson,
+        });
     } catch (err) {
         next(err);
     }

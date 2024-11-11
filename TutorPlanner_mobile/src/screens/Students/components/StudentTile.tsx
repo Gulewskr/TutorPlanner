@@ -3,7 +3,7 @@ import { Icon, ICON_NAME } from '@components/icon';
 import { StudentDTO } from '@model';
 import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { getFullName } from 'src/utils/utils';
+import { getFullName } from '@utils/utils';
 import { Tile } from '@components/tile';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 

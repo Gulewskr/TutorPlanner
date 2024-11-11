@@ -4,11 +4,11 @@ export type EventDTO = {
     date: Date;
     isCanceled: boolean;
     isOverridden: boolean;
-    type: 'LESSON' | 'DEFAULT';
+    eventType: 'LESSON' | 'DEFAULT';
     eventSeriesId?: number;
     description?: string;
-    startHour?: string;
-    endHour?: string;
+    startHour?: number;
+    endHour?: number;
     price?: number;
     isPaid?: boolean;
     studentId?: number;

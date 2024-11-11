@@ -1,2 +1,2 @@
-import Checkbox, { CheckboxTile } from './Checkbox';
-export { Checkbox, CheckboxTile };
+import Checkbox, { CheckboxTile, StaticCheckboxTile } from './Checkbox';
+export { Checkbox, CheckboxTile, StaticCheckboxTile };

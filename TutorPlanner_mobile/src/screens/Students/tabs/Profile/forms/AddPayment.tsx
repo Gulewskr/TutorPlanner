@@ -45,9 +45,7 @@ export const AddStudentPayment: React.FC<CreateStudentLessonForm> = ({
                 severity: 'success',
                 message: 'Dodano płatność',
             });
-            navigation.jumpTo('Info', {
-                student,
-            });
+            navigation.jumpTo('Info');
         } catch (e) {
             showAlert({
                 severity: 'success',
@@ -57,9 +55,7 @@ export const AddStudentPayment: React.FC<CreateStudentLessonForm> = ({
     };
 
     const handleCancel = (): void => {
-        navigation.jumpTo('Info', {
-            student: student,
-        });
+        navigation.jumpTo('Info');
     };
 
     return (

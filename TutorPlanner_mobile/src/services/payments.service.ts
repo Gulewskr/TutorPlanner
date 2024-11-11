@@ -12,15 +12,25 @@ class PaymentsService {
     create = async (
         body: PaymentCreateRequestBody,
     ): Promise<PaymentDTO | undefined> => {
-        try {
-            if (!body.studentId || !body.price) {
-                throw new Error(`Missing data`);
-            }
-            const response = await axios.post(PAYMENTS_URL, body);
-            return response.data;
-        } catch (error) {
-            console.log(error);
+        if (!body.studentId || !body.price) {
+            throw new Error(`Missing data`);
         }
+        const response = await axios.post(PAYMENTS_URL, body);
+        return response.data;
+    };
+    update = async (
+        paymentId: number,
+        body: PaymentCreateRequestBody,
+    ): Promise<PaymentDTO | undefined> => {
+        if (!body.studentId || !body.price) {
+            throw new Error(`Missing data`);
+        }
+        const response = await axios.put(`${PAYMENTS_URL}/${paymentId}`, body);
+        return response.data;
+    };
+    delete = async (paymentId: number): Promise<void> => {
+        const response = await axios.delete(`${PAYMENTS_URL}/${paymentId}`);
+        return response.data;
     };
     getAll = async () => await this.getList({});
     getList = async ({

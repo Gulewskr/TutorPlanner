@@ -1,54 +1,32 @@
+import React from 'react';
 import { Header } from '@components/header';
-import { Tile } from '@components/tile';
 import { LessonDTO } from '@model';
-import { studentsService } from '@services/students.service';
-import { format } from 'date-fns';
-import React, { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { LessonTile } from '../../Lessons/components/LessonTile';
 
 interface StudentNextLessonProps {
-    studentId: number;
+    lesson?: LessonDTO;
 }
 
-const StudentNextLesson: React.FC<StudentNextLessonProps> = ({ studentId }) => {
-    const [nextLesson, setNextLesson] = useState<LessonDTO | undefined>(() => {
-        return undefined;
-    });
-
+const StudentNextLesson: React.FC<StudentNextLessonProps> = ({ lesson }) => {
     const navigateToCallendar = () => {
         //TODO - rather should open event modal and then -> `show in callendar`
     };
-
-    const loadData = async () => {
-        const data = await studentsService.getNextStudentLesson(studentId);
-        if (data && 'name' in data) {
-            setNextLesson(data);
-        }
-    };
-
-    useEffect(() => {
-        loadData();
-    }, [studentId]);
 
     return (
         <View
             style={{
                 position: 'relative',
                 width: '100%',
+                paddingHorizontal: 15,
                 alignItems: 'center',
             }}
         >
             <Header title="Najbliższe zajęcia" isCentered />
-            {nextLesson ? (
+            {lesson ? (
                 <Pressable onPress={navigateToCallendar}>
-                    <Tile>
-                        <Text>
-                            {nextLesson.name}{' '}
-                            {`(${nextLesson.startHour} - ${nextLesson.endHour})`}
-                        </Text>
-                        <Text>{format(nextLesson.date, 'yyyy-MM-dd')}</Text>
-                    </Tile>
+                    <LessonTile lesson={lesson} />
                 </Pressable>
             ) : (
                 <Text>Brak zaplanowanych zajęć</Text>

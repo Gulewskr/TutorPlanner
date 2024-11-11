@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
         borderColor: '#000',
         alignItems: 'center',
         position: 'relative',
+        width: '95%',
     },
     closeButton: {
         padding: 15,

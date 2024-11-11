@@ -1,77 +1,79 @@
 import { Button } from '@components/button';
-import { CheckboxTile } from '@components/checkbox';
+import { StaticCheckboxTile } from '@components/checkbox';
+//import { CheckboxTile } from '@components/checkbox';
 import { Tile } from '@components/tile';
-import { useConfirmModal } from '@contexts/confirmModalContext';
+import { useModalContext } from '@contexts/modalContext';
 import { LessonDTO } from '@model';
+import { mapHourValueToText } from '@utils/dateUtils';
 import React from 'react';
 import { Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 interface LessonModalProps {
-    event: LessonDTO;
-    onDelete: (num: number) => void;
+    lesson: LessonDTO;
+    goToStudentProfile?: () => void;
+    goToEditForm: () => void;
+    //Probably to remove
+    onDelete?: (num: number) => void;
 }
 
 export const LessonModal: React.FC<LessonModalProps> = ({
-    event,
+    lesson,
+    goToStudentProfile,
+    goToEditForm,
     onDelete,
 }) => {
-    const { openModal } = useConfirmModal();
-    const handleDeleteEvent = () => {
-        openModal({
-            message: `Usunąć ${event.name}?`,
-            onConfirm: () => onDelete(event.id),
-        });
-    };
+    const { setIsOpen } = useModalContext();
 
     return (
         <View style={styles.container}>
             <View style={{ bottom: 5 }}>
-                <Text style={styles.label}>{event.name}</Text>
+                <Text style={styles.label}>{lesson.name}</Text>
                 <Text style={styles.message}>
-                    {event.startHour} - {event.endHour}
+                    {mapHourValueToText(lesson.startHour)} -{' '}
+                    {mapHourValueToText(lesson.endHour)}
                 </Text>
             </View>
-
             <View style={styles.double_container}>
-                <View style={{ width: '50%' }}>
+                <View style={{ width: '40%' }}>
                     <Tile color="white">
-                        <Text>Cena: 60zl</Text>
+                        <Text>{`Cena: ${lesson.price}zł`}</Text>
                     </Tile>
                 </View>
-                <View style={{ width: '50%' }}>
-                    <Button
-                        icon="addPayment"
-                        size="small"
-                        onClick={() => console.log(1)}
-                        label="Zmień opłatę"
-                    />
+                <View style={{ width: '59%' }}>
+                    {lesson.isPaid ? (
+                        <StaticCheckboxTile isChecked={true} label="Opłacone" />
+                    ) : (
+                        <StaticCheckboxTile
+                            isChecked={false}
+                            label="Nieopłacone"
+                        />
+                    )}
                 </View>
             </View>
-            <CheckboxTile onChange={() => console.log(1)} label="Opłacone" />
-            <Button
-                onClick={() => console.log(1)}
-                icon="students"
-                size="small"
-                label="Profil ucznia"
-            />
-            <View style={[styles.double_container, { marginTop: 30 }]}>
-                <View style={{ width: '50%' }}>
-                    <Button
-                        icon="pencil"
-                        size="small"
-                        onClick={() => console.log(event)}
-                        label="Edytuj"
-                    />
-                </View>
-                <View style={{ width: '50%' }}>
-                    <Button
-                        icon="trash"
-                        size="small"
-                        onClick={handleDeleteEvent}
-                        label="Usuń"
-                    />
-                </View>
+            {goToStudentProfile && (
+                <Button
+                    onClick={() => {
+                        setIsOpen(false);
+                        goToStudentProfile();
+                    }}
+                    icon="students"
+                    size="small"
+                    label="Profil ucznia"
+                    secondary
+                />
+            )}
+            <View style={{ marginTop: 30, width: '100%' }}>
+                <Button
+                    icon="pencil"
+                    size="small"
+                    onClick={() => {
+                        setIsOpen(false);
+                        goToEditForm();
+                    }}
+                    label="Edytuj lekcje"
+                    severity="warning"
+                />
             </View>
         </View>
     );

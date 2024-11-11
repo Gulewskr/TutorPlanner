@@ -64,16 +64,8 @@ const Button: React.FC<ButtonProps> = ({
                 }}
             >
                 <View style={style.content}>
-                    {icon && (
-                        <>
-                            <Icon icon={icon} />
-                        </>
-                    )}
-                    {isIconButton || (
-                        <View style={{ flex: 1, alignItems: 'center' }}>
-                            <Text style={style.text}>{label}</Text>
-                        </View>
-                    )}
+                    {icon && <Icon icon={icon} />}
+                    {isIconButton || <Text style={style.text}>{label}</Text>}
                 </View>
             </Pressable>
             {hasShadow && (
@@ -134,9 +126,13 @@ const styles = (
                     ? pressed
                         ? '$color_func'
                         : '$color_func'
-                    : pressed
-                      ? '$color_primary_hover'
-                      : '$color_primary',
+                    : severity == 'error'
+                      ? pressed
+                          ? '#FF6B6B'
+                          : '#FF6B6B'
+                      : pressed
+                        ? '$color_primary_hover'
+                        : '$color_primary',
             position: 'relative',
             shadowColor: '#000000',
             elevation: 3,

@@ -5,6 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CreateLessonForm } from './CreateLessonForm';
 import { LessonsTabParamList, RootStackParamList } from '@components/ui/navbar';
+import { EditLessonForm } from './EditLessonForm';
 
 const Tab = createBottomTabNavigator<LessonsTabParamList>();
 
@@ -24,6 +25,7 @@ export const Lessons: React.FC<
         >
             <Tab.Screen name="List" component={LessonList} />
             <Tab.Screen name="Create" component={CreateLessonForm} />
+            <Tab.Screen name="Edit" component={EditLessonForm} />
         </Tab.Navigator>
     );
 };

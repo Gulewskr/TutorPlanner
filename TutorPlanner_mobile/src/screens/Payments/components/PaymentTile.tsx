@@ -3,7 +3,7 @@ import { PaymentDTO } from '@model';
 import { format } from 'date-fns';
 import { Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { getFullName } from 'src/utils/utils';
+import { getFullName } from '@utils/utils';
 
 interface StudentTileProps {
     payment: PaymentDTO;
@@ -35,7 +35,7 @@ export const PaymentTile: React.FC<StudentTileProps> = ({
                         {getFullName(student)} {payment.price}zł
                     </Text>
                     <Text style={styles.text}>
-                        {format(payment.date, 'yyyy-MM-dd hh-mm')}
+                        {format(payment.date, 'yyyy-MM-dd')}
                     </Text>
                 </View>
             </Tile>
