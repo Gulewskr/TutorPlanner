@@ -20,6 +20,7 @@
         "zod-prisma-types": "^3.1.8"
     },
     "devDependencies": {
+        "@flydotio/dockerfile": "^0.5.9",
         "@prisma/client": "5.20.0",
         "@types/cookie-parser": "^1.4.7",
         "@types/cors": "^2.8.17",

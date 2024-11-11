@@ -13,8 +13,14 @@ import {
 import { addWeeks, endOfMonth } from 'date-fns';
 import { z } from 'zod';
 import { lessonRepository } from '../repositories/lessonsRepository';
-import { Pagable } from '../../../TutorPlanner_shared/Pagable';
 import { parseDate } from '../utils/utils';
+
+interface Pagable<T> {
+    data: T[];
+    size: number;
+    page: number;
+    pageSize: number;
+}
 
 const HOUR_REGEX = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
@@ -102,11 +108,11 @@ class LessonsService {
                 page: pageResults.page,
                 pageSize: pageResults.pageSize,
                 size: pageResults.size,
-                data: pageResults.data.map(v => toLessonDTO(v)),
+                data: pageResults.data.map((v: LessonDAO) => toLessonDTO(v)),
             };
         }
         const lessons = await lessonRepository.getLessons(filter);
-        return lessons.map(l => toLessonDTO(l));
+        return lessons.map((l: Lesson) => toLessonDTO(l));
     }
 
     public async getStudentLessons(studnetId: number): Promise<Lesson[]> {

@@ -1,8 +1,14 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db';
 import { CreateLessonRequestBody, LessonDAO } from '../models/lesson';
-import { Pagable } from '../../../TutorPlanner_shared/Pagable';
 import { endOfDay, startOfDay } from 'date-fns';
+
+interface Pagable<T> {
+    data: T[];
+    size: number;
+    page: number;
+    pageSize: number;
+}
 
 //TODO remove not related to Lesson type fucntions
 export const lessonRepository = {

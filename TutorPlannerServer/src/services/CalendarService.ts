@@ -1,7 +1,10 @@
 import { endOfMonth } from 'date-fns';
-import { CalendarDTO } from '../../../TutorPlanner_shared/CalendarDTO';
 import { eventRepository } from '../repositories/eventsRepository';
-import { toEventDTO } from '../dto/events';
+import { EventDTO, toEventDTO } from '../dto/events';
+
+export type CalendarDTO = {
+    events: EventDTO[];
+};
 
 class CalendarService {
     public async getCalendarData(
