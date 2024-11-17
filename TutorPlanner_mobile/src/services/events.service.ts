@@ -1,6 +1,4 @@
-import { EVENTS_URL } from './config';
-import { axios } from './baseService';
-import { EventDTO } from '../../../TutorPlanner_shared/EventDTO';
+import { EventDTO } from '@model';
 
 interface EventFilters {
     startDate: Date;

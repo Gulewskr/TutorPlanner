@@ -1,4 +1,4 @@
-import { EventDTO } from '../dto/events';
+import { EventDTO, toEventDTO } from '../dto/events';
 import { eventRepository } from '../repositories/eventsRepository';
 
 class EventsService {
@@ -6,10 +6,11 @@ class EventsService {
         startDate: Date,
         endDate: Date,
     ): Promise<EventDTO[]> {
-        return (await eventRepository.getEventsInTimeFrame(
+        const events = await eventRepository.getEventsInTimeFrame(
             startDate,
             endDate,
-        )) as EventDTO[];
+        );
+        return events.map(e => toEventDTO(e));
     }
 }
 

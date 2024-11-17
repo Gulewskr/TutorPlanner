@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useReducer, useState } from 'react';
-import { EventDTO } from '../../../../TutorPlanner_shared/EventDTO';
+import React, { createContext, useContext, useState } from 'react';
 import { useEvents } from '@hooks/useEvents';
 import { DayEventsData } from './components/calendar/model';
 import { calendarService } from '@services/calendar.service';
 import { format } from 'date-fns';
+import { EventDTO } from '@model';
 
 interface CalendarContextProps {
     events: EventDTO[];

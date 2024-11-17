@@ -6,6 +6,16 @@
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "userInterfaceStyle": "automatic",
+    "sdkVersion": "51.0.0",
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/project-id",
+      "requestHeaders": {
+        "expo-runtime-version":"1.0.0",
+        "expo-channel-name":"production"
+      },
+      "checkAutomatically": "NEVER"
+    },
     "splash": {
       "image": "./src/assets/splash.png",
       "resizeMode": "contain",

@@ -1,7 +1,7 @@
 import { getDaysInMonth } from 'date-fns';
-import { LessonSeriesDTO } from '../../../TutorPlanner_shared/LessonDTO';
 import {
     LessonDTO,
+    LessonSeriesDTO,
     mapEventSeriesToLessonSeriesDTO,
     toLessonDTO,
 } from '../models/lesson';

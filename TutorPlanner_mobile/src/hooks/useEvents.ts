@@ -1,6 +1,6 @@
 import { eventsService } from '@services/events.service';
 import { useEffect, useState } from 'react';
-import { EventDTO } from '../../../TutorPlanner_shared/EventDTO';
+import { EventDTO } from '@model';
 
 interface Timeframe {
     startDate: Date;

@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for tutorplannerserver on 2024-11-11T19:52:41+01:00
+# fly.toml app configuration file generated for tutorplannerserver on 2024-11-16T15:59:53+01:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -17,6 +17,6 @@ primary_region = 'arn'
   processes = ['app']
 
 [[vm]]
-  memory = '1gb'
+  memory = '256MB'
   cpu_kind = 'shared'
   cpus = 1
