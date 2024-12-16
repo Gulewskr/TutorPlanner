@@ -10,10 +10,15 @@ import lessonsRouter from './routes/lessons.routes';
 import paymentsRouter from './routes/payments.routes';
 import eventsRouter from './routes/events.routes';
 import calendarRouter from './routes/calendar.routes';
+import configRouter from './routes/config.routes';
 import { errorHandler } from './middlewares/errorHandler';
 
 // development
-import { addDemoData } from './demoData/addDemoData';
+//import { addDemoData } from './demoData/addDemoData';
+import ServerService from './services/ServerService';
+
+//App initialization
+ServerService.initializeServer();
 
 var app: Express = express();
 const port = process.env.PORT || 3000;
@@ -37,6 +42,7 @@ app.use('/events', eventsRouter);
 app.use('/calendar', calendarRouter);
 app.use('/lessons', lessonsRouter);
 app.use('/payments', paymentsRouter);
+app.use('/config', configRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req: Request, res: Response, next: NextFunction) {

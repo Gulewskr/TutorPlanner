@@ -14,7 +14,6 @@ const router: Router = express.Router();
  */
 router.get('/', async (req, res, next) => {
     try {
-        console.log('huh');
         const filters: LessonFilters = {};
 
         if (req.query.date) {

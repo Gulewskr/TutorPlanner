@@ -80,6 +80,7 @@ export const OverduesTile: React.FC<OverduesTileProps> = ({
                     <View style={{ gap: 10, marginTop: 10, paddingBottom: 20 }}>
                         {lessons.map((lesson, i) => (
                             <LessonTile
+                                key={lesson.id}
                                 lesson={lesson}
                                 onClick={() => handleShowEventModal(lesson)}
                             />

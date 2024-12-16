@@ -45,6 +45,7 @@ export const LessonsList: React.FC<LessonsListProps> = ({
                     <View style={{ gap: 10, paddingBottom: 20 }}>
                         {lessons.map((event: LessonDTO, i) => (
                             <LessonTile
+                                key={event.id}
                                 lesson={event}
                                 onClick={() => handleShowEventModal(event)}
                             />

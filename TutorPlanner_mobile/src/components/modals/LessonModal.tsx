@@ -1,5 +1,6 @@
 import { Button } from '@components/button';
 import { StaticCheckboxTile } from '@components/checkbox';
+import { Icon } from '@components/icon';
 //import { CheckboxTile } from '@components/checkbox';
 import { Tile } from '@components/tile';
 import { useModalContext } from '@contexts/modalContext';
@@ -41,14 +42,22 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                     </Tile>
                 </View>
                 <View style={{ width: '59%' }}>
-                    {lesson.isPaid ? (
-                        <StaticCheckboxTile isChecked={true} label="Opłacone" />
-                    ) : (
-                        <StaticCheckboxTile
-                            isChecked={false}
-                            label="Nieopłacone"
-                        />
-                    )}
+                    <Tile color="white">
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                gap: 5,
+                            }}
+                        >
+                            <Icon
+                                icon={lesson.isPaid ? 'payments' : 'cancel'}
+                            />
+                            <Text>
+                                {lesson.isPaid ? 'Opłacone' : 'Nieopłacone'}
+                            </Text>
+                        </View>
+                    </Tile>
                 </View>
             </View>
             {goToStudentProfile && (

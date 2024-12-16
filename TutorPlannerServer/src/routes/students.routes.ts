@@ -12,13 +12,13 @@ const router: Router = express.Router();
 
 router.get('/', async (req, res) => {
     const data: StudentsDTO = await StudentService.getStudents();
-    res.status(200).json(data);
+    return res.status(200).json(data);
 });
 
 router.post('/', async (req, res, next) => {
     try {
         const createdStudent = await StudentService.createStudent(req.body);
-        res.status(200).json(createdStudent);
+        return res.status(200).json(createdStudent);
     } catch (err) {
         next(err);
     }
@@ -28,7 +28,7 @@ router.get('/:studentId', async (req, res, next) => {
     try {
         const studentId = parseStudentId(req);
         const student = await StudentService.getStudent(studentId);
-        res.status(200).json(student);
+        return res.status(200).json(student);
     } catch (err) {
         next(err);
     }
@@ -38,7 +38,7 @@ router.post('/:studentId', async (req, res, next) => {
     try {
         const studentId = parseStudentId(req);
         const student = await StudentService.updateStudent(studentId, req.body);
-        res.status(200).json(student);
+        return res.status(200).json(student);
     } catch (err) {
         next(err);
     }
@@ -48,7 +48,7 @@ router.delete('/:studentId', async (req, res, next) => {
     try {
         const studentId = parseStudentId(req);
         const student = await StudentService.disableStudent(studentId);
-        res.status(200).json(student);
+        return res.status(200).json(student);
     } catch (err) {
         next(err);
     }
@@ -77,12 +77,24 @@ router.get('/:studentId/profile/lessons', async (req, res, next) => {
     try {
         const studentId = parseStudentId(req);
         const lessons = await StudentProfileService.getLessonsData(studentId);
-        res.status(200).json(lessons);
+        return res.status(200).json(lessons);
     } catch (err) {
         next(err);
     }
 });
 
-router.use(errorHandler);
+/**
+ * path: students/recalculateBalances
+ *
+ * returns void
+ */
+router.post('/actions/recalculate-balances', async (req, res, next) => {
+    try {
+        await StudentPaymentsService.recalculateAllStudentsBalance();
+        return res.status(204).send();
+    } catch (err) {
+        next(err);
+    }
+});
 
 export default router;

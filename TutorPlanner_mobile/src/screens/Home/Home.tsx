@@ -1,4 +1,4 @@
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Button } from '@components/button';
 import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -7,13 +7,60 @@ import { Header } from '@components/header';
 import { EventsList } from '@components/complex/eventslist';
 import { ScrollView } from '@components/ui/scrool-view';
 import { RootStackParamList } from '@components/ui/navbar';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useConfig } from '@hooks/useConfig';
+import { useModalContext } from '@contexts/modalContext';
+import { AppVersionModal } from '@components/modals/AppVersionModal';
+import { APP_VERSION } from 'src/config';
+import { useAlert } from '@contexts/AlertContext';
 
 export const Home: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Home'>
 > = ({ navigation, route }) => {
     const isFocused = useIsFocused();
+    const { setIsOpen, setModalBody } = useModalContext();
+    const { showAlert } = useAlert();
+    const { versionCheck, welcomeMessage, isLoading } = useConfig();
     const today = useMemo(() => new Date(), []);
+
+    useEffect(() => {
+        if (!versionCheck) {
+            if (!isLoading) {
+                showAlert({
+                    message: 'Oj coś nie działa 🤒',
+                    severity: 'warning',
+                });
+            }
+            return;
+        }
+        if (!versionCheck.isSupported) {
+            setModalBody(
+                <AppVersionModal
+                    message={`Należy pobrać aktualizacje aplikacji - najnowsza wersja: ${versionCheck.newestVersion}, aktualna wersja może nie działać poprawnie 😟`}
+                    version={APP_VERSION}
+                />,
+            );
+            setIsOpen(true);
+            return;
+        }
+        if (versionCheck.hasUpdate) {
+            setModalBody(
+                <AppVersionModal
+                    message={`Dostępna aktualizacja - ${versionCheck.newestVersion} 😉`}
+                    version={APP_VERSION}
+                />,
+            );
+            setIsOpen(true);
+            return;
+        }
+        if (!isLoading) {
+            showAlert({
+                message: 'Miłej pracy 😎',
+                severity: 'success',
+            });
+        }
+        return;
+    }, [versionCheck]);
 
     return (
         <Layout
@@ -21,8 +68,8 @@ export const Home: React.FC<
             route={'Home'}
             hasHeader
             isHeaderCentered={false}
-            title="Witaj, Natalcia!"
-            subtitle="Dziś jest wspaniały dzień do działania :)"
+            title={welcomeMessage.title}
+            subtitle={welcomeMessage.message}
         >
             {isFocused && (
                 <ScrollView>

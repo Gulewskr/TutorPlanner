@@ -17,7 +17,7 @@ interface CreatePaymentData {
 }
 
 const defaultData: CreatePaymentData = {
-    student: '0',
+    student: 'none',
     price: 0,
     date: new Date(),
 };
@@ -29,7 +29,7 @@ interface PaymentFormProps {
     cb: () => void;
 }
 
-export const PaymentCreateForm: React.FC<PaymentFormProps> = ({
+export const PaymentForm: React.FC<PaymentFormProps> = ({
     onCancel,
     mode = 'Create',
     initialData,
@@ -40,6 +40,20 @@ export const PaymentCreateForm: React.FC<PaymentFormProps> = ({
     const { data: students } = useStudentsContext();
     const handleSubmit = async (data: CreatePaymentData): Promise<void> => {
         try {
+            if (!data.student || data.student == 'none') {
+                showAlert({
+                    message: 'Wybierz studenta.',
+                    severity: 'danger',
+                });
+                return;
+            }
+            if (!data.price || data.price <= 0) {
+                showAlert({
+                    message: 'Kwota musi być liczbą dodatnią.',
+                    severity: 'danger',
+                });
+                return;
+            }
             if (mode === 'Create') {
                 await handleCreateAction(data);
             } else {
@@ -105,6 +119,9 @@ export const PaymentCreateForm: React.FC<PaymentFormProps> = ({
                 schema={schema}
                 onSubmit={handleSubmit}
                 onCancel={onCancel}
+                confirmLabel={
+                    mode === 'Create' ? 'Dodaj płatność' : 'Zapisz zmiany'
+                }
             />
         </FormProvider>
     );

@@ -67,8 +67,17 @@ export const CalendarProvider = ({ children }: React.PropsWithChildren) => {
             const dateKey = format(event.date, 'yyyy-MM-dd');
             acc[dateKey] = acc[dateKey] || {
                 amount: 0,
+                numOfUnpaidedLessons: 0,
+                numOfPaidedLessons: 0,
             };
             acc[dateKey].amount++;
+            if (event.eventType === 'LESSON') {
+                if (event.isPaid) {
+                    acc[dateKey].numOfPaidedLessons++;
+                } else {
+                    acc[dateKey].numOfUnpaidedLessons++;
+                }
+            }
             return acc;
         }, {});
         setCalendarData(data => ({

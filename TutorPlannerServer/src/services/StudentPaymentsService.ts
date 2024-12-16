@@ -24,23 +24,54 @@ class StudentPaymentsService {
         const studentPayments =
             await paymentRepository.getSumOfPaymentByStudentId(studentId);
         const studentLessonsCosts =
-            await lessonRepository.getSumLessonsPriceByStudentId(studentId);
+            await lessonRepository.getSumOfPaidLessonsByStudentId(studentId);
         let newBalance = studentPayments - studentLessonsCosts;
-        const unpaidLessons =
-            await lessonRepository.getUnpaidLessonsByStudentId(studentId);
-        let paidLessonsIds = [];
-        for (const lesson of unpaidLessons) {
-            if (lesson.price < newBalance) {
-                newBalance -= lesson.price;
-                paidLessonsIds.push(lesson.id);
+        if (newBalance > 0) {
+            const unpaidLessons =
+                await lessonRepository.getUnpaidLessonsByStudentId(studentId);
+            const paidLessonsIds = [];
+            for (const lesson of unpaidLessons) {
+                if (lesson.price <= newBalance) {
+                    newBalance -= lesson.price;
+                    paidLessonsIds.push(lesson.id);
+                } else {
+                    break;
+                }
             }
-        }
-        if (paidLessonsIds.length) {
-            await lessonRepository.bulkUpdate(paidLessonsIds, { isPaid: true });
+            if (paidLessonsIds.length) {
+                await lessonRepository.bulkUpdate(paidLessonsIds, {
+                    isPaid: true,
+                });
+            }
+        } else if (newBalance < 0) {
+            const unpaidLessonsIds = [];
+            const paidLessons =
+                await lessonRepository.getPaidLessonsByStudentId(studentId);
+            for (const lesson of paidLessons) {
+                if (newBalance < 0) {
+                    newBalance += lesson.price;
+                    unpaidLessonsIds.push(lesson.id);
+                } else {
+                    break;
+                }
+            }
+            if (unpaidLessonsIds.length) {
+                await lessonRepository.bulkUpdate(unpaidLessonsIds, {
+                    isPaid: false,
+                });
+            }
         }
         return await studentRepository.update(studentId, {
             balance: newBalance,
         });
+    }
+
+    public async recalculateAllStudentsBalance(): Promise<void> {
+        const students = await studentRepository.findAll();
+        for (const stud of students) {
+            await this.recalculateStudentBalance(stud.id);
+        }
+        return;
     }
 }
 

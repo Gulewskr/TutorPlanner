@@ -94,6 +94,14 @@ model EventSeries {
     events Event[]
 }
 
+model Config {
+    id                   Int    @id @default(autoincrement())
+    version              String // newest supported client version
+    lastSupportedVersion String // minimum client version
+    welcomeMessageTitle  String
+    welcomeMessage       String
+}
+
 //TODO - make possible to user create own event types
 enum EventType {
     DEFAULT

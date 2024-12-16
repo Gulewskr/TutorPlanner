@@ -45,6 +45,9 @@ class PaymentsService {
     public async addPayment(data: PaymentInput): Promise<Payment> {
         const parsedData = validatePaymentInput(data);
         const payment = await paymentRepository.createPayment(parsedData);
+        await StudentPaymentsService.recalculateStudentBalance(
+            parsedData.studentId,
+        );
         return payment;
     }
 

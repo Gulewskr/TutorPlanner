@@ -2,6 +2,12 @@ import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { format, isToday } from 'date-fns';
 import { DayEventsData } from './model';
+import {
+    $color_black,
+    $color_danger,
+    $color_success,
+    $color_warning,
+} from '@styles/colors';
 
 interface DayInCalendarProps {
     day: Date;
@@ -18,8 +24,10 @@ const DayInCalendar: React.FC<DayInCalendarProps> = ({
     isBlackedOut = false,
     onClick,
 }) => {
-    const dateKey = format(day, 'yyyy-MM-dd');
-    const todaysEvents = eventsData;
+    //const dateKey = format(day, 'yyyy-MM-dd');
+    console.log(eventsData);
+    const hasUnpaidedEvents = eventsData && eventsData.numOfUnpaidedLessons > 0;
+    const hasPaidedEvents = eventsData && eventsData.numOfPaidedLessons > 0;
 
     return (
         <Pressable
@@ -33,9 +41,28 @@ const DayInCalendar: React.FC<DayInCalendarProps> = ({
             ]}
         >
             <Text>{format(day, 'd')}</Text>
-            {todaysEvents && (
-                <View style={styles.event}>
-                    <Text style={styles.event_text}>{todaysEvents.amount}</Text>
+            {eventsData && (
+                <View
+                    style={[
+                        styles.event,
+                        hasUnpaidedEvents && { backgroundColor: 'red' },
+                        hasPaidedEvents && { backgroundColor: $color_success },
+                        hasUnpaidedEvents &&
+                            hasPaidedEvents && {
+                                backgroundColor: $color_warning,
+                            },
+                    ]}
+                >
+                    <Text
+                        style={[
+                            styles.event_text,
+                            hasPaidedEvents && {
+                                color: $color_black,
+                            },
+                        ]}
+                    >
+                        {eventsData.amount}
+                    </Text>
                 </View>
             )}
         </Pressable>
@@ -55,9 +82,9 @@ const styles = EStyleSheet.create({
         width: 16,
         heigth: 10,
         position: 'absolute',
+        backgroundColor: 'red',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'red',
         borderRadius: 50,
         borderWidth: 1,
         top: -6,

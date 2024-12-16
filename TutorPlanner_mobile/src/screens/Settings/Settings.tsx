@@ -1,12 +1,52 @@
-import * as React from 'react';
+import { useState } from 'react';
 import { Layout } from '../Layout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@components/ui/navbar';
 import { Button } from '@components/button';
+import { APP_VERSION } from 'src/config';
+import { Text } from 'react-native';
+import { studentsService } from '@services/students.service';
+import { useAlert } from '@contexts/AlertContext';
 
 export const Settings: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Settings'>
 > = ({ navigation, route }) => {
+    const [isCalculating, setIsCalculating] = useState(false);
+    const { showAlert } = useAlert();
+
+    const displayError = () => {
+        showAlert({
+            message: 'Oj za dużo liczenia 🤕',
+            severity: 'danger',
+        });
+    };
+
+    const displaySuccess = () => {
+        showAlert({
+            message: 'Policzone 😎',
+            severity: 'success',
+        });
+    };
+
+    const handleBalanceRecalcualtion = async () => {
+        showAlert({
+            message: 'Liczę to może trochę zająć... ⌛😑',
+            severity: 'info',
+            time: 2000,
+        });
+        try {
+            const responseCode =
+                await studentsService.recalculateAllStudentsBalances();
+            if (responseCode === 204) {
+                displaySuccess();
+            } else {
+                displayError();
+            }
+        } catch (err) {
+            displayError();
+        }
+        setIsCalculating(false);
+    };
     return (
         <Layout
             navigation={navigation}
@@ -15,11 +55,18 @@ export const Settings: React.FC<
             hasHeader
         >
             <Button
-                label="Oblicz ponownie bilanse uczniów"
+                label={
+                    isCalculating
+                        ? 'Liczonko...'
+                        : 'Oblicz ponownie bilanse uczniów'
+                }
                 onClick={() => {
-                    //TODO
+                    setIsCalculating(true);
+                    handleBalanceRecalcualtion();
                 }}
+                disabled={isCalculating}
             />
+            <Text>Aktualna wersja {APP_VERSION}</Text>
         </Layout>
     );
 };

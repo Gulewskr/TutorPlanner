@@ -1,7 +1,6 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
-import { MONTHS_NOMINATIVE, WEEKDAYS } from '../components/calendar';
 import { Button } from '@components/button';
 import { CalendarLayout } from '../CalendarLayout';
 import { CalendarTabParamList } from '../calendarTabs';
@@ -21,7 +20,11 @@ import {
     format,
 } from 'date-fns';
 import { DayInCalendar } from '../components/calendar/DayInCalendar';
-import { getDayOfWeek } from '../components/calendar/utils';
+import {
+    getDayOfWeek,
+    MONTHS_NOMINATIVE,
+    WEEKDAYS,
+} from '../components/calendar/utils';
 import { useCalendarContext } from '../CalendarContext';
 import { $color_primary, $color_primary_shadow } from '@styles/colors';
 import { EventsList } from '@components/complex/eventslist';

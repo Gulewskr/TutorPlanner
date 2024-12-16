@@ -32,6 +32,8 @@ EStyleSheet.build({
     $color_black: '#070707',
     $color_white: '#F5F5F5',
     $color_disabled: '#6F6F6F',
+    $color_danger: '#FF6B6B',
+    $color_success: '#BAFCA2',
     $color_disabled_primary: '#B08DA9',
     $bgColor_white: '#FFFCE3',
     $bgColor_primary: '#FFC3FF',

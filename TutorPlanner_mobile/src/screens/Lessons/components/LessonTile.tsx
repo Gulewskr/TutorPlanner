@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { mapHourValueToText } from '@utils/dateUtils';
 import { Tile } from '@components/tile';
 import { LessonDTO } from '@model';
+import { Icon } from '@components/icon';
 
 interface LessonTileProps {
     lesson: LessonDTO;
@@ -18,7 +19,17 @@ const LessonTile: React.FC<LessonTileProps> = ({ lesson, onClick }) => (
                 paddingHorizontal: 10,
             }}
         >
-            <Text>
+            <Text
+                style={{
+                    textAlign: 'center',
+                }}
+            >
+                <Text>
+                    <Icon
+                        icon={lesson.isPaid ? 'payments' : 'cancel'}
+                        size="xxs"
+                    />{' '}
+                </Text>
                 {lesson.name}{' '}
                 {`(${mapHourValueToText(lesson.startHour)} - ${mapHourValueToText(lesson.endHour)})`}
             </Text>

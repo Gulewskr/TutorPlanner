@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { AlertSeverity } from './model';
+import { $color_danger, $color_success, $tile_bgColor } from '@styles/colors';
 
 interface AlertProps {
     message: string;
@@ -21,13 +22,13 @@ interface AlertProps {
 const getBgColor = (severity: AlertSeverity) => {
     switch (severity) {
         case 'danger':
-            return '#FF6B6B';
+            return $color_danger;
         case 'success':
-            return '#BAFCA2';
+            return $color_success;
         case 'warning':
         case 'info':
         default:
-            return '#F4DDFF';
+            return $tile_bgColor;
     }
 };
 

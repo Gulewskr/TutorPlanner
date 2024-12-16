@@ -2,7 +2,7 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { View } from 'react-native';
 import { PaymentsLayout } from '../PaymentsLayout';
-import { PaymentCreateForm } from '../components/PaymentCreateForm';
+import { PaymentForm } from '../components/PaymentForm';
 import { PaymentsTabParamList } from '@components/ui/navbar';
 
 export const PaymentEdit: React.FC<
@@ -13,11 +13,11 @@ export const PaymentEdit: React.FC<
     return (
         <PaymentsLayout {...props}>
             <View style={{ padding: 15, width: '100%' }}>
-                <PaymentCreateForm
-                    onCancel={() => navigation.goBack()}
+                <PaymentForm
                     initialData={route.params.payment}
                     mode="Edit"
-                    cb={() => navigation.goBack()}
+                    onCancel={navigation.goBack}
+                    cb={navigation.goBack}
                 />
             </View>
         </PaymentsLayout>

@@ -127,6 +127,20 @@ class StudentsService {
             throw error;
         }
     };
+    recalculateAllStudentsBalances = async (): Promise<number> => {
+        try {
+            const response = await axios.post(
+                `${STUDENTS_URL}/actions/recalculate-balances`,
+                undefined,
+                {
+                    timeout: 30 * 1000,
+                },
+            );
+            return response.status;
+        } catch (error) {
+            throw error;
+        }
+    };
     delete = async (studnetId: number): Promise<StudentDTO | ErrorResponse> => {
         try {
             const response = await axios.delete(`${STUDENTS_URL}/${studnetId}`);

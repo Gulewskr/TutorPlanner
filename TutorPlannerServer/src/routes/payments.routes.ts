@@ -46,7 +46,6 @@ router.post('/', async (req, res, next) => {
             ...req.body,
             studentId,
         });
-        await StudentPaymentsService.recalculateStudentBalance(studentId);
         res.status(200).json(payment);
     } catch (err) {
         next(err);
@@ -131,7 +130,6 @@ router.post('/:studentId/payments/', async (req, res, next) => {
             ...req.body,
             studentId: studentId,
         });
-        await StudentPaymentsService.recalculateStudentBalance(studentId);
         res.status(200).json(payment);
     } catch (err) {
         next(err);

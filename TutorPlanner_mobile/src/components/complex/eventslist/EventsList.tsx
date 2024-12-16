@@ -9,6 +9,7 @@ import { LessonModal } from '@components/modals';
 import axios from 'axios';
 import { LESSONS_URL } from '@services/config';
 import { mapHourValueToText } from '@utils/dateUtils';
+import { LessonTile } from '@screens/Lessons/components/LessonTile';
 
 interface EventsListProps {
     day: Date;
@@ -86,6 +87,13 @@ export const EventsList: React.FC<EventsListProps> = ({ day, navigation }) => {
                 <ScrollView nestedScrollEnabled={true}>
                     <View style={{ width: 320, gap: 10, paddingBottom: 20 }}>
                         {events.map((event: LessonDTO, i) => (
+                            <LessonTile
+                                key={event.id}
+                                lesson={event}
+                                onClick={() => handleShowEventModal(event)}
+                            />
+                            /*
+                            TODO - add handling both events and lessons in single list
                             <Tile
                                 key={i}
                                 color="white"
@@ -106,6 +114,7 @@ export const EventsList: React.FC<EventsListProps> = ({ day, navigation }) => {
                                     </Text>
                                 </View>
                             </Tile>
+                            */
                         ))}
                     </View>
                 </ScrollView>

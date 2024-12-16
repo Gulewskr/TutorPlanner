@@ -4,8 +4,14 @@ import { ScrollView, Text, View } from 'react-native';
 import { PaymentsLayout } from '../PaymentsLayout';
 import { PaymentTile } from '../components/PaymentTile';
 import { Button } from '@components/button';
-import { MONTHS_NOMINATIVE } from '@screens/Calendar/components/calendar';
-import { addMonths, getMonth, getYear, isBefore, isSameYear } from 'date-fns';
+import {
+    addMonths,
+    compareDesc,
+    getMonth,
+    getYear,
+    isBefore,
+    isSameYear,
+} from 'date-fns';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { usePayments } from '@hooks/usePayments';
 import { OverduesTile } from '../components/OverduesTile';
@@ -19,6 +25,7 @@ import { getFullName } from '@utils/utils';
 import { paymentsService } from '@services/payments.service';
 import { useConfirmModal } from '@contexts/confirmModalContext';
 import { LoadWrapper } from '@components/loader';
+import { getMonthName } from '@screens/Calendar/components/calendar/utils';
 
 export const PaymentsHistory: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'History'>
@@ -27,7 +34,8 @@ export const PaymentsHistory: React.FC<
     const [controlDate, setControlDate] = useState(new Date());
     const [isFutureMonth, setIsFutureMonth] = useState(false);
     const today = useMemo(() => new Date(), []);
-    const month = getMonth(controlDate);
+    // In app we use 1-12 month system
+    const month = getMonth(controlDate) + 1;
     const year = getYear(controlDate);
 
     const { setIsOpen, setModalBody } = useModalContext();
@@ -49,7 +57,7 @@ export const PaymentsHistory: React.FC<
 
     const loadData = () => {
         fetchPayments({
-            month: month + 1,
+            month: month,
             year: year,
         });
         if (
@@ -58,7 +66,7 @@ export const PaymentsHistory: React.FC<
                 controlDate.getMonth() <= today.getMonth())
         ) {
             fetchUnpaidLessons({
-                month: month + 1,
+                month: month,
                 year: year,
             });
             setIsFutureMonth(false);
@@ -146,7 +154,7 @@ export const PaymentsHistory: React.FC<
                     />
                     <View style={styles.control_text}>
                         <Text style={{ fontWeight: 'bold' }}>
-                            {MONTHS_NOMINATIVE[month]}{' '}
+                            {getMonthName(month)}{' '}
                             {!isSameYear(controlDate, new Date()) && year}
                         </Text>
                     </View>
@@ -169,15 +177,17 @@ export const PaymentsHistory: React.FC<
                     >
                         <LoadWrapper loading={!isLoading} size="large">
                             {payments.length ? (
-                                payments.map(p => (
-                                    <PaymentTile
-                                        key={p.id}
-                                        payment={p}
-                                        onClick={() =>
-                                            handleOpenPaymentModal(p)
-                                        }
-                                    />
-                                ))
+                                payments
+                                    .sort((a, b) => compareDesc(a.date, b.date))
+                                    .map(p => (
+                                        <PaymentTile
+                                            key={p.id + 1}
+                                            payment={p}
+                                            onClick={() =>
+                                                handleOpenPaymentModal(p)
+                                            }
+                                        />
+                                    ))
                             ) : (
                                 <Text>Brak płatności</Text>
                             )}

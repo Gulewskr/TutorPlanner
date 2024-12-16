@@ -263,16 +263,14 @@ export const lessonRepository = {
             pageSize: pageSize || amount,
         };
     },
-    getSumLessonsPriceByStudentId: async (
+    getSumOfPaidLessonsByStudentId: async (
         studentId: number,
     ): Promise<number> => {
         const res = await prisma.event.groupBy({
             where: {
                 eventType: 'LESSON',
                 studentId: studentId,
-                date: {
-                    lte: new Date(),
-                },
+                isPaid: true,
             },
             by: 'studentId',
             _sum: {
@@ -289,12 +287,23 @@ export const lessonRepository = {
                 eventType: 'LESSON',
                 studentId: studentId,
                 isPaid: false,
-                date: {
-                    lte: new Date(),
-                },
             },
             orderBy: {
                 date: 'asc',
+            },
+        })) as LessonDAO[];
+    },
+    getPaidLessonsByStudentId: async (
+        studentId: number,
+    ): Promise<LessonDAO[]> => {
+        return (await prisma.event.findMany({
+            where: {
+                eventType: 'LESSON',
+                studentId: studentId,
+                isPaid: true,
+            },
+            orderBy: {
+                date: 'desc',
             },
         })) as LessonDAO[];
     },

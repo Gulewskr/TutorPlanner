@@ -25,7 +25,6 @@ export const FormRenderer: React.FunctionComponent<FormRendererProps> = ({
 
     const handleSubmit = async () => {
         setSendingData(true);
-        console.log('test');
         await onSubmit(formData);
         setSendingData(false);
     };

@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Layout } from '../Layout';
 import { View } from 'react-native';
-import { PaymentCreateForm } from '../Payments/components/PaymentCreateForm';
+import { PaymentForm } from '../Payments/components/PaymentForm';
 import { RootStackParamList } from '@components/ui/navbar';
 
 export const CreatePayment: React.FC<
@@ -16,7 +16,7 @@ export const CreatePayment: React.FC<
             hasHeaderSeperated
         >
             <View style={{ padding: 15, width: '100%' }}>
-                <PaymentCreateForm
+                <PaymentForm
                     onCancel={navigation.goBack}
                     cb={() => navigation.goBack()}
                 />
