@@ -67,9 +67,31 @@ class LessonsService {
             throw error;
         }
     };
+    restore = async (lessonId: number): Promise<LessonDTO> => {
+        try {
+            const response = await axios.delete(
+                `${LESSONS_URL}/${lessonId}/cancel`,
+            );
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
     cancelSeries = async (lessonId: number): Promise<LessonDTO> => {
         try {
             const response = await axios.post(
+                `${LESSONS_URL}/${lessonId}/series/cancel`,
+            );
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
+    restoreSeries = async (lessonId: number): Promise<LessonDTO> => {
+        try {
+            const response = await axios.delete(
                 `${LESSONS_URL}/${lessonId}/series/cancel`,
             );
             return response.data;

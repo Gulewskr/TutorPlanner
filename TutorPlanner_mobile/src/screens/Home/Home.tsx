@@ -7,7 +7,7 @@ import { Header } from '@components/header';
 import { EventsList } from '@components/complex/eventslist';
 import { ScrollView } from '@components/ui/scrool-view';
 import { RootStackParamList } from '@components/ui/navbar';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useConfig } from '@hooks/useConfig';
 import { useModalContext } from '@contexts/modalContext';
 import { AppVersionModal } from '@components/modals/AppVersionModal';
@@ -17,6 +17,7 @@ import { useAlert } from '@contexts/AlertContext';
 export const Home: React.FC<
     NativeStackScreenProps<RootStackParamList, 'Home'>
 > = ({ navigation, route }) => {
+    const [loadingScreen, setLoadingScreen] = useState(true);
     const isFocused = useIsFocused();
     const { setIsOpen, setModalBody } = useModalContext();
     const { showAlert } = useAlert();
@@ -62,6 +63,12 @@ export const Home: React.FC<
         return;
     }, [versionCheck]);
 
+    useEffect(() => {
+        if (!isLoading) {
+            setTimeout(() => setLoadingScreen(false), 1500);
+        }
+    }, [isLoading]);
+
     return (
         <Layout
             navigation={navigation}
@@ -70,6 +77,7 @@ export const Home: React.FC<
             isHeaderCentered={false}
             title={welcomeMessage.title}
             subtitle={welcomeMessage.message}
+            isLoading={loadingScreen}
         >
             {isFocused && (
                 <ScrollView>

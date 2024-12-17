@@ -3,10 +3,12 @@ import { StaticCheckboxTile } from '@components/checkbox';
 import { Icon, ICON_NAME } from '@components/icon';
 //import { CheckboxTile } from '@components/checkbox';
 import { Tile } from '@components/tile';
+import { useAlert } from '@contexts/AlertContext';
 import { useModalContext } from '@contexts/modalContext';
 import { LessonDTO } from '@model';
+import { lessonsService } from '@services/lessons.service';
 import { mapHourValueToText } from '@utils/dateUtils';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -24,7 +26,9 @@ export const LessonModal: React.FC<LessonModalProps> = ({
     goToEditForm,
     onDelete,
 }) => {
+    const { showAlert } = useAlert();
     const { setIsOpen } = useModalContext();
+    const [isSending, setSending] = useState(false);
 
     const [iconName, iconText]: [ICON_NAME, string] = useMemo(() => {
         if (lesson.isCanceled) {
@@ -35,6 +39,24 @@ export const LessonModal: React.FC<LessonModalProps> = ({
         }
         return ['cancel', 'Nieopłacone'];
     }, [lesson]);
+
+    const handleRestoreLesson = async (): Promise<void> => {
+        try {
+            setSending(true);
+            await lessonsService.restore(lesson.id);
+            showAlert({
+                message: 'Przywrócono',
+                severity: 'success',
+            });
+            setIsOpen(false);
+        } catch (e) {
+            showAlert({
+                message: 'Błąd',
+                severity: 'danger',
+            });
+        }
+        setSending(false);
+    };
 
     return (
         <View style={styles.container}>
@@ -79,16 +101,29 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                 />
             )}
             <View style={{ marginTop: 30, width: '100%' }}>
-                <Button
-                    icon="pencil"
-                    size="small"
-                    onClick={() => {
-                        setIsOpen(false);
-                        goToEditForm();
-                    }}
-                    label="Edytuj lekcje"
-                    severity="warning"
-                />
+                {!lesson.isCanceled ? (
+                    <Button
+                        icon="pencil"
+                        size="small"
+                        onClick={() => {
+                            setIsOpen(false);
+                            goToEditForm();
+                        }}
+                        label="Edytuj lekcje"
+                        severity="warning"
+                        disabled={isSending}
+                    />
+                ) : (
+                    <Button
+                        icon="refresh"
+                        size="small"
+                        onClick={() => {
+                            handleRestoreLesson();
+                        }}
+                        label="Przywróć zajęcia"
+                        severity="warning"
+                    />
+                )}
             </View>
         </View>
     );

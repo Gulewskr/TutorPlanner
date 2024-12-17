@@ -44,7 +44,7 @@ router.get('/monthly', async (req, res, next) => {
  */
 router.post('/:id/cancel', async (req, res, next) => {
     try {
-        await LessonsService.cancelLesson(Number(req.params.id));
+        await LessonsService.cancelLesson(Number(req.params.id), true);
         res.status(200).json('Lessons has been canceled.');
     } catch (err) {
         next(err);

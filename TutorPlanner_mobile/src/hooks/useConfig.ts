@@ -1,8 +1,10 @@
+import { useAlert } from '@contexts/AlertContext';
 import { VersionCheckDTO } from '@model';
 import { configService } from '@services/config.service';
 import { useEffect, useState } from 'react';
 
 export const useConfig = () => {
+    const { showAlert } = useAlert();
     const [welcomeMessage, setWelcomeMessage] = useState<{
         title: string;
         message: string;
@@ -14,10 +16,17 @@ export const useConfig = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     const loadData = async () => {
-        const response = await configService.getWelcomeMessage();
-        const validationCheckDTO = await configService.versionValidation();
-        setVersionCheck(validationCheckDTO);
-        setWelcomeMessage(response);
+        try {
+            const response = await configService.getWelcomeMessage();
+            const validationCheckDTO = await configService.versionValidation();
+            setVersionCheck(validationCheckDTO);
+            setWelcomeMessage(response);
+        } catch (e) {
+            showAlert({
+                message: 'Oj coś nie działa 🤒',
+                severity: 'warning',
+            });
+        }
         setIsLoading(false);
     };
 

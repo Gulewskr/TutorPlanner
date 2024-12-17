@@ -120,6 +120,7 @@ class LessonsService {
         pageSize?: number;
     }): Promise<LessonDTO[] | Pagable<LessonDTO>> {
         const filter: Prisma.EventWhereInput = {};
+        filter.isPaid = { not: true };
         if (studentId !== undefined) {
             filter.studentId = studentId;
         }
@@ -311,18 +312,24 @@ class LessonsService {
         });
     }
 
-    public async cancelLesson(lessonId: number): Promise<void> {
+    public async cancelLesson(
+        lessonId: number,
+        isCancelled: boolean,
+    ): Promise<void> {
         const updatedLesson = await lessonRepository.update(lessonId, {
-            isCanceled: true,
+            isCanceled: isCancelled,
         });
         await StudentPaymentsService.recalculateStudentBalance(
             updatedLesson.studentId,
         );
     }
 
-    public async cancelSereisOfLesson(lessonId: number): Promise<void> {
+    public async cancelSereisOfLesson(
+        lessonId: number,
+        isCancelled: boolean,
+    ): Promise<void> {
         const updatedLesson = await lessonRepository.update(lessonId, {
-            isCanceled: true,
+            isCanceled: isCancelled,
         });
         if (!updatedLesson.eventSeriesId) {
             throw new Error('Event is not part of series');
@@ -330,12 +337,12 @@ class LessonsService {
         await eventSeriesRepository.updateEventSeries(
             updatedLesson.eventSeriesId,
             {
-                isCanceled: true,
+                isCanceled: isCancelled,
             },
         );
         await lessonRepository.bulkUpdateByFilter(
             {
-                isCanceled: true,
+                isCanceled: isCancelled,
             },
             {
                 eventSeriesId: updatedLesson.eventSeriesId,

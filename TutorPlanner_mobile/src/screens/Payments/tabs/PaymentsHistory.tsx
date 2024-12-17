@@ -202,6 +202,11 @@ export const PaymentsHistory: React.FC<
                             navigation={navigation}
                         />
                     )}
+                    <View
+                        style={{
+                            height: 200,
+                        }}
+                    />
                 </ScrollView>
             </View>
         </PaymentsLayout>

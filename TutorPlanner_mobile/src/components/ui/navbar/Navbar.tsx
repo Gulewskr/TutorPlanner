@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Svg, Defs, Rect, Mask, Circle, Line } from 'react-native-svg';
 import { Icon, ICON_NAME } from '@components/icon';
 import { NavbarNavigationScreens } from './tabs';
+import { $bgColor_primary } from '@styles/colors';
 
 interface NavbarItemProps {
     name: NavbarNavigationScreens;
@@ -66,7 +67,7 @@ const ActiveComponent = () => (
             y="0"
             height="100%"
             width="100%"
-            fill="#FFC3FF" //$bgColor_primary
+            fill={$bgColor_primary}
             mask="url(#mask)"
             fill-opacity="0"
         />

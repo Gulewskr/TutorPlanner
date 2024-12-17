@@ -51,7 +51,6 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
             <View style={styles.modalOverlay}>
                 <View style={[styles.modalContent, { backgroundColor: color }]}>
                     <Text style={styles.label}>{message}</Text>
-                    {/*<Text style={styles.message}>{message}</Text>*/}
                     <View style={{ flex: 1 }} />
                     <View style={styles.double_button_container}>
                         <View style={{ width: '50%' }}>

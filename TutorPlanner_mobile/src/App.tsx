@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useColorScheme } from 'react-native';
+import { StatusBar, useColorScheme } from 'react-native';
 import {
     NavigationContainer,
     DarkTheme,
@@ -24,6 +24,7 @@ import { AlertProvider } from '@contexts/AlertContext';
 import { ConfirmModalProvider } from '@contexts/confirmModalContext';
 import { StudentsProvider } from '@contexts/StudentsContext';
 import { StudentProvider } from '@contexts/StudentContext';
+import { $bgColor_primary } from '@styles/colors';
 
 EStyleSheet.build({
     $color_primary: '#FFA9F1',
@@ -54,6 +55,10 @@ const App: React.FC<{}> = () => {
         <NavigationContainer
             theme={scheme === 'dark' ? DarkTheme : DefaultTheme}
         >
+            <StatusBar
+                barStyle="light-content"
+                backgroundColor={$bgColor_primary}
+            />
             <ConfirmModalProvider>
                 <ModalProvider>
                     <AlertProvider>

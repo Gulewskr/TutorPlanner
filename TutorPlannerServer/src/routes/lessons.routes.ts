@@ -178,8 +178,17 @@ router.post('/:id/pay', async (req, res, next) => {
  */
 router.post('/:id/cancel', async (req, res, next) => {
     try {
-        await LessonsService.cancelLesson(Number(req.params.id));
+        await LessonsService.cancelLesson(Number(req.params.id), true);
         res.status(200).json('Lessons has been canceled.');
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.delete('/:id/cancel', async (req, res, next) => {
+    try {
+        await LessonsService.cancelLesson(Number(req.params.id), false);
+        res.status(200).json('Cancelation of lesson has been reverted.');
     } catch (err) {
         next(err);
     }
@@ -190,8 +199,21 @@ router.post('/:id/cancel', async (req, res, next) => {
  */
 router.post('/:id/series/cancel', async (req, res, next) => {
     try {
-        await LessonsService.cancelSereisOfLesson(Number(req.params.id));
-        res.status(200).json('Lessons series has been canceled.');
+        await LessonsService.cancelSereisOfLesson(Number(req.params.id), true);
+        res.status(200).json(
+            'Cancelation of lessons series has been canceled.',
+        );
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.delete('/:id/series/cancel', async (req, res, next) => {
+    try {
+        await LessonsService.cancelSereisOfLesson(Number(req.params.id), false);
+        res.status(200).json(
+            'Cancelation of lessons series has been canceled.',
+        );
     } catch (err) {
         next(err);
     }
