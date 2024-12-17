@@ -1,12 +1,12 @@
 import { Button } from '@components/button';
 import { StaticCheckboxTile } from '@components/checkbox';
-import { Icon } from '@components/icon';
+import { Icon, ICON_NAME } from '@components/icon';
 //import { CheckboxTile } from '@components/checkbox';
 import { Tile } from '@components/tile';
 import { useModalContext } from '@contexts/modalContext';
 import { LessonDTO } from '@model';
 import { mapHourValueToText } from '@utils/dateUtils';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -25,6 +25,16 @@ export const LessonModal: React.FC<LessonModalProps> = ({
     onDelete,
 }) => {
     const { setIsOpen } = useModalContext();
+
+    const [iconName, iconText]: [ICON_NAME, string] = useMemo(() => {
+        if (lesson.isCanceled) {
+            return ['cancelled', 'Odwołane'];
+        }
+        if (lesson.isPaid) {
+            return ['payments', 'Opłacone'];
+        }
+        return ['cancel', 'Nieopłacone'];
+    }, [lesson]);
 
     return (
         <View style={styles.container}>
@@ -50,12 +60,8 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                                 gap: 5,
                             }}
                         >
-                            <Icon
-                                icon={lesson.isPaid ? 'payments' : 'cancel'}
-                            />
-                            <Text>
-                                {lesson.isPaid ? 'Opłacone' : 'Nieopłacone'}
-                            </Text>
+                            <Icon icon={iconName} />
+                            <Text>{iconText}</Text>
                         </View>
                     </Tile>
                 </View>

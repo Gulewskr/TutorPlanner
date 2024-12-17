@@ -102,7 +102,6 @@ export const lessonRepository = {
             },
         })) as LessonDAO[];
     },
-
     update: async (
         id: number,
         lesson: Prisma.EventUpdateInput,
@@ -114,6 +113,17 @@ export const lessonRepository = {
                 eventType: 'LESSON',
             },
         })) as LessonDAO;
+    },
+    //TODO merge 2 functions
+    bulkUpdateByFilter: async (
+        lesson: Prisma.EventUpdateInput,
+        filter: Prisma.EventWhereInput,
+    ): Promise<Prisma.BatchPayload> => {
+        filter.eventType = 'LESSON';
+        return await prisma.event.updateMany({
+            data: lesson,
+            where: filter,
+        });
     },
     bulkUpdate: async (
         lessonsId: number[],
@@ -271,6 +281,7 @@ export const lessonRepository = {
                 eventType: 'LESSON',
                 studentId: studentId,
                 isPaid: true,
+                isCanceled: { not: true },
             },
             by: 'studentId',
             _sum: {
@@ -287,6 +298,7 @@ export const lessonRepository = {
                 eventType: 'LESSON',
                 studentId: studentId,
                 isPaid: false,
+                isCanceled: { not: true },
             },
             orderBy: {
                 date: 'asc',
@@ -301,6 +313,7 @@ export const lessonRepository = {
                 eventType: 'LESSON',
                 studentId: studentId,
                 isPaid: true,
+                isCanceled: { not: true },
             },
             orderBy: {
                 date: 'desc',

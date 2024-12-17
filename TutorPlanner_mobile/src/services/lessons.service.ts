@@ -56,6 +56,28 @@ class LessonsService {
             throw error;
         }
     };
+    cancel = async (lessonId: number): Promise<LessonDTO> => {
+        try {
+            const response = await axios.post(
+                `${LESSONS_URL}/${lessonId}/cancel`,
+            );
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
+    cancelSeries = async (lessonId: number): Promise<LessonDTO> => {
+        try {
+            const response = await axios.post(
+                `${LESSONS_URL}/${lessonId}/series/cancel`,
+            );
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
     getLessonsInDay = async (date: Date): Promise<LessonDTO[]> => {
         try {
             if (!date) throw new Error('Missing data');

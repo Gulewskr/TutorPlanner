@@ -84,7 +84,7 @@ router.get('/:studentId/profile/lessons', async (req, res, next) => {
 });
 
 /**
- * path: students/recalculateBalances
+ * path: students/actions/recalculate-balances
  *
  * returns void
  */

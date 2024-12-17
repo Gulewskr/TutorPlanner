@@ -6,3 +6,5 @@ export const $color_danger = '#FF6B6B';
 export const $color_success = '#BAFCA2';
 export const $color_warning = '#FFF59C';
 export const $color_black = '#070707';
+export const $color_white = '#F5F5F5';
+export const $color_disabled = '#6F6F6F';

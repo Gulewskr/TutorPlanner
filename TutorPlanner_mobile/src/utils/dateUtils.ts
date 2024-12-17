@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 const MAX_HOURS = 60 * 24;
 
 export const getDateWithoutTZ = (date: Date): Date =>
@@ -27,4 +29,8 @@ export const mapHourValueToText = (value: number): string => {
 
 export const mapDateToHourValue = (date: Date): number => {
     return date.getHours() * 60 + date.getMinutes();
+};
+
+export const formatToDayInCalendar = (date: Date): string => {
+    return format(date, 'yyyy-MM-dd');
 };

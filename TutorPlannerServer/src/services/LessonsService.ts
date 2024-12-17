@@ -22,6 +22,7 @@ import {
     LessonUpdateInputSchema,
 } from '../validators/lessons/lesson';
 import { LessonSeriesUpdateInputSchema } from '../validators/lessons/lessonSeries';
+import StudentPaymentsService from './StudentPaymentsService';
 
 export type LessonSeriesDTO = {
     id: number;
@@ -287,6 +288,7 @@ class LessonsService {
                 },
             },
             description: updateData.description,
+            isCanceled: false,
             isOverridden: true,
         });
         return toLessonDTO(createdLesson);
@@ -310,7 +312,41 @@ class LessonsService {
     }
 
     public async cancelLesson(lessonId: number): Promise<void> {
-        await lessonRepository.update(lessonId, { isCanceled: true });
+        const updatedLesson = await lessonRepository.update(lessonId, {
+            isCanceled: true,
+        });
+        await StudentPaymentsService.recalculateStudentBalance(
+            updatedLesson.studentId,
+        );
+    }
+
+    public async cancelSereisOfLesson(lessonId: number): Promise<void> {
+        const updatedLesson = await lessonRepository.update(lessonId, {
+            isCanceled: true,
+        });
+        if (!updatedLesson.eventSeriesId) {
+            throw new Error('Event is not part of series');
+        }
+        await eventSeriesRepository.updateEventSeries(
+            updatedLesson.eventSeriesId,
+            {
+                isCanceled: true,
+            },
+        );
+        await lessonRepository.bulkUpdateByFilter(
+            {
+                isCanceled: true,
+            },
+            {
+                eventSeriesId: updatedLesson.eventSeriesId,
+                date: {
+                    gte: updatedLesson.date,
+                },
+            },
+        );
+        await StudentPaymentsService.recalculateStudentBalance(
+            updatedLesson.studentId,
+        );
     }
 }
 

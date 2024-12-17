@@ -185,4 +185,16 @@ router.post('/:id/cancel', async (req, res, next) => {
     }
 });
 
+/*
+ * path: /lessons/:id/series/:seriesId/cancel
+ */
+router.post('/:id/series/cancel', async (req, res, next) => {
+    try {
+        await LessonsService.cancelSereisOfLesson(Number(req.params.id));
+        res.status(200).json('Lessons series has been canceled.');
+    } catch (err) {
+        next(err);
+    }
+});
+
 export default router;

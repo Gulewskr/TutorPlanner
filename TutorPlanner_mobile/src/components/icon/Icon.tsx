@@ -16,6 +16,8 @@ type ICON_NAME =
     | 'back'
     | 'bell'
     | 'calendar'
+    | 'calendar-student'
+    | 'cancelled'
     | 'cancel'
     | 'check'
     | 'checkbox'
@@ -32,10 +34,13 @@ type ICON_NAME =
     | 'notes'
     | 'oneNote'
     | 'payments'
+    | 'payments-missing'
+    | 'payments-done'
     | 'pencil'
     | 'phone'
     | 'plus'
     | 'refresh'
+    | 'series'
     | 'settings'
     | 'settingsPanel'
     | 'studentCap'
@@ -54,7 +59,9 @@ const iconsMap: { [key in ICON_NAME]: any } = {
     back: require('../../assets/icons/back.png'),
     bell: require('../../assets/icons/bell.png'),
     calendar: require('../../assets/icons/calendar.png'),
+    'calendar-student': require('../../assets/icons/calendar-student.png'),
     cancel: require('../../assets/icons/cancel.png'),
+    cancelled: require('../../assets/icons/cancelled.png'),
     check: require('../../assets/icons/check.png'),
     checkbox: require('../../assets/icons/checkbox.png'),
     diagram: require('../../assets/icons/diagram.png'),
@@ -70,11 +77,14 @@ const iconsMap: { [key in ICON_NAME]: any } = {
     notes: require('../../assets/icons/notes.png'),
     oneNote: require('../../assets/icons/oneNote.png'),
     payments: require('../../assets/icons/payments.png'),
+    'payments-missing': require('../../assets/icons/payments-missing.png'),
+    'payments-done': require('../../assets/icons/payments-done.png'),
     pencil: require('../../assets/icons/pencil.png'),
     phone: require('../../assets/icons/phone.png'),
     plus: require('../../assets/icons/plus.png'),
     refresh: require('../../assets/icons/refresh.png'),
     settings: require('../../assets/icons/settings.png'),
+    series: require('../../assets/icons/series.png'),
     settingsPanel: require('../../assets/icons/settingsPanel.png'),
     studentCap: require('../../assets/icons/studentCap.png'),
     students: require('../../assets/icons/students.png'),

@@ -5,9 +5,12 @@ import { DayEventsData } from './model';
 import {
     $color_black,
     $color_danger,
+    $color_disabled,
     $color_success,
     $color_warning,
+    $color_white,
 } from '@styles/colors';
+import { useMemo } from 'react';
 
 interface DayInCalendarProps {
     day: Date;
@@ -24,10 +27,21 @@ const DayInCalendar: React.FC<DayInCalendarProps> = ({
     isBlackedOut = false,
     onClick,
 }) => {
-    //const dateKey = format(day, 'yyyy-MM-dd');
-    console.log(eventsData);
-    const hasUnpaidedEvents = eventsData && eventsData.numOfUnpaidedLessons > 0;
-    const hasPaidedEvents = eventsData && eventsData.numOfPaidedLessons > 0;
+    const [textColor, bgColor] = useMemo(() => {
+        if (!eventsData) {
+            return [$color_white, $color_danger];
+        }
+        if (eventsData.numOfUnpaidedLessons > 0) {
+            return eventsData.numOfPaidedLessons > 0
+                ? [$color_black, $color_warning]
+                : [$color_white, 'red'];
+        } else if (eventsData.numOfPaidedLessons > 0) {
+            return [$color_black, $color_success];
+        } else if (eventsData.canceledEvents === eventsData.amount) {
+            return [$color_white, $color_disabled];
+        }
+        return [$color_white, $color_danger];
+    }, [eventsData]);
 
     return (
         <Pressable
@@ -42,22 +56,12 @@ const DayInCalendar: React.FC<DayInCalendarProps> = ({
         >
             <Text>{format(day, 'd')}</Text>
             {eventsData && (
-                <View
-                    style={[
-                        styles.event,
-                        hasUnpaidedEvents && { backgroundColor: 'red' },
-                        hasPaidedEvents && { backgroundColor: $color_success },
-                        hasUnpaidedEvents &&
-                            hasPaidedEvents && {
-                                backgroundColor: $color_warning,
-                            },
-                    ]}
-                >
+                <View style={[styles.event, { backgroundColor: bgColor }]}>
                     <Text
                         style={[
                             styles.event_text,
-                            hasPaidedEvents && {
-                                color: $color_black,
+                            {
+                                color: textColor,
                             },
                         ]}
                     >

@@ -15,6 +15,9 @@ import { useStudentsContext } from '@contexts/StudentsContext';
 import { useAlert } from '@contexts/AlertContext';
 import { Button } from '@components/button';
 import { format } from 'date-fns';
+import { formatToDayInCalendar } from '@utils/dateUtils';
+import { useModalContext } from '@contexts/modalContext';
+import { LessonCancelationModal } from '@components/modals/LessonCancelationModal';
 
 interface CreateLessonData {
     name: string;
@@ -53,6 +56,7 @@ export const EditLessonForm: React.FC<
     const [page, setPage] = React.useState(0);
     const [dataToSave, setDataToSave] = React.useState<CreateLessonData>();
 
+    const { setIsOpen, setModalBody } = useModalContext();
     const { showAlert } = useAlert();
     const { loading: studentsLoading, data: students } = useStudentsContext();
 
@@ -158,11 +162,29 @@ export const EditLessonForm: React.FC<
         }
     };
 
+    const handleLessonCancelation = async (): Promise<void> => {
+        setModalBody(
+            <LessonCancelationModal
+                lesson={selectedLesson!}
+                cb={navigation.goBack}
+            />,
+        );
+        setIsOpen(true);
+    };
+
+    const getSubTitle = (): string => {
+        if (!selectedLesson) {
+            return '-';
+        }
+        return `${selectedLesson.name} - ${formatToDayInCalendar(selectedLesson.date)}`;
+    };
+
     return (
         <Layout
             navigation={navigation}
             route={'Lessons'}
             title="Edytuj zajecia"
+            subtitle={getSubTitle()}
             hasHeader
             hasHeaderSeperated
         >
@@ -190,13 +212,15 @@ export const EditLessonForm: React.FC<
                                             onCancel={onCancel}
                                             confirmLabel={'Zapisz'}
                                         />
-                                        <Button
-                                            label="Anuluj zajęcia"
-                                            severity="error"
-                                            onClick={() => {
-                                                //TODO - open confirm dialog to cancel lesson
-                                            }}
-                                        />
+                                        {selectedLesson.isCanceled || (
+                                            <Button
+                                                label="Odwołaj zajęcia"
+                                                severity="error"
+                                                onClick={
+                                                    handleLessonCancelation
+                                                }
+                                            />
+                                        )}
                                     </View>
                                 ) : (
                                     <View

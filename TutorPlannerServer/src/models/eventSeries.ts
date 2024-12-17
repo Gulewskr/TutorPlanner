@@ -22,7 +22,7 @@ const eventSeriesRepository = {
     },
     updateEventSeries: async (
         id: number,
-        eventSeries: Prisma.EventSeriesCreateInput,
+        eventSeries: Prisma.EventSeriesUpdateInput,
     ): Promise<EventSeries> => {
         return await prisma.eventSeries.update({
             data: eventSeries,
