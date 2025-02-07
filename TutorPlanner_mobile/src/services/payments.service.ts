@@ -39,19 +39,15 @@ class PaymentsService {
     }: {
         month?: number;
         year?: number;
-    }): Promise<PaymentDTO[] | undefined> => {
-        try {
-            if (!month && !year) {
-                const response = await axios.get(PAYMENTS_URL);
-                return response.data;
-            } else {
-                const response = await axios.get(
-                    `${PAYMENTS_URL}?month=${month}&year=${year}`,
-                );
-                return response.data;
-            }
-        } catch (error) {
-            console.log(error);
+    }): Promise<PaymentDTO[]> => {
+        if (!month && !year) {
+            const response = await axios.get(PAYMENTS_URL);
+            return response.data;
+        } else {
+            const response = await axios.get(
+                `${PAYMENTS_URL}?month=${month}&year=${year}`,
+            );
+            return response.data;
         }
     };
 }

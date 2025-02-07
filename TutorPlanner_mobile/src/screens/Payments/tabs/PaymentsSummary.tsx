@@ -28,42 +28,47 @@ export const PaymentsSummary: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'Summary'>
 > = props => {
     const { navigation, route } = props;
-    const [unpaidLoading, setUnpaidLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [summaryData, setSummaryDate] = useState<{
         income: number;
-        expectedIncome: number;
+        paymentsNumber: number;
         lessonsNumber: number;
     }>({
         income: 0,
-        expectedIncome: 0,
+        paymentsNumber: 0,
         lessonsNumber: 0,
     });
 
     const isFocused = useIsFocused();
-    const { payments, isLoading, fetchPayments } = usePayments();
+    const { payments, isLoading: paymentsLoading, fetchPayments } = usePayments();
     const { overdueLessons } = useOverdues();
     const { setIsOpen, setModalBody } = useModalContext();
     const { openModal } = useConfirmModal();
     const { showAlert } = useAlert();
 
     const loadData = async () => {
-        setUnpaidLoading(true);
+        setIsLoading(true);
         fetchPayments();
         const todayDate = new Date();
 
-        const lessons = await lessonsService.getLessons({
-            month: getMonth(todayDate) + 1,
-            year: getYear(todayDate),
+        const month = getMonth(todayDate) + 1;
+        const year = getYear(todayDate);
+
+        const payments = await paymentsService.getList({
+            month: month,
+            year: year,
         });
+        const lessons = await lessonsService.getLessons({
+            month: month,
+            year: year,
+        });
+
         setSummaryDate({
             lessonsNumber: lessons.length,
-            income: lessons.reduce(
-                (acc, c) => (c.isPaid ? acc + c.price : acc),
-                0,
-            ),
-            expectedIncome: lessons.reduce((acc, c) => c.price + acc, 0),
+            income: 0,
+            paymentsNumber: payments.length
         });
-        setUnpaidLoading(false);
+        setIsLoading(false);
     };
 
     const handlePaymentDelete = async (id: number) => {
@@ -130,7 +135,7 @@ export const PaymentsSummary: React.FC<
                     isCentered
                     styles={{ height: 30, marginBottom: 10 }}
                 />
-                <Tile color="secondary">
+                <Tile color='white'>
                     <View style={{ padding: 5 }}>
                         <View style={styles.fullWidthRow}>
                             <Text style={styles.headText}>Zarobki</Text>
@@ -141,12 +146,15 @@ export const PaymentsSummary: React.FC<
                             </Text>
                         </View>
                         <View style={styles.fullWidthRow}>
+                            <Text style={styles.headText}>Liczba płatności</Text>
+                            <Text>
+                                {summaryData.paymentsNumber}
+                            </Text>
+                        </View>
+                        <View style={styles.fullWidthRow}>
                             <Text style={styles.headText}>Liczba zajęć</Text>
                             <Text>
                                 {summaryData.lessonsNumber}
-                                {summaryData.lessonsNumber
-                                    ? `(${summaryData.expectedIncome}zł)`
-                                    : ''}
                             </Text>
                         </View>
                     </View>
@@ -154,7 +162,7 @@ export const PaymentsSummary: React.FC<
                 <View style={{ height: 20 }} />
                 <OverduesTile
                     lessons={overdueLessons}
-                    isLoading={unpaidLoading}
+                    isLoading={isLoading}
                     navigation={navigation}
                 />
                 <View style={{ height: 20 }} />

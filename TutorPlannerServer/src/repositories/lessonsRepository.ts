@@ -1,7 +1,7 @@
 import { EventSeries, Prisma } from '@prisma/client';
 import { prisma } from '../db';
 import { LessonDAO } from '../models/lesson';
-import { endOfDay, startOfDay } from 'date-fns';
+import { addDays, endOfDay, getDay, isSameDay, startOfDay, startOfWeek } from 'date-fns';
 
 interface Pagable<T> {
     data: T[];
@@ -139,7 +139,131 @@ export const lessonRepository = {
             data: lesson,
         });
     },
-    updateLessonSeriesByEventId: async (
+    updateLessonSeriesByLessonId: async (
+        lessonId: number,
+        data: Partial<{
+            name: string;
+            description: string | null;
+            startHour: number;
+            endHour: number;
+            date: Date;
+            price: number;
+            student: number;
+        }>,
+    ): Promise<void> => {
+        const firstLesson = await prisma.event.findFirstOrThrow({
+            where: {
+                eventType: 'LESSON',
+                id: lessonId,
+            },
+        }) as LessonDAO;
+
+        if (!firstLesson.eventSeriesId) {
+            throw new Error('Selected lesson is not part of event series.');
+        }
+        const { eventSeriesId: seriesId } = firstLesson;
+
+        let dayOfWeek = -1;
+        if (data.date && !isSameDay(data.date, firstLesson.date)) {
+            dayOfWeek = getDay(data.date);
+        }
+
+        let updatedLessonsToSave: LessonDAO[] = [];
+        if (dayOfWeek != -1) {
+            const lessonsToUpdate = await prisma.event.findMany({
+                where: {
+                    eventSeriesId: seriesId,
+                    date: {
+                        gte: firstLesson.date
+                    },
+                    isOverridden: {
+                        not: true
+                    }
+                }
+            }) as LessonDAO[];
+
+            if (firstLesson.isOverridden) {
+                lessonsToUpdate.push(firstLesson);
+            }
+
+            updatedLessonsToSave = lessonsToUpdate.map(lesson => ({
+                ...lesson,
+                name: data.name || lesson.name,
+                description: data.description || lesson.description,
+                price: data.price || lesson.price,
+                studentId: data.student || lesson.studentId,
+                startHour: data.startHour || lesson.startHour,
+                endHour: data.endHour || lesson.endHour,
+                date: addDays(startOfWeek(lesson.date), dayOfWeek)
+            }))
+        }
+        
+        
+        await prisma.$transaction(async (tx) => {
+            await tx.eventSeries.update({
+                data: {
+                    name: data.name,
+                    description: data.description,
+                    startHour: data.startHour,
+                    endHour: data.endHour,
+                    price: data.price,
+                    studentId: data.student,
+                },
+                where: {
+                    id: seriesId,
+                },
+            });
+            if (updatedLessonsToSave.length) {
+                console.log(`DELETING...`);
+                await tx.event.deleteMany({
+                    where: {
+                        id: {
+                            in: updatedLessonsToSave.map(({id}) => id) 
+                        }
+                    }
+                });
+                console.log(`INSERTING...`);
+                await tx.event.createMany({
+                    data: updatedLessonsToSave
+                });
+                /*
+                for (const lesson of updatedLessonsToSave) {
+                    console.log(`UPODATED: ${lesson.id}`);
+                    await tx.event.update({
+                        data: {
+                            ...lesson
+                        },
+                        where: {
+                            id: lesson.id
+                        }
+                    })
+                }
+                */
+                console.log(`POG.`);
+            } else {
+                await tx.event.updateMany({
+                    data: {
+                        name: data.name,
+                        description: data.description,
+                        startHour: data.startHour,
+                        endHour: data.endHour,
+                        price: data.price,
+                        studentId: data.student,
+                    },
+                    where: {
+                        isOverridden: false,
+                        eventSeriesId: seriesId,
+                        date: {
+                            gte: firstLesson.date,
+                        },
+                    },
+                });
+            }
+        }, {
+            timeout: 10000
+        });
+    },
+    updateLessonSeriesBySeriesId: async (
         id: number,
         lesson: {
             name: string;

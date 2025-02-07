@@ -2,7 +2,7 @@ import { Image, StyleSheet } from 'react-native';
 
 interface IconProps {
     icon: ICON_NAME;
-    size?: 'xxs' | 'xs' | 'sm' | 'lg' | 'xl';
+    size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
 type ICON_NAME =

@@ -4,6 +4,7 @@ import { MAX_HOUR } from '../constraints';
 export const LessonSeriesUpdateInputSchema = z.object({
     name: z.string(),
     description: z.string().nullish(),
+    date: z.date(),
     student: z.number(),
     price: z.number(),
     startHour: z.number().min(0).max(MAX_HOUR),

@@ -56,6 +56,21 @@ class LessonsService {
             throw error;
         }
     };
+    updateLessonSeries = async (
+        lessonId: number,
+        body: Partial<LessonCreateRequestBody>,
+    ): Promise<LessonDTO> => {
+        try {
+            const response = await axios.put(
+                `${LESSONS_URL}/${lessonId}/series`,
+                body,
+            );
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
     cancel = async (lessonId: number): Promise<LessonDTO> => {
         try {
             const response = await axios.post(

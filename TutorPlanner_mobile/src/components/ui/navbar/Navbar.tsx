@@ -11,6 +11,7 @@ interface NavbarItemProps {
     name: NavbarNavigationScreens;
     icon: ICON_NAME;
     disabled?: boolean;
+    size?: 'lg' | 'sm';
 }
 
 interface NavbarProps {
@@ -34,6 +35,7 @@ const NAVBAR_ITEMS: NavbarItemProps[] = [
     {
         name: 'Payments',
         icon: 'payments',
+        size: 'lg'
     },
     {
         name: 'Notes',
@@ -118,12 +120,12 @@ const Navbar: React.FC<NavbarProps> = ({ navigation, route }) => {
                         {isActive ? (
                             <>
                                 <View style={styles.activeIconContainer}>
-                                    <Icon icon={item.icon} size={'sm'} />
+                                    <Icon icon={item.icon} size={item.size ? 'md' : 'sm'} />
                                 </View>
                                 <ActiveComponent />
                             </>
                         ) : (
-                            <Icon icon={item.icon} />
+                            <Icon icon={item.icon} size={item.size} />
                         )}
                         {item.disabled && (
                             <View style={styles.navbarItemBG_disabled} />

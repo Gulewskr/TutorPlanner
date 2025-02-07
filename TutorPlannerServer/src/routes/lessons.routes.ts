@@ -150,8 +150,29 @@ router.put('/series/:id', async (req, res, next) => {
         const body = req.body;
         body.date = parseDate(body.date);
 
-        await LessonsService.updateLessonSeries(seriesId, body);
+        await LessonsService.updateLessonsTypeSeries(seriesId, body);
         const lesson = await LessonsService.getLesson(seriesId);
+        res.status(200).json({
+            message: 'Lessons has been updated successfully.',
+            data: lesson,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+
+/*
+ * path: /lessons/:lessonId/series
+ */
+router.put('/:lessonId/series', async (req, res, next) => {
+    try {
+        const lessonId = Number(req.params.lessonId);
+        const body = req.body;
+        body.date = parseDate(body.date);
+        console.log(body.date);
+        await LessonsService.updateSeriesOfLesson(lessonId, body);
+        const lesson = await LessonsService.getLesson(lessonId);
         res.status(200).json({
             message: 'Lessons has been updated successfully.',
             data: lesson,

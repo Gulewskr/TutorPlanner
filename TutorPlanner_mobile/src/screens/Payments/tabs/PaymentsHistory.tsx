@@ -33,6 +33,7 @@ export const PaymentsHistory: React.FC<
     const { navigation, route } = props;
     const [controlDate, setControlDate] = useState(new Date());
     const [isFutureMonth, setIsFutureMonth] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const today = useMemo(() => new Date(), []);
     // In app we use 1-12 month system
     const month = getMonth(controlDate) + 1;
@@ -44,13 +45,12 @@ export const PaymentsHistory: React.FC<
 
     const {
         unpaidLessons,
-        isLoading: unpaidLessonsLoading,
         fetchData: fetchUnpaidLessons,
     } = useUnpaidLessons({
         month: month,
         year: year,
     });
-    const { payments, isLoading, fetchPayments } = usePayments({
+    const { payments, fetchPayments } = usePayments({
         month: month,
         year: year,
     });
@@ -73,6 +73,9 @@ export const PaymentsHistory: React.FC<
         } else {
             setIsFutureMonth(true);
         }
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 250);
     };
 
     useEffect(() => {
@@ -81,6 +84,7 @@ export const PaymentsHistory: React.FC<
 
     const handleMonthChange = async (num: number) => {
         setControlDate(addMonths(controlDate, num));
+        setIsLoading(true);
     };
 
     const handlePaymentDelete = async (id: number) => {
@@ -137,36 +141,120 @@ export const PaymentsHistory: React.FC<
             >
                 <View
                     style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
                         width: '100%',
                     }}
                 >
-                    <Button
-                        icon="arrowLeft"
-                        type="icon-button"
-                        hasShadow={false}
-                        severity="warning"
-                        onClick={() => {
-                            handleMonthChange(-1);
+                    <View
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            width: '100%',
                         }}
-                    />
-                    <View style={styles.control_text}>
-                        <Text style={{ fontWeight: 'bold' }}>
-                            {getMonthName(month)}{' '}
-                            {!isSameYear(controlDate, new Date()) && year}
-                        </Text>
+                    >
+                        <Button
+                            icon="arrowLeft"
+                            type="icon-button"
+                            hasShadow={false}
+                            severity="warning"
+                            onClick={() => {
+                                handleMonthChange(-1);
+                            }}
+                        />
+                        <View style={styles.control_text}>
+                            <Text style={{ fontWeight: 'bold' }}>
+                                {getMonthName(month)}{' '}
+                                {!isSameYear(controlDate, new Date()) && year}
+                            </Text>
+                        </View>
+                        <Button
+                            icon="arrowRight"
+                            type="icon-button"
+                            hasShadow={false}
+                            severity="warning"
+                            onClick={() => {
+                                handleMonthChange(1);
+                            }}
+                        />
                     </View>
-                    <Button
-                        icon="arrowRight"
-                        type="icon-button"
-                        hasShadow={false}
-                        severity="warning"
-                        onClick={() => {
-                            handleMonthChange(1);
+                    <View
+                        style={{
+                            display: 'flex',
+                            alignContent: 'center',
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            gap: 20,
+                            width: '100%',
+                            marginBottom: 10,
                         }}
-                    />
+                    >
+                        {isLoading ?
+                                <Text
+                                    style={{
+                                        fontWeight: 'bold',
+                                        borderBottomWidth: 1,
+                                    }}
+                                >
+                                    Ładowanie...
+                                </Text>
+                         : 
+                         <>
+                         {payments.length ? (
+                                <Text
+                                    style={{
+                                        fontWeight: 'bold',
+                                        borderBottomWidth: 1,
+                                    }}
+                                >
+                                    Przychody:{' '}
+                                    {payments.reduce(
+                                        (acc, v) => acc + v.price,
+                                        0,
+                                    )}
+                                    zł
+                                </Text>
+                                /*
+                                TODO dodać ilość lekcji
+                                <Text
+                                    style={{
+                                        fontWeight: 'bold',
+                                        borderBottomWidth: 1,
+                                    }}
+                                >
+                                    Lekcje:  
+                                </Text>*/
+                        ) : (
+                            <Text
+                                style={{
+                                    fontWeight: 'bold',
+                                    borderBottomWidth: 1,
+                                }}
+                            >
+                                Brak płatności
+                            </Text>
+                        )}
+                        {unpaidLessons.length ? (
+                            <Text
+                                style={{
+                                    fontWeight: 'bold',
+                                    borderBottomWidth: 1,
+                                }}
+                            >
+                                Zaległości: {unpaidLessons.length}
+                            </Text>
+                        ) : (
+                            <Text
+                                style={{
+                                    fontWeight: 'bold',
+                                    borderBottomWidth: 1,
+                                }}
+                            >
+                                Brak Zaległości
+                            </Text>
+                        )}
+                        </>
+                    }
+                    </View>
                 </View>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View
@@ -175,10 +263,8 @@ export const PaymentsHistory: React.FC<
                             marginBottom: 20,
                         }}
                     >
-                        <LoadWrapper loading={!isLoading} size="large">
-                            {payments.length ? (
-                                payments
-                                    .sort((a, b) => compareDesc(a.date, b.date))
+                        <LoadWrapper loading={isLoading} size="large">
+                            {payments.sort((a, b) => compareDesc(a.date, b.date))
                                     .map(p => (
                                         <PaymentTile
                                             key={p.id + 1}
@@ -187,10 +273,7 @@ export const PaymentsHistory: React.FC<
                                                 handleOpenPaymentModal(p)
                                             }
                                         />
-                                    ))
-                            ) : (
-                                <Text>Brak płatności</Text>
-                            )}
+                                    ))}
                         </LoadWrapper>
                     </View>
                     {isFutureMonth || (
@@ -198,8 +281,9 @@ export const PaymentsHistory: React.FC<
                             lessons={unpaidLessons.filter(lesson =>
                                 isBefore(lesson.date, new Date()),
                             )}
-                            isLoading={unpaidLessonsLoading}
+                            isLoading={isLoading}
                             navigation={navigation}
+                            hasHeader={false}
                         />
                     )}
                     <View

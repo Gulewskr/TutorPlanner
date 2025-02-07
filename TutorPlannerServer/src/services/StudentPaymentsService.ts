@@ -3,6 +3,8 @@ import LessonsService from './LessonsService';
 import { paymentRepository } from '../repositories/paymentRepository';
 import { lessonRepository } from '../repositories/lessonsRepository';
 import { Student, studentRepository } from '../models/student';
+import { Lesson } from '../models/lesson';
+import { isBefore } from 'date-fns';
 
 class StudentPaymentsService {
     public async autoMarkPayments(studentId: number): Promise<void> {
@@ -25,11 +27,36 @@ class StudentPaymentsService {
             await paymentRepository.getSumOfPaymentByStudentId(studentId);
         const studentLessonsCosts =
             await lessonRepository.getSumOfPaidLessonsByStudentId(studentId);
-        let newBalance = studentPayments - studentLessonsCosts;
+        const unpaidLessons =
+            await lessonRepository.getUnpaidLessonsByStudentId(studentId);
+        const paidLessons =
+            await lessonRepository.getPaidLessonsByStudentId(studentId);
+
+        let newBalance = 0;
+        const paidLessonsIds: number[] = [];
+        const lessonsToSetAsNotPaid: Lesson[] = [];
+        const unpaidLessonsIds: number[] = [];
+        if (unpaidLessons.length && paidLessons.length && isBefore(unpaidLessons[0].date, paidLessons[0].date)) {
+            const firstActualPaidLessonIndex = paidLessons.findIndex(paidLesson => paidLesson.date < unpaidLessons[0].date);
+            const firstActualUnpaidLessonIndex = unpaidLessons.findIndex(unpaidLesson => unpaidLesson.date > paidLessons[0].date);
+
+            lessonsToSetAsNotPaid.push(...paidLessons.splice(0, firstActualPaidLessonIndex));
+            lessonsToSetAsNotPaid.forEach(lesson => {
+                newBalance += lesson.price;
+            });
+            lessonsToSetAsNotPaid.push(...unpaidLessons.splice(0, firstActualUnpaidLessonIndex))
+        }
+
+        newBalance += studentPayments - studentLessonsCosts;
         if (newBalance > 0) {
-            const unpaidLessons =
-                await lessonRepository.getUnpaidLessonsByStudentId(studentId);
-            const paidLessonsIds = [];
+            for (const lesson of lessonsToSetAsNotPaid.sort((a,b) => isBefore(a.date, b.date) ? -1 : 1)) {
+                if (lesson.price <= newBalance) {
+                    newBalance -= lesson.price;
+                    paidLessonsIds.push(lesson.id);
+                } else {
+                    break;
+                }
+            }
             for (const lesson of unpaidLessons) {
                 if (lesson.price <= newBalance) {
                     newBalance -= lesson.price;
@@ -42,11 +69,13 @@ class StudentPaymentsService {
                 await lessonRepository.bulkUpdate(paidLessonsIds, {
                     isPaid: true,
                 });
+                if (paidLessonsIds.length < lessonsToSetAsNotPaid.length) {
+                    await lessonRepository.bulkUpdate(lessonsToSetAsNotPaid.filter(l => !paidLessonsIds.includes(l.id)).map(l => l.id), {
+                        isPaid: false,
+                    });
+                }
             }
         } else if (newBalance < 0) {
-            const unpaidLessonsIds = [];
-            const paidLessons =
-                await lessonRepository.getPaidLessonsByStudentId(studentId);
             for (const lesson of paidLessons) {
                 if (newBalance < 0) {
                     newBalance += lesson.price;
@@ -55,6 +84,7 @@ class StudentPaymentsService {
                     break;
                 }
             }
+            unpaidLessonsIds.push(...lessonsToSetAsNotPaid.map(l => l.id));
             if (unpaidLessonsIds.length) {
                 await lessonRepository.bulkUpdate(unpaidLessonsIds, {
                     isPaid: false,

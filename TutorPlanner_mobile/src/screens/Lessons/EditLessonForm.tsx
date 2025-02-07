@@ -127,7 +127,7 @@ export const EditLessonForm: React.FC<
             if (!dataToSave) {
                 return onError();
             }
-            await lessonsService.updateSeries(selectedLesson!.eventSeriesId!, {
+            await lessonsService.updateLessonSeries(selectedLesson!.id!, {
                 name: dataToSave.name,
                 description: dataToSave.description,
                 student: Number(dataToSave.student),

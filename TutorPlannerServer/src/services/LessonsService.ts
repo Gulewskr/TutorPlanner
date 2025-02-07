@@ -295,12 +295,23 @@ class LessonsService {
         return toLessonDTO(createdLesson);
     }
 
-    public async updateLessonSeries(
+    public async updateLessonsTypeSeries(
+        seriesId: number,
+        data: Partial<CreateLessonRequestBody>,
+    ): Promise<void> {
+        const updateData = LessonSeriesUpdateInputSchema.parse(data);
+        await lessonRepository.updateLessonSeriesBySeriesId(
+            seriesId,
+            updateData,
+        );
+    }
+
+    public async updateSeriesOfLesson(
         lessonId: number,
         data: Partial<CreateLessonRequestBody>,
     ): Promise<void> {
         const updateData = LessonSeriesUpdateInputSchema.parse(data);
-        await lessonRepository.updateLessonSeriesByEventId(
+        await lessonRepository.updateLessonSeriesByLessonId(
             lessonId,
             updateData,
         );

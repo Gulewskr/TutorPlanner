@@ -11,6 +11,7 @@ interface OverduesTileProps {
     isLoading: boolean;
     lessons?: LessonDTO[];
     navigation: any;
+    hasHeader?: boolean;
 }
 
 const upnpaidPaymentsText = (num: number): string =>
@@ -20,6 +21,7 @@ export const OverduesTile: React.FC<OverduesTileProps> = ({
     isLoading,
     lessons,
     navigation,
+    hasHeader = true,
 }) => {
     const { setIsOpen, setModalBody } = useModalContext();
     const numOfUnpaid = lessons?.length || 0;
@@ -56,22 +58,35 @@ export const OverduesTile: React.FC<OverduesTileProps> = ({
                 isCentered
                 styles={{ height: 30, marginBottom: 10 }}
             />
+            {hasHeader ? (
             <Tile
                 color={numOfUnpaid ? 'red' : 'green'}
                 hasShadow={false}
                 centered
             >
+                    <Text
+                        style={{
+                            fontSize: 18,
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        {isLoading
+                            ? 'Ładowanie...'
+                            : upnpaidPaymentsText(numOfUnpaid)}
+                    </Text>
+              
+            </Tile>
+              ) : isLoading && (
                 <Text
                     style={{
                         fontSize: 18,
                         fontWeight: 'bold',
+                        textAlign: 'center',
                     }}
                 >
-                    {isLoading
-                        ? 'Ładowanie...'
-                        : upnpaidPaymentsText(numOfUnpaid)}
+                    Ładowanie...
                 </Text>
-            </Tile>
+            )}
             {!isLoading && lessons && (
                 <ScrollView
                     nestedScrollEnabled={true}
