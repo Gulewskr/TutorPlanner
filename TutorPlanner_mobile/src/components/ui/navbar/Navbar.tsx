@@ -35,7 +35,6 @@ const NAVBAR_ITEMS: NavbarItemProps[] = [
     {
         name: 'Payments',
         icon: 'payments',
-        size: 'lg'
     },
     {
         name: 'Notes',
