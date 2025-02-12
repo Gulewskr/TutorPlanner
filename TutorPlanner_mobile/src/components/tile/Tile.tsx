@@ -78,6 +78,7 @@ const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
                     styles.content,
                     {
                         backgroundColor: selectedColor,
+                         flex: 1
                     },
                 ]}
             >

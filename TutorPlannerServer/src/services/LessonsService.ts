@@ -99,6 +99,7 @@ class LessonsService {
     > {
         const lessons = await lessonRepository.getLessons({
             isPaid: false,
+            isCanceled: { not: true },
             date: {
                 lte: new Date(),
             },
@@ -121,6 +122,7 @@ class LessonsService {
     }): Promise<LessonDTO[] | Pagable<LessonDTO>> {
         const filter: Prisma.EventWhereInput = {};
         filter.isPaid = { not: true };
+        filter.isCanceled = { not: true };
         if (studentId !== undefined) {
             filter.studentId = studentId;
         }

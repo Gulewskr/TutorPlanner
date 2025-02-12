@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { StudentsLayout } from '../Layout';
 import { StudentProfileTabParamList } from '../StudentProfile';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
@@ -62,39 +62,43 @@ export const StudentLessons: React.FC<
 
     return (
         <StudentsLayout {...props} student={student}>
-            {renderHeader('Zajęcia cotygodniowe')}
-            <View
-                style={{
-                    paddingHorizontal: 15,
-                }}
-            >
-                {renderWeeklyLessons()}
-            </View>
-            {renderHeader('Najbliższe zajęcia')}
-            <View
-                style={{
-                    paddingHorizontal: 15,
-                }}
-            >
-                {studentNextLesson ? (
-                    <LessonTile lesson={studentNextLesson} />
-                ) : (
-                    <Text>Brak zaplanowanych lekcji</Text>
-                )}
-            </View>
-            {renderHeader('Bieżący miesiąc')}
+            <ScrollView>
+                <View style={{alignItems: 'center', gap: 20 }}>
+                    {renderHeader('Zajęcia cotygodniowe')}
+                    <View
+                        style={{
+                            paddingHorizontal: 15,
+                        }}
+                    >
+                        {renderWeeklyLessons()}
+                    </View>
+                    {renderHeader('Najbliższe zajęcia')}
+                    <View
+                        style={{
+                            paddingHorizontal: 15,
+                        }}
+                    >
+                        {studentNextLesson ? (
+                            <LessonTile lesson={studentNextLesson} />
+                        ) : (
+                            <Text>Brak zaplanowanych lekcji</Text>
+                        )}
+                    </View>
+                    {renderHeader('Bieżący miesiąc')}
 
-            <View
-                style={{
-                    paddingHorizontal: 15,
-                }}
-            >
-                <LessonsList
-                    lessons={currentMonth}
-                    isLoading={false}
-                    navigation={props.navigation.getParent()}
-                />
-            </View>
+                    <View
+                        style={{
+                            paddingHorizontal: 15,
+                        }}
+                    >
+                        <LessonsList
+                            lessons={currentMonth}
+                            isLoading={false}
+                            navigation={props.navigation.getParent()}
+                        />
+                    </View>
+                </View>
+            </ScrollView>
         </StudentsLayout>
     );
 };

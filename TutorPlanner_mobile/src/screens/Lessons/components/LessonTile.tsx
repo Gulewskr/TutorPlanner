@@ -26,17 +26,17 @@ const LessonTile: React.FC<LessonTileProps> = ({ lesson, onClick }) => {
                     flex: 1,
                     flexDirection: 'row',
                     padding: 5,
+                    height: 'auto'
                 }}
             >
                 <View
                     style={{
                         alignItems: 'center',
                         justifyContent: 'center',
+                        marginRight: 10
                     }}
                 >
-                    <Text>
-                        <Icon icon={iconName} />{' '}
-                    </Text>
+                    <Icon icon={iconName} />
                 </View>
                 <View style={{}}>
                     <Text
@@ -44,7 +44,7 @@ const LessonTile: React.FC<LessonTileProps> = ({ lesson, onClick }) => {
                             textAlign: 'center',
                         }}
                     >
-                        {lesson.name}{' '}
+                        <Text style={{fontWeight: 'bold'}}>{lesson.name}</Text>{' '}
                         {`(${mapHourValueToText(lesson.startHour)} - ${mapHourValueToText(lesson.endHour)})`}
                     </Text>
                     <Text>{format(lesson.date, 'yyyy-MM-dd')}</Text>

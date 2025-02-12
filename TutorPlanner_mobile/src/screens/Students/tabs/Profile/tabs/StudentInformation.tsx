@@ -8,6 +8,8 @@ import { Button } from '@components/button';
 import { Tile } from '@components/tile';
 import { StudentNextLesson } from '@screens/Students/components/StudentNextLesson';
 import { useStudentContext } from '../StudentContext';
+import { LessonTile } from '@screens/Lessons/components/LessonTile';
+import { ScrollView } from '@components/ui/scrool-view';
 
 export const StudentInformations: React.FC<
     BottomTabScreenProps<StudentProfileTabParamList, 'Info'>
@@ -32,64 +34,66 @@ export const StudentInformations: React.FC<
 
     return (
         <StudentsLayout {...props} student={student}>
-            <View style={styles.double_button_container}>
-                <View style={{ width: '48%' }}>
-                    <Tile color="white" hasShadow centered>
-                        <Text style={{ fontWeight: 'bold' }}>
-                            Bilans: {student?.balance || 0}zł
-                        </Text>
-                    </Tile>
+            <ScrollView>
+                <View style={styles.double_button_container}>
+                    <View style={{ width: '48%' }}>
+                        <Tile color="white" hasShadow centered>
+                            <Text style={{ fontWeight: 'bold' }}>
+                                Bilans: {student?.balance || 0}zł
+                            </Text>
+                        </Tile>
+                    </View>
+                    <View style={{ width: '48%' }}>
+                        <Button
+                            icon="addPayment"
+                            label="Dodaj wpłate"
+                            secondary
+                            onClick={goToAddPayment}
+                            size="small"
+                        />
+                    </View>
+                    {/*
+                    <View style={{ width: '48%' }}>
+                        <Button
+                            icon="refresh"
+                            label={`Bilans: ${student?.balance || 0}zł`}
+                            onClick={() => {
+                                reloadBalance();
+                            }}
+                            size="small"
+                        />
+                    </View>
+                    <View style={{ width: '58%' }}>
+                        <Button
+                            icon="addPayment"
+                            label="Dodaj wpłate"
+                            secondary
+                            onClick={goToAddPayment}
+                            size="small"
+                        />
+                    </View>
+                    */}
                 </View>
-                <View style={{ width: '48%' }}>
-                    <Button
-                        icon="addPayment"
-                        label="Dodaj wpłate"
-                        secondary
-                        onClick={goToAddPayment}
-                        size="small"
-                    />
+                <StudentNextLesson lesson={studentNextLesson} />
+                <View style={styles.double_button_container}>
+                    <View style={{ width: '48%' }}>
+                        <Button
+                            icon="addLesson"
+                            label="Dodaj zajęcia"
+                            secondary
+                            onClick={goToCreateLesson}
+                        />
+                    </View>
+                    <View style={{ width: '48%' }}>
+                        <Button
+                            icon="list"
+                            label="Lista zajęć"
+                            secondary
+                            onClick={goToLessonsList}
+                        />
+                    </View>
                 </View>
-                {/*
-                <View style={{ width: '48%' }}>
-                    <Button
-                        icon="refresh"
-                        label={`Bilans: ${student?.balance || 0}zł`}
-                        onClick={() => {
-                            reloadBalance();
-                        }}
-                        size="small"
-                    />
-                </View>
-                <View style={{ width: '58%' }}>
-                    <Button
-                        icon="addPayment"
-                        label="Dodaj wpłate"
-                        secondary
-                        onClick={goToAddPayment}
-                        size="small"
-                    />
-                </View>
-                */}
-            </View>
-            <StudentNextLesson lesson={studentNextLesson} />
-            <View style={styles.double_button_container}>
-                <View style={{ width: '48%' }}>
-                    <Button
-                        icon="addLesson"
-                        label="Dodaj zajęcia"
-                        secondary
-                        onClick={goToCreateLesson}
-                    />
-                </View>
-                <View style={{ width: '48%' }}>
-                    <Button
-                        icon="list"
-                        label="Lista zajęć"
-                        secondary
-                        onClick={goToLessonsList}
-                    />
-                </View>
-            </View>
+            </ScrollView>
         </StudentsLayout>
     );
 };
@@ -100,7 +104,6 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         gap: 10,
-        marginTop: 5,
         padding: 15,
         justifyContent: 'center',
         alignItems: 'center',
