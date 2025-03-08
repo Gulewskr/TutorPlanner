@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Layout } from '../Layout';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
 import { lessonsService } from '@services/lessons.service';
@@ -18,6 +17,7 @@ import { format } from 'date-fns';
 import { formatToDayInCalendar } from '@utils/dateUtils';
 import { useModalContext } from '@contexts/modalContext';
 import { LessonCancelationModal } from '@components/modals/LessonCancelationModal';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 interface CreateLessonData {
     name: string;
@@ -47,7 +47,7 @@ Case:
  */
 
 export const EditLessonForm: React.FC<
-    NativeStackScreenProps<LessonsTabParamList, 'Edit'>
+BottomTabScreenProps<LessonsTabParamList, 'Edit'>
 > = ({ navigation, route }) => {
     const [loading, setLoading] = React.useState(true);
     const [selectedLesson, setSelectedLesson] = React.useState<

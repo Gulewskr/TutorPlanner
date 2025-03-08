@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Text } from 'react-native';
 import { Layout } from '../Layout';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BottomTabScreenProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CreateLessonForm } from './CreateLessonForm';
 import { LessonsTabParamList, RootStackParamList } from '@components/ui/navbar';
 import { EditLessonForm } from './EditLessonForm';
@@ -10,7 +9,7 @@ import { EditLessonForm } from './EditLessonForm';
 const Tab = createBottomTabNavigator<LessonsTabParamList>();
 
 export const Lessons: React.FC<
-    NativeStackScreenProps<RootStackParamList, 'Lessons'>
+    BottomTabScreenProps<RootStackParamList, 'Lessons'>
 > = ({ navigation, route }) => {
     return (
         <Tab.Navigator
@@ -31,7 +30,7 @@ export const Lessons: React.FC<
 };
 
 const LessonList: React.FC<
-    NativeStackScreenProps<LessonsTabParamList, 'List'>
+    BottomTabScreenProps<LessonsTabParamList, 'List'>
 > = ({ navigation, route }) => {
     return (
         <Layout

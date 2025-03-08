@@ -5,19 +5,19 @@ import {
     Text,
     View,
 } from 'react-native';
-import { PropsWithChildren, useState } from 'react';
+import { PropsWithChildren } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Navbar, NavbarNavigationScreens, RootStackParamList } from '@components/ui/navbar';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NavbarNavigationScreens } from '@components/ui/navbar';
 import { Header } from '@components/header';
 import React from 'react';
 import { useAlert } from '@contexts/AlertContext';
 import { $bgColor_primary, $color_primary, $color_white } from '@styles/colors';
 import { $border_width_line } from '@styles/global';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 interface LayoutProps {
-    navigation: NativeStackNavigationProp<any>;
+    navigation: BottomTabNavigationProp<any>;
     route: NavbarNavigationScreens;
     hasHeader?: boolean;
     hasHeaderSeperated?: boolean;
@@ -143,9 +143,6 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
                 end={{ x: 0.5, y: 1 }}
                 pointerEvents="none"
             />
-            <View style={styles.navbar}>
-                <Navbar navigation={navigation} route={route} />
-            </View>
         </View>
     );
 };

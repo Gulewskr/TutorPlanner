@@ -1,6 +1,5 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
+import { BottomTabScreenProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { PaymentsSummary } from './tabs/PaymentsSummary';
 import { PaymentCreate } from './tabs/PaymentCreate';
 import { PaymentsHistory } from './tabs/PaymentsHistory';
@@ -13,7 +12,7 @@ import { PaymentEdit } from './tabs/PaymentEdit';
 const Tab = createBottomTabNavigator<PaymentsTabParamList>();
 
 export const Payments: React.FC<
-    NativeStackScreenProps<RootStackParamList, 'Payments'>
+BottomTabScreenProps<RootStackParamList, 'Payments'>
 > = ({ navigation, route }) => {
     return (
         <Tab.Navigator

@@ -1,7 +1,6 @@
 import { PaymentDTO, StudentDTO } from '@model';
 
 export type BaseStackParam = {
-    previousScreen: NavbarNavigationScreens
 }
 
 export type RootStackParamList = {

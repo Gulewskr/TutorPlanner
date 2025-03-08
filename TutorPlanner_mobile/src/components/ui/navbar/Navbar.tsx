@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
     View,
     TouchableOpacity,
@@ -7,13 +7,12 @@ import {
     Dimensions,
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { Svg, Defs, Rect, Mask, Circle } from 'react-native-svg';
 import { Icon, ICON_NAME } from '@components/icon';
 import { NavbarNavigationScreens } from './tabs';
 import { $bgColor_primary, $color_black } from '@styles/colors';
 import { $border_width } from '@styles/global';
-import { useGlobalContext } from '@contexts/GlobalContext';
 
 interface NavbarItemProps {
     name: NavbarNavigationScreens;
@@ -23,8 +22,8 @@ interface NavbarItemProps {
 }
 
 interface NavbarProps {
-    navigation: NativeStackNavigationProp<any>;
-    route: NavbarNavigationScreens;
+    navigation: BottomTabNavigationProp<any>;
+    route: string;
 }
 
 const NAVBAR_ITEMS: NavbarItemProps[] = [
@@ -94,17 +93,18 @@ const Navbar: React.FC<NavbarProps> = ({ navigation, route }) => {
         navigation.navigate(route, { previousScreen: route });
     };
 
+    const [previousScreen, setPreviousScreen] = useState(route);
+
     const screenWidth = Dimensions.get('window').width;
 
-    const { previousScreen, setPreviousScreen } = useGlobalContext();
+    //const { previousScreen, setPreviousScreen } = useGlobalContext();
     
     useEffect(() => {
-        setPreviousScreen(route);
-        const intervalId = setInterval(() => {
-            setPreviousScreen(route);
-          }, 1000);
+        const intervalId = setTimeout(() => {
+            setPreviousScreen(route)
+          }, 500);
           return () => clearInterval(intervalId);
-    }, []);
+    }, [route]);
 
     const previousIndex = useMemo(() => {
         return NAVBAR_ITEMS.findIndex(icon => icon.name === previousScreen);
@@ -269,6 +269,8 @@ const styles = EStyleSheet.create({
         height: 56,
         flexDirection: 'row',
         justifyContent: 'space-around',
+        zIndex: 9999,
+        bottom: 0
     },
     navbarItem: {
         flex: 1,

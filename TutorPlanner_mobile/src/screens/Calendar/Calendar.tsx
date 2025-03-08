@@ -1,8 +1,7 @@
 import { Text } from 'react-native';
 import { Layout } from '../Layout';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BottomTabScreenProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DailyCalendar } from './tabs/DailyCalendar';
 import { MonthlyCalendar } from './tabs/MonthlyCalendar';
 import { CalendarTabParamList } from './calendarTabs';
@@ -12,7 +11,7 @@ import { CalendarProvider } from './CalendarContext';
 const Tab = createBottomTabNavigator<CalendarTabParamList>();
 
 export const RootCalendar: React.FC<
-    NativeStackScreenProps<RootStackParamList, 'Calendar'>
+    BottomTabScreenProps<RootStackParamList, 'Calendar'>
 > = ({ navigation, route }) => {
     return (
         <CalendarProvider>
@@ -39,7 +38,7 @@ export const RootCalendar: React.FC<
 };
 
 const CreateEvent: React.FC<
-    NativeStackScreenProps<CalendarTabParamList, 'Create'>
+BottomTabScreenProps<CalendarTabParamList, 'Create'>
 > = ({ navigation, route }) => {
     return (
         <Layout
@@ -54,7 +53,7 @@ const CreateEvent: React.FC<
 };
 
 const EventDetails: React.FC<
-    NativeStackScreenProps<CalendarTabParamList, 'Event'>
+BottomTabScreenProps<CalendarTabParamList, 'Event'>
 > = ({ navigation, route }) => {
     return (
         <Layout

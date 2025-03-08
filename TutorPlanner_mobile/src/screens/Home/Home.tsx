@@ -1,7 +1,7 @@
 import { View, StyleSheet } from 'react-native';
 import { Button } from '@components/button';
 import { Layout } from '../Layout';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useIsFocused } from '@react-navigation/native';
 import { Header } from '@components/header';
 import { EventsList } from '@components/complex/eventslist';
@@ -15,7 +15,7 @@ import { APP_VERSION } from 'src/config';
 import { useAlert } from '@contexts/AlertContext';
 
 export const Home: React.FC<
-    NativeStackScreenProps<RootStackParamList, 'Home'>
+    BottomTabScreenProps<RootStackParamList, 'Home'>
 > = ({ navigation, route }) => {
     const [loadingScreen, setLoadingScreen] = useState(true);
     const isFocused = useIsFocused();

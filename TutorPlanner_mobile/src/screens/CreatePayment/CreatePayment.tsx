@@ -1,11 +1,11 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Layout } from '../Layout';
 import { View } from 'react-native';
 import { PaymentForm } from '../Payments/components/PaymentForm';
 import { RootStackParamList } from '@components/ui/navbar';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 export const CreatePayment: React.FC<
-    NativeStackScreenProps<RootStackParamList, 'CreatePayment'>
+BottomTabScreenProps<RootStackParamList, 'CreatePayment'>
 > = ({ navigation, route }) => {
     return (
         <Layout
