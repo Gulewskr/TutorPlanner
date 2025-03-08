@@ -9,3 +9,5 @@ export const $color_black = '#070707';
 export const $color_white = '#F5F5F5';
 export const $color_disabled = '#6F6F6F';
 export const $bgColor_primary = '#FFC3FF';
+
+export const $color_checkbox = '#11bd37';

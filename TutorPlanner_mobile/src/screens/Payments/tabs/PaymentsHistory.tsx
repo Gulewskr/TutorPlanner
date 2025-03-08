@@ -26,6 +26,7 @@ import { paymentsService } from '@services/payments.service';
 import { useConfirmModal } from '@contexts/confirmModalContext';
 import { LoadWrapper } from '@components/loader';
 import { getMonthName } from '@screens/Calendar/components/calendar/utils';
+import { $border_width } from '@styles/global';
 
 export const PaymentsHistory: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'History'>
@@ -303,7 +304,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
         width: '70%',
         height: 40,
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         borderRadius: 10,
         backgroundColor: '$color_white',

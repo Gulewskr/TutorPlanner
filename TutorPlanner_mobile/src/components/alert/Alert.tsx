@@ -9,6 +9,7 @@ import {
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { AlertSeverity } from './model';
 import { $color_danger, $color_success, $tile_bgColor } from '@styles/colors';
+import { $border_width } from '@styles/global';
 
 interface AlertProps {
     message: string;
@@ -110,7 +111,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.2)',
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderRadius: 10,
         borderColor: '$color_black',
     },
@@ -121,7 +122,7 @@ const styles = EStyleSheet.create({
         maxWidth: '80%',
         alignItems: 'center',
         position: 'relative',
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         borderRadius: 10,
     },

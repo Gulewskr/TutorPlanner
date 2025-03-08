@@ -4,6 +4,7 @@ import { ICON_NAME } from '@components/icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { mapDateToHourValue, mapHourValueToDate } from '@utils/dateUtils';
+import { $border_width, $border_width_line } from '@styles/global';
 
 interface HourInputProps {
     placeholder?: string;
@@ -151,7 +152,7 @@ const styles = EStyleSheet.create({
         width: 120,
         height: 20,
         borderRadius: 10,
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         textAlign: 'center',
         textAlignVertical: 'center',
@@ -161,7 +162,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: 40,
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         borderRadius: 15,
         backgroundColor: '$color_white',
@@ -169,7 +170,7 @@ const styles = EStyleSheet.create({
     },
     hourinput: {
         borderRadius: 15,
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         height: 40,
         width: 100,
@@ -185,7 +186,7 @@ const styles = EStyleSheet.create({
     },
     separator: {
         width: 20,
-        borderWidth: 0.5,
+        borderWidth: $border_width_line,
         margin: 10,
     },
     shadow: {
@@ -195,7 +196,7 @@ const styles = EStyleSheet.create({
         top: 4,
         left: 4,
         backgroundColor: '$shadow_color_primary',
-        borderWidth: 1,
+        borderWidth: $border_width,
         width: '100%',
         borderColor: '$color_black',
         zIndex: -1,

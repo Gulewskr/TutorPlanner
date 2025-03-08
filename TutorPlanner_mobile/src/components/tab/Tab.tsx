@@ -1,4 +1,5 @@
 import { Icon, ICON_NAME } from '@components/icon';
+import { $border_width } from '@styles/global';
 import React, { PropsWithChildren, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Dimensions } from 'react-native';
@@ -83,7 +84,7 @@ const styles = EStyleSheet.create({
     tab: {
         flexDirection: 'row',
         gap: 10,
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderBottomWidth: 0,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,

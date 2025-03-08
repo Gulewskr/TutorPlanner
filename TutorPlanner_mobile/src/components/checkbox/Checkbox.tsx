@@ -3,6 +3,8 @@ import { Text, View, TouchableOpacity } from 'react-native';
 import { Icon } from '@components/icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Tile } from '@components/tile';
+import { $border_width } from '@styles/global';
+import { $color_checkbox } from '@styles/colors';
 
 interface CheckboxProps {
     label?: string;
@@ -33,11 +35,10 @@ const Checkbox: React.FC<CheckboxProps> = ({
     return (
         <View style={styles.container}>
             <TouchableOpacity
-                style={styles.checkboxBG}
                 onPress={toggleCheckbox}
             >
                 <View style={[styles.checkbox, isChecked && styles.checked]}>
-                    {isChecked && <Icon icon="check" size="xxs" />}
+                    {isChecked && <Icon icon="checkmark" size='md' />}
                 </View>
             </TouchableOpacity>
             {label && <Text style={styles.label}>{label}</Text>}
@@ -58,7 +59,7 @@ const StaticCheckboxTile: React.FC<StaticCheckboxProps> = ({
         <Tile color="white">
             <View style={styles.container}>
                 <View style={[styles.checkbox, isChecked && styles.checked]}>
-                    {isChecked && <Icon icon="check" size="xxs" />}
+                    {isChecked && <Icon icon='checkmark' size="xxs" />}
                 </View>
                 {label && <Text style={styles.label}>{label}</Text>}
             </View>
@@ -84,23 +85,23 @@ const styles = EStyleSheet.create({
         height: 25,
         borderRadius: 5,
         backgroundColor: '$shadow_color_primary',
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         justifyContent: 'center',
         alignItems: 'center',
     },
     checkbox: {
-        width: 20,
-        height: 20,
+        width: 25,
+        height: 25,
         borderRadius: 5,
         backgroundColor: '$color_white',
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         justifyContent: 'center',
         alignItems: 'center',
     },
     checked: {
-        backgroundColor: '$color_primary',
+        backgroundColor: $color_checkbox,
     },
     label: {
         fontSize: 16,

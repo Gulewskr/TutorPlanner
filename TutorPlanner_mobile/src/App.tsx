@@ -25,6 +25,7 @@ import { ConfirmModalProvider } from '@contexts/confirmModalContext';
 import { StudentsProvider } from '@contexts/StudentsContext';
 import { StudentProvider } from '@contexts/StudentContext';
 import { $bgColor_primary } from '@styles/colors';
+import { GlobalContextProvider } from '@contexts/GlobalContext';
 
 EStyleSheet.build({
     $color_primary: '#FFA9F1',
@@ -59,6 +60,7 @@ const App: React.FC<{}> = () => {
                 barStyle="light-content"
                 backgroundColor={$bgColor_primary}
             />
+            <GlobalContextProvider>
             <ConfirmModalProvider>
                 <ModalProvider>
                     <AlertProvider>
@@ -69,6 +71,7 @@ const App: React.FC<{}> = () => {
                                         animation: 'none',
                                         headerShown: false,
                                     }}
+                                    initialRouteName='Home'
                                 >
                                     <Stack.Screen
                                         name="Home"
@@ -113,6 +116,7 @@ const App: React.FC<{}> = () => {
                     </AlertProvider>
                 </ModalProvider>
             </ConfirmModalProvider>
+            </GlobalContextProvider>
         </NavigationContainer>
     );
 };

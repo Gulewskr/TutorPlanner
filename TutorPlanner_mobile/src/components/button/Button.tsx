@@ -3,6 +3,7 @@ import { Icon, ICON_NAME } from '@components/icon';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { $border_width } from '@styles/global';
 
 type ButtonSize = 'small' | 'medium' | 'large';
 interface ButtonProps {
@@ -135,9 +136,8 @@ const styles = (
                         : '$color_primary',
             position: 'relative',
             shadowColor: '#000000',
-            elevation: 3,
             zIndex: 10,
-            borderWidth: 1,
+            borderWidth: $border_width,
             borderColor: isDisabled ? '#4A4A4A' : '$color_black',
             top: pressed ? 4 : 0,
             left: pressed ? 4 : 0,
@@ -172,7 +172,7 @@ const styles = (
                 : secondary
                   ? '$shadow_color_secondary'
                   : '$shadow_color_primary',
-            borderWidth: 1,
+            borderWidth: $border_width,
             borderColor: isDisabled ? '#4A4A4A' : '$color_black',
             zIndex: 1,
         },

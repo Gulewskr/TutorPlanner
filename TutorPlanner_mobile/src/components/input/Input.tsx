@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Text, View, TextInput } from 'react-native';
 import { Icon, ICON_NAME } from '@components/icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { $border_width } from '@styles/global';
 
 export interface InputProps {
     placeholder?: string;
@@ -67,7 +68,7 @@ const styles = EStyleSheet.create({
         width: 120,
         height: 20,
         borderRadius: 15,
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         textAlign: 'center',
         textAlignVertical: 'center',
@@ -77,7 +78,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         minHeight: 40,
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         borderRadius: 15,
         backgroundColor: '$color_white',
@@ -96,7 +97,7 @@ const styles = EStyleSheet.create({
         top: 4,
         left: 4,
         backgroundColor: '$shadow_color_primary',
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         zIndex: -1,
     },

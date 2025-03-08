@@ -1,17 +1,21 @@
 import { PaymentDTO, StudentDTO } from '@model';
 
+export type BaseStackParam = {
+    previousScreen: NavbarNavigationScreens
+}
+
 export type RootStackParamList = {
-    Home: undefined;
-    Calendar: undefined;
-    Students: { screen: keyof StudentsTabParamList; initial?: boolean };
+    Home: BaseStackParam;
+    Calendar: BaseStackParam;
+    Students: { screen: keyof StudentsTabParamList; initial?: boolean } & BaseStackParam;
     Payments: {
         screen: keyof PaymentsTabParamList;
         initial?: boolean;
-    };
-    CreatePayment: undefined;
-    Notes: undefined;
-    Settings: undefined;
-    Lessons: { screen: keyof LessonsTabParamList; initial?: boolean };
+    } & BaseStackParam;
+    CreatePayment: BaseStackParam;
+    Notes: BaseStackParam;
+    Settings: BaseStackParam;
+    Lessons: { screen: keyof LessonsTabParamList; initial?: boolean } & BaseStackParam;
 };
 
 export type NavbarNavigationScreens = keyof RootStackParamList;

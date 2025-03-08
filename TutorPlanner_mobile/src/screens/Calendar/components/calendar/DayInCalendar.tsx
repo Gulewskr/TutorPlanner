@@ -11,6 +11,7 @@ import {
     $color_white,
 } from '@styles/colors';
 import { useMemo } from 'react';
+import { $border_width } from '@styles/global';
 
 interface DayInCalendarProps {
     day: Date;
@@ -90,7 +91,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 50,
-        borderWidth: 1,
+        borderWidth: $border_width,
         top: -6,
         right: -6,
     },
@@ -100,7 +101,7 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
     },
     day: {
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         borderRadius: 8,
         width: 40,

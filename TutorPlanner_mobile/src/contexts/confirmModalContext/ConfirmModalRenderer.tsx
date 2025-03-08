@@ -1,5 +1,6 @@
 import { Button } from '@components/button';
 import { DarkTheme, useNavigation } from '@react-navigation/native';
+import { $border_width } from '@styles/global';
 import React from 'react';
 import { Modal, StyleSheet, Text, View } from 'react-native';
 
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
         elevation: 5,
         gap: 10,
         minHeight: 200,
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '#000',
         alignItems: 'center',
         position: 'relative',

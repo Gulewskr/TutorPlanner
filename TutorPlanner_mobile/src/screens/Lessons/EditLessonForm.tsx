@@ -234,17 +234,18 @@ export const EditLessonForm: React.FC<
                                             Zastosować zmiany dla całej serii?
                                         </Text>
                                         <Button
-                                            label="Zastosuj dla wszystkich"
-                                            onClick={handleLessonSeriesUpdate}
-                                        />
-                                        <Button
-                                            label={`Zastosuj dla wybranej lekcji ${format(selectedLesson.date, 'yyyy-MM-dd')}`}
+                                            label={`Zastosuj dla wybranej lekcji (${format(selectedLesson.date, 'dd-MM-yyyy')})`}
                                             onClick={
                                                 handleLessonSingleEntryUpdate
                                             }
                                         />
                                         <Button
-                                            label="Cofnij"
+                                            label="Zastosuj dla wszystkich"
+                                            onClick={handleLessonSeriesUpdate}
+                                        />
+                                        <Button
+                                            label="Anuluj"
+                                            secondary={true}
                                             onClick={() => setPage(0)}
                                         />
                                     </View>

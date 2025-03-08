@@ -28,6 +28,7 @@ import {
 import { useCalendarContext } from '../CalendarContext';
 import { $color_primary, $color_primary_shadow } from '@styles/colors';
 import { EventsList } from '@components/complex/eventslist';
+import { $border_width } from '@styles/global';
 
 const CALENDAR_WEEKS = [0, 1, 2, 3, 4, 5];
 const WEEK_DAYS_RANGE = [0, 1, 2, 3, 4, 5, 6];
@@ -123,7 +124,9 @@ export const MonthlyCalendar: React.FC<
                                         hasShadow={false}
                                         height={20}
                                     >
-                                        <Text>
+                                        <Text style={{
+                                            fontWeight: 'bold'
+                                        }}>
                                             {
                                                 MONTHS_NOMINATIVE[
                                                     controlDate.getMonth()
@@ -148,19 +151,21 @@ export const MonthlyCalendar: React.FC<
                                 </View>
                             </View>
                             <View style={styles.grid}>
-                                {loading && (
-                                    <>
-                                        <View
-                                            style={styles.grid_loading_opacity}
-                                        />
-                                        <View style={styles.grid_loading}>
-                                            <ActivityIndicator
-                                                size={'large'}
-                                                color={$color_primary_shadow}
-                                            />
-                                        </View>
-                                    </>
-                                )}
+                                <View
+                                    style={[
+                                        styles.grid_loading_opacity,
+                                        {display: loading ? 'flex' : 'none'}
+                                    ]}
+                                />
+                                <View style={[
+                                    styles.grid_loading,
+                                    {display: loading ? 'flex' : 'none'}
+                                ]}>
+                                    <ActivityIndicator
+                                        size={'large'}
+                                        color={$color_primary_shadow}
+                                    />
+                                </View>
                                 <View style={styles.grid_row}>
                                     {WEEKDAYS.map(day => (
                                         <Text key={day} style={styles.weekday}>
@@ -227,10 +232,10 @@ const styles = EStyleSheet.create({
         gap: 5,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
         borderRadius: 10,
         zIndex: 1,
-        borderWidth: 1,
+        borderWidth: $border_width,
+        alignItems: 'center',
         backgroundColor: '$tile_bgColor',
         borderColor: '$color_black',
         position: 'relative',
@@ -244,7 +249,7 @@ const styles = EStyleSheet.create({
         borderRadius: 10,
         backgroundColor: '$shadow_color_primary',
         zIndex: 0,
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         width: '100%',
         height: '100%',
@@ -254,6 +259,7 @@ const styles = EStyleSheet.create({
         gap: 5,
         width: '100%',
         justifyContent: 'center',
+        alignItems: 'center'
     },
     grid_row: {
         gap: 5,

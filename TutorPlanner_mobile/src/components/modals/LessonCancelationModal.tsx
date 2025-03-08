@@ -63,8 +63,7 @@ export const LessonCancelationModal: React.FC<LessonCancelationModalProps> = ({
                         handleLessonCancelation();
                         setIsOpen(false);
                     }}
-                    label="Odwołaj tą lekcje"
-                    severity="error"
+                    label="Odwołaj tylko tą lekcje"
                     disabled={isSending}
                 />
             </View>
@@ -78,8 +77,7 @@ export const LessonCancelationModal: React.FC<LessonCancelationModalProps> = ({
                             handleLessonCancelation(true);
                             setIsOpen(false);
                         }}
-                        label="Odwołaj wszystkie zajęcia w serii"
-                        severity="error"
+                        label="Odwołaj wszystkie zajęcia"
                         disabled={isSending}
                     />
                 )}

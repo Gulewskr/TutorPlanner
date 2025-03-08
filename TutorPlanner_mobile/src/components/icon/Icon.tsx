@@ -21,6 +21,7 @@ type ICON_NAME =
     | 'cancel'
     | 'check'
     | 'checkbox'
+    | 'checkmark'
     | 'diagram'
     | 'download'
     | 'filter'
@@ -64,6 +65,7 @@ const iconsMap: { [key in ICON_NAME]: any } = {
     cancelled: require('../../assets/icons/cancelled.png'),
     check: require('../../assets/icons/check.png'),
     checkbox: require('../../assets/icons/checkbox.png'),
+    checkmark: require('../../assets/icons/checkmark.png'),
     diagram: require('../../assets/icons/diagram.png'),
     download: require('../../assets/icons/download.png'),
     filter: require('../../assets/icons/filter.png'),

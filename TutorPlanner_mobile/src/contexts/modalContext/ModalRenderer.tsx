@@ -2,10 +2,11 @@ import React from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from '@components/icon';
 import {
-    $color_primary,
-    $color_primary_shadow,
-    $color_secondary,
+    $bgColor_primary,
+    $color_black,
+    $color_primary
 } from '@styles/colors';
+import { $border_width } from '@styles/global';
 
 interface ModalRendererProps {
     modalBody: React.ReactNode;
@@ -20,10 +21,9 @@ export const ModalRenderer: React.FunctionComponent<ModalRendererProps> = ({
         <Modal transparent={true} animationType="fade">
             <View style={styles.modalOverlay}>
                 <View
-                    style={[
-                        styles.modalContent,
-                        { backgroundColor: $color_primary },
-                    ]}
+                    style={
+                        styles.modalContent
+                    }
                 >
                     {modalBody}
                     <TouchableOpacity
@@ -50,8 +50,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         elevation: 5,
         gap: 10,
-        borderWidth: 1,
-        borderColor: '#000',
+        borderWidth: $border_width,
+        borderColor: $color_black,
+        backgroundColor: $bgColor_primary,
         alignItems: 'center',
         position: 'relative',
     },

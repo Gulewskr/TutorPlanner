@@ -8,12 +8,13 @@ import {
 import { PropsWithChildren, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Navbar, NavbarNavigationScreens } from '@components/ui/navbar';
+import { Navbar, NavbarNavigationScreens, RootStackParamList } from '@components/ui/navbar';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Header } from '@components/header';
 import React from 'react';
 import { useAlert } from '@contexts/AlertContext';
 import { $bgColor_primary, $color_primary, $color_white } from '@styles/colors';
+import { $border_width_line } from '@styles/global';
 
 interface LayoutProps {
     navigation: NativeStackNavigationProp<any>;
@@ -42,31 +43,30 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
 
     return (
         <View style={styles.container}>
-            {isLoading && (
-                <View
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '110%',
-                        zIndex: 900,
-                        backgroundColor: $color_primary,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        alignContent: 'center',
-                    }}
-                >
-                    <Image
-                        style={{ width: 200, height: 250 }}
-                        source={require('../assets/loading.png')}
-                    />
-                    <ActivityIndicator size="large" color={$color_white} />
-                    <Text style={{ textAlign: 'center', color: $color_white }}>
-                        Ładowanie...
-                    </Text>
-                </View>
-            )}
+            <View
+                style={{
+                    display: isLoading ? 'flex' : 'none',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '110%',
+                    zIndex: 900,
+                    backgroundColor: $color_primary,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    alignContent: 'center',
+                }}
+            >
+                <Image
+                    style={{ width: 200, height: 250 }}
+                    source={require('../assets/loading.png')}
+                />
+                <ActivityIndicator size="large" color={$color_white} />
+                <Text style={{ textAlign: 'center', color: $color_white }}>
+                    Ładowanie...
+                </Text>
+            </View>
             {alerts && (
                 <View
                     style={{
@@ -185,6 +185,8 @@ const styles = EStyleSheet.create({
         paddingTop: 15,
         height: '100%',
         position: 'relative',
+        flex: 1,
+        backgroundColor: 'transparent',
     },
     header_container: {
         position: 'absolute',
@@ -195,7 +197,7 @@ const styles = EStyleSheet.create({
     },
     verticalLine: {
         width: '100%',
-        borderWidth: 0.5,
+        borderWidth: $border_width_line,
         height: 1,
     },
     navbar: {

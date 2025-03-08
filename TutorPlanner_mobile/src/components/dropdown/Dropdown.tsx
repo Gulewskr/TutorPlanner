@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { Icon, ICON_NAME } from '@components/icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { $border_width } from '@styles/global';
 
 interface DropdownOption {
     label: string;
@@ -108,7 +109,7 @@ const styles = EStyleSheet.create({
         width: 120,
         height: 20,
         borderRadius: 15,
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         textAlign: 'center',
         textAlignVertical: 'center',
@@ -118,7 +119,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         minHeight: 40,
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         borderRadius: 15,
         backgroundColor: '$color_white',
@@ -134,7 +135,7 @@ const styles = EStyleSheet.create({
         top: 4,
         left: 4,
         backgroundColor: '$shadow_color_primary',
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         zIndex: -1,
     },
@@ -147,7 +148,7 @@ const styles = EStyleSheet.create({
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
         borderColor: '$color_black',
-        borderWidth: 1,
+        borderWidth: $border_width,
         maxHeight: 200,
         zIndex: 0,
     },

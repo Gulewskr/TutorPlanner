@@ -1,4 +1,5 @@
 import { $color_primary, $color_secondary } from '@styles/colors';
+import { $border_width } from '@styles/global';
 import React, { PropsWithChildren, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -115,7 +116,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         width: '100%',
         minHeight: 40,
-        borderWidth: 1,
+        borderWidth: $border_width,
         borderColor: '$color_black',
         borderRadius: 10,
         backgroundColor: '$color_white',
@@ -130,7 +131,7 @@ const styles = EStyleSheet.create({
         top: 5,
         left: 5,
         backgroundColor: '$shadow_color_primary',
-        borderWidth: 1,
+        borderWidth: $border_width,
         width: '100%',
         borderColor: '$color_black',
         zIndex: -1,
