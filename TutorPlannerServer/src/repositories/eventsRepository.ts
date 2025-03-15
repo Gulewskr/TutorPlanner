@@ -13,6 +13,11 @@ export const eventRepository = {
     getAllEvents: async (): Promise<EventDAO[]> => {
         return await prisma.event.findMany();
     },
+    getEvents: async (filter: Prisma.EventWhereInput): Promise<EventDAO[]> => {
+        return await prisma.event.findMany({
+            where: filter
+        });
+    },
     getEventsInTimeFrame: async (
         startDate: Date,
         endDate: Date,

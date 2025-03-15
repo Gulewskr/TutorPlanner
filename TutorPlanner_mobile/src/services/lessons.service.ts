@@ -1,6 +1,7 @@
 import { LessonDTO } from '@model';
 import { LESSONS_URL, STUDENTS_URL } from './config';
 import { axios } from './baseService';
+import { formatToDayInCalendar } from '@utils/dateUtils';
 
 interface LessonCreateRequestBody {
     name: string;
@@ -118,7 +119,7 @@ class LessonsService {
     getLessonsInDay = async (date: Date): Promise<LessonDTO[]> => {
         try {
             if (!date) throw new Error('Missing data');
-            const formattedDate = date.toISOString().split('T')[0]; // np 2024-10-05
+            const formattedDate = formatToDayInCalendar(date); // np 2024-10-05
             const response = await axios.get(LESSONS_URL, {
                 params: {
                     date: formattedDate,

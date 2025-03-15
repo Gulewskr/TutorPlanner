@@ -4,8 +4,15 @@ import { CreateEventRequestBody } from '../models/event';
 import { eventRepository } from '../repositories/eventsRepository';
 import { EventCreateInputSchema, EventUpdateInputSchema } from '../validators/events/event';
 import { eventSeriesRepository } from '../models/eventSeries';
-import { addWeeks, getDay } from 'date-fns';
+import { addWeeks, endOfMonth, getDay, startOfMonth } from 'date-fns';
 import { CONFIG } from '../config';
+
+export interface EventFilter {
+    date?: Date;
+    month?: number;
+    year?: number;
+    eventType: EventType;
+}
 
 class EventsService {
     public async createEvent (
@@ -51,6 +58,28 @@ class EventsService {
             const event = await eventRepository.getNextBySeriesId(series.id);
             return toEventDTO(event);
         }
+    };
+    public async filterEvents(filter?: EventFilter): Promise<EventDTO[]> {
+        let events = [];
+        if (filter?.date) {
+            events = await eventRepository.getEvents({
+                date: filter?.date,
+                eventType: filter.eventType
+            });
+            return events.map(event => toEventDTO(event));
+        } else if (filter?.month && filter.year) {
+            const date = new Date(filter.year, filter.month);
+            events = await eventRepository.getEvents({
+                date: {
+                    gte: startOfMonth(date),
+                    lte: endOfMonth(date),
+                },
+                eventType: filter.eventType
+            });
+        } else {
+            events = await eventRepository.getAllEvents();
+        }
+        return events.map(event => toEventDTO(event));
     };
     public async getEvent(eventId: number): Promise<EventDTO> {
         const event = await eventRepository.getEventById(eventId);

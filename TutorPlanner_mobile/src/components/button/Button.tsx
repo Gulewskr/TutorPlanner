@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { $border_width } from '@styles/global';
+import { $color_black, $color_error_button, $color_white } from '@styles/colors';
 
 type ButtonSize = 'small' | 'medium' | 'large';
 interface ButtonProps {
@@ -66,7 +67,9 @@ const Button: React.FC<ButtonProps> = ({
             >
                 <View style={style.content}>
                     {icon && <Icon icon={icon} />}
-                    {isIconButton || <Text style={style.text}>{label}</Text>}
+                    {isIconButton || <Text style={[style.text, {
+                        color: severity === 'error' ? $color_white : $color_black
+                    }]}>{label}</Text>}
                 </View>
             </Pressable>
             {hasShadow && (
@@ -129,8 +132,8 @@ const styles = (
                         : '$color_func'
                     : severity == 'error'
                       ? pressed
-                          ? '#FF6B6B'
-                          : '#FF6B6B'
+                          ? $color_error_button
+                          : $color_error_button
                       : pressed
                         ? '$color_primary_hover'
                         : '$color_primary',
@@ -156,7 +159,6 @@ const styles = (
             lineHeight: 21,
             fontWeight: 'bold',
             letterSpacing: 0.25,
-            color: '$color_black',
             flexShrink: 1,
             maxWidth: '80%',
             paddingBottom: 2,
