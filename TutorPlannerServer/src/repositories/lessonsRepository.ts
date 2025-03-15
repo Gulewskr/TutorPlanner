@@ -3,6 +3,7 @@ import { prisma } from '../db';
 import { LessonDAO } from '../models/lesson';
 import { addDays, endOfDay, getDay, isSameDay, startOfDay, startOfWeek } from 'date-fns';
 import { eventRepository } from './eventsRepository';
+import { getDateWithoutTZ } from '../utils/utils';
 
 interface Pagable<T> {
     data: T[];
@@ -87,8 +88,8 @@ export const lessonRepository = {
             where: {
                 eventType: 'LESSON',
                 date: {
-                    gte: startOfDay(date),
-                    lt: endOfDay(date),
+                    gte: getDateWithoutTZ(startOfDay(date)),
+                    lt: getDateWithoutTZ(endOfDay(date)),
                 },
             },
             orderBy: {

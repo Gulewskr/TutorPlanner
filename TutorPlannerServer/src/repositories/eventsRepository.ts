@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../db';
 import { EventDAO } from '../models/event';
 import { addDays, addWeeks, differenceInDays, getDay, isSameDay, startOfWeek, subDays } from 'date-fns';
+import { getDateWithoutTZ } from '../utils/utils';
 
 export const eventRepository = {
     getEventById: async (id: number): Promise<EventDAO> => {
@@ -26,8 +27,8 @@ export const eventRepository = {
         return await prisma.event.findMany({
             where: {
                 date: {
-                    gte: startDate,
-                    lte: endDate,
+                    gte: getDateWithoutTZ(startDate),
+                    lte: getDateWithoutTZ(endDate),
                 },
             },
         });
@@ -37,7 +38,7 @@ export const eventRepository = {
             where: {
                 eventSeriesId: seriesId,
                 date: {
-                    gte: new Date(),
+                    gte: getDateWithoutTZ(new Date()),
                 },
             },
             orderBy: {
@@ -107,7 +108,7 @@ export const eventRepository = {
                 where: {
                     eventSeriesId: seriesId,
                     date: {
-                        gte: event.date
+                        gte: getDateWithoutTZ(event.date)
                     }
                 },
                 orderBy: {
@@ -123,7 +124,7 @@ export const eventRepository = {
                 studentId: data.student || e.studentId,
                 startHour: data.startHour || e.startHour,
                 endHour: data.endHour || e.endHour,
-                date: addWeeks(data.date!, i)
+                date: getDateWithoutTZ(addWeeks(data.date!, i))
             }))
         }
                 
@@ -167,7 +168,7 @@ export const eventRepository = {
                         isOverridden: false,
                         eventSeriesId: seriesId,
                         date: {
-                            gte: event.date,
+                            gte: getDateWithoutTZ(event.date),
                         },
                     },
                 });

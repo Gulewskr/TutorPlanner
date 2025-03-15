@@ -31,5 +31,8 @@ export const parseDate = (dateString: string): Date => {
             'Invalid date format. Please use a valid date (YYYY-MM-DD).',
         );
     }
-    return date;
+    return getDateWithoutTZ(date);
 };
+
+export const getDateWithoutTZ = (date: Date): Date =>
+    new Date(date.valueOf() - date.getTimezoneOffset() * 60 * 1000);

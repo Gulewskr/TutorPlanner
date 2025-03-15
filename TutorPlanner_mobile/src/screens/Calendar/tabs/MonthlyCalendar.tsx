@@ -30,7 +30,7 @@ import { $color_primary_shadow } from '@styles/colors';
 import { EventsList } from '@components/complex/eventslist';
 import { $border_width } from '@styles/global';
 import { setLoadingPage } from '@contexts/NavbarReducer';
-import { useIsFocused } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const CALENDAR_WEEKS = [0, 1, 2, 3, 4, 5];
 const WEEK_DAYS_RANGE = [0, 1, 2, 3, 4, 5, 6];
@@ -49,6 +49,14 @@ export const MonthlyCalendar: React.FC<
         fetchMonthlyCalendarData,
     } = useCalendarContext();
 
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchMonthlyCalendarData(controlDate);
+            return () => {};
+          }, [])
+        
+    );
+
     useEffect(() => {
         if (!loading) {
             setTimeout(() => {
@@ -56,12 +64,6 @@ export const MonthlyCalendar: React.FC<
             }, 1000);
         }
     }, [loading]);
-
-    const isFocused = useIsFocused();
-    
-    useEffect(() => {
-        fetchMonthlyCalendarData(controlDate);
-    }, [isFocused]);
 
     useEffect(() => {
         fetchMonthlyCalendarData(controlDate);

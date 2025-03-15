@@ -4,9 +4,10 @@ import { CreateEventRequestBody } from '../models/event';
 import { eventRepository } from '../repositories/eventsRepository';
 import { EventCreateInputSchema, EventUpdateInputSchema } from '../validators/events/event';
 import { eventSeriesRepository } from '../models/eventSeries';
-import { addWeeks, endOfMonth, getDay, startOfMonth } from 'date-fns';
+import { addWeeks, endOfDay, endOfMonth, getDay, startOfDay, startOfMonth } from 'date-fns';
 import { CONFIG } from '../config';
 import { EventSeriesUpdateInputSchema } from '../validators/events/eventSeries';
+import { getDateWithoutTZ } from '../utils/utils';
 
 export interface EventFilter {
     date?: Date;
@@ -64,7 +65,10 @@ class EventsService {
         let events = [];
         if (filter?.date) {
             events = await eventRepository.getEvents({
-                date: filter?.date,
+                date: {
+                    gte: getDateWithoutTZ(startOfDay(filter?.date)),
+                    lte: getDateWithoutTZ(endOfDay(filter?.date))
+                },
                 eventType: filter.eventType
             });
             return events.map(event => toEventDTO(event));
@@ -72,8 +76,8 @@ class EventsService {
             const date = new Date(filter.year, filter.month);
             events = await eventRepository.getEvents({
                 date: {
-                    gte: startOfMonth(date),
-                    lte: endOfMonth(date),
+                    gte: getDateWithoutTZ(startOfMonth(date)),
+                    lte: getDateWithoutTZ(endOfMonth(date)),
                 },
                 eventType: filter.eventType
             });

@@ -11,7 +11,7 @@ import {
     mapEventSeriesToLessonSeriesDTO,
     toLessonDTO,
 } from '../models/lesson';
-import { parseDate } from '../utils/utils';
+import { getDateWithoutTZ, parseDate } from '../utils/utils';
 
 // repositories
 import { eventSeriesRepository } from '../models/eventSeries';
@@ -69,8 +69,8 @@ class LessonsService {
             const startOfMonth = new Date(filters.year, filters.month - 1, 1);
             return await lessonRepository.getLessons({
                 date: {
-                    gte: startOfMonth,
-                    lte: endOfMonth(startOfMonth),
+                    gte: getDateWithoutTZ(startOfMonth),
+                    lte: getDateWithoutTZ(endOfMonth(startOfMonth)),
                 },
             });
         }
@@ -113,8 +113,8 @@ class LessonsService {
         if (year && month) {
             const startOfMonth = new Date(year, month - 1, 1);
             filter.date = {
-                gte: startOfMonth,
-                lte: endOfMonth(startOfMonth),
+                gte: getDateWithoutTZ(startOfMonth),
+                lte: getDateWithoutTZ(endOfMonth(startOfMonth)),
             };
         }
         if (page !== undefined || pageSize !== undefined) {

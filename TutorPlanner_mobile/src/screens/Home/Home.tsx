@@ -127,7 +127,7 @@ export const Home: React.FC<
                             </View>
                             <View style={{ width: '50%' }}>
                                 <Button
-                                    icon="notes"
+                                    icon='event'
                                     onClick={() =>
                                         navigation.navigate('Events', {
                                             screen: 'Create',
