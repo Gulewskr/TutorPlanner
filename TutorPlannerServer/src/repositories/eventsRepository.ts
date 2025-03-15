@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db';
 import { EventDAO } from '../models/event';
-import { addDays, differenceInDays, getDay, isSameDay, startOfWeek, subDays } from 'date-fns';
+import { addDays, addWeeks, differenceInDays, getDay, isSameDay, startOfWeek, subDays } from 'date-fns';
 
 export const eventRepository = {
     getEventById: async (id: number): Promise<EventDAO> => {
@@ -99,31 +99,23 @@ export const eventRepository = {
         }
         const { eventSeriesId: seriesId } = event;
         
-        let dayDiff = 0, isLater = false;
-        if (data.date && !isSameDay(data.date, event.date)) {
-            isLater = data.date > event.date;
-            dayDiff = isLater ? differenceInDays(data.date, event.date) : differenceInDays(event.date, data.date);
-        }
+        const dateShouldBeChanged = data.date && !isSameDay(data.date, event.date);
 
         let dataToSave: EventDAO[] = [];
-        if (dayDiff != -1) {
+        if (dateShouldBeChanged) {
             const eventsToUpdate = await prisma.event.findMany({
                 where: {
                     eventSeriesId: seriesId,
                     date: {
                         gte: event.date
-                    },
-                    isOverridden: {
-                        not: true
                     }
+                },
+                orderBy: {
+                    date: 'asc'
                 }
             });
 
-            if (event.isOverridden) {
-                eventsToUpdate.push(event);
-            }
-
-            dataToSave = eventsToUpdate.map(e => ({
+            dataToSave = eventsToUpdate.map((e, i) => ({
                 ...e,
                 name: data.name || e.name,
                 description: data.description || e.description,
@@ -131,7 +123,7 @@ export const eventRepository = {
                 studentId: data.student || e.studentId,
                 startHour: data.startHour || e.startHour,
                 endHour: data.endHour || e.endHour,
-                date: isLater ? addDays(e.date, dayDiff) : subDays(e.date, dayDiff)
+                date: addWeeks(data.date!, i)
             }))
         }
                 

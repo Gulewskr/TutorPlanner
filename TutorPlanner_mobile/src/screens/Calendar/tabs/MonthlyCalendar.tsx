@@ -26,10 +26,11 @@ import {
     WEEKDAYS,
 } from '../components/calendar/utils';
 import { useCalendarContext } from '../CalendarContext';
-import { $color_primary, $color_primary_shadow } from '@styles/colors';
+import { $color_primary_shadow } from '@styles/colors';
 import { EventsList } from '@components/complex/eventslist';
 import { $border_width } from '@styles/global';
 import { setLoadingPage } from '@contexts/NavbarReducer';
+import { useIsFocused } from '@react-navigation/native';
 
 const CALENDAR_WEEKS = [0, 1, 2, 3, 4, 5];
 const WEEK_DAYS_RANGE = [0, 1, 2, 3, 4, 5, 6];
@@ -56,16 +57,21 @@ export const MonthlyCalendar: React.FC<
         }
     }, [loading]);
 
+    const isFocused = useIsFocused();
+    
     useEffect(() => {
         fetchMonthlyCalendarData(controlDate);
-    }, [controlDate.getMonth()]);
+    }, [isFocused]);
+
+    useEffect(() => {
+        fetchMonthlyCalendarData(controlDate);
+    }, [controlDate]);
 
     const firstDayOfMonth = startOfMonth(controlDate);
     const firstDayInCallendar = subDays(
         firstDayOfMonth,
         getDayOfWeek(firstDayOfMonth),
     );
-    const CALLENDAR_LENGTH = 6 * 7;
 
     const handlePreviousMonth = () => {
         setControlDate(subMonths(controlDate, 1));

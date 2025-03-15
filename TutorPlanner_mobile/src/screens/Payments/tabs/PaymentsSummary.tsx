@@ -183,7 +183,7 @@ export const PaymentsSummary: React.FC<
                     isCentered
                     styles={{ height: 30, marginBottom: 10 }}
                 />
-                {!isLoading ? (
+                {isLoading ? (
                     <ActivityIndicator size="large" color={$color_primary} />
                 ) : payments.length ? (
                     <>

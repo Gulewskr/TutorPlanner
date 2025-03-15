@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import { useEvents } from '@hooks/useEvents';
 import { DayEventsData } from './components/calendar/model';
 import { calendarService } from '@services/calendar.service';
-import { format } from 'date-fns';
+import { addDays, endOfMonth, format, isSameDay, startOfMonth } from 'date-fns';
 import { EventDTO } from '@model';
 
 interface CalendarContextProps {
@@ -61,6 +61,20 @@ export const CalendarProvider = ({ children }: React.PropsWithChildren) => {
             controlDate.getFullYear(),
         );
 
+        let startDate = startOfMonth(controlDate);
+        const endDate = endOfMonth(controlDate);
+        const clearCachedData: { [key: string]: DayEventsData} = {};
+        while (startDate <= endDate || isSameDay(startDate, endDate)) {
+            clearCachedData[format(startDate, 'yyyy-MM-dd')] = {
+                amount: 0,
+                canceledEvents: 0,
+                numOfUnpaidedLessons: 0,
+                numOfPaidedLessons: 0,
+                numOfLessons: 0
+            };
+            startDate = addDays(startDate, 1);
+        }
+
         const calendarData = data.events.reduce<{
             [key: string]: DayEventsData;
         }>((acc, event) => {
@@ -82,7 +96,7 @@ export const CalendarProvider = ({ children }: React.PropsWithChildren) => {
                 }
             }
             return acc;
-        }, {});
+        }, clearCachedData);
         setCalendarData(data => ({
             ...data,
             ...calendarData,
