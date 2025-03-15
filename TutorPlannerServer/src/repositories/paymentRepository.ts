@@ -4,6 +4,8 @@ import {
     CreatePaymentDTO,
     PaymentWithStudentDAO,
 } from '../models/payment.model';
+import { toMySQLDate } from '../utils/utils';
+import { isDate } from 'date-fns';
 
 export const paymentRepository = {
     getPaymentById: async (
@@ -57,6 +59,7 @@ export const paymentRepository = {
             data: {
                 price: payment.price,
                 date: payment.date,
+                date_text: toMySQLDate(payment.date),
                 student: {
                     connect: {
                         id: payment.studentId,
@@ -69,6 +72,9 @@ export const paymentRepository = {
         paymentId: number,
         payment: Prisma.PaymentUpdateInput,
     ): Promise<Payment> => {
+        if (payment.date && isDate(payment.date)) {
+            payment.date_text = toMySQLDate(payment.date);
+        }
         return await prisma.payment.update({
             data: payment,
             where: {

@@ -131,7 +131,6 @@ const getFormSchema = (
     students: StudentDTO[],
     initialData: CreatePaymentData = defaultData,
 ): FormRendererSchema => {
-    console.log(initialData);
     return {
         title: 'Dodaj płatność',
         initValue: initialData,

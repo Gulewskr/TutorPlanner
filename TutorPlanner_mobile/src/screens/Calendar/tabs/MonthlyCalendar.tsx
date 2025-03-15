@@ -84,14 +84,13 @@ export const MonthlyCalendar: React.FC<
     };
 
     const handleSelectDate = (day: Date) => {
-        const date = getDateWithoutTZ(day);
-        if (!isSameMonth(date, controlDate)) {
-            isBefore(date, controlDate)
+        if (!isSameMonth(day, controlDate)) {
+            isBefore(day, controlDate)
                 ? handlePreviousMonth()
                 : handleNextMonth();
         }
-        setControlDate(date);
-        selectDate(date);
+        setControlDate(day);
+        selectDate(day);
     };
 
     return (

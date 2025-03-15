@@ -41,13 +41,15 @@ model Payment {
     id        Int      @id @default(autoincrement())
     studentId Int
     price     Int
-    date      DateTime
+    date      DateTime @db.Date
+    date_text String   @default("")
     student   Student  @relation(fields: [studentId], references: [id])
 }
 
 model Event {
     id           Int      @id @default(autoincrement())
-    date         DateTime
+    date         DateTime @db.Date
+    date_text    String   @default("")
     isCanceled   Boolean  @default(false)
     isOverridden Boolean  @default(false)
 
@@ -69,16 +71,18 @@ model Event {
 }
 
 model EventSeries {
-    id         Int             @id @default(autoincrement())
-    type       EventSeriesType
-    pattern    String?
+    id             Int             @id @default(autoincrement())
+    type           EventSeriesType
+    pattern        String?
     //DAILY - none
     //WEEKLY - arrays of days 
     //MONTHLY - array of days
     //YEARLY - full date
-    startDate  DateTime?
-    endDate    DateTime?
-    isCanceled Boolean         @default(false)
+    startDate      DateTime?       @db.Date
+    startDate_text String?
+    endDate        DateTime?       @db.Date
+    endDate_text   String?
+    isCanceled     Boolean         @default(false)
 
     //Generic data
     name        String

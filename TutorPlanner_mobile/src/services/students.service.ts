@@ -46,7 +46,6 @@ class StudentsService {
         data: CreateStudentRequestData,
     ): Promise<StudentDTO | ErrorResponse> => {
         try {
-            console.log(data);
             const response = await axios.post(STUDENTS_URL, data);
             return response.data;
         } catch (error) {

@@ -1,4 +1,4 @@
-import { isValid, parse } from 'date-fns';
+import { format, isValid, parse } from 'date-fns';
 import { Request } from 'express';
 
 export const validateDateFormat = (dateString?: string): Date => {
@@ -36,3 +36,5 @@ export const parseDate = (dateString: string): Date => {
 
 export const getDateWithoutTZ = (date: Date): Date =>
     new Date(date.valueOf() - date.getTimezoneOffset() * 60 * 1000);
+
+export const toMySQLDate = (date: string | Date): string => format(date, 'yyyy-MM-dd');

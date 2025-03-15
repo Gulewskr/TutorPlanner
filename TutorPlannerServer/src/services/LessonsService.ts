@@ -69,8 +69,8 @@ class LessonsService {
             const startOfMonth = new Date(filters.year, filters.month - 1, 1);
             return await lessonRepository.getLessons({
                 date: {
-                    gte: getDateWithoutTZ(startOfMonth),
-                    lte: getDateWithoutTZ(endOfMonth(startOfMonth)),
+                    gte: startOfMonth,
+                    lte: endOfMonth(startOfMonth),
                 },
             });
         }
@@ -113,8 +113,8 @@ class LessonsService {
         if (year && month) {
             const startOfMonth = new Date(year, month - 1, 1);
             filter.date = {
-                gte: getDateWithoutTZ(startOfMonth),
-                lte: getDateWithoutTZ(endOfMonth(startOfMonth)),
+                gte: startOfMonth,
+                lte: endOfMonth(startOfMonth),
             };
         }
         if (page !== undefined || pageSize !== undefined) {
@@ -297,7 +297,7 @@ class LessonsService {
         data: Partial<CreateLessonRequestBody>,
     ): Promise<void> {
         const updateData = LessonSeriesUpdateInputSchema.parse(data);
-        await lessonRepository.updateLessonSeriesByLessonId(
+        await eventRepository.updateSeriesOfEvents(
             lessonId,
             updateData,
         );

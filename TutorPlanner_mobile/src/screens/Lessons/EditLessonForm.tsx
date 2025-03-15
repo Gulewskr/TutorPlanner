@@ -66,7 +66,6 @@ BottomTabScreenProps<LessonsTabParamList, 'Edit'>
             const lesson = await lessonsService.getLesson(
                 route.params.lessonId,
             );
-            console.log(lesson);
             setSelectedLesson(lesson);
         } catch (err) {
             showAlert({

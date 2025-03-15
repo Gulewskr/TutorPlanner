@@ -66,7 +66,6 @@ export const EventsList: React.FC<EventsListProps> = ({ day, navigation }) => {
             const response = await axios.delete(`${LESSONS_URL}/${eventId}`);
             getEvents();
             setIsOpen(false);
-            console.log('Event deleted:', response.data.message);
         } catch (error) {
             console.error('Error deleting event:', error);
         }

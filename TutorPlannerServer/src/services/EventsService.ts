@@ -7,7 +7,7 @@ import { eventSeriesRepository } from '../models/eventSeries';
 import { addWeeks, endOfDay, endOfMonth, getDay, startOfDay, startOfMonth } from 'date-fns';
 import { CONFIG } from '../config';
 import { EventSeriesUpdateInputSchema } from '../validators/events/eventSeries';
-import { getDateWithoutTZ } from '../utils/utils';
+import { getDateWithoutTZ, toMySQLDate } from '../utils/utils';
 
 export interface EventFilter {
     date?: Date;
@@ -65,10 +65,7 @@ class EventsService {
         let events = [];
         if (filter?.date) {
             events = await eventRepository.getEvents({
-                date: {
-                    gte: getDateWithoutTZ(startOfDay(filter?.date)),
-                    lte: getDateWithoutTZ(endOfDay(filter?.date))
-                },
+                date_text: toMySQLDate(filter?.date),
                 eventType: filter.eventType
             });
             return events.map(event => toEventDTO(event));
@@ -76,8 +73,8 @@ class EventsService {
             const date = new Date(filter.year, filter.month);
             events = await eventRepository.getEvents({
                 date: {
-                    gte: getDateWithoutTZ(startOfMonth(date)),
-                    lte: getDateWithoutTZ(endOfMonth(date)),
+                    gte: startOfMonth(date),
+                    lte: endOfMonth(date),
                 },
                 eventType: filter.eventType
             });
@@ -108,6 +105,7 @@ class EventsService {
         const event = await eventRepository.update(id, {
             name: updateData.name,
             date: updateData.date,
+            date_text: toMySQLDate(updateData.date),
             startHour: updateData.startHour,
             endHour: updateData.endHour,
             description: updateData.description,

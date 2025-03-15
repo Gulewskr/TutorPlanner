@@ -2,7 +2,8 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../db';
 import { EventDAO } from '../models/event';
 import { addDays, addWeeks, differenceInDays, getDay, isSameDay, startOfWeek, subDays } from 'date-fns';
-import { getDateWithoutTZ } from '../utils/utils';
+import { getDateWithoutTZ, toMySQLDate } from '../utils/utils';
+import { format } from 'path';
 
 export const eventRepository = {
     getEventById: async (id: number): Promise<EventDAO> => {
@@ -27,8 +28,8 @@ export const eventRepository = {
         return await prisma.event.findMany({
             where: {
                 date: {
-                    gte: getDateWithoutTZ(startDate),
-                    lte: getDateWithoutTZ(endDate),
+                    gte: startDate,
+                    lte: endDate,
                 },
             },
         });
@@ -38,7 +39,7 @@ export const eventRepository = {
             where: {
                 eventSeriesId: seriesId,
                 date: {
-                    gte: getDateWithoutTZ(new Date()),
+                    gte: new Date(),
                 },
             },
             orderBy: {
@@ -108,7 +109,7 @@ export const eventRepository = {
                 where: {
                     eventSeriesId: seriesId,
                     date: {
-                        gte: getDateWithoutTZ(event.date)
+                        gte: event.date
                     }
                 },
                 orderBy: {
@@ -116,16 +117,20 @@ export const eventRepository = {
                 }
             });
 
-            dataToSave = eventsToUpdate.map((e, i) => ({
-                ...e,
-                name: data.name || e.name,
-                description: data.description || e.description,
-                price: data.price || e.price,
-                studentId: data.student || e.studentId,
-                startHour: data.startHour || e.startHour,
-                endHour: data.endHour || e.endHour,
-                date: getDateWithoutTZ(addWeeks(data.date!, i))
-            }))
+            dataToSave = eventsToUpdate.map((e, i) => {
+                const newDate = addWeeks(data.date!, i);
+                return ({
+                    ...e,
+                    name: data.name || e.name,
+                    description: data.description || e.description,
+                    price: data.price || e.price,
+                    studentId: data.student || e.studentId,
+                    startHour: data.startHour || e.startHour,
+                    endHour: data.endHour || e.endHour,
+                    date: newDate,
+                    date_text: toMySQLDate(newDate)
+                })
+            })
         }
                 
                 
@@ -168,7 +173,7 @@ export const eventRepository = {
                         isOverridden: false,
                         eventSeriesId: seriesId,
                         date: {
-                            gte: getDateWithoutTZ(event.date),
+                            gte: event.date,
                         },
                     },
                 });

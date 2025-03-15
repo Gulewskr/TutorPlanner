@@ -13,7 +13,7 @@ axios.interceptors.response.use(
         return response;
     },
     error => {
-        console.log(JSON.stringify(error));
+        console.error(JSON.stringify(error));
         console.error(
             'API Error: ',
             error.response ? error.response.data : error.message,

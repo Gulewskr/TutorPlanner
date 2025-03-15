@@ -10,6 +10,7 @@ type PaymentWithStudentDAO = {
     id: number;
     price: number;
     date: Date;
+    date_text: string;
     studentId: number;
     student: Student;
 };

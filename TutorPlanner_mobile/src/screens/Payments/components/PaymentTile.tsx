@@ -18,7 +18,7 @@ export const PaymentTile: React.FC<StudentTileProps> = ({
     const { student } = payment;
 
     const handleAction = (num: number) => {
-        console.log(num);
+        //TODO
     };
 
     return (

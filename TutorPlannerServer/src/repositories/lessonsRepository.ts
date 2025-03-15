@@ -1,9 +1,9 @@
 import { EventSeries, EventType, Prisma } from '@prisma/client';
 import { prisma } from '../db';
 import { LessonDAO } from '../models/lesson';
-import { addDays, endOfDay, getDay, isSameDay, startOfDay, startOfWeek } from 'date-fns';
+import { addDays, format, getDay, isDate, isSameDay, startOfWeek } from 'date-fns';
 import { eventRepository } from './eventsRepository';
-import { getDateWithoutTZ } from '../utils/utils';
+import { toMySQLDate } from '../utils/utils';
 
 interface Pagable<T> {
     data: T[];
@@ -18,6 +18,7 @@ export const lessonRepository = {
         return (await prisma.event.create({
             data: {
                 ...lesson,
+                date_text: toMySQLDate(lesson.date),
                 eventType: 'LESSON',
             },
         })) as LessonDAO;
@@ -87,13 +88,10 @@ export const lessonRepository = {
         return (await prisma.event.findMany({
             where: {
                 eventType: 'LESSON',
-                date: {
-                    gte: getDateWithoutTZ(startOfDay(date)),
-                    lt: getDateWithoutTZ(endOfDay(date)),
-                },
+                date_text: toMySQLDate(date)
             },
             orderBy: {
-                date: 'asc',
+                startHour: 'asc',
             },
         })) as LessonDAO[];
     },
@@ -102,6 +100,9 @@ export const lessonRepository = {
         event: Prisma.EventUpdateInput,
     ): Promise<LessonDAO> => {
         event.eventType = EventType.LESSON;
+        if (event.date && isDate(event.date)) {
+            event.date_text = toMySQLDate(event.date)
+        }
         return eventRepository.update<LessonDAO>(id, event);
     },
     //TODO merge 2 functions
@@ -120,13 +121,13 @@ export const lessonRepository = {
         lesson: Prisma.EventUpdateInput,
     ): Promise<Prisma.BatchPayload> => {
         return await prisma.event.updateMany({
+            data: lesson,
             where: {
                 id: {
                     in: lessonsId,
                 },
                 eventType: 'LESSON',
             },
-            data: lesson,
         });
     },
     updateLessonSeriesByLessonId: async (
@@ -176,16 +177,20 @@ export const lessonRepository = {
                 lessonsToUpdate.push(firstLesson);
             }
 
-            updatedLessonsToSave = lessonsToUpdate.map(lesson => ({
-                ...lesson,
-                name: data.name || lesson.name,
-                description: data.description || lesson.description,
-                price: data.price || lesson.price,
-                studentId: data.student || lesson.studentId,
-                startHour: data.startHour || lesson.startHour,
-                endHour: data.endHour || lesson.endHour,
-                date: addDays(startOfWeek(lesson.date), dayOfWeek)
-            }))
+            updatedLessonsToSave = lessonsToUpdate.map(lesson => {
+                const newDate = addDays(startOfWeek(lesson.date), dayOfWeek);
+                return ({
+                    ...lesson,
+                    name: data.name || lesson.name,
+                    description: data.description || lesson.description,
+                    price: data.price || lesson.price,
+                    studentId: data.student || lesson.studentId,
+                    startHour: data.startHour || lesson.startHour,
+                    endHour: data.endHour || lesson.endHour,
+                    date: newDate,
+                    date_text: toMySQLDate(newDate),
+                })
+            })
         }
         
         
