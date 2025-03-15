@@ -1,8 +1,5 @@
 import {
-    ActivityIndicator,
-    Image,
     KeyboardAvoidingView,
-    Text,
     View,
 } from 'react-native';
 import { PropsWithChildren } from 'react';
@@ -12,7 +9,7 @@ import { NavbarNavigationScreens } from '@components/ui/navbar';
 import { Header } from '@components/header';
 import React from 'react';
 import { useAlert } from '@contexts/AlertContext';
-import { $bgColor_primary, $color_primary, $color_white } from '@styles/colors';
+import { $bgColor_primary } from '@styles/colors';
 import { $border_width_line } from '@styles/global';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
@@ -24,7 +21,6 @@ interface LayoutProps {
     isHeaderCentered?: boolean;
     title?: string;
     subtitle?: string;
-    isLoading?: boolean;
 }
 
 export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
@@ -36,37 +32,12 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
     route,
     title,
     subtitle,
-    isLoading,
 }) => {
     const { alerts } = useAlert();
     const isSettingsButtonDisabled = route == 'Settings';
 
     return (
         <View style={styles.container}>
-            <View
-                style={{
-                    display: isLoading ? 'flex' : 'none',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '110%',
-                    zIndex: 900,
-                    backgroundColor: $color_primary,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    alignContent: 'center',
-                }}
-            >
-                <Image
-                    style={{ width: 200, height: 250 }}
-                    source={require('../assets/loading.png')}
-                />
-                <ActivityIndicator size="large" color={$color_white} />
-                <Text style={{ textAlign: 'center', color: $color_white }}>
-                    Ładowanie...
-                </Text>
-            </View>
             {alerts && (
                 <View
                     style={{
@@ -110,6 +81,7 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
                             title={title}
                             subtitle={subtitle}
                             isCentered={isHeaderCentered}
+                            titleFontSize={26}
                         />
                     </View>
                 </>
@@ -125,12 +97,7 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
             */}
 
             <KeyboardAvoidingView
-                style={[
-                    styles.content,
-                    {
-                        marginTop: hasHeader ? 90 : 0,
-                    },
-                ]}
+                style={styles.content}
                 behavior="padding"
             >
                 {hasHeaderSeperated && <View style={styles.verticalLine} />}
@@ -168,7 +135,7 @@ const styles = EStyleSheet.create({
         bottom: 0,
         left: 0,
         width: '100%',
-        height: '20%',
+        height: '20%'
     },
     topGradient: {
         position: 'absolute',
@@ -180,17 +147,16 @@ const styles = EStyleSheet.create({
     container: {
         zIndex: 1,
         paddingTop: 15,
-        height: '100%',
+        height: 500,
         position: 'relative',
         flex: 1,
-        backgroundColor: 'transparent',
+        backgroundColor: 'red',
     },
     header_container: {
-        position: 'absolute',
-        paddingTop: 30,
+        position: 'fixed',
         top: 0,
         width: '100%',
-        height: 90,
+        fontFamily: 'Modak_400Regular'
     },
     verticalLine: {
         width: '100%',
@@ -199,7 +165,7 @@ const styles = EStyleSheet.create({
     },
     navbar: {
         position: 'absolute',
-        bottom: -2,
+        bottom: 0,
         left: 0,
         width: '100%',
     },
@@ -208,5 +174,6 @@ const styles = EStyleSheet.create({
         flexDirection: 'column',
         gap: 15,
         alignItems: 'center',
+        marginBottom: 100,
     },
 });

@@ -23,6 +23,7 @@ import { useConfirmModal } from '@contexts/confirmModalContext';
 import { getFullName } from '@utils/utils';
 import { paymentsService } from '@services/payments.service';
 import { useAlert } from '@contexts/AlertContext';
+import { setLoadingPage } from '@contexts/NavbarReducer';
 
 export const PaymentsSummary: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'Summary'>
@@ -121,6 +122,13 @@ export const PaymentsSummary: React.FC<
             loadData();
         }
     }, [isFocused]);
+
+    
+    if (isFocused && !isLoading) {
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 1000);
+    }
 
     return (
         <PaymentsLayout {...props}>

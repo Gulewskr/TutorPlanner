@@ -5,7 +5,7 @@ import {
     DarkTheme,
     DefaultTheme,
 } from '@react-navigation/native';
-import { createBottomTabNavigator, BottomTabHeaderProps, BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EStyleSheet from 'react-native-extended-stylesheet';
 //screens
 import { Home } from './screens/Home/Home';
@@ -17,7 +17,7 @@ import { Settings } from './screens/Settings/Settings';
 import { Lessons } from './screens/Lessons/Lessons';
 import { CreatePayment } from './screens/CreatePayment/CreatePayment';
 //components
-import { Navbar, RootStackParamList } from '@components/ui/navbar';
+import { RootStackParamList } from '@components/ui/navbar';
 //contexts
 import { ModalProvider } from '@contexts/modalContext';
 import { AlertProvider } from '@contexts/AlertContext';
@@ -26,7 +26,12 @@ import { StudentsProvider } from '@contexts/StudentsContext';
 import { StudentProvider } from '@contexts/StudentContext';
 import { $bgColor_primary } from '@styles/colors';
 import { GlobalContextProvider } from '@contexts/GlobalContext';
-import { Header } from '@components/header';
+import { Provider } from 'react-redux';
+import { store } from '@contexts/NavbarReducer';
+import Navbar from '@components/ui/navbar/Navbar';
+import LoadingScreen from '@components/ui/LoadingScreen';
+import { navigationRef } from '@components/ui/navbar/GlobalNavigation';
+import LoadingPage from '@components/ui/LoadingPage';
 //import { title } from 'process';
 
 EStyleSheet.build({
@@ -49,13 +54,14 @@ EStyleSheet.build({
     $tile_bgColor: '#F4DDFF',
 });
 
-const Tab = createBottomTabNavigator<RootStackParamList>();
+const Tab = createNativeStackNavigator<RootStackParamList>();
 
 const App: React.FC<{}> = () => {
     let scheme = useColorScheme();
 
     return (
         <NavigationContainer
+            ref={navigationRef}
             theme={scheme === 'dark' ? DarkTheme : DefaultTheme}
         >
             <StatusBar
@@ -63,6 +69,14 @@ const App: React.FC<{}> = () => {
                 backgroundColor={$bgColor_primary}
             />
             <GlobalContextProvider>
+                <Provider store={store}>
+                <View style={{
+                    backgroundColor: 'transparent',
+                    flex: 1
+                }}>
+                <LoadingScreen />
+                <Navbar />
+                <LoadingPage />
                 <ConfirmModalProvider>
                     <ModalProvider>
                         <AlertProvider>
@@ -71,12 +85,7 @@ const App: React.FC<{}> = () => {
                                     <Tab.Navigator
                                         screenOptions={{
                                             animation: 'none',
-                                            headerShown: false,
-                                            tabBarBackground: () => (<View style={{backgroundColor: 'red', width: '100%', height: '100%'}} />),
-                                            tabBar: (
-                                                props: BottomTabBarProps
-                                                //@ts-ignore
-                                            ) => (<Navbar navigation={props.navigation} route={props.route.name}/>)
+                                            headerShown: false
                                         }}
                                         initialRouteName="Home"
                                     >
@@ -122,7 +131,9 @@ const App: React.FC<{}> = () => {
                         </AlertProvider>
                     </ModalProvider>
                 </ConfirmModalProvider>
-            </GlobalContextProvider>
+                </View>
+                </Provider>
+                </GlobalContextProvider>
         </NavigationContainer>
     );
 };

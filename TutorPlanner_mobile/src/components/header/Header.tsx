@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Button } from '@components/button';
 import { ICON_NAME } from '@components/icon';
+import { $color_black } from '@styles/colors';
 
 interface HeaderProps {
     isLeftActionDisabled?: boolean;
@@ -15,6 +16,7 @@ interface HeaderProps {
     subtitle?: string;
     title?: string;
     styles?: any;
+    titleFontSize?: number;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -28,6 +30,7 @@ const Header: React.FC<HeaderProps> = ({
     rightAction,
     isCentered: centered = false,
     styles: customStyles,
+    titleFontSize
 }) => {
     const leftActionActive = !isLeftActionDisabled && leftAction;
 
@@ -54,7 +57,17 @@ const Header: React.FC<HeaderProps> = ({
                     },
                 ]}
             >
-                {title && <Text style={styles.main_text}>{title}</Text>}
+                {title && (
+                    <Text
+                        style={{
+                            fontSize: titleFontSize || 20,
+                            fontWeight: 900,
+                            color: $color_black
+                        }}
+                    >
+                        {title}
+                    </Text>
+                )}
                 {subtitle && (
                     <Text style={styles.optional_text}>{subtitle}</Text>
                 )}
@@ -100,6 +113,7 @@ const styles = EStyleSheet.create({
 
     main_text: {
         fontSize: 20,
+        fontFamily: 'Modak_400Regular',
         fontWeight: 'bold',
     },
 

@@ -3,14 +3,21 @@ import { Text } from 'react-native';
 import { Layout } from '../Layout';
 import { BottomTabScreenProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CreateLessonForm } from './CreateLessonForm';
-import { LessonsTabParamList, RootStackParamList } from '@components/ui/navbar';
+import { LessonsTabParamList, NavbarNavigationScreens, RootStackParamList } from '@components/ui/navbar';
 import { EditLessonForm } from './EditLessonForm';
+import { updateCurrentRoute } from '@contexts/NavbarReducer';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator<LessonsTabParamList>();
 
 export const Lessons: React.FC<
     BottomTabScreenProps<RootStackParamList, 'Lessons'>
 > = ({ navigation, route }) => {
+
+    //useFocusEffect(() => {
+    //    updateCurrentRoute('Lessons' as NavbarNavigationScreens)
+    //});
+
     return (
         <Tab.Navigator
             initialRouteName="List"

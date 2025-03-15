@@ -69,7 +69,7 @@ export default CustomTabs;
 
 const styles = EStyleSheet.create({
     border: {
-        borderBottomWidth: 1,
+        borderBottomWidth: $border_width,
         borderBottomColor: '$color_black',
         width: '100%',
         alignItems: 'center',

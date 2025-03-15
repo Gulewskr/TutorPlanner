@@ -10,4 +10,8 @@ export const $color_white = '#F5F5F5';
 export const $color_disabled = '#6F6F6F';
 export const $bgColor_primary = '#FFC3FF';
 
+export const $color_primary_text = "#5e1052";
+//export const $color_primary_shadow = '#F5D4F5';
+
 export const $color_checkbox = '#11bd37';
+export const $color_active_page = '#f7728c';

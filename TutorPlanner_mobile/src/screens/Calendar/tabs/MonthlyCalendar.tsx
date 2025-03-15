@@ -29,6 +29,7 @@ import { useCalendarContext } from '../CalendarContext';
 import { $color_primary, $color_primary_shadow } from '@styles/colors';
 import { EventsList } from '@components/complex/eventslist';
 import { $border_width } from '@styles/global';
+import { setLoadingPage } from '@contexts/NavbarReducer';
 
 const CALENDAR_WEEKS = [0, 1, 2, 3, 4, 5];
 const WEEK_DAYS_RANGE = [0, 1, 2, 3, 4, 5, 6];
@@ -46,6 +47,14 @@ export const MonthlyCalendar: React.FC<
         selectDate,
         fetchMonthlyCalendarData,
     } = useCalendarContext();
+
+    useEffect(() => {
+        if (!loading) {
+            setTimeout(() => {
+                setLoadingPage(false);
+            }, 1000);
+        }
+    }, [loading]);
 
     useEffect(() => {
         fetchMonthlyCalendarData(controlDate);

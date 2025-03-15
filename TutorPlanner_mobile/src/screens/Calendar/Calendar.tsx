@@ -5,14 +5,21 @@ import { BottomTabScreenProps, createBottomTabNavigator } from '@react-navigatio
 import { DailyCalendar } from './tabs/DailyCalendar';
 import { MonthlyCalendar } from './tabs/MonthlyCalendar';
 import { CalendarTabParamList } from './calendarTabs';
-import { RootStackParamList } from '@components/ui/navbar';
+import { NavbarNavigationScreens, RootStackParamList } from '@components/ui/navbar';
 import { CalendarProvider } from './CalendarContext';
+import { updateCurrentRoute } from '@contexts/NavbarReducer';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator<CalendarTabParamList>();
 
 export const RootCalendar: React.FC<
     BottomTabScreenProps<RootStackParamList, 'Calendar'>
 > = ({ navigation, route }) => {
+
+    useFocusEffect(() => {
+        updateCurrentRoute('Calendar' as NavbarNavigationScreens)
+    });
+
     return (
         <CalendarProvider>
             <Tab.Navigator

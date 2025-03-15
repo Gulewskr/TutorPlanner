@@ -8,8 +8,8 @@ import { Button } from '@components/button';
 import { Tile } from '@components/tile';
 import { StudentNextLesson } from '@screens/Students/components/StudentNextLesson';
 import { useStudentContext } from '../StudentContext';
-import { LessonTile } from '@screens/Lessons/components/LessonTile';
 import { ScrollView } from '@components/ui/scrool-view';
+import { setLoadingPage } from '@contexts/NavbarReducer';
 
 export const StudentInformations: React.FC<
     BottomTabScreenProps<StudentProfileTabParamList, 'Info'>
@@ -18,6 +18,12 @@ export const StudentInformations: React.FC<
     const { data, recalculate, refresh, loading } = useStudentContext();
 
     const { student, studentNextLesson } = data;
+
+    if (!loading) {
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 1000);
+    }
 
     const reloadBalance = async () => {
         student && recalculate(student.id);
