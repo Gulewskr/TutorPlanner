@@ -1,7 +1,6 @@
 import { EventSeriesType, Prisma } from '@prisma/client';
 import { addWeeks, endOfMonth, getDay } from 'date-fns';
 import { CONFIG } from '../config';
-import { eventSeriesRepository } from '../models/eventSeries';
 import {
     CreateLessonRequestBody,
     EventType,
@@ -12,9 +11,12 @@ import {
     mapEventSeriesToLessonSeriesDTO,
     toLessonDTO,
 } from '../models/lesson';
-import { lessonRepository } from '../repositories/lessonsRepository';
 import { parseDate } from '../utils/utils';
-import { z } from 'zod';
+
+// repositories
+import { eventSeriesRepository } from '../models/eventSeries';
+import { lessonRepository } from '../repositories/lessonsRepository';
+import { eventRepository } from '../repositories/eventsRepository';
 
 // validators
 import {
@@ -23,6 +25,7 @@ import {
 } from '../validators/lessons/lesson';
 import { LessonSeriesUpdateInputSchema } from '../validators/lessons/lessonSeries';
 import StudentPaymentsService from './StudentPaymentsService';
+import EventsService from './EventsService';
 
 export type LessonSeriesDTO = {
     id: number;
@@ -41,25 +44,6 @@ interface Pagable<T> {
     page: number;
     pageSize: number;
 }
-
-const HOUR_REGEX = /^([01]\d|2[0-3]):([0-5]\d)$/;
-
-const isValidHourFormat = (key: string) => {
-    if (!HOUR_REGEX.test(key)) {
-        throw new Error(`Invalid hour format - 00:00 - ${key}`);
-    }
-};
-
-const LessonInputSchema = z.object({
-    name: z.string(),
-    description: z.string().nullish(),
-    student: z.number(),
-    price: z.number(),
-    date: z.date(),
-    startHour: z.string(),
-    endHour: z.string(),
-    weekly: z.boolean().nullish(),
-});
 
 interface PayedLessonsData {
     lessons: LessonDAO[];
@@ -260,7 +244,7 @@ class LessonsService {
                 });
                 lessonDate = addWeeks(lessonDate, 1);
             }
-            await lessonRepository.bulkCreate(inputData);
+            await eventRepository.bulkCreate(inputData);
             const createdLesson =
                 await lessonRepository.getNextLessonBySeriesId(series.id);
             const lessonDTO = toLessonDTO(createdLesson);
@@ -270,8 +254,8 @@ class LessonsService {
         }
     }
 
-    public async deleteLesson(lessonId: number): Promise<LessonDAO> {
-        return await lessonRepository.deleteLesson(lessonId);
+    public async deleteLesson(id: number): Promise<LessonDAO> {
+        return await lessonRepository.delete(id);
     }
 
     public async updateLesson(
@@ -329,9 +313,10 @@ class LessonsService {
         lessonId: number,
         isCancelled: boolean,
     ): Promise<void> {
-        const updatedLesson = await lessonRepository.update(lessonId, {
-            isCanceled: isCancelled,
-        });
+        const updatedLesson = await EventsService.cancelEvent(lessonId, isCancelled);
+        if (updatedLesson.studentId == undefined) {
+            throw new Error(`MISSING 'studentId' field for LESSON with id: ${lessonId}`)
+        }
         await StudentPaymentsService.recalculateStudentBalance(
             updatedLesson.studentId,
         );

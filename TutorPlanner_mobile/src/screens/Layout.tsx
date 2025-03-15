@@ -15,7 +15,7 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 interface LayoutProps {
     navigation: BottomTabNavigationProp<any>;
-    route: NavbarNavigationScreens;
+    route?: NavbarNavigationScreens;
     hasHeader?: boolean;
     hasHeaderSeperated?: boolean;
     isHeaderCentered?: boolean;

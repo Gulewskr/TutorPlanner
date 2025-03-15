@@ -15,6 +15,7 @@ export type RootStackParamList = {
     Notes: BaseStackParam;
     Settings: BaseStackParam;
     Lessons: { screen: keyof LessonsTabParamList; initial?: boolean } & BaseStackParam;
+    Events: { screen: keyof EventsTabParamList; initial?: boolean } & BaseStackParam;
 };
 
 export type NavbarNavigationScreens = keyof RootStackParamList;
@@ -48,6 +49,10 @@ export type LessonsTabParamList = {
     Edit: {
         lessonId: number;
     };
+};
+
+export type EventsTabParamList = {
+    Create: undefined;
 };
 
 export type PaymentsTabParamList = {

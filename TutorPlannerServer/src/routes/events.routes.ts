@@ -1,5 +1,4 @@
 import express, { Router } from 'express';
-import LessonsService from '../services/LessonsService';
 import EventsService from '../services/EventsService';
 import { parseDate } from '../utils/utils';
 
@@ -30,13 +29,81 @@ router.get('/', async (req, res, next) => {
     }
 });
 
+/**
+ * path: /events
+ *
+ */
+router.post('/', async (req, res, next) => {
+    try {
+        const body = req.body;
+        body.date = parseDate(body.date);
+
+        const lesson = await EventsService.createEvent(body);
+        res.status(200).json({
+            message: 'Lessons has been created successfully.',
+            data: lesson,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
+ * path: /events/:id
+ *
+ */
+router.get('/:id', async (req, res, next) => {
+    try {
+        const dto = await EventsService.getEvent(Number(req.params.id));
+        res.status(200).json(dto);
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.put('/:id', async (req, res, next) => {
+    try {
+        const body = req.body;
+        body.date = parseDate(body.date);
+
+        const dto = await EventsService.updateEvent(
+            Number(req.params.id),
+            body,
+        );
+        res.status(200).json({
+            message: 'Event has been updated successfully.',
+            data: dto,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.delete('/:id', async (req, res, next) => {
+    try {
+        const dto = await EventsService.deleteEvent(Number(req.params.id));
+        res.status(200).json(dto);
+    } catch (err) {
+        next(err);
+    }
+});
+
 /*
  * path: /events/:id/cancel
  */
 router.post('/:id/cancel', async (req, res, next) => {
     try {
-        await LessonsService.cancelLesson(Number(req.params.id), true);
-        res.status(200).json('Lessons has been canceled.');
+        await EventsService.cancelEvent(Number(req.params.id), true);
+        res.status(200).json('Event has been canceled.');
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.delete('/:id/cancel', async (req, res, next) => {
+    try {
+        await EventsService.cancelEvent(Number(req.params.id), false);
+        res.status(200).json('Event has been scheduled.');
     } catch (err) {
         next(err);
     }

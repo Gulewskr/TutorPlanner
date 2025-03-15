@@ -2,24 +2,21 @@ import * as React from 'react';
 import { Layout } from '../Layout';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
-import { lessonsService } from '@services/lessons.service';
 import { ActivityIndicator, View } from 'react-native';
 import { ScrollView } from '@components/ui/scrool-view';
 import { StudentDTO } from '@model';
 import { FormRendererSchema } from '@components/complex/form-renderer/model';
-import { getFullName } from '@utils/utils';
-import { LessonsTabParamList } from '@components/ui/navbar';
+import { EventsTabParamList } from '@components/ui/navbar';
 import { $color_primary } from '@styles/colors';
 import { useStudentsContext } from '@contexts/StudentsContext';
 import { useAlert } from '@contexts/AlertContext';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { eventsService } from '@services/events.service';
 import { formatToDayInCalendar } from '@utils/dateUtils';
 
-interface CreateLessonData {
+interface CreateEventData {
     name: string;
     description: string;
-    student: string;
-    price: string;
     date: string;
     hour: {
         startHour: string;
@@ -28,11 +25,9 @@ interface CreateLessonData {
     isWeekly: boolean;
 }
 
-const defaultData: CreateLessonData = {
+const defaultData: CreateEventData = {
     name: '',
     description: '',
-    student: '',
-    price: '',
     date: formatToDayInCalendar(new Date()),
     hour: {
         startHour: '',
@@ -41,25 +36,22 @@ const defaultData: CreateLessonData = {
     isWeekly: false,
 };
 
-export const CreateLessonForm: React.FC<
- BottomTabScreenProps<LessonsTabParamList, 'Create'>
+export const CreateEventForm: React.FC<
+    BottomTabScreenProps<EventsTabParamList, 'Create'>
 > = ({ navigation, route }) => {
     const { showAlert } = useAlert();
-    const { loading, data: students } = useStudentsContext();
-    const handleSubmit = async (data: CreateLessonData): Promise<void> => {
+    const handleSubmit = async (data: CreateEventData): Promise<void> => {
         try {
-            await lessonsService.create({
+            await eventsService.create({
                 name: data.name,
                 description: data.description,
-                student: Number(data.student),
-                price: Number(data.price),
                 date: new Date(data.date),
                 startHour: data.hour.startHour,
                 endHour: data.hour.endHour,
                 weekly: data.isWeekly,
             });
             showAlert({
-                message: 'Pomyślnie dodano zajęcia',
+                message: 'Pomyślnie dodano wydarzenie',
                 severity: 'success',
             });
             navigation.goBack();
@@ -78,32 +70,27 @@ export const CreateLessonForm: React.FC<
     return (
         <Layout
             navigation={navigation}
-            route={'Lessons'}
-            title="Dodaj zajecia"
+            title="Dodaj wydarzenie"
             hasHeader
             hasHeaderSeperated
         >
-            {loading ? (
-                <ActivityIndicator size="large" color={$color_primary} />
-            ) : (
-                <FormProvider>
-                    <ScrollView>
-                        <View style={styles.form_container}>
-                            <FormRenderer
-                                schema={getFormSchema(students)}
-                                onSubmit={handleSubmit}
-                                onCancel={handleCancel}
-                            />
-                        </View>
-                    </ScrollView>
-                </FormProvider>
-            )}
+            <FormProvider>
+                <ScrollView>
+                    <View style={styles.form_container}>
+                        <FormRenderer
+                            schema={FORM_SCHEMA}
+                            onSubmit={handleSubmit}
+                            onCancel={handleCancel}
+                        />
+                    </View>
+                </ScrollView>
+            </FormProvider>
         </Layout>
     );
 };
 
-const getFormSchema = (students: StudentDTO[]): FormRendererSchema => ({
-    title: 'Dodaj zajęcia',
+const FORM_SCHEMA: FormRendererSchema = {
+    title: 'Dodaj wydarzenie',
     initValue: defaultData,
     fields: {
         name: {
@@ -118,26 +105,6 @@ const getFormSchema = (students: StudentDTO[]): FormRendererSchema => ({
             componentProps: {
                 label: 'Opis',
                 placeholder: '--Opis--',
-            },
-        },
-        student: {
-            component: 'dropdown',
-            componentProps: {
-                label: 'Uczeń',
-                icon: 'students',
-                placeholder: '--Wybierz ucznia--',
-                options: students.map(stud => ({
-                    value: stud.id,
-                    label: getFullName(stud),
-                })),
-            },
-        },
-        price: {
-            component: 'input',
-            componentProps: {
-                label: 'Cena',
-                icon: 'payments',
-                placeholder: '--Podaj cene--',
             },
         },
         date: {
@@ -158,11 +125,11 @@ const getFormSchema = (students: StudentDTO[]): FormRendererSchema => ({
         isWeekly: {
             component: 'checkbox-tile',
             componentProps: {
-                label: 'Zajęcia cotygodniowe',
+                label: 'Powtarzaj co tydzień',
             },
         },
     },
-});
+};
 
 const styles = EStyleSheet.create({
     form_container: {

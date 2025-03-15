@@ -128,9 +128,13 @@ export const Home: React.FC<
                             <View style={{ width: '50%' }}>
                                 <Button
                                     icon="notes"
-                                    onClick={() => 1}
-                                    label="Dodaj notatkę"
-                                    disabled={true}
+                                    onClick={() =>
+                                        navigation.navigate('Events', {
+                                            screen: 'Create',
+                                            initial: true,
+                                        })
+                                    }
+                                    label="Dodaj wydarzenie"
                                     width={160}
                                 />
                             </View>
