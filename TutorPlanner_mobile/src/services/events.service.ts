@@ -42,27 +42,39 @@ class EventsService {
             throw error;
         }
     };
-    cancel = async (eventId: number, isCanceled: boolean = true): Promise<EventDTO> => {
-        try {
-            const response = isCanceled ? await axios.post(
-                `${EVENTS_URL}/${eventId}/cancel`,
-            ) : await axios.delete(
-                `${EVENTS_URL}/${eventId}/cancel`,
-            );
-            return response.data;
-        } catch (error) {
-            throw error;
+
+    update = async (
+        id: number,
+        data: EventCreateRequestBody,
+        series = false,
+    ): Promise<EventDTO> => {
+        if (!id || !data.name || !data.date) {
+            throw new Error(`Missing data`);
         }
+        const requestUrl = series
+            ? `${EVENTS_URL}/${id}/series`
+            : `${EVENTS_URL}/${id}`;
+        const response = await axios.put(requestUrl, data);
+        return response.data;
+    };
+
+    cancel = async (
+        eventId: number,
+        isCanceled: boolean = true,
+        series = false,
+    ): Promise<EventDTO> => {
+        const requestUrl = series
+            ? `${EVENTS_URL}/${eventId}/series/cancel`
+            : `${EVENTS_URL}/${eventId}/cancel`;
+
+        const response = isCanceled
+            ? await axios.post(requestUrl)
+            : await axios.delete(requestUrl);
+        return response.data;
     };
     delete = async (eventId: number): Promise<EventDTO> => {
-        try {
-            const response = await axios.delete(
-                `${EVENTS_URL}/${eventId}`,
-            );
-            return response.data;
-        } catch (error) {
-            throw error;
-        }
+        const response = await axios.delete(`${EVENTS_URL}/${eventId}`);
+        return response.data;
     };
 }
 

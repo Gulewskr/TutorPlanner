@@ -2,45 +2,19 @@ import * as React from 'react';
 import { Layout } from '../Layout';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
-import { ActivityIndicator, View } from 'react-native';
+import { View } from 'react-native';
 import { ScrollView } from '@components/ui/scrool-view';
-import { StudentDTO } from '@model';
-import { FormRendererSchema } from '@components/complex/form-renderer/model';
 import { EventsTabParamList } from '@components/ui/navbar';
-import { $color_primary } from '@styles/colors';
-import { useStudentsContext } from '@contexts/StudentsContext';
 import { useAlert } from '@contexts/AlertContext';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { eventsService } from '@services/events.service';
-import { formatToDayInCalendar } from '@utils/dateUtils';
-
-interface CreateEventData {
-    name: string;
-    description: string;
-    date: string;
-    hour: {
-        startHour: string;
-        endHour: string;
-    };
-    isWeekly: boolean;
-}
-
-const defaultData: CreateEventData = {
-    name: '',
-    description: '',
-    date: formatToDayInCalendar(new Date()),
-    hour: {
-        startHour: '',
-        endHour: '',
-    },
-    isWeekly: false,
-};
+import { EventFormData, FORM_SCHEMA } from './formSchema';
 
 export const CreateEventForm: React.FC<
     BottomTabScreenProps<EventsTabParamList, 'Create'>
 > = ({ navigation, route }) => {
     const { showAlert } = useAlert();
-    const handleSubmit = async (data: CreateEventData): Promise<void> => {
+    const handleSubmit = async (data: EventFormData): Promise<void> => {
         try {
             await eventsService.create({
                 name: data.name,
@@ -87,48 +61,6 @@ export const CreateEventForm: React.FC<
             </FormProvider>
         </Layout>
     );
-};
-
-const FORM_SCHEMA: FormRendererSchema = {
-    title: 'Dodaj wydarzenie',
-    initValue: defaultData,
-    fields: {
-        name: {
-            component: 'input',
-            componentProps: {
-                label: 'Nazwa',
-                placeholder: '--Nazwa wydarzenia--',
-            },
-        },
-        description: {
-            component: 'input',
-            componentProps: {
-                label: 'Opis',
-                placeholder: '--Opis--',
-            },
-        },
-        date: {
-            component: 'datepicker',
-            componentProps: {
-                label: 'Data',
-                icon: 'calendar',
-                placeholder: '--Data--',
-            },
-        },
-        hour: {
-            component: 'hour-input',
-            componentProps: {
-                label: 'Godzina',
-                placeholder: '--Godzina--',
-            },
-        },
-        isWeekly: {
-            component: 'checkbox-tile',
-            componentProps: {
-                label: 'Powtarzaj co tydzień',
-            },
-        },
-    },
 };
 
 const styles = EStyleSheet.create({

@@ -6,6 +6,7 @@ import { EventCreateInputSchema, EventUpdateInputSchema } from '../validators/ev
 import { eventSeriesRepository } from '../models/eventSeries';
 import { addWeeks, endOfMonth, getDay, startOfMonth } from 'date-fns';
 import { CONFIG } from '../config';
+import { EventSeriesUpdateInputSchema } from '../validators/events/eventSeries';
 
 export interface EventFilter {
     date?: Date;
@@ -111,11 +112,46 @@ class EventsService {
         });
         return toEventDTO(event); 
     };
+    
+    public async updateEventSeries(
+        eventId: number,
+        data: Partial<CreateEventRequestBody>,
+    ): Promise<void> {
+        const updateData = EventSeriesUpdateInputSchema.parse(data);
+        await eventRepository.updateSeriesOfEvents(
+            eventId,
+            updateData,
+        );
+    }
+    
     public async cancelEvent (
         id: number,
         isCanceled: boolean
     ): Promise<EventDTO> {
         return await eventRepository.update(id, {
+            isCanceled,
+        });
+    };
+    public async cancelEventSeries (
+        id: number,
+        isCanceled: boolean
+    ): Promise<void> {
+        const selectedEvent = await eventRepository.getEventById(id);
+        if(!selectedEvent.eventSeriesId) {
+            throw Error('Selected event is not part of series');
+        }
+        await eventRepository.bulkUpdate({
+            isCanceled: isCanceled
+        }, {
+            eventSeriesId: {
+                not: null,
+                equals: selectedEvent.eventSeriesId,
+            },
+            date: {
+                gte: selectedEvent.date
+            } 
+        });
+        await eventSeriesRepository.updateEventSeries(selectedEvent.eventSeriesId, {
             isCanceled,
         });
     };

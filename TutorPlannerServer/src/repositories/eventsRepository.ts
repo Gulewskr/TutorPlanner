@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db';
 import { EventDAO } from '../models/event';
+import { addDays, differenceInDays, getDay, isSameDay, startOfWeek, subDays } from 'date-fns';
 
 export const eventRepository = {
     getEventById: async (id: number): Promise<EventDAO> => {
@@ -66,6 +67,122 @@ export const eventRepository = {
                 id: id,
             },
         }) as T;
+    },
+    bulkUpdate: async <T = EventDAO>(
+        data: Prisma.EventUpdateInput,
+        selector: Prisma.EventWhereInput
+    ): Promise<T> => {
+        return await prisma.event.updateMany({
+            data: data,
+            where: selector,
+        }) as T;
+    },
+    updateSeriesOfEvents: async (
+        eventId: number,
+        data: Partial<{
+            name: string;
+            description: string | null;
+            startHour: number;
+            endHour: number;
+            date: Date;
+            price: number;
+            student: number;
+        }>,
+    ): Promise<void> => {
+        const event = await prisma.event.findFirstOrThrow({
+                    where: {
+                        id: eventId,
+                    },
+                })
+        if (!event.eventSeriesId) {
+            throw new Error('Selected event is not part of event series.');
+        }
+        const { eventSeriesId: seriesId } = event;
+        
+        let dayDiff = 0, isLater = false;
+        if (data.date && !isSameDay(data.date, event.date)) {
+            isLater = data.date > event.date;
+            dayDiff = isLater ? differenceInDays(data.date, event.date) : differenceInDays(event.date, data.date);
+        }
+
+        let dataToSave: EventDAO[] = [];
+        if (dayDiff != -1) {
+            const eventsToUpdate = await prisma.event.findMany({
+                where: {
+                    eventSeriesId: seriesId,
+                    date: {
+                        gte: event.date
+                    },
+                    isOverridden: {
+                        not: true
+                    }
+                }
+            });
+
+            if (event.isOverridden) {
+                eventsToUpdate.push(event);
+            }
+
+            dataToSave = eventsToUpdate.map(e => ({
+                ...e,
+                name: data.name || e.name,
+                description: data.description || e.description,
+                price: data.price || e.price,
+                studentId: data.student || e.studentId,
+                startHour: data.startHour || e.startHour,
+                endHour: data.endHour || e.endHour,
+                date: isLater ? addDays(e.date, dayDiff) : subDays(e.date, dayDiff)
+            }))
+        }
+                
+                
+        await prisma.$transaction(async (tx) => {
+            await tx.eventSeries.update({
+                data: {
+                    name: data.name,
+                    description: data.description,
+                    startHour: data.startHour,
+                    endHour: data.endHour,
+                    price: data.price,
+                    studentId: data.student,
+                },
+                where: {
+                    id: seriesId,
+                },
+            });
+            if (dataToSave.length) {
+                await tx.event.deleteMany({
+                    where: {
+                        id: {
+                            in: dataToSave.map(({id}) => id) 
+                        }
+                    }
+                });
+                await tx.event.createMany({
+                    data: dataToSave
+                });
+            } else {
+                await tx.event.updateMany({
+                    data: {
+                        name: data.name,
+                        description: data.description,
+                        startHour: data.startHour,
+                        endHour: data.endHour,
+                        price: data.price,
+                        studentId: data.student,
+                    },
+                    where: {
+                        isOverridden: false,
+                        eventSeriesId: seriesId,
+                        date: {
+                            gte: event.date,
+                        },
+                    },
+                });
+            }
+        }, {
+            timeout: 10000
+        });
     },
     delete: async <T = EventDAO>(id: number): Promise<T> => {
         return await prisma.event.delete({

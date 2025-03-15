@@ -102,12 +102,11 @@ export const EventsList: React.FC<EventsListProps> = ({ day, navigation }) => {
         setModalBody(
             <EventModal
                 event={event}
-                onDelete={handleDeleteEvent}
                 goToEditForm={() => {
                     navigation.navigate('Events', {
                         screen: 'Edit',
                         params: {
-                            lessonId: event.id,
+                            event: event,
                         },
                     });
                 }}
@@ -135,29 +134,6 @@ export const EventsList: React.FC<EventsListProps> = ({ day, navigation }) => {
                                 event={event}
                                 onClick={() => handleShowEventModal(event)}
                             />
-                            /*
-                            TODO - add handling both events and lessons in single list
-                            <Tile
-                                key={i}
-                                color="white"
-                                onClick={() => handleShowEventModal(event)}
-                            >
-                                <View
-                                    style={{
-                                        paddingVertical: 3,
-                                        paddingHorizontal: 10,
-                                    }}
-                                >
-                                    <Text style={{ fontWeight: 'bold' }}>
-                                        {event.name}
-                                    </Text>
-                                    <Text>
-                                        {mapHourValueToText(event.startHour)}-
-                                        {mapHourValueToText(event.endHour)}
-                                    </Text>
-                                </View>
-                            </Tile>
-                            */
                         ))}
                     </View>
                 </ScrollView>

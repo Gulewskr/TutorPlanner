@@ -203,7 +203,6 @@ export const lessonRepository = {
                 },
             });
             if (updatedLessonsToSave.length) {
-                console.log(`DELETING...`);
                 await tx.event.deleteMany({
                     where: {
                         id: {
@@ -211,24 +210,9 @@ export const lessonRepository = {
                         }
                     }
                 });
-                console.log(`INSERTING...`);
                 await tx.event.createMany({
                     data: updatedLessonsToSave
                 });
-                /*
-                for (const lesson of updatedLessonsToSave) {
-                    console.log(`UPODATED: ${lesson.id}`);
-                    await tx.event.update({
-                        data: {
-                            ...lesson
-                        },
-                        where: {
-                            id: lesson.id
-                        }
-                    })
-                }
-                */
-                console.log(`POG.`);
             } else {
                 await tx.event.updateMany({
                     data: {

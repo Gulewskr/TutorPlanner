@@ -1,4 +1,4 @@
-import { PaymentDTO, StudentDTO } from '@model';
+import { EventDTO, PaymentDTO, StudentDTO } from '@model';
 
 export type BaseStackParam = {
 }
@@ -53,6 +53,9 @@ export type LessonsTabParamList = {
 
 export type EventsTabParamList = {
     Create: undefined;
+    Edit: {
+        event: EventDTO
+    }
 };
 
 export type PaymentsTabParamList = {

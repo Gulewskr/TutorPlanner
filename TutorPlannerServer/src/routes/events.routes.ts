@@ -123,4 +123,57 @@ router.delete('/:id/cancel', async (req, res, next) => {
     }
 });
 
+
+/**
+ * path: /events/series/:id
+ *
+ */
+router.get('/series/:id', async (req, res, next) => {
+    next();
+});
+
+/**
+ * path: /events/:id/series
+ *
+ */
+router.put('/:id/series', async (req, res, next) => {
+    try {
+        const body = req.body;
+        body.date = parseDate(body.date);
+
+        const dto = await EventsService.updateEventSeries(
+            Number(req.params.id),
+            body,
+        );
+        res.status(200).json({
+            message: 'Event series has been updated successfully.',
+            data: dto,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
+ * path: /events/:id/series/cancel
+ *
+ */
+router.post('/:id/series/cancel', async (req, res, next) => {
+    try {
+        await EventsService.cancelEventSeries(Number(req.params.id), true);
+        res.status(200).json('Event has been scheduled.');
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.delete('/:id/series/cancel', async (req, res, next) => {
+    try {
+        await EventsService.cancelEventSeries(Number(req.params.id), false);
+        res.status(200).json('Event has been scheduled.');
+    } catch (err) {
+        next(err);
+    }
+});
+
 export default router;

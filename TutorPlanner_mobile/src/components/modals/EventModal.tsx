@@ -41,7 +41,7 @@ export const EventModal: React.FC<EventModalProps> = ({
     const handleRestore = async (): Promise<void> => {
         try {
             setSending(true);
-            await eventsService.cancel(event.id, true);
+            await eventsService.cancel(event.id, false);
             showAlert({
                 message: 'Przywrócono',
                 severity: 'success',
