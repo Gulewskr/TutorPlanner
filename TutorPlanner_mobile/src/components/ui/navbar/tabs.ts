@@ -1,7 +1,6 @@
-import { PaymentDTO, StudentDTO } from '@model';
+import { EventDTO, PaymentDTO, StudentDTO } from '@model';
 
 export type BaseStackParam = {
-    previousScreen: NavbarNavigationScreens
 }
 
 export type RootStackParamList = {
@@ -16,6 +15,7 @@ export type RootStackParamList = {
     Notes: BaseStackParam;
     Settings: BaseStackParam;
     Lessons: { screen: keyof LessonsTabParamList; initial?: boolean } & BaseStackParam;
+    Events: { screen: keyof EventsTabParamList; initial?: boolean } & BaseStackParam;
 };
 
 export type NavbarNavigationScreens = keyof RootStackParamList;
@@ -49,6 +49,13 @@ export type LessonsTabParamList = {
     Edit: {
         lessonId: number;
     };
+};
+
+export type EventsTabParamList = {
+    Create: undefined;
+    Edit: {
+        event: EventDTO
+    }
 };
 
 export type PaymentsTabParamList = {

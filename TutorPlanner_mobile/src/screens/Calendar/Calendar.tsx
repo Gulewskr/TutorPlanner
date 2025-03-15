@@ -1,19 +1,25 @@
 import { Text } from 'react-native';
 import { Layout } from '../Layout';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BottomTabScreenProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DailyCalendar } from './tabs/DailyCalendar';
 import { MonthlyCalendar } from './tabs/MonthlyCalendar';
 import { CalendarTabParamList } from './calendarTabs';
-import { RootStackParamList } from '@components/ui/navbar';
+import { NavbarNavigationScreens, RootStackParamList } from '@components/ui/navbar';
 import { CalendarProvider } from './CalendarContext';
+import { updateCurrentRoute } from '@contexts/NavbarReducer';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator<CalendarTabParamList>();
 
 export const RootCalendar: React.FC<
-    NativeStackScreenProps<RootStackParamList, 'Calendar'>
+    BottomTabScreenProps<RootStackParamList, 'Calendar'>
 > = ({ navigation, route }) => {
+
+    useFocusEffect(() => {
+        updateCurrentRoute('Calendar' as NavbarNavigationScreens)
+    });
+
     return (
         <CalendarProvider>
             <Tab.Navigator
@@ -39,7 +45,7 @@ export const RootCalendar: React.FC<
 };
 
 const CreateEvent: React.FC<
-    NativeStackScreenProps<CalendarTabParamList, 'Create'>
+BottomTabScreenProps<CalendarTabParamList, 'Create'>
 > = ({ navigation, route }) => {
     return (
         <Layout
@@ -54,7 +60,7 @@ const CreateEvent: React.FC<
 };
 
 const EventDetails: React.FC<
-    NativeStackScreenProps<CalendarTabParamList, 'Event'>
+BottomTabScreenProps<CalendarTabParamList, 'Event'>
 > = ({ navigation, route }) => {
     return (
         <Layout

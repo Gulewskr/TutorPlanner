@@ -1,7 +1,8 @@
-import { EventSeries, Prisma } from '@prisma/client';
+import { EventSeries, EventType, Prisma } from '@prisma/client';
 import { prisma } from '../db';
 import { LessonDAO } from '../models/lesson';
 import { addDays, endOfDay, getDay, isSameDay, startOfDay, startOfWeek } from 'date-fns';
+import { eventRepository } from './eventsRepository';
 
 interface Pagable<T> {
     data: T[];
@@ -19,13 +20,6 @@ export const lessonRepository = {
                 eventType: 'LESSON',
             },
         })) as LessonDAO;
-    },
-    bulkCreate: async (
-        inputData: Prisma.EventCreateManyInput[],
-    ): Promise<Prisma.BatchPayload> => {
-        return await prisma.event.createMany({
-            data: inputData,
-        });
     },
     getLessonById: async (id: number): Promise<LessonDAO | null> => {
         return (await prisma.event.findFirst({
@@ -104,15 +98,10 @@ export const lessonRepository = {
     },
     update: async (
         id: number,
-        lesson: Prisma.EventUpdateInput,
+        event: Prisma.EventUpdateInput,
     ): Promise<LessonDAO> => {
-        return (await prisma.event.update({
-            data: lesson,
-            where: {
-                id: id,
-                eventType: 'LESSON',
-            },
-        })) as LessonDAO;
+        event.eventType = EventType.LESSON;
+        return eventRepository.update<LessonDAO>(id, event);
     },
     //TODO merge 2 functions
     bulkUpdateByFilter: async (
@@ -214,7 +203,6 @@ export const lessonRepository = {
                 },
             });
             if (updatedLessonsToSave.length) {
-                console.log(`DELETING...`);
                 await tx.event.deleteMany({
                     where: {
                         id: {
@@ -222,24 +210,9 @@ export const lessonRepository = {
                         }
                     }
                 });
-                console.log(`INSERTING...`);
                 await tx.event.createMany({
                     data: updatedLessonsToSave
                 });
-                /*
-                for (const lesson of updatedLessonsToSave) {
-                    console.log(`UPODATED: ${lesson.id}`);
-                    await tx.event.update({
-                        data: {
-                            ...lesson
-                        },
-                        where: {
-                            id: lesson.id
-                        }
-                    })
-                }
-                */
-                console.log(`POG.`);
             } else {
                 await tx.event.updateMany({
                     data: {
@@ -306,12 +279,8 @@ export const lessonRepository = {
             },
         });
     },
-    deleteLesson: async (id: number): Promise<LessonDAO> => {
-        return (await prisma.event.delete({
-            where: {
-                id: id,
-            },
-        })) as LessonDAO;
+    delete: async (id: number): Promise<LessonDAO> => {
+        return eventRepository.delete<LessonDAO>(id);
     },
     getLessons: async (
         filter: Prisma.EventWhereInput,

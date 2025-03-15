@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Layout } from '../Layout';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
 import { lessonsService } from '@services/lessons.service';
@@ -13,6 +12,8 @@ import { LessonsTabParamList } from '@components/ui/navbar';
 import { $color_primary } from '@styles/colors';
 import { useStudentsContext } from '@contexts/StudentsContext';
 import { useAlert } from '@contexts/AlertContext';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { formatToDayInCalendar } from '@utils/dateUtils';
 
 interface CreateLessonData {
     name: string;
@@ -32,7 +33,7 @@ const defaultData: CreateLessonData = {
     description: '',
     student: '',
     price: '',
-    date: '',
+    date: formatToDayInCalendar(new Date()),
     hour: {
         startHour: '',
         endHour: '',
@@ -41,7 +42,7 @@ const defaultData: CreateLessonData = {
 };
 
 export const CreateLessonForm: React.FC<
-    NativeStackScreenProps<LessonsTabParamList, 'Create'>
+ BottomTabScreenProps<LessonsTabParamList, 'Create'>
 > = ({ navigation, route }) => {
     const { showAlert } = useAlert();
     const { loading, data: students } = useStudentsContext();

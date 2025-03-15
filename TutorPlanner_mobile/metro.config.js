@@ -1,5 +1,8 @@
 const { mergeConfig } = require('@react-native/metro-config');
 const { getDefaultConfig } = require('expo/metro-config');
+const {
+    wrapWithReanimatedMetroConfig,
+  } = require('react-native-reanimated/metro-config');
 
 const defaultConfig = getDefaultConfig(__dirname, {
     isCSSEnabled: true,
@@ -31,9 +34,9 @@ const config = {
     },
 };
 
-module.exports = mergeConfig(
+module.exports = wrapWithReanimatedMetroConfig(mergeConfig(
     getDefaultConfig(__dirname, {
         isCSSEnabled: true,
     }),
     config,
-);
+));

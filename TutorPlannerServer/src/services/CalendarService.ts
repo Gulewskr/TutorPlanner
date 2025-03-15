@@ -1,6 +1,6 @@
 import { endOfMonth } from 'date-fns';
 import { eventRepository } from '../repositories/eventsRepository';
-import { EventDTO, toEventDTO } from '../dto/events';
+import { EventDTO, toEventDTO } from '../dto/EventDTO';
 
 export type CalendarDTO = {
     events: EventDTO[];

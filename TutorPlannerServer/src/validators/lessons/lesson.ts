@@ -1,26 +1,22 @@
 import { z } from 'zod';
 import { MAX_HOUR } from '../constraints';
 
-export const LessonCreateInputSchema = z.object({
+const BASE_SCHEMA = {
     name: z.string(),
     description: z.string().nullish(),
+    date: z.date(),
     student: z.number(),
     price: z.number(),
-    date: z.date(),
     startHour: z.number().min(0).max(MAX_HOUR),
     endHour: z.number().min(0).max(MAX_HOUR),
+}
+
+export const LessonCreateInputSchema = z.object({
+    ...BASE_SCHEMA,
     weekly: z.boolean().nullish(),
 });
 
-export const LessonUpdateInputSchema = z.object({
-    name: z.string(),
-    description: z.string().nullish(),
-    date: z.date(),
-    student: z.number(),
-    price: z.number(),
-    startHour: z.number().min(0).max(MAX_HOUR),
-    endHour: z.number().min(0).max(MAX_HOUR),
-});
+export const LessonUpdateInputSchema = z.object(BASE_SCHEMA);
 
 /*
 const validatePaymentInput = (data: PaymentInput): CreatePaymentDTO => {

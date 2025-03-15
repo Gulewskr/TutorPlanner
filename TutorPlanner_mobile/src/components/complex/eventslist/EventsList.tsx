@@ -1,15 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import { lessonsService } from '@services/lessons.service';
-import { Tile } from '@components/tile';
-import { LessonDTO } from '@model';
+import { LessonDTO, EventDTO } from '@model';
 import { $color_primary } from '@styles/colors';
 import { useModalContext } from '@contexts/modalContext';
 import { LessonModal } from '@components/modals';
 import axios from 'axios';
 import { LESSONS_URL } from '@services/config';
-import { mapHourValueToText } from '@utils/dateUtils';
 import { LessonTile } from '@screens/Lessons/components/LessonTile';
+import { eventsService } from '@services/events.service';
+import { useAlert } from '@contexts/AlertContext';
+import { EventTile } from '@screens/Events/components/EventTile';
+import { EventModal } from '@components/modals/EventModal';
 
 interface EventsListProps {
     day: Date;
@@ -17,21 +19,38 @@ interface EventsListProps {
 }
 
 export const EventsList: React.FC<EventsListProps> = ({ day, navigation }) => {
-    const [events, setEvents] = useState<LessonDTO[]>([]);
+    const [events, setEvents] = useState<(LessonDTO | EventDTO)[]>([]);
+    const [error, setError] = useState<string>('');
     const [isLoading, setIsLoading] = useState(true);
     const { setIsOpen, setModalBody } = useModalContext();
+    const { showAlert } = useAlert();
 
     const getEvents = async () => {
-        const response = await lessonsService.getLessonsInDay(day);
-        setEvents(
-            response.sort((a, b) => {
-                const start = a.startHour - b.startHour;
-                if (start === 0) {
-                    return a.endHour - b.endHour;
-                }
-                return start;
-            }),
-        );
+        try {
+            const response = await lessonsService.getLessonsInDay(day);
+            const eventsDTO = await eventsService.getEventsInDay(day);
+            setEvents(
+                [...response, ...eventsDTO].sort((a, b) => {
+                    if (!a.startHour || !a.endHour) {
+                        return -1;
+                    }
+                    if (!b.startHour || !b.endHour) {
+                        return 1;
+                    }
+                    const start = a.startHour - b.startHour;
+                    if (start === 0) {
+                        return a.endHour - b.endHour;
+                    }
+                    return start;
+                }),
+            );
+        } catch (err) {
+            showAlert({
+                message: 'Błąd wczytywania danych',
+                severity: 'danger',
+            });
+            setError("BŁĄD 😔");
+        }
         setIsLoading(false);
     };
 
@@ -53,7 +72,7 @@ export const EventsList: React.FC<EventsListProps> = ({ day, navigation }) => {
         }
     };
 
-    const handleShowEventModal = (lesson: LessonDTO) => {
+    const handleShowLessonModal = (lesson: LessonDTO) => {
         setModalBody(
             <LessonModal
                 lesson={lesson}
@@ -79,6 +98,23 @@ export const EventsList: React.FC<EventsListProps> = ({ day, navigation }) => {
         setIsOpen(true);
     };
 
+    const handleShowEventModal = (event: EventDTO) => {
+        setModalBody(
+            <EventModal
+                event={event}
+                goToEditForm={() => {
+                    navigation.navigate('Events', {
+                        screen: 'Edit',
+                        params: {
+                            event: event,
+                        },
+                    });
+                }}
+            />,
+        );
+        setIsOpen(true);
+    };
+
     return (
         <View style={{ maxHeight: 500, marginBottom: 200 }}>
             {isLoading ? (
@@ -86,40 +122,23 @@ export const EventsList: React.FC<EventsListProps> = ({ day, navigation }) => {
             ) : events.length ? (
                 <ScrollView nestedScrollEnabled={true}>
                     <View style={{ width: 320, gap: 10, paddingBottom: 20 }}>
-                        {events.map((event: LessonDTO, i) => (
+                        {events.map((event: EventDTO | LessonDTO, i) => (
+                            'studentId' in event ? 
                             <LessonTile
                                 key={event.id}
-                                lesson={event}
+                                lesson={event as LessonDTO}
+                                onClick={() => handleShowLessonModal(event as LessonDTO)}
+                            />
+                            : <EventTile
+                                key={event.id}
+                                event={event}
                                 onClick={() => handleShowEventModal(event)}
                             />
-                            /*
-                            TODO - add handling both events and lessons in single list
-                            <Tile
-                                key={i}
-                                color="white"
-                                onClick={() => handleShowEventModal(event)}
-                            >
-                                <View
-                                    style={{
-                                        paddingVertical: 3,
-                                        paddingHorizontal: 10,
-                                    }}
-                                >
-                                    <Text style={{ fontWeight: 'bold' }}>
-                                        {event.name}
-                                    </Text>
-                                    <Text>
-                                        {mapHourValueToText(event.startHour)}-
-                                        {mapHourValueToText(event.endHour)}
-                                    </Text>
-                                </View>
-                            </Tile>
-                            */
                         ))}
                     </View>
                 </ScrollView>
             ) : (
-                <Text>Brak wydarzeń</Text>
+                <Text>{error || 'Brak wydarzeń'}</Text>
             )}
         </View>
     );

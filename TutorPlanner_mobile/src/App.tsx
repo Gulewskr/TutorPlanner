@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StatusBar, useColorScheme } from 'react-native';
+import { StatusBar, Text, useColorScheme, View } from 'react-native';
 import {
     NavigationContainer,
     DarkTheme,
@@ -26,6 +26,14 @@ import { StudentsProvider } from '@contexts/StudentsContext';
 import { StudentProvider } from '@contexts/StudentContext';
 import { $bgColor_primary } from '@styles/colors';
 import { GlobalContextProvider } from '@contexts/GlobalContext';
+import { Provider } from 'react-redux';
+import { store } from '@contexts/NavbarReducer';
+import Navbar from '@components/ui/navbar/Navbar';
+import LoadingScreen from '@components/ui/LoadingScreen';
+import { navigationRef } from '@components/ui/navbar/GlobalNavigation';
+import LoadingPage from '@components/ui/LoadingPage';
+import { Events } from '@screens/Events/Events';
+//import { title } from 'process';
 
 EStyleSheet.build({
     $color_primary: '#FFA9F1',
@@ -47,13 +55,14 @@ EStyleSheet.build({
     $tile_bgColor: '#F4DDFF',
 });
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createNativeStackNavigator<RootStackParamList>();
 
 const App: React.FC<{}> = () => {
     let scheme = useColorScheme();
 
     return (
         <NavigationContainer
+            ref={navigationRef}
             theme={scheme === 'dark' ? DarkTheme : DefaultTheme}
         >
             <StatusBar
@@ -61,61 +70,77 @@ const App: React.FC<{}> = () => {
                 backgroundColor={$bgColor_primary}
             />
             <GlobalContextProvider>
-            <ConfirmModalProvider>
-                <ModalProvider>
-                    <AlertProvider>
-                        <StudentsProvider>
-                            <StudentProvider>
-                                <Stack.Navigator
-                                    screenOptions={{
-                                        animation: 'none',
-                                        headerShown: false,
-                                    }}
-                                    initialRouteName='Home'
-                                >
-                                    <Stack.Screen
-                                        name="Home"
-                                        component={Home}
-                                        options={{
-                                            headerShown: false,
-                                            headerTitleAlign: 'center',
-                                            title: 'Welcome',
-                                        }}
-                                    />
-                                    <Stack.Screen
-                                        name="Calendar"
-                                        component={Calendar}
-                                    />
-                                    <Stack.Screen
-                                        name="Lessons"
-                                        component={Lessons}
-                                    />
-                                    <Stack.Screen
-                                        name="Notes"
-                                        component={Notes}
-                                    />
-                                    <Stack.Screen
-                                        name="Payments"
-                                        component={Payments}
-                                    />
-                                    <Stack.Screen
-                                        name="Students"
-                                        component={Students}
-                                    />
-                                    <Stack.Screen
-                                        name="Settings"
-                                        component={Settings}
-                                    />
-                                    <Stack.Screen
-                                        name="CreatePayment"
-                                        component={CreatePayment}
-                                    />
-                                </Stack.Navigator>
-                            </StudentProvider>
-                        </StudentsProvider>
-                    </AlertProvider>
-                </ModalProvider>
-            </ConfirmModalProvider>
+                <Provider store={store}>
+                    <View
+                        style={{
+                            backgroundColor: 'transparent',
+                            flex: 1,
+                        }}
+                    >
+                        <LoadingScreen />
+                        <Navbar />
+                        <LoadingPage />
+                        <ConfirmModalProvider>
+                            <ModalProvider>
+                                <AlertProvider>
+                                    <StudentsProvider>
+                                        <StudentProvider>
+                                            <Tab.Navigator
+                                                screenOptions={{
+                                                    animation: 'none',
+                                                    headerShown: false,
+                                                }}
+                                                initialRouteName="Home"
+                                            >
+                                                <Tab.Screen
+                                                    name="Home"
+                                                    component={Home}
+                                                    options={{
+                                                        headerTitleAlign:
+                                                            'center',
+                                                        title: 'Welcome',
+                                                    }}
+                                                />
+                                                <Tab.Screen
+                                                    name="Calendar"
+                                                    component={Calendar}
+                                                />
+                                                <Tab.Screen
+                                                    name="Lessons"
+                                                    component={Lessons}
+                                                />
+                                                <Tab.Screen
+                                                    name="Events"
+                                                    component={Events}
+                                                />
+                                                <Tab.Screen
+                                                    name="Notes"
+                                                    component={Notes}
+                                                />
+                                                <Tab.Screen
+                                                    name="Payments"
+                                                    component={Payments}
+                                                />
+                                                <Tab.Screen
+                                                    name="Students"
+                                                    component={Students}
+                                                />
+                                                <Tab.Screen
+                                                    name="Settings"
+                                                    component={Settings}
+                                                />
+                                                <Tab.Screen
+                                                    name="CreatePayment"
+                                                    component={CreatePayment}
+                                                />
+                                            </Tab.Navigator>
+                                        </StudentProvider>
+                                    </StudentsProvider>
+                                </AlertProvider>
+                            </ModalProvider>
+                        </ConfirmModalProvider>
+                    </View>
+                </Provider>
             </GlobalContextProvider>
         </NavigationContainer>
     );

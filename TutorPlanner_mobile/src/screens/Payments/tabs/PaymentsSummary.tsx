@@ -23,6 +23,7 @@ import { useConfirmModal } from '@contexts/confirmModalContext';
 import { getFullName } from '@utils/utils';
 import { paymentsService } from '@services/payments.service';
 import { useAlert } from '@contexts/AlertContext';
+import { setLoadingPage } from '@contexts/NavbarReducer';
 
 export const PaymentsSummary: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'Summary'>
@@ -122,6 +123,13 @@ export const PaymentsSummary: React.FC<
         }
     }, [isFocused]);
 
+    
+    if (isFocused && !isLoading) {
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 1000);
+    }
+
     return (
         <PaymentsLayout {...props}>
             <ScrollView
@@ -175,7 +183,7 @@ export const PaymentsSummary: React.FC<
                     isCentered
                     styles={{ height: 30, marginBottom: 10 }}
                 />
-                {!isLoading ? (
+                {isLoading ? (
                     <ActivityIndicator size="large" color={$color_primary} />
                 ) : payments.length ? (
                     <>

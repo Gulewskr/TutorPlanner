@@ -120,9 +120,6 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
-/*
- * path: /lessons/:id?session=true
- */
 router.put('/:id', async (req, res, next) => {
     try {
         const body = req.body;

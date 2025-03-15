@@ -1,20 +1,27 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
+import { BottomTabScreenProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { PaymentsSummary } from './tabs/PaymentsSummary';
 import { PaymentCreate } from './tabs/PaymentCreate';
 import { PaymentsHistory } from './tabs/PaymentsHistory';
 import {
+    NavbarNavigationScreens,
     PaymentsTabParamList,
     RootStackParamList,
 } from '@components/ui/navbar';
 import { PaymentEdit } from './tabs/PaymentEdit';
+import { updateCurrentRoute } from '@contexts/NavbarReducer';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator<PaymentsTabParamList>();
 
 export const Payments: React.FC<
-    NativeStackScreenProps<RootStackParamList, 'Payments'>
+BottomTabScreenProps<RootStackParamList, 'Payments'>
 > = ({ navigation, route }) => {
+
+    useFocusEffect(() => {
+        updateCurrentRoute('Payments' as NavbarNavigationScreens)
+    });
+
     return (
         <Tab.Navigator
             screenOptions={{

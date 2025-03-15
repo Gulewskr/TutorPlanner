@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 import {
     View,
     TouchableOpacity,
@@ -7,24 +7,23 @@ import {
     Dimensions,
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Svg, Defs, Rect, Mask, Circle } from 'react-native-svg';
 import { Icon, ICON_NAME } from '@components/icon';
 import { NavbarNavigationScreens } from './tabs';
-import { $bgColor_primary, $color_black } from '@styles/colors';
+import { $bgColor_primary, $color_active_page, $color_black } from '@styles/colors';
 import { $border_width } from '@styles/global';
-import { useGlobalContext } from '@contexts/GlobalContext';
+
+import { useSelector } from 'react-redux';
+
+//import Animated from 'react-native-reanimated';
+import { RootState, updateCurrentRoute } from '@contexts/NavbarReducer';
+import { navigate } from './GlobalNavigation';
 
 interface NavbarItemProps {
     name: NavbarNavigationScreens;
     icon: ICON_NAME;
     disabled?: boolean;
     size?: 'lg' | 'sm';
-}
-
-interface NavbarProps {
-    navigation: NativeStackNavigationProp<any>;
-    route: NavbarNavigationScreens;
 }
 
 const NAVBAR_ITEMS: NavbarItemProps[] = [
@@ -89,32 +88,28 @@ const ActiveComponent = () => (
     </Svg>
 );
 
-const Navbar: React.FC<NavbarProps> = ({ navigation, route }) => {
+const Navbar: React.FC = () => {
+    const previousRoute = useSelector(
+        (state: RootState) => state.previousRoute,
+    );
+    const currentRoute = useSelector((state: RootState) => state.currentRoute);
+
     const handlePress = (route: NavbarNavigationScreens) => {
-        navigation.navigate(route, { previousScreen: route });
+        updateCurrentRoute(route);
+        navigate(route, {});
     };
 
     const screenWidth = Dimensions.get('window').width;
 
-    const { previousScreen, setPreviousScreen } = useGlobalContext();
-    
-    useEffect(() => {
-        setPreviousScreen(route);
-        const intervalId = setInterval(() => {
-            setPreviousScreen(route);
-          }, 1000);
-          return () => clearInterval(intervalId);
-    }, []);
-
-    const previousIndex = useMemo(() => {
-        return NAVBAR_ITEMS.findIndex(icon => icon.name === previousScreen);
-    }, [route]);
-
-    const activeIndex = useMemo(() => {
-        return NAVBAR_ITEMS.findIndex(icon => icon.name === route);
-    }, [route]);
+    const previousIndex = NAVBAR_ITEMS.findIndex(
+        icon => icon.name === previousRoute,
+    );
+    const activeIndex = NAVBAR_ITEMS.findIndex(
+        icon => icon.name === currentRoute,
+    );
 
     const tileWidth = screenWidth / NAVBAR_ITEMS.length;
+
     const leftPanelWidth = useAnimatedValue(
         -tileWidth * previousIndex - tileWidth,
     );
@@ -122,36 +117,22 @@ const Navbar: React.FC<NavbarProps> = ({ navigation, route }) => {
     const rightPanelWidth = useAnimatedValue(
         tileWidth * previousIndex + tileWidth,
     );
-    const bringUpIcon = useAnimatedValue(0);
-    const bringDownIcon = useAnimatedValue(-30);
 
-    useEffect(() => {
-        Animated.timing(leftPanelWidth, {
-            toValue: activeIndex * tileWidth - screenWidth,
-            duration: 500,
-            useNativeDriver: true,
-        }).start();
-        Animated.timing(positionHorizontaly, {
-            toValue: tileWidth * activeIndex,
-            duration: 500,
-            useNativeDriver: true,
-        }).start();
-        Animated.timing(rightPanelWidth, {
-            toValue: tileWidth * activeIndex + tileWidth,
-            duration: 500,
-            useNativeDriver: true,
-        }).start();
-        Animated.timing(bringUpIcon, {
-            toValue: -30,
-            duration: 500,
-            useNativeDriver: true,
-        }).start();
-        Animated.timing(bringDownIcon, {
-            toValue: 0,
-            duration: 500,
-            useNativeDriver: true,
-        }).start();
-    }, [positionHorizontaly, rightPanelWidth, activeIndex, bringUpIcon, bringDownIcon]);
+    Animated.timing(leftPanelWidth, {
+        toValue: activeIndex * tileWidth - screenWidth,
+        duration: 800,
+        useNativeDriver: true,
+    }).start();
+    Animated.timing(positionHorizontaly, {
+        toValue: tileWidth * activeIndex,
+        duration: 800,
+        useNativeDriver: true,
+    }).start();
+    Animated.timing(rightPanelWidth, {
+        toValue: tileWidth * activeIndex + tileWidth,
+        duration: 800,
+        useNativeDriver: true,
+    }).start();
 
     return (
         <View style={styles.navbar}>
@@ -204,63 +185,46 @@ const Navbar: React.FC<NavbarProps> = ({ navigation, route }) => {
             />
             {NAVBAR_ITEMS.map((item, index) => (
                 <TouchableOpacity
+                key={index}
+                activeOpacity={1}
+                disabled={item.disabled}
+                onPress={() => !item.disabled && handlePress(item.name)}
+                style={[
+                    styles.navbarItem,
+                    {
+                        alignContent: 'center',
+                        height: 100,
+                        zIndex: 9999,
+                    },
+                ]}
+            >
+                <View
                     key={index}
-                    activeOpacity={1}
-                    disabled={item.disabled}
-                    onPress={() => !item.disabled && handlePress(item.name)}
-                    style={[
-                        styles.navbarItem,
-                        {
-                            alignContent: 'center',
-                        },
-                    ]}
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        position: 'absolute',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        top: activeIndex === index
+                        ? -30
+                        : previousIndex === index
+                          ? 0
+                          : 0,
+                    }}
                 >
-                    {activeIndex === index ? (
-                        <Animated.View
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                position: 'absolute',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                top: 0,
-                                transform: [{ translateY: bringUpIcon }],
-                            }}
-                        >
-                            <Icon
-                                icon={item.icon}
-                                size={item.size ? 'md' : 'sm'}
-                            />
-                        </Animated.View>
-                    ) : previousIndex === index ? (
-                        <Animated.View
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                position: 'absolute',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                transform: [{ translateY: bringDownIcon }],
-                            }}
-                        >
-                            <Icon
-                                icon={item.icon}
-                                size={item.size ? 'md' : 'sm'}
-                            />
-                        </Animated.View>
-                    ) : (
-                        <Icon icon={item.icon} size={item.size} />
-                    )}
-                    {item.disabled && (
-                        <View style={styles.navbarItemBG_disabled} />
-                    )}
-                </TouchableOpacity>
+                    <Icon icon={item.icon} size={item.size ? 'md' : 'sm'} />
+                </View>
+                {item.disabled && (
+                    <View style={styles.navbarItemBG_disabled} />
+                )}
+            </TouchableOpacity>
             ))}
         </View>
     );
 };
 
-Navbar.displayName = 'Navbar';
+Navbar.displayName = 'GlobalNavbar';
 
 const styles = EStyleSheet.create({
     navbar: {
@@ -269,6 +233,9 @@ const styles = EStyleSheet.create({
         height: 56,
         flexDirection: 'row',
         justifyContent: 'space-around',
+        zIndex: 100,
+        bottom: 0,
+        position: 'absolute',
     },
     navbarItem: {
         flex: 1,
@@ -281,10 +248,10 @@ const styles = EStyleSheet.create({
         opacity: 0.5,
         position: 'absolute',
         width: '100%',
-        height: '100%',
+        height: 56,
     },
     activeIconContainer: {
-        backgroundColor: '$color_primary',
+        backgroundColor: $color_active_page,
         borderRadius: 50,
         width: 50,
         height: 50,

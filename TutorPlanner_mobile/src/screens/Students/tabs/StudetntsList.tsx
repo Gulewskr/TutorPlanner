@@ -14,6 +14,8 @@ import { getFullName } from '@utils/utils';
 import { studentsService } from '@services/students.service';
 import { useAlert } from '@contexts/AlertContext';
 import { StudentDTO } from '@model';
+import { setLoadingPage } from '@contexts/NavbarReducer';
+import { useIsFocused } from '@react-navigation/native';
 
 export const StudentsList: React.FC<
     BottomTabScreenProps<StudentsTabParamList, 'List'>
@@ -23,10 +25,17 @@ export const StudentsList: React.FC<
     const { loading, data: students, fetch } = useStudentsContext();
     const { openModal } = useConfirmModal();
     const { showAlert } = useAlert();
-
+    const isFocused = useIsFocused();
+    
     useEffect(() => {
         fetch();
     }, []);
+
+    if (isFocused && !loading) {
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 1000);
+    }
 
     const handleDeleteEvent = async (stud: StudentDTO) => {
         try {

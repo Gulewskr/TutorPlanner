@@ -1,19 +1,26 @@
 import * as React from 'react';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator, BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { StudentCreate } from './tabs/StudentCreate';
 import { StudentsList } from './tabs/StudetntsList';
 import { StudentProfile } from './tabs/Profile/StudentProfile';
 import {
+    NavbarNavigationScreens,
     RootStackParamList,
     StudentsTabParamList,
 } from '@components/ui/navbar';
+import { updateCurrentRoute } from '@contexts/NavbarReducer';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator<StudentsTabParamList>();
 
 export const Students: React.FC<
-    NativeStackScreenProps<RootStackParamList, 'Students'>
+    BottomTabScreenProps<RootStackParamList, 'Students'>
 > = ({ navigation, route }) => {
+
+    useFocusEffect(() => {
+        updateCurrentRoute('Students' as NavbarNavigationScreens)
+    });
+    
     return (
         <Tab.Navigator
             initialRouteName="List"

@@ -24,6 +24,7 @@ type ICON_NAME =
     | 'checkmark'
     | 'diagram'
     | 'download'
+    | 'event'
     | 'filter'
     | 'gmail'
     | 'home'
@@ -68,6 +69,7 @@ const iconsMap: { [key in ICON_NAME]: any } = {
     checkmark: require('../../assets/icons/checkmark.png'),
     diagram: require('../../assets/icons/diagram.png'),
     download: require('../../assets/icons/download.png'),
+    event: require('../../assets/icons/event.png'),
     filter: require('../../assets/icons/filter.png'),
     gmail: require('../../assets/icons/gmail.png'),
     home: require('../../assets/icons/home.png'),
@@ -118,6 +120,11 @@ const styles = StyleSheet.create({
     'icon-sm': {
         width: 25,
         height: 25,
+    },
+    'icon-md': {
+        width: 30,
+        height: 30,
+        resizeMode: 'contain',
     },
     'icon-lg': {
         width: 40,
