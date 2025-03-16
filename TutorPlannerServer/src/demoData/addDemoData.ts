@@ -2,6 +2,7 @@ import { Prisma, Student } from '@prisma/client';
 import { studentRepository } from '../models/student';
 import { contactDataRepository } from '../models/contactData';
 import LessonsService from '../services/LessonsService';
+import { toMySQLDate } from '../utils/utils';
 
 const FIRST_NAMES = [
     'Alan',
@@ -140,12 +141,14 @@ const getStudentContacts = (
 
 const getStudentLesson = (student: Student) => {
     const startHour = getRandomNumberInRange(8, 20) * 60;
+    const newDate = getRandomDateInThisWeek();
     return {
         name: `Korepetycje ${getNickname(student.firstname, student.surename)}`,
         description: '',
         student: student.id,
         price: student.defaultPrice || 0,
-        date: getRandomDateInThisWeek(),
+        date: newDate,
+        date_text: toMySQLDate(newDate),
         startHour: startHour,
         endHour: startHour + 60,
         weekly: true,

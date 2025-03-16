@@ -89,18 +89,6 @@ export interface CreateLessonRequestBody {
     student: number;
     price: number;
     date: Date;
-    startHour: number;
-    endHour: number;
-    weekly: boolean;
-}
-
-
-export interface CreateLessonRequestBody {
-    name: string;
-    description: string;
-    student: number;
-    price: number;
-    date: Date;
     date_text: String;
     startHour: number;
     endHour: number;

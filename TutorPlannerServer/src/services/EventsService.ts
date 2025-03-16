@@ -26,6 +26,7 @@ class EventsService {
                 name: parsedData.name,
                 description: parsedData.description,
                 date: parsedData.date,
+                date_text: toMySQLDate(parsedData.date),
                 eventType: EventType.DEFAULT,
                 startHour: parsedData.startHour,
                 endHour: parsedData.endHour,
@@ -47,6 +48,7 @@ class EventsService {
             while (nextEntryDate < CONFIG.MAX_DATE) {
                 createManyData.push({
                     date: nextEntryDate,
+                    date_text: toMySQLDate(nextEntryDate),
                     eventType: EventType.DEFAULT,
                     name: parsedData.name,
                     description: parsedData.description,
