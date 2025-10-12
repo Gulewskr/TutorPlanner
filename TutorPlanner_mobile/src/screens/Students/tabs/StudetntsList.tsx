@@ -37,7 +37,7 @@ export const StudentsList: React.FC<
         }, 1000);
     }
 
-    const handleDeleteEvent = async (stud: StudentDTO) => {
+    const onDelete = async (stud: StudentDTO) => {
         try {
             await studentsService.delete(stud.id);
             await fetch();
@@ -111,7 +111,7 @@ export const StudentsList: React.FC<
                                                       openModal({
                                                           message: `Czy chcesz usunąć ${getFullName(student)}`,
                                                           onConfirm: () => {
-                                                              handleDeleteEvent(
+                                                              onDelete(
                                                                   student,
                                                               );
                                                           },

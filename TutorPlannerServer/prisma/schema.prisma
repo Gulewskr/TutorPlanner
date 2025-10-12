@@ -50,7 +50,9 @@ model Event {
     id           Int      @id @default(autoincrement())
     date         DateTime @db.Date
     date_text    String   @default("")
+    day_of_week  Int      @default(0) //actual values 1-7
     isCanceled   Boolean  @default(false)
+    isDeleted    Boolean  @default(false)
     isOverridden Boolean  @default(false)
 
     eventSeriesId Int?
@@ -83,6 +85,7 @@ model EventSeries {
     endDate        DateTime?       @db.Date
     endDate_text   String?
     isCanceled     Boolean         @default(false)
+    isDeleted      Boolean         @default(false)
 
     //Generic data
     name        String

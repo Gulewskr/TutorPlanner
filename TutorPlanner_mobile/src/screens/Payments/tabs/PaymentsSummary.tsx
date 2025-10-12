@@ -41,7 +41,11 @@ export const PaymentsSummary: React.FC<
     });
 
     const isFocused = useIsFocused();
-    const { payments, isLoading: paymentsLoading, fetchPayments } = usePayments();
+    const {
+        payments,
+        isLoading: paymentsLoading,
+        fetchPayments,
+    } = usePayments();
     const { overdueLessons } = useOverdues();
     const { setIsOpen, setModalBody } = useModalContext();
     const { openModal } = useConfirmModal();
@@ -66,8 +70,8 @@ export const PaymentsSummary: React.FC<
 
         setSummaryDate({
             lessonsNumber: lessons.length,
-            income: 0,
-            paymentsNumber: payments.length
+            income: payments.map(v => v.price).reduce((acc, v) => acc + v, 0),
+            paymentsNumber: payments.length,
         });
         setIsLoading(false);
     };
@@ -123,7 +127,6 @@ export const PaymentsSummary: React.FC<
         }
     }, [isFocused]);
 
-    
     if (isFocused && !isLoading) {
         setTimeout(() => {
             setLoadingPage(false);
@@ -143,7 +146,7 @@ export const PaymentsSummary: React.FC<
                     isCentered
                     styles={{ height: 30, marginBottom: 10 }}
                 />
-                <Tile color='white'>
+                <Tile color="white">
                     <View style={{ padding: 5 }}>
                         <View style={styles.fullWidthRow}>
                             <Text style={styles.headText}>Zarobki</Text>
@@ -154,16 +157,14 @@ export const PaymentsSummary: React.FC<
                             </Text>
                         </View>
                         <View style={styles.fullWidthRow}>
-                            <Text style={styles.headText}>Liczba płatności</Text>
-                            <Text>
-                                {summaryData.paymentsNumber}
+                            <Text style={styles.headText}>
+                                Liczba płatności
                             </Text>
+                            <Text>{summaryData.paymentsNumber}</Text>
                         </View>
                         <View style={styles.fullWidthRow}>
                             <Text style={styles.headText}>Liczba zajęć</Text>
-                            <Text>
-                                {summaryData.lessonsNumber}
-                            </Text>
+                            <Text>{summaryData.lessonsNumber}</Text>
                         </View>
                     </View>
                 </Tile>

@@ -9,6 +9,7 @@ import { Icon } from '@components/icon';
 interface EventTileProps {
     event: EventDTO;
     onClick?: () => void;
+    onChange?: () => void;
 }
 
 const EventTile: React.FC<EventTileProps> = ({ event, onClick }) => {

@@ -9,6 +9,7 @@ import { Icon, ICON_NAME } from '@components/icon';
 interface LessonTileProps {
     lesson: LessonDTO;
     onClick?: () => void;
+    onChange?: () => void;
 }
 
 const LessonTile: React.FC<LessonTileProps> = ({ lesson, onClick }) => {

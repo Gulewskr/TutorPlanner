@@ -1,6 +1,6 @@
 export interface DayEventsData {
-    amount: number;
-    canceledEvents: number;
+    activeEventsNumber: number;
+    canceledEventsNumber: number;
     numOfLessons: number;
     numOfUnpaidedLessons: number;
     numOfPaidedLessons: number;

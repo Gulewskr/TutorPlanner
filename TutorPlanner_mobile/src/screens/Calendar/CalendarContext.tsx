@@ -63,14 +63,14 @@ export const CalendarProvider = ({ children }: React.PropsWithChildren) => {
 
         let startDate = startOfMonth(controlDate);
         const endDate = endOfMonth(controlDate);
-        const clearCachedData: { [key: string]: DayEventsData} = {};
+        const clearCachedData: { [key: string]: DayEventsData } = {};
         while (startDate <= endDate || isSameDay(startDate, endDate)) {
             clearCachedData[format(startDate, 'yyyy-MM-dd')] = {
-                amount: 0,
-                canceledEvents: 0,
+                activeEventsNumber: 0,
+                canceledEventsNumber: 0,
                 numOfUnpaidedLessons: 0,
                 numOfPaidedLessons: 0,
-                numOfLessons: 0
+                numOfLessons: 0,
             };
             startDate = addDays(startDate, 1);
         }
@@ -80,19 +80,21 @@ export const CalendarProvider = ({ children }: React.PropsWithChildren) => {
         }>((acc, event) => {
             const dateKey = format(event.date, 'yyyy-MM-dd');
             acc[dateKey] = acc[dateKey] || {
-                amount: 0,
-                canceledEvents: 0,
+                activeEventsNumber: 0,
+                canceledEventsNumber: 0,
                 numOfUnpaidedLessons: 0,
                 numOfPaidedLessons: 0,
             };
-            acc[dateKey].amount++;
             if (event.isCanceled) {
-                acc[dateKey].canceledEvents++;
-            } else if (event.eventType === 'LESSON') {
-                if (event.isPaid) {
-                    acc[dateKey].numOfPaidedLessons++;
-                } else {
-                    acc[dateKey].numOfUnpaidedLessons++;
+                acc[dateKey].canceledEventsNumber++;
+            } else {
+                acc[dateKey].activeEventsNumber++;
+                if (event.eventType === 'LESSON') {
+                    if (event.isPaid) {
+                        acc[dateKey].numOfPaidedLessons++;
+                    } else {
+                        acc[dateKey].numOfUnpaidedLessons++;
+                    }
                 }
             }
             return acc;

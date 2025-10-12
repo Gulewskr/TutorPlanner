@@ -6,7 +6,6 @@ import { CalendarLayout } from '../CalendarLayout';
 import { CalendarTabParamList } from '../calendarTabs';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Tile } from '@components/tile';
-import { getDateWithoutTZ } from '@utils/dateUtils';
 import {
     startOfMonth,
     subDays,
@@ -53,8 +52,7 @@ export const MonthlyCalendar: React.FC<
         React.useCallback(() => {
             fetchMonthlyCalendarData(controlDate);
             return () => {};
-          }, [])
-        
+        }, []),
     );
 
     useEffect(() => {
@@ -68,6 +66,8 @@ export const MonthlyCalendar: React.FC<
     useEffect(() => {
         fetchMonthlyCalendarData(controlDate);
     }, [controlDate]);
+
+    const refresh = () => fetchMonthlyCalendarData(controlDate);
 
     const firstDayOfMonth = startOfMonth(controlDate);
     const firstDayInCallendar = subDays(
@@ -140,9 +140,11 @@ export const MonthlyCalendar: React.FC<
                                         hasShadow={false}
                                         height={20}
                                     >
-                                        <Text style={{
-                                            fontWeight: 'bold'
-                                        }}>
+                                        <Text
+                                            style={{
+                                                fontWeight: 'bold',
+                                            }}
+                                        >
                                             {
                                                 MONTHS_NOMINATIVE[
                                                     controlDate.getMonth()
@@ -170,13 +172,15 @@ export const MonthlyCalendar: React.FC<
                                 <View
                                     style={[
                                         styles.grid_loading_opacity,
-                                        {display: loading ? 'flex' : 'none'}
+                                        { display: loading ? 'flex' : 'none' },
                                     ]}
                                 />
-                                <View style={[
-                                    styles.grid_loading,
-                                    {display: loading ? 'flex' : 'none'}
-                                ]}>
+                                <View
+                                    style={[
+                                        styles.grid_loading,
+                                        { display: loading ? 'flex' : 'none' },
+                                    ]}
+                                >
                                     <ActivityIndicator
                                         size={'large'}
                                         color={$color_primary_shadow}
@@ -232,6 +236,7 @@ export const MonthlyCalendar: React.FC<
                     <EventsList
                         day={selectedDate}
                         navigation={navigation.getParent()}
+                        onChange={refresh}
                     />
                 </View>
             </ScrollView>
@@ -275,7 +280,7 @@ const styles = EStyleSheet.create({
         gap: 5,
         width: '100%',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     grid_row: {
         gap: 5,

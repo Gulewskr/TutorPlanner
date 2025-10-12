@@ -16,7 +16,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
     message,
     onConfirm,
     hideModal,
-    color = '#F16DDC',
+    color = '#f8c2e9ff',
     onCancel,
 }) => {
     const navigation = useNavigation();

@@ -2,6 +2,7 @@ import express, { Router } from 'express';
 import EventsService, { EventFilter } from '../services/EventsService';
 import { parseDate } from '../utils/utils';
 import { EventType } from '@prisma/client';
+import { isEventType } from '../models/event';
 
 const router: Router = express.Router();
 
@@ -14,9 +15,7 @@ const router: Router = express.Router();
  */
 router.get('/', async (req, res, next) => {
     try {
-        const filters: EventFilter = {
-            eventType: EventType.DEFAULT
-        };
+        const filters: EventFilter = { };
        
         /*
         const { startDate, endDate } = req.query;
@@ -33,6 +32,10 @@ router.get('/', async (req, res, next) => {
 
         if (req.query.date) {
             filters.date = parseDate(req.query.date as string);
+        }
+
+         if (req.query.eventType && isEventType(req.query.eventType as string)) {
+            filters.eventType = req.query.eventType as EventType;
         }
 
         const results = await EventsService.filterEvents(filters);

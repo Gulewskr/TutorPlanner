@@ -11,7 +11,7 @@ import {
     mapEventSeriesToLessonSeriesDTO,
     toLessonDTO,
 } from '../models/lesson';
-import { getDateWithoutTZ, parseDate } from '../utils/utils';
+import { parseDate, toMySQLDate } from '../utils/utils';
 
 // repositories
 import { eventSeriesRepository } from '../models/eventSeries';
@@ -206,6 +206,7 @@ class LessonsService {
                 name: lessonInputData.name,
                 description: lessonInputData.description,
                 date: lessonInputData.date,
+                date_text: toMySQLDate(lessonInputData.date),
                 eventType: EventType.LESSON,
                 price: lessonInputData.price,
                 startHour: lessonInputData.startHour,
@@ -255,7 +256,10 @@ class LessonsService {
     }
 
     public async deleteLesson(id: number): Promise<LessonDAO> {
-        return await lessonRepository.delete(id);
+        const updatedLesson = await lessonRepository.update(id, {
+            isDeleted: true,
+        });
+        return updatedLesson;
     }
 
     public async updateLesson(
@@ -309,7 +313,7 @@ class LessonsService {
         });
     }
 
-    public async cancelLesson(
+    public async updateLessonCancelationStatus(
         lessonId: number,
         isCancelled: boolean,
     ): Promise<void> {
@@ -322,18 +326,17 @@ class LessonsService {
         );
     }
 
-    public async cancelSereisOfLesson(
+    public async updateLessonsSeriesCancelationStatus(
         lessonId: number,
         isCancelled: boolean,
     ): Promise<void> {
-        const updatedLesson = await lessonRepository.update(lessonId, {
-            isCanceled: isCancelled,
-        });
-        if (!updatedLesson.eventSeriesId) {
+        const lesson = await lessonRepository.getLessonById(lessonId);
+        if (!lesson || !lesson.eventSeriesId) {
             throw new Error('Event is not part of series');
         }
+        //TODO -> transaction
         await eventSeriesRepository.updateEventSeries(
-            updatedLesson.eventSeriesId,
+            lesson.eventSeriesId,
             {
                 isCanceled: isCancelled,
             },
@@ -343,14 +346,49 @@ class LessonsService {
                 isCanceled: isCancelled,
             },
             {
-                eventSeriesId: updatedLesson.eventSeriesId,
+                eventSeriesId: lesson.eventSeriesId,
                 date: {
-                    gte: updatedLesson.date,
+                    gte: lesson.date,
                 },
             },
         );
         await StudentPaymentsService.recalculateStudentBalance(
-            updatedLesson.studentId,
+            lesson.studentId,
+        );
+    }
+
+    public async deleteLessonsSeries(
+        lessonId: number
+    ): Promise<void> {
+        const lesson = await lessonRepository.getLessonById(lessonId);
+        if (!lesson || !lesson.eventSeriesId) {
+            throw new Error('Event is not part of series');
+        }
+        const eventSeries = await eventSeriesRepository.getEventSeriesById(lesson.eventSeriesId);
+        if (!eventSeries || !eventSeries.isCanceled) {
+            throw new Error('Event series needs to be canceled before delete.');
+        }
+        //TODO -> transaction
+        await eventSeriesRepository.updateEventSeries(
+            lesson.eventSeriesId,
+            {
+                isDeleted: true,
+            },
+        );
+        await lessonRepository.bulkUpdateByFilter(
+            {
+                isDeleted: true,
+            },
+            {
+                eventSeriesId: lesson.eventSeriesId,
+                date: {
+                    gte: lesson.date,
+                },
+                isCanceled: true
+            },
+        );
+        await StudentPaymentsService.recalculateStudentBalance(
+            lesson.studentId,
         );
     }
 }

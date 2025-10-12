@@ -38,7 +38,7 @@ const DayInCalendar: React.FC<DayInCalendarProps> = ({
                 : [$color_white, 'red'];
         } else if (eventsData.numOfPaidedLessons > 0) {
             return [$color_black, $color_success];
-        } else if (eventsData.canceledEvents === eventsData.amount) {
+        } else if (eventsData.canceledEventsNumber === eventsData.activeEventsNumber) {
             return [$color_white, $color_disabled];
         }
         return [$color_white, $color_danger];
@@ -56,7 +56,7 @@ const DayInCalendar: React.FC<DayInCalendarProps> = ({
             ]}
         >
             <Text>{format(day, 'd')}</Text>
-            {eventsData && (
+            {eventsData && eventsData.activeEventsNumber > 0 && (
                 <View style={[styles.event, { backgroundColor: bgColor }]}>
                     <Text
                         style={[
@@ -66,7 +66,7 @@ const DayInCalendar: React.FC<DayInCalendarProps> = ({
                             },
                         ]}
                     >
-                        {eventsData.amount}
+                        {eventsData.activeEventsNumber}
                     </Text>
                 </View>
             )}

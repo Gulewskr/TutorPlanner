@@ -10,7 +10,8 @@ export const $color_white = '#F5F5F5';
 export const $color_disabled = '#6F6F6F';
 export const $bgColor_primary = '#FFC3FF';
 
-export const $color_error_button = '#fc2121';
+//previously fc2121
+export const $color_error_button = '#d61616ff';
 export const $color_primary_text = "#5e1052";
 //export const $color_primary_shadow = '#F5D4F5';
 

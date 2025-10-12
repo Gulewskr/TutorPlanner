@@ -1,7 +1,5 @@
 import { Button } from '@components/button';
-import { StaticCheckboxTile } from '@components/checkbox';
 import { Icon, ICON_NAME } from '@components/icon';
-//import { CheckboxTile } from '@components/checkbox';
 import { Tile } from '@components/tile';
 import { useAlert } from '@contexts/AlertContext';
 import { useModalContext } from '@contexts/modalContext';
@@ -11,23 +9,25 @@ import { mapHourValueToText } from '@utils/dateUtils';
 import React, { useMemo, useState } from 'react';
 import { Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { LessonDeleteModal } from './LessonDeleteModal';
+import { useConfirmModal } from '@contexts/confirmModalContext';
 
 interface LessonModalProps {
     lesson: LessonDTO;
     goToStudentProfile?: () => void;
     goToEditForm: () => void;
-    //Probably to remove
-    onDelete?: (num: number) => void;
+    onChange?: () => void;
 }
 
 export const LessonModal: React.FC<LessonModalProps> = ({
     lesson,
     goToStudentProfile,
     goToEditForm,
-    onDelete,
+    onChange,
 }) => {
     const { showAlert } = useAlert();
-    const { setIsOpen } = useModalContext();
+    const { setIsOpen, setModalBody } = useModalContext();
+    const { openModal } = useConfirmModal();
     const [isSending, setSending] = useState(false);
 
     const [iconName, iconText]: [ICON_NAME, string] = useMemo(() => {
@@ -49,6 +49,7 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                 severity: 'success',
             });
             setIsOpen(false);
+            onChange?.();
         } catch (e) {
             showAlert({
                 message: 'Błąd',
@@ -56,6 +57,29 @@ export const LessonModal: React.FC<LessonModalProps> = ({
             });
         }
         setSending(false);
+    };
+
+    const handleDeleteLesson = async (): Promise<void> => {
+        if (lesson.eventSeriesId) {
+            setModalBody(
+                <LessonDeleteModal
+                    lesson={lesson}
+                    cb={() => {
+                        setIsOpen(false)
+                        onChange?.();
+                    }}
+                />,
+            );
+            setIsOpen(true);
+        } else {
+            openModal({
+                onConfirm: async () => {
+                    await lessonsService.delete(lesson.id);
+                    onChange?.();
+                },
+                message: `Czy na pewno chcesz usunąć lekcje z kalendarza ${lesson.name} - ${lesson.date}?`,
+            });
+        }
     };
 
     return (
@@ -114,15 +138,26 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                         disabled={isSending}
                     />
                 ) : (
-                    <Button
-                        icon="refresh"
-                        size="small"
-                        onClick={() => {
-                            handleRestoreLesson();
-                        }}
-                        label="Przywróć zajęcia"
-                        severity="warning"
-                    />
+                    <View style={{ gap: 10, width: '100%' }}>
+                        <Button
+                            icon="refresh"
+                            size="small"
+                            onClick={() => {
+                                handleRestoreLesson();
+                            }}
+                            label="Przywróć zajęcia"
+                            severity="warning"
+                        />
+                        <Button
+                            icon="trash"
+                            size="small"
+                            onClick={() => {
+                                handleDeleteLesson();
+                            }}
+                            label="Usuń zajęcia z kalendarza"
+                            severity="error"
+                        />
+                    </View>
                 )}
             </View>
         </View>

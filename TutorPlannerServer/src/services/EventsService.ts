@@ -4,16 +4,55 @@ import { CreateEventRequestBody } from '../models/event';
 import { eventRepository } from '../repositories/eventsRepository';
 import { EventCreateInputSchema, EventUpdateInputSchema } from '../validators/events/event';
 import { eventSeriesRepository } from '../models/eventSeries';
-import { addWeeks, endOfDay, endOfMonth, getDay, startOfDay, startOfMonth } from 'date-fns';
+import { addWeeks, endOfMonth, endOfYear, getDay, startOfMonth, startOfYear } from 'date-fns';
 import { CONFIG } from '../config';
 import { EventSeriesUpdateInputSchema } from '../validators/events/eventSeries';
-import { getDateWithoutTZ, toMySQLDate } from '../utils/utils';
+import { toMySQLDate } from '../utils/utils';
 
 export interface EventFilter {
     date?: Date;
     month?: number;
     year?: number;
-    eventType: EventType;
+    eventType?: EventType;
+    isCanceled?: boolean;
+    isDeleted?: boolean;
+}
+
+const getPrismaFilter = (filter?: EventFilter): Prisma.EventWhereInput => {
+    const prismaFilter: Prisma.EventWhereInput = {};
+    if (!filter) {
+        return prismaFilter;
+    }
+    if (filter.date) {
+        prismaFilter.date_text = toMySQLDate(filter.date);
+    }
+    if (filter.eventType) {
+        prismaFilter.eventType = filter.eventType;
+    }
+    if (filter.year) {
+        if (filter.month) {
+            const date = new Date(filter.year, filter.month);
+            prismaFilter.date = {
+                gte: startOfMonth(date),
+                lte: endOfMonth(date),
+            }
+        } else {
+            const date = new Date(filter.year, 1);
+            prismaFilter.date = {
+                gte: startOfYear(date),
+                lte: endOfYear(date),
+            }
+        }
+    }
+    if (filter.isCanceled != undefined) {
+        prismaFilter.isCanceled = filter.isCanceled
+    }
+    if (filter.isDeleted != undefined) {
+        prismaFilter.isDeleted = filter.isDeleted
+    } else {
+        prismaFilter.isDeleted = false;
+    }
+    return prismaFilter;
 }
 
 class EventsService {
@@ -65,12 +104,10 @@ class EventsService {
     };
     public async filterEvents(filter?: EventFilter): Promise<EventDTO[]> {
         let events = [];
+        events = await eventRepository.getEvents(getPrismaFilter(filter));
+        return events.map(event => toEventDTO(event));
+        /*
         if (filter?.date) {
-            events = await eventRepository.getEvents({
-                date_text: toMySQLDate(filter?.date),
-                eventType: filter.eventType
-            });
-            return events.map(event => toEventDTO(event));
         } else if (filter?.month && filter.year) {
             const date = new Date(filter.year, filter.month);
             events = await eventRepository.getEvents({
@@ -84,6 +121,7 @@ class EventsService {
             events = await eventRepository.getAllEvents();
         }
         return events.map(event => toEventDTO(event));
+        */
     };
     public async getEvent(eventId: number): Promise<EventDTO> {
         const event = await eventRepository.getEventById(eventId);
