@@ -6,12 +6,14 @@ import { StudentDTO } from '@model';
 import { useAlert } from '@contexts/AlertContext';
 import { useStudentsContext } from '@contexts/StudentsContext';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { useViewLoaded } from '@hooks/useViewLoaded';
 
 export const StudentCreate: React.FC<
     BottomTabScreenProps<StudentsTabParamList, 'Create'>
 > = ({ navigation, route }) => {
     const { fetch: refreshStudentsData } = useStudentsContext();
     const { showAlert } = useAlert();
+    useViewLoaded();
 
     const handleStudentCreation = (data: StudentDTO) => {
         refreshStudentsData();

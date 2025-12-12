@@ -12,14 +12,26 @@ interface Pagable<T> {
     pageSize: number;
 }
 
+interface LessonCreateInput {
+    date: Date;
+    date_text: string;
+    name: string;
+    description?: string | null;
+    startHour: number;
+    endHour: number;
+    price: number;
+    studentId: number;
+}
+
 //TODO remove not related to Lesson type fucntions
 export const lessonRepository = {
-    create: async (lesson: Prisma.EventCreateInput): Promise<LessonDAO> => {
+    create: async (lesson: LessonCreateInput): Promise<LessonDAO> => {
         return (await prisma.event.create({
             data: {
                 ...lesson,
                 date_text: toMySQLDate(lesson.date),
                 eventType: 'LESSON',
+                studentId: lesson.studentId
             },
         })) as LessonDAO;
     },

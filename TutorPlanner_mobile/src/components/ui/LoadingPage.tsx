@@ -4,12 +4,15 @@ import { View, Image, Text } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '@contexts/NavbarReducer';
 
+// base | christmas
+const theme = 'christmas';
+
 const LOADING_GIFS = [
-    require('../../assets/loadingPage1.gif'),
-    require('../../assets/loadingPage2.gif'),
-    require('../../assets/loadingPage3.gif'),
-    require('../../assets/loadingPage4.gif'),
-    require('../../assets/loadingPage5.gif'),
+    require(`../../assets/loadingScreens/${theme}/1.gif`),
+    require(`../../assets/loadingScreens/${theme}/2.gif`),
+    require(`../../assets/loadingScreens/${theme}/3.gif`),
+    require(`../../assets/loadingScreens/${theme}/4.gif`),
+    require(`../../assets/loadingScreens/${theme}/5.gif`),
 ]
 
 const LoadingPage: React.FC = () => {

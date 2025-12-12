@@ -207,15 +207,10 @@ class LessonsService {
                 description: lessonInputData.description,
                 date: lessonInputData.date,
                 date_text: toMySQLDate(lessonInputData.date),
-                eventType: EventType.LESSON,
                 price: lessonInputData.price,
                 startHour: lessonInputData.startHour,
                 endHour: lessonInputData.endHour,
-                student: {
-                    connect: {
-                        id: lessonInputData.student,
-                    },
-                },
+                studentId: lessonInputData.student
             });
             return toLessonDTO(createdLesson);
         } else {
@@ -234,6 +229,7 @@ class LessonsService {
             while (lessonDate < CONFIG.MAX_DATE) {
                 inputData.push({
                     date: lessonDate,
+                    date_text: toMySQLDate(lessonDate),
                     eventType: EventType.LESSON,
                     name: lesson.name,
                     description: lesson.description,

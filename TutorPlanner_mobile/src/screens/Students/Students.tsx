@@ -8,7 +8,7 @@ import {
     RootStackParamList,
     StudentsTabParamList,
 } from '@components/ui/navbar';
-import { updateCurrentRoute } from '@contexts/NavbarReducer';
+import { setLoadingPage, updateCurrentRoute } from '@contexts/NavbarReducer';
 import { useFocusEffect } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator<StudentsTabParamList>();
@@ -17,10 +17,16 @@ export const Students: React.FC<
     BottomTabScreenProps<RootStackParamList, 'Students'>
 > = ({ navigation, route }) => {
 
-    useFocusEffect(() => {
-        updateCurrentRoute('Students' as NavbarNavigationScreens)
-    });
-    
+    useFocusEffect(
+        React.useCallback(() => {
+            updateCurrentRoute('Students' as NavbarNavigationScreens)
+            return () => {
+                // Do something when the screen is unfocused
+                // Useful for cleanup functions
+            };
+        }, [])
+    );
+        
     return (
         <Tab.Navigator
             initialRouteName="List"
