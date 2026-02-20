@@ -9,9 +9,7 @@ const axios = ax.create({
 });
 
 axios.interceptors.response.use(
-    response => {
-        return response;
-    },
+    response => response,
     error => {
         console.error(JSON.stringify(error));
         console.error(

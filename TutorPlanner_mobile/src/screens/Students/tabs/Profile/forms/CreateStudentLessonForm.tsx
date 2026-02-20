@@ -22,19 +22,7 @@ interface CreateStudentLessonData {
     isWeekly: boolean;
 }
 
-const defaultData: CreateStudentLessonData = {
-    name: '',
-    description: '',
-    price: '',
-    date: '',
-    hour: {
-        startHour: '',
-        endHour: '',
-    },
-    isWeekly: false,
-};
-
-interface CreateStudentLessonForm {
+interface CreateStudentLessonFormProps {
     student: StudentDTO;
     navigation: BottomTabNavigationProp<
         StudentProfileTabParamList,
@@ -43,7 +31,7 @@ interface CreateStudentLessonForm {
     >;
 }
 
-export const CreateStudentLesson: React.FC<CreateStudentLessonForm> = ({
+export const CreateStudentLessonForm: React.FC<CreateStudentLessonFormProps> = ({
     student,
     navigation,
 }) => {
@@ -105,6 +93,18 @@ export const CreateStudentLesson: React.FC<CreateStudentLessonForm> = ({
             </ScrollView>
         </FormProvider>
     );
+};
+
+const defaultData: CreateStudentLessonData = {
+    name: '',
+    description: '',
+    price: '',
+    date: '',
+    hour: {
+        startHour: '',
+        endHour: '',
+    },
+    isWeekly: false,
 };
 
 const FORM_SCHEMA: FormRendererSchema = {

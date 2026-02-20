@@ -1,50 +1,55 @@
-import express, { Router } from 'express';
-import EventsService, { EventFilter } from '../services/EventsService';
-import { parseDate } from '../utils/utils';
-import { EventType } from '@prisma/client';
-import { isEventType } from '../models/event';
+import express, { Router, Request } from 'express';
+import EventsService from '../services/events/EventsService';
+import { parseDate, parseReqestQueryToOptionalDate } from '../utils/utils';
+import { updateEventSeriesSchema } from '../models/events/update-eventSeries.schema';
+import { EventFilter } from '../services/events/events.filter';
+import { EventResponseDTO } from '../models/events/event-response.dto';
 
 const router: Router = express.Router();
 
-/**
- * path: /events?
- *
- * queryParams:
- * startDate:
- * endDate:
- */
-router.get('/', async (req, res, next) => {
-    try {
-        const filters: EventFilter = { };
-       
-        /*
-        const { startDate, endDate } = req.query;
-        if (startDate && endDate) {
-            const _start = parseDate(startDate as string);
-            const _end = parseDate(endDate as string);
-            const results = await EventsService.getEventsInTimeFrame(
-                _start,
-                _end,
-            );
-            return res.status(200).json(results);
-        }
-        */
+//path: /events
+router.get(
+    '/',
+    async (
+        req: Request<
+            {},
+            EventResponseDTO[],
+            {},
+            {
+                date?: string;
+                eventType?: string;
+                startDate?: string;
+                endDate?: string;
+            }
+        >,
+        res,
+        next,
+    ) => {
+        try {
+            const filters: EventFilter = new EventFilter({
+                date: parseReqestQueryToOptionalDate(req.query.date),
+                eventType: req.query.eventType,
+            });
 
-        if (req.query.date) {
-            filters.date = parseDate(req.query.date as string);
+            /*
+            const { startDate, endDate } = req.query;
+            if (startDate && endDate) {
+                const _start = parseDate(startDate as string);
+                const _end = parseDate(endDate as string);
+                const results = await EventsService.getEventsInTimeFrame(
+                    _start,
+                    _end,
+                );
+                return res.status(200).json(results);
+            }
+            */
+            const results = await EventsService.filterEvents(filters);
+            res.status(200).json(results);
+        } catch (err) {
+            next(err);
         }
-
-         if (req.query.eventType && isEventType(req.query.eventType as string)) {
-            filters.eventType = req.query.eventType as EventType;
-        }
-
-        const results = await EventsService.filterEvents(filters);
-        res.status(200).json(results);
-    } catch (err) {
-        console.log(err);
-        next(err);
-    }
-});
+    },
+);
 
 /**
  * path: /events
@@ -126,7 +131,6 @@ router.delete('/:id/cancel', async (req, res, next) => {
     }
 });
 
-
 /**
  * path: /events/series/:id
  *
@@ -141,16 +145,16 @@ router.get('/series/:id', async (req, res, next) => {
  */
 router.put('/:id/series', async (req, res, next) => {
     try {
-        const body = req.body;
-        body.date = parseDate(body.date);
-
-        const dto = await EventsService.updateEventSeries(
+        const parsedData = updateEventSeriesSchema.parse({
+            ...req.body,
+            date: parseDate(req.body.date),
+        });
+        await EventsService.updateEventSeries(
             Number(req.params.id),
-            body,
+            parsedData,
         );
         res.status(200).json({
             message: 'Event series has been updated successfully.',
-            data: dto,
         });
     } catch (err) {
         next(err);

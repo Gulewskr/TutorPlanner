@@ -1,17 +1,17 @@
-import express, { Router } from 'express';
+import express, { Request, Router } from 'express';
 import StudentService from '../services/StudentService';
 import paymentRouter from './studentsRoutes/payments.routes';
 import lessonsRouter from './studentsRoutes/lessons.routes';
-import { StudentsDTO } from '../dto/students';
 import StudentPaymentsService from '../services/StudentPaymentsService';
-import { parseStudentId } from './studentsRoutes/utils';
-import { errorHandler } from '../middlewares/errorHandler';
+import { getStudentIdFromParams } from './utils';
 import StudentProfileService from '../services/StudentProfileService';
+import { StudentsListDTO } from '../models/students/students-list-response.dto';
+import { StudentDTO } from '../models/students/student-response.dto';
 
 const router: Router = express.Router();
 
 router.get('/', async (req, res) => {
-    const data: StudentsDTO = await StudentService.getStudents();
+    const data: StudentsListDTO = await StudentService.getStudents();
     return res.status(200).json(data);
 });
 
@@ -26,7 +26,7 @@ router.post('/', async (req, res, next) => {
 
 router.get('/:studentId', async (req, res, next) => {
     try {
-        const studentId = parseStudentId(req);
+        const studentId = getStudentIdFromParams(req);
         const student = await StudentService.getStudent(studentId);
         return res.status(200).json(student);
     } catch (err) {
@@ -36,7 +36,7 @@ router.get('/:studentId', async (req, res, next) => {
 
 router.post('/:studentId', async (req, res, next) => {
     try {
-        const studentId = parseStudentId(req);
+        const studentId = getStudentIdFromParams(req);
         const student = await StudentService.updateStudent(studentId, req.body);
         return res.status(200).json(student);
     } catch (err) {
@@ -46,7 +46,7 @@ router.post('/:studentId', async (req, res, next) => {
 
 router.delete('/:studentId', async (req, res, next) => {
     try {
-        const studentId = parseStudentId(req);
+        const studentId = getStudentIdFromParams(req);
         const student = await StudentService.disableStudent(studentId);
         return res.status(200).json(student);
     } catch (err) {
@@ -54,9 +54,9 @@ router.delete('/:studentId', async (req, res, next) => {
     }
 });
 
-router.post('/:studentId/recalculate', async (req, res, next) => {
+router.post('/:studentId/recalculate', async (req: Request<{}, StudentDTO>, res, next) => {
     try {
-        const studentId = parseStudentId(req);
+        const studentId = getStudentIdFromParams(req);
         const student =
             await StudentPaymentsService.recalculateStudentBalance(studentId);
         return res.status(200).json(student);
@@ -75,7 +75,7 @@ router.use('/:studentId/lessons', lessonsRouter);
  */
 router.get('/:studentId/profile/lessons', async (req, res, next) => {
     try {
-        const studentId = parseStudentId(req);
+        const studentId = getStudentIdFromParams(req);
         const lessons = await StudentProfileService.getLessonsData(studentId);
         return res.status(200).json(lessons);
     } catch (err) {

@@ -28,7 +28,7 @@ interface CreateStudentLessonForm {
     >;
 }
 
-export const AddStudentPayment: React.FC<CreateStudentLessonForm> = ({
+export const CreateStudentPaymentForm: React.FC<CreateStudentLessonForm> = ({
     student,
     navigation,
 }) => {
@@ -40,6 +40,8 @@ export const AddStudentPayment: React.FC<CreateStudentLessonForm> = ({
                 date: data.date,
                 studentId: student.id,
                 price: Number(data.price),
+                accountId: 0,
+                type: 'DIGITAL'
             });
             showAlert({
                 severity: 'success',

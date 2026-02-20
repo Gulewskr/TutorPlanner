@@ -4,7 +4,7 @@ import {
     LessonSeriesDTO,
     mapEventSeriesToLessonSeriesDTO,
     toLessonDTO,
-} from '../models/lesson';
+} from '../models/lessons/lesson';
 import { lessonRepository } from '../repositories/lessonsRepository';
 
 interface StudentLessonsData {

@@ -38,18 +38,20 @@ enum ContactType {
 }
 
 model Payment {
-    id        Int      @id @default(autoincrement())
+    id        Int         @id @default(autoincrement())
     studentId Int
     price     Int
-    date      DateTime @db.Date
-    date_text String   @default("")
-    student   Student  @relation(fields: [studentId], references: [id])
+    date      DateTime    @db.Date
+    date_text String
+    type      PaymentType @default(DIGITAL)
+    accountId Int         @default(0)
+    student   Student     @relation(fields: [studentId], references: [id])
 }
 
 model Event {
     id           Int      @id @default(autoincrement())
     date         DateTime @db.Date
-    date_text    String   @default("")
+    date_text    String
     day_of_week  Int      @default(0) //actual values 1-7
     isCanceled   Boolean  @default(false)
     isDeleted    Boolean  @default(false)
@@ -107,6 +109,11 @@ model Config {
     lastSupportedVersion String // minimum client version
     welcomeMessageTitle  String
     welcomeMessage       String
+}
+
+enum PaymentType {
+    DIGITAL
+    CASH
 }
 
 //TODO - make possible to user create own event types

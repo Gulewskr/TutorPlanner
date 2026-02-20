@@ -1,13 +1,12 @@
 import { Prisma } from '@prisma/client';
 import { Payment } from '../models/payment.model';
-import {
-    PaymentInput,
-    validatePaymentInput,
-} from '../validators/payments/paymentInput';
 import { endOfMonth } from 'date-fns';
 import { paymentRepository } from '../repositories/paymentRepository';
-import { parseDate } from '../utils/utils';
+import { parseDate, validateDateFormat } from '../utils/utils';
 import StudentPaymentsService from './StudentPaymentsService';
+import { CreatePayment } from '../models/payments/create-payment.schema';
+import { UpdatePayment } from '../models/payments/update-payment.schema';
+import { DEFAULT_ACCOUNT_ID } from '../config';
 
 interface Filters {
     month: number;
@@ -42,18 +41,22 @@ class PaymentsService {
         return await paymentRepository.getPaymentByStudentId(studentId);
     }
 
-    public async addPayment(data: PaymentInput): Promise<Payment> {
-        const parsedData = validatePaymentInput(data);
-        const payment = await paymentRepository.createPayment(parsedData);
+    public async addPayment(data: CreatePayment): Promise<Payment> {
+        const payment = await paymentRepository.createPayment({
+            ...data,
+            type: data.type || 'DIGITAL',
+            date: data.date ? validateDateFormat(data.date) : new Date(),
+            accountId: data.accountId || DEFAULT_ACCOUNT_ID,
+        });
         await StudentPaymentsService.recalculateStudentBalance(
-            parsedData.studentId,
+            data.studentId,
         );
         return payment;
     }
 
     public async updatePayment(
         paymentId: number,
-        data: Partial<PaymentInput>,
+        data: UpdatePayment,
     ): Promise<void> {
         const updateData: Prisma.PaymentUpdateInput = {
             price: data.price,

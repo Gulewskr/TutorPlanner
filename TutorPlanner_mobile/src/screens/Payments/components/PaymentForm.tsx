@@ -2,28 +2,25 @@ import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
 import { FormRendererSchema } from '@components/complex/form-renderer/model';
 import { useAlert } from '@contexts/AlertContext';
 import { useStudentsContext } from '@contexts/StudentsContext';
-import { PaymentDTO, StudentDTO } from '@model';
+import { Payment, PAYMENTS_TYPES, PaymentType, StudentDTO } from '@model';
 import { useIsFocused } from '@react-navigation/native';
 import { paymentsService } from '@services/payments.service';
 import { format } from 'date-fns';
 import { useMemo } from 'react';
 import { getFullName } from '@utils/utils';
+import { ACCOUNTS } from '@utils/consts';
 
 //TODO - extendend fields
 interface CreatePaymentData {
     student: string;
     price: number;
     date?: Date;
+    type?: PaymentType;
+    account: number;
 }
 
-const defaultData: CreatePaymentData = {
-    student: 'none',
-    price: 0,
-    date: new Date(),
-};
-
 interface PaymentFormProps {
-    initialData?: PaymentDTO;
+    initialData?: Payment;
     mode?: 'Edit' | 'Create';
     onCancel: () => void;
     cb: () => void;
@@ -47,7 +44,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
                 });
                 return;
             }
-            if (!data.price || data.price <= 0) {
+            if (!data.price || data.price < 0) {
                 showAlert({
                     message: 'Kwota musi być liczbą dodatnią.',
                     severity: 'danger',
@@ -71,10 +68,12 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
     const handleCreateAction = async (
         data: CreatePaymentData,
     ): Promise<void> => {
-        const response = await paymentsService.create({
+        await paymentsService.create({
             studentId: Number(data.student),
             price: Number(data.price),
             date: data.date ? format(data.date, 'yyyy-MM-dd') : undefined,
+            type: data.type || 'DIGITAL',
+            accountId: data.account
         });
         showAlert({
             message: 'Dodano płatnośc',
@@ -90,6 +89,8 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
             studentId: Number(data.student),
             price: Number(data.price),
             date: data.date ? format(data.date, 'yyyy-MM-dd') : undefined,
+            type: data.type || 'DIGITAL',
+            accountId: data.account
         });
         showAlert({
             message: 'Zapisano zmiany',
@@ -106,6 +107,8 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
                           student: `${initialData.student.id}`,
                           price: initialData.price,
                           date: initialData.date,
+                          type: initialData.type,
+                          account: initialData.account
                       }
                     : undefined,
             ),
@@ -127,9 +130,17 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
     );
 };
 
+const defaultCreateDate: CreatePaymentData = {
+    student: 'none',
+    price: 0,
+    date: new Date(),
+    type: 'DIGITAL',
+    account: 0
+};
+
 const getFormSchema = (
     students: StudentDTO[],
-    initialData: CreatePaymentData = defaultData,
+    initialData: CreatePaymentData = defaultCreateDate,
 ): FormRendererSchema => {
     return {
         title: 'Dodaj płatność',
@@ -162,6 +173,28 @@ const getFormSchema = (
                     icon: 'calendar',
                     placeholder: '--Data--',
                 },
+            },
+            type: {
+                component: 'dropdown',
+                componentProps: {
+                    label: 'Typ płatności',
+                    placeholder: '--Wybierz ucznia--',
+                    options: PAYMENTS_TYPES.map(typ => ({
+                        value: typ,
+                        label: typ, 
+                    })),
+                }
+            },
+            account: {
+                component: 'dropdown',
+                componentProps: {
+                    label: 'Konto',
+                    placeholder: '--Wybierz konto--',
+                    options: ACCOUNTS.map(acc => ({
+                        value: acc.id,
+                        label: acc.name, 
+                    })),
+                }
             },
         },
     };

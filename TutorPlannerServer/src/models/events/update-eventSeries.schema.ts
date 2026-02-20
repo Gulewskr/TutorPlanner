@@ -1,12 +1,12 @@
 import { z } from 'zod';
-import { MAX_HOUR } from '../constraints';
+import { MAX_HOUR } from '../../config';
 
-export const LessonSeriesUpdateInputSchema = z.object({
+export const updateEventSeriesSchema = z.object({
     name: z.string(),
     description: z.string().nullish(),
     date: z.date(),
-    student: z.number(),
-    price: z.number(),
     startHour: z.number().min(0).max(MAX_HOUR),
     endHour: z.number().min(0).max(MAX_HOUR),
 });
+
+export type UpdateEventSeries = z.infer<typeof updateEventSeriesSchema>;

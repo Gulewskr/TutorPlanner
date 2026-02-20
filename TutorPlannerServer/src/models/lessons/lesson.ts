@@ -1,5 +1,5 @@
 import { Event, EventSeries, EventType } from '@prisma/client';
-import { MAX_HOUR } from '../validators/constraints';
+import { MAX_HOUR } from '../../config';
 
 export type LessonDTO = {
     id: number;
@@ -81,18 +81,6 @@ export interface LessonFilters {
     date?: string; // Opcjonalna właściwość date
     month?: number;
     year?: number;
-}
-
-export interface CreateLessonRequestBody {
-    name: string;
-    description: string;
-    student: number;
-    price: number;
-    date: Date;
-    date_text: String;
-    startHour: number;
-    endHour: number;
-    weekly: boolean;
 }
 
 export { LessonDAO as Lesson, EventType };

@@ -1,0 +1,5 @@
+export enum ErrorCode {
+    INVALID_INPUT,
+    VALIDATION_FAILED,
+    UNEXPECTED_ERROR
+}

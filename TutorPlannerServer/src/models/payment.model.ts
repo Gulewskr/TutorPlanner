@@ -1,19 +1,12 @@
-import { Payment, Student } from '@prisma/client';
+import { Payment } from '@prisma/client';
 
-type CreatePaymentDTO = {
+type CreatePaymentInput = {
     price: number;
     date: string | Date;
     studentId: number;
+    type: 'CASH' | 'DIGITAL';
+    accountId: number;
 };
 
-type PaymentWithStudentDAO = {
-    id: number;
-    price: number;
-    date: Date;
-    date_text: string;
-    studentId: number;
-    student: Student;
-};
-
-export type { CreatePaymentDTO, PaymentWithStudentDAO };
+export type { CreatePaymentInput };
 export { Payment };

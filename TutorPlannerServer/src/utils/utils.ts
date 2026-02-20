@@ -24,6 +24,14 @@ export const parsePaginationParams = (req: Request) => {
     };
 };
 
+export const parseNumber = (reqParam: string): number => {
+    const param = Number(reqParam);
+    if (Number.isNaN(param)) {
+        throw new Error('Wrong data format provided.');
+    }
+    return param;
+};
+
 export const parseDate = (dateString: string): Date => {
     const date = new Date(dateString);
     if (!isValid(date)) {
@@ -32,6 +40,13 @@ export const parseDate = (dateString: string): Date => {
         );
     }
     return getDateWithoutTZ(date);
+};
+
+export const parseReqestQueryToOptionalDate = (dateString?: string): Date | undefined => {
+    if (!dateString) {
+        return undefined;
+    }
+    return parseDate(dateString);
 };
 
 export const getDateWithoutTZ = (date: Date): Date =>

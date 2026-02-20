@@ -2,7 +2,7 @@ import React from 'react';
 import { StudentsLayout } from '../Layout';
 import { StudentProfileTabParamList } from '../StudentProfile';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { AddStudentPayment } from '../forms/AddPayment';
+import { CreateStudentPaymentForm } from '../forms/CreateStudentPaymentForm';
 import { useStudentContext } from '../StudentContext';
 
 export const StudentAddPayment: React.FC<
@@ -15,7 +15,7 @@ export const StudentAddPayment: React.FC<
 
     return (
         <StudentsLayout {...props} student={student}>
-            <AddStudentPayment student={student!} navigation={navigation} />
+            <CreateStudentPaymentForm student={student!} navigation={navigation} />
         </StudentsLayout>
     );
 };

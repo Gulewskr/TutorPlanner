@@ -1,17 +1,19 @@
 import { PAYMENTS_URL } from './config';
 import { axios } from './baseService';
-import { PaymentDTO } from '@model';
+import { Payment, PaymentType } from '@model';
 
 interface PaymentCreateRequestBody {
     studentId: number;
     price: number;
     date?: string;
+    type: PaymentType;
+    accountId: number;
 }
 
 class PaymentsService {
     create = async (
         body: PaymentCreateRequestBody,
-    ): Promise<PaymentDTO | undefined> => {
+    ): Promise<Payment | undefined> => {
         if (!body.studentId || !body.price) {
             throw new Error(`Missing data`);
         }
@@ -21,7 +23,7 @@ class PaymentsService {
     update = async (
         paymentId: number,
         body: PaymentCreateRequestBody,
-    ): Promise<PaymentDTO | undefined> => {
+    ): Promise<Payment | undefined> => {
         if (!body.studentId || !body.price) {
             throw new Error(`Missing data`);
         }
@@ -39,7 +41,7 @@ class PaymentsService {
     }: {
         month?: number;
         year?: number;
-    }): Promise<PaymentDTO[]> => {
+    }): Promise<Payment[]> => {
         if (!month && !year) {
             const response = await axios.get(PAYMENTS_URL);
             return response.data;

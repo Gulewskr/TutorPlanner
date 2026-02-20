@@ -1,8 +1,8 @@
 import { Prisma, Student } from '@prisma/client';
-import { studentRepository } from '../models/student';
 import { contactDataRepository } from '../models/contactData';
 import LessonsService from '../services/LessonsService';
 import { toMySQLDate } from '../utils/utils';
+import { studentRepository } from '../repositories/studentsRepository';
 
 const FIRST_NAMES = [
     'Alan',

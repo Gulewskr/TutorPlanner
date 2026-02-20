@@ -1,6 +1,7 @@
-import { StudentsDTO } from '../dto/students';
-import { Student, studentRepository } from '../models/student';
 import z from 'zod';
+import { StudentsListDTO } from '../models/students/students-list-response.dto';
+import { studentRepository } from '../repositories/studentsRepository';
+import { StudentDTO, studentToStudentDTO } from '../models/students/student-response.dto';
 
 interface StudentInput {
     firstname: string;
@@ -27,7 +28,7 @@ const StudentInputSchema = z.object({
 });
 
 class StudentService {
-    public async getStudents(filters?: StudnentFilter): Promise<StudentsDTO> {
+    public async getStudents(filters?: StudnentFilter): Promise<StudentsListDTO> {
         if (filters == undefined) {
             const students = await studentRepository.findAll();
             const size = await studentRepository.count();
@@ -39,26 +40,28 @@ class StudentService {
         }
         throw new Error('Filters are not implemented yet.');
     }
-    public async getStudent(studentId: number): Promise<Student> {
+    public async getStudent(studentId: number): Promise<StudentDTO> {
         const student = await studentRepository.findStudentById(studentId);
         if (student == null) {
             throw new Error(`Student not found`);
         }
         return student;
     }
-    public async createStudent(student: StudentInput): Promise<Student> {
-        const data = StudentInputSchema.parse(student);
+    public async createStudent(input: StudentInput): Promise<StudentDTO> {
+        const data = StudentInputSchema.parse(input);
         console.log(`Adding student: ${data}`);
-        return await studentRepository.create(data);
+        const student = await studentRepository.create(data);
+        return studentToStudentDTO(student);
     }
     public async updateStudent(
         studentId: number,
         student: StudentInput,
-    ): Promise<Student> {
+    ): Promise<StudentDTO> {
         return await studentRepository.update(studentId, student);
     }
-    public async disableStudent(studentId: number): Promise<Student> {
-        return await studentRepository.disable(studentId);
+    public async disableStudent(studentId: number): Promise<StudentDTO> {
+        const student = await studentRepository.disable(studentId);
+        return studentToStudentDTO(student);
     }
 }
 

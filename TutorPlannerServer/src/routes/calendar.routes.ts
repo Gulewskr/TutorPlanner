@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import LessonsService from '../services/LessonsService';
-import EventsService from '../services/EventsService';
+import EventsService from '../services/events/EventsService';
 import { parseDate } from '../utils/utils';
 import CalendarService from '../services/CalendarService';
 

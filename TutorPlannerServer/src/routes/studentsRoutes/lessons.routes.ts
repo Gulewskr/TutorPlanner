@@ -1,7 +1,8 @@
 import express, { Router } from 'express';
 import LessonsService from '../../services/LessonsService';
-import { parseStudentId } from './utils';
-import { toLessonDTO } from '../../models/lesson';
+import { getStudentIdFromParams } from '../utils';
+import { toLessonDTO } from '../../models/lessons/lesson';
+import { createLessonSchema } from '../../models/lessons/create-lesson.schema';
 
 const router: Router = express.Router({ mergeParams: true });
 
@@ -10,7 +11,7 @@ const router: Router = express.Router({ mergeParams: true });
  */
 router.get('/', async (req, res, next) => {
     try {
-        const studentId = parseStudentId(req);
+        const studentId = getStudentIdFromParams(req);
         const student = await LessonsService.getStudentLessons(studentId);
         res.status(200).json(student);
     } catch (err) {
@@ -23,7 +24,7 @@ router.get('/', async (req, res, next) => {
  */
 router.get('/next', async (req, res, next) => {
     try {
-        const studentId = parseStudentId(req);
+        const studentId = getStudentIdFromParams(req);
         const lesson = await LessonsService.getNextStudentLessons(studentId);
         res.status(200).json(lesson ? toLessonDTO(lesson) : '');
     } catch (err) {
@@ -36,8 +37,11 @@ router.get('/next', async (req, res, next) => {
  */
 router.post('/', async (req, res, next) => {
     try {
-        const studentId = parseStudentId(req);
-        const student = await LessonsService.addUserLesson(studentId, req.body);
+        const studentId = getStudentIdFromParams(req);
+        const student = await LessonsService.createLesson({
+            ...req.body,
+            student: studentId,
+        });
         res.status(200).json(student);
     } catch (err) {
         next(err);

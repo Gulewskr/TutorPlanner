@@ -2,9 +2,10 @@ import PaymentsService from './PaymentsService';
 import LessonsService from './LessonsService';
 import { paymentRepository } from '../repositories/paymentRepository';
 import { lessonRepository } from '../repositories/lessonsRepository';
-import { Student, studentRepository } from '../models/student';
-import { Lesson } from '../models/lesson';
+import { Lesson } from '../models/lessons/lesson';
 import { isBefore } from 'date-fns';
+import { Student } from '@prisma/client';
+import { studentRepository } from '../repositories/studentsRepository';
 
 class StudentPaymentsService {
     public async autoMarkPayments(studentId: number): Promise<void> {

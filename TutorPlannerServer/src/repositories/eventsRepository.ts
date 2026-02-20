@@ -1,22 +1,21 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, Event } from '@prisma/client';
 import { prisma } from '../db';
-import { EventDAO } from '../models/event';
 import { addDays, addWeeks, differenceInDays, getDay, isSameDay, startOfWeek, subDays } from 'date-fns';
 import { getDateWithoutTZ, toMySQLDate } from '../utils/utils';
 import { format } from 'path';
 
 export const eventRepository = {
-    getEventById: async (id: number): Promise<EventDAO> => {
+    getEventById: async (id: number): Promise<Event> => {
         return await prisma.event.findFirstOrThrow({
             where: {
                 id: id,
             },
         });
     },
-    getAllEvents: async (): Promise<EventDAO[]> => {
+    getAllEvents: async (): Promise<Event[]> => {
         return await prisma.event.findMany();
     },
-    getEvents: async (filter: Prisma.EventWhereInput): Promise<EventDAO[]> => {
+    getEvents: async (filter: Prisma.EventWhereInput): Promise<Event[]> => {
         return await prisma.event.findMany({
             where: filter
         });
@@ -24,7 +23,7 @@ export const eventRepository = {
     getEventsInTimeFrame: async (
         startDate: Date,
         endDate: Date,
-    ): Promise<EventDAO[]> => {
+    ): Promise<Event[]> => {
         return await prisma.event.findMany({
             where: {
                 date: {
@@ -34,7 +33,7 @@ export const eventRepository = {
             },
         });
     },
-    getNextBySeriesId: async (seriesId: number): Promise<EventDAO> => {
+    getNextBySeriesId: async (seriesId: number): Promise<Event> => {
         return (await prisma.event.findFirstOrThrow({
             where: {
                 eventSeriesId: seriesId,
@@ -45,9 +44,9 @@ export const eventRepository = {
             orderBy: {
                 date: 'asc',
             },
-        })) as EventDAO;
+        })) as Event;
     },
-    createEvent: async (event: Prisma.EventCreateInput): Promise<EventDAO> => {
+    createEvent: async (event: Prisma.EventCreateInput): Promise<Event> => {
         return await prisma.event.create({
             data: event,
         });
@@ -59,7 +58,7 @@ export const eventRepository = {
             data: inputData,
         });
     },
-    update: async <T = EventDAO>(
+    update: async <T = Event>(
         id: number,
         event: Prisma.EventUpdateInput,
     ): Promise<T> => {
@@ -70,7 +69,7 @@ export const eventRepository = {
             },
         }) as T;
     },
-    bulkUpdate: async <T = EventDAO>(
+    bulkUpdate: async <T = Event>(
         data: Prisma.EventUpdateInput,
         selector: Prisma.EventWhereInput
     ): Promise<T> => {
@@ -103,7 +102,7 @@ export const eventRepository = {
         
         const dateShouldBeChanged = data.date && !isSameDay(data.date, event.date);
 
-        let dataToSave: EventDAO[] = [];
+        let dataToSave: Event[] = [];
         if (dateShouldBeChanged) {
             const eventsToUpdate = await prisma.event.findMany({
                 where: {
@@ -182,7 +181,7 @@ export const eventRepository = {
             timeout: 10000
         });
     },
-    delete: async <T = EventDAO>(id: number): Promise<T> => {
+    delete: async <T = Event>(id: number): Promise<T> => {
         return await prisma.event.delete({
             where: {
                 id: id,

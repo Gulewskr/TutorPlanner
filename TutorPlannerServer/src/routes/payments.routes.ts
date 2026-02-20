@@ -1,7 +1,7 @@
 import express, { Request, Router } from 'express';
 import PaymentsService from '../services/PaymentsService';
-import { parseStudentId } from './studentsRoutes/utils';
-import StudentPaymentsService from '../services/StudentPaymentsService';
+import { createPaymentSchema } from '../models/payments/create-payment.schema';
+import { updatePaymentSchema } from '../models/payments/update-payment.schema';
 
 /**
  * Typescript don't like merging params so as workaround cast req.params to any
@@ -19,66 +19,6 @@ const getStudentId = (req: Request): number => {
 router.get('/:id', async (req, res, next) => {
     try {
         const payment = await PaymentsService.getPayment(Number(req.params.id));
-        res.status(200).json(payment);
-    } catch (err) {
-        next(err);
-    }
-});
-
-/**
- * path: /payments
- *
- * requestBody:
- *  studentId: number;
- *  price: number;
- *  date?: string;
- *
- * response:
- *  studentId: number;
- *  id: number;
- *  price: number;
- *  date: Date;
- */
-router.post('/', async (req, res, next) => {
-    try {
-        const studentId = getStudentId(req);
-        const payment = await PaymentsService.addPayment({
-            ...req.body,
-            studentId,
-        });
-        res.status(200).json(payment);
-    } catch (err) {
-        next(err);
-    }
-});
-
-/**
- * path: /payments/:paymentId
- */
-router.put('/:id', async (req, res, next) => {
-    try {
-        const studentId = getStudentId(req);
-        const payment = await PaymentsService.updatePayment(
-            Number(req.params.id),
-            {
-                ...req.body,
-                studentId,
-            },
-        );
-        res.status(200).json(payment);
-    } catch (err) {
-        next(err);
-    }
-});
-
-/**
- * path: /payments/:paymentId
- */
-router.delete('/:id', async (req, res, next) => {
-    try {
-        const payment = await PaymentsService.deletePayment(
-            Number(req.params.id),
-        );
         res.status(200).json(payment);
     } catch (err) {
         next(err);
@@ -123,13 +63,54 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.post('/:studentId/payments/', async (req, res, next) => {
+/**
+ * path: /payments
+ *
+ * requestBody:
+ *  studentId: number;
+ *  price: number;
+ *  date?: string;
+ *
+ * response:
+ *  studentId: number;
+ *  id: number;
+ *  price: number;
+ *  date: Date;
+ */
+router.post('/', async (req, res, next) => {
     try {
-        const studentId = parseStudentId(req);
-        const payment = await PaymentsService.addPayment({
-            ...req.body,
-            studentId: studentId,
-        });
+        const parsedBody = createPaymentSchema.parse(req.body);
+        const payment = await PaymentsService.addPayment(parsedBody);
+        res.status(200).json(payment);
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
+ * path: /payments/:paymentId
+ */
+router.put('/:id', async (req, res, next) => {
+    try {
+        const parsedBody = updatePaymentSchema.parse(req.body);
+        const payment = await PaymentsService.updatePayment(
+            Number(req.params.id),
+            parsedBody
+        );
+        res.status(200).json(payment);
+    } catch (err) {
+        next(err);
+    }
+});
+
+/**
+ * path: /payments/:paymentId
+ */
+router.delete('/:id', async (req, res, next) => {
+    try {
+        const payment = await PaymentsService.deletePayment(
+            Number(req.params.id),
+        );
         res.status(200).json(payment);
     } catch (err) {
         next(err);

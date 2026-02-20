@@ -1,10 +1,6 @@
 import { endOfMonth } from 'date-fns';
 import { eventRepository } from '../repositories/eventsRepository';
-import { EventDTO, toEventDTO } from '../dto/EventDTO';
-
-export type CalendarDTO = {
-    events: EventDTO[];
-};
+import { CalendarDTO, eventsToCalendarDTO } from '../models/callendar.dto';
 
 class CalendarService {
     public async getCalendarData(
@@ -12,13 +8,11 @@ class CalendarService {
         year: number,
     ): Promise<CalendarDTO> {
         const startOfMonth = new Date(year, month - 1, 1);
-        const data = await eventRepository.getEventsInTimeFrame(
+        const events = await eventRepository.getEventsInTimeFrame(
             startOfMonth,
             endOfMonth(startOfMonth),
         );
-        return {
-            events: data.map(e => toEventDTO(e)),
-        };
+        return eventsToCalendarDTO(events);
     }
 }
 

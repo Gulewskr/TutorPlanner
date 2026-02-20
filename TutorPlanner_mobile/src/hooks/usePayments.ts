@@ -1,4 +1,4 @@
-import { PaymentDTO } from '@model';
+import { Payment } from '@model';
 import { paymentsService } from '@services/payments.service';
 import { useEffect, useState } from 'react';
 
@@ -8,7 +8,7 @@ interface PaymentsFilter {
 }
 
 export const usePayments = (filter?: PaymentsFilter) => {
-    const [payments, setPayments] = useState<PaymentDTO[]>([]);
+    const [payments, setPayments] = useState<Payment[]>([]);
     const [isLoading, setDataLoaded] = useState(false);
 
     const loadData = async (props?: PaymentsFilter) => {

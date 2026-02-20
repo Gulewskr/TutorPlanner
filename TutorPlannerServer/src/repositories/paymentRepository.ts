@@ -1,8 +1,7 @@
 import { Prisma, Payment } from '@prisma/client';
 import { prisma } from '../db';
 import {
-    CreatePaymentDTO,
-    PaymentWithStudentDAO,
+    CreatePaymentInput
 } from '../models/payment.model';
 import { toMySQLDate } from '../utils/utils';
 import { isDate } from 'date-fns';
@@ -10,7 +9,7 @@ import { isDate } from 'date-fns';
 export const paymentRepository = {
     getPaymentById: async (
         id: number,
-    ): Promise<PaymentWithStudentDAO | null> => {
+    ): Promise<Payment | null> => {
         return await prisma.payment.findFirst({
             where: {
                 id: id,
@@ -22,7 +21,7 @@ export const paymentRepository = {
     },
     getPaymentByStudentId: async (
         studentId: number,
-    ): Promise<PaymentWithStudentDAO[]> => {
+    ): Promise<Payment[]> => {
         return await prisma.payment.findMany({
             where: {
                 studentId: studentId,
@@ -46,7 +45,7 @@ export const paymentRepository = {
     },
     getPayments: async (
         filter?: Prisma.PaymentWhereInput,
-    ): Promise<PaymentWithStudentDAO[]> => {
+    ): Promise<Payment[]> => {
         return await prisma.payment.findMany({
             where: filter,
             include: {
@@ -54,7 +53,7 @@ export const paymentRepository = {
             },
         });
     },
-    createPayment: async (payment: CreatePaymentDTO): Promise<Payment> => {
+    createPayment: async (payment: CreatePaymentInput): Promise<Payment> => {
         return await prisma.payment.create({
             data: {
                 price: payment.price,
@@ -65,6 +64,8 @@ export const paymentRepository = {
                         id: payment.studentId,
                     },
                 },
+                accountId: payment.accountId,
+                type: payment.type
             },
         });
     },

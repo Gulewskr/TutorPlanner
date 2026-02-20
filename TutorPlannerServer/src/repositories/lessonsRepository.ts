@@ -1,6 +1,6 @@
 import { EventSeries, EventType, Prisma } from '@prisma/client';
 import { prisma } from '../db';
-import { LessonDAO } from '../models/lesson';
+import { LessonDAO } from '../models/lessons/lesson';
 import { addDays, format, getDay, isDate, isSameDay, startOfWeek } from 'date-fns';
 import { eventRepository } from './eventsRepository';
 import { toMySQLDate } from '../utils/utils';

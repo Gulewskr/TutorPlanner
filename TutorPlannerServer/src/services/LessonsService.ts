@@ -2,7 +2,6 @@ import { EventSeriesType, Prisma } from '@prisma/client';
 import { addWeeks, endOfMonth, getDay } from 'date-fns';
 import { CONFIG } from '../config';
 import {
-    CreateLessonRequestBody,
     EventType,
     Lesson,
     LessonDAO,
@@ -10,7 +9,7 @@ import {
     LessonFilters,
     mapEventSeriesToLessonSeriesDTO,
     toLessonDTO,
-} from '../models/lesson';
+} from '../models/lessons/lesson';
 import { parseDate, toMySQLDate } from '../utils/utils';
 
 // repositories
@@ -18,14 +17,11 @@ import { eventSeriesRepository } from '../models/eventSeries';
 import { lessonRepository } from '../repositories/lessonsRepository';
 import { eventRepository } from '../repositories/eventsRepository';
 
-// validators
-import {
-    LessonCreateInputSchema,
-    LessonUpdateInputSchema,
-} from '../validators/lessons/lesson';
-import { LessonSeriesUpdateInputSchema } from '../validators/lessons/lessonSeries';
 import StudentPaymentsService from './StudentPaymentsService';
-import EventsService from './EventsService';
+import EventsService from './events/EventsService';
+import { CreateLesson, createLessonSchema } from '../models/lessons/create-lesson.schema';
+import { updateLessonSchema } from '../models/lessons/update-lesson.schema';
+import { updateLessonSeriesSchema } from '../models/lessons/update-lessonSeries.schema';
 
 export type LessonSeriesDTO = {
     id: number;
@@ -134,15 +130,15 @@ class LessonsService {
         return lessons.map((l: Lesson) => toLessonDTO(l));
     }
 
-    public async getStudentLessons(studnetId: number): Promise<Lesson[]> {
-        return await lessonRepository.getLessonsByStudentId(studnetId);
+    public async getStudentLessons(studentId: number): Promise<Lesson[]> {
+        return await lessonRepository.getLessonsByStudentId(studentId);
     }
 
     public async getStudentWeeklyLessons(
-        studnetId: number,
+        studentId: number,
     ): Promise<LessonSeriesDTO[]> {
         const res =
-            await lessonRepository.getLessonsSeriesByStudentId(studnetId);
+            await lessonRepository.getLessonsSeriesByStudentId(studentId);
         return res.map(l => mapEventSeriesToLessonSeriesDTO(l));
     }
 
@@ -187,41 +183,31 @@ class LessonsService {
         });
     }
 
-    public async addUserLesson(
-        studnetId: number,
-        lesson: CreateLessonRequestBody,
-    ): Promise<LessonDTO> {
-        return await this.createLesson({
-            ...lesson,
-            student: studnetId,
-        });
-    }
-
     public async createLesson(
-        lesson: CreateLessonRequestBody,
+        data: CreateLesson,
     ): Promise<LessonDTO> {
-        const lessonInputData = LessonCreateInputSchema.parse(lesson);
-        if (!lessonInputData.weekly) {
+        const lesson = createLessonSchema.parse(data);
+        if (!lesson.weekly) {
             const createdLesson = await lessonRepository.create({
-                name: lessonInputData.name,
-                description: lessonInputData.description,
-                date: lessonInputData.date,
-                date_text: toMySQLDate(lessonInputData.date),
-                price: lessonInputData.price,
-                startHour: lessonInputData.startHour,
-                endHour: lessonInputData.endHour,
-                studentId: lessonInputData.student
+                name: lesson.name,
+                description: lesson.description,
+                date: lesson.date,
+                date_text: toMySQLDate(lesson.date),
+                price: lesson.price,
+                startHour: lesson.startHour,
+                endHour: lesson.endHour,
+                studentId: lesson.student
             });
             return toLessonDTO(createdLesson);
         } else {
             const series = await eventSeriesRepository.createEventSeries({
-                name: lessonInputData.name,
-                description: lessonInputData.description,
-                startHour: lessonInputData.startHour,
-                endHour: lessonInputData.endHour,
+                name: lesson.name,
+                description: lesson.description,
+                startHour: lesson.startHour,
+                endHour: lesson.endHour,
                 type: EventSeriesType.WEEKLY,
                 pattern: JSON.stringify([getDay(lesson.date)]),
-                studentId: lessonInputData.student,
+                studentId: lesson.student,
                 isCanceled: false,
             });
             const inputData: Prisma.EventCreateManyInput[] = [];
@@ -260,9 +246,9 @@ class LessonsService {
 
     public async updateLesson(
         lessonId: number,
-        data: Partial<CreateLessonRequestBody>,
+        data: Partial<CreateLesson>,
     ): Promise<LessonDTO> {
-        const updateData = LessonUpdateInputSchema.parse(data);
+        const updateData = updateLessonSchema.parse(data);
         const createdLesson = await lessonRepository.update(lessonId, {
             name: updateData.name,
             date: updateData.date,
@@ -283,9 +269,9 @@ class LessonsService {
 
     public async updateLessonsTypeSeries(
         seriesId: number,
-        data: Partial<CreateLessonRequestBody>,
+        data: Partial<CreateLesson>,
     ): Promise<void> {
-        const updateData = LessonSeriesUpdateInputSchema.parse(data);
+        const updateData = updateLessonSeriesSchema.parse(data);
         await lessonRepository.updateLessonSeriesBySeriesId(
             seriesId,
             updateData,
@@ -294,9 +280,9 @@ class LessonsService {
 
     public async updateSeriesOfLesson(
         lessonId: number,
-        data: Partial<CreateLessonRequestBody>,
+        data: Partial<CreateLesson>,
     ): Promise<void> {
-        const updateData = LessonSeriesUpdateInputSchema.parse(data);
+        const updateData = updateLessonSeriesSchema.parse(data);
         await eventRepository.updateSeriesOfEvents(
             lessonId,
             updateData,
