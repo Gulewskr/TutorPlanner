@@ -8,6 +8,7 @@ import { Tile } from '@components/tile';
 import { mapHourValueToText } from '@utils/dateUtils';
 import { LessonTile } from '@screens/Lessons/components/LessonTile';
 import { WEEKSDAYS_FULLNAMES } from '@screens/Calendar/components/calendar';
+import { STYLES } from '@styles/theme';
 
 export const StudentLessons: React.FC<
     BottomTabScreenProps<StudentProfileTabParamList, 'Lessons'>
@@ -31,7 +32,7 @@ export const StudentLessons: React.FC<
     */
 
     const renderHeader = (title: string) => (
-        <Text style={{ fontSize: 22, fontWeight: 'bold' }}>{title}</Text>
+        <Text style={STYLES.h4}>{title}</Text>
     );
 
     const renderWeeklyLessons = () => {

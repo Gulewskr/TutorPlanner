@@ -17,16 +17,17 @@ import { usePayments } from '@hooks/usePayments';
 import { OverduesTile } from '../components/OverduesTile';
 import { useUnpaidLessons } from '@hooks/useUnpaidLessons';
 import { PaymentsTabParamList } from '@components/ui/navbar';
-import { PaymentDTO } from '@model';
 import { useModalContext } from '@contexts/modalContext';
 import { PaymentModal } from '@components/modals/PaymentModal';
 import { useAlert } from '@contexts/AlertContext';
 import { getFullName } from '@utils/utils';
 import { paymentsService } from '@services/payments.service';
 import { useConfirmModal } from '@contexts/confirmModalContext';
-import { LoadWrapper } from '@components/loader';
 import { getMonthName } from '@screens/Calendar/components/calendar/utils';
 import { $border_width } from '@styles/global';
+import { PaymentsList } from '../components/PaymentsList';
+import { Payment } from '@model';
+import { PageNavigation } from '../components/PageNavigation';
 
 export const PaymentsHistory: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'History'>
@@ -44,10 +45,7 @@ export const PaymentsHistory: React.FC<
     const { openModal } = useConfirmModal();
     const { showAlert } = useAlert();
 
-    const {
-        unpaidLessons,
-        fetchData: fetchUnpaidLessons,
-    } = useUnpaidLessons({
+    const { unpaidLessons, fetchData: fetchUnpaidLessons } = useUnpaidLessons({
         month: month,
         year: year,
     });
@@ -105,7 +103,7 @@ export const PaymentsHistory: React.FC<
         }
     };
 
-    const handleOpenPaymentModal = (payment: PaymentDTO) => {
+    const handleOpenPaymentModal = (payment: Payment) => {
         setModalBody(
             <PaymentModal
                 payment={payment}
@@ -145,39 +143,15 @@ export const PaymentsHistory: React.FC<
                         width: '100%',
                     }}
                 >
-                    <View
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            width: '100%',
+                    <PageNavigation
+                        onPrev={() => {
+                            handleMonthChange(-1);
                         }}
-                    >
-                        <Button
-                            icon="arrowLeft"
-                            type="icon-button"
-                            hasShadow={false}
-                            severity="warning"
-                            onClick={() => {
-                                handleMonthChange(-1);
-                            }}
-                        />
-                        <View style={styles.control_text}>
-                            <Text style={{ fontWeight: 'bold' }}>
-                                {getMonthName(month)}{' '}
-                                {!isSameYear(controlDate, new Date()) && year}
-                            </Text>
-                        </View>
-                        <Button
-                            icon="arrowRight"
-                            type="icon-button"
-                            hasShadow={false}
-                            severity="warning"
-                            onClick={() => {
-                                handleMonthChange(1);
-                            }}
-                        />
-                    </View>
+                        onNext={() => {
+                            handleMonthChange(1);
+                        }}
+                        title={`${getMonthName(month)} ${!isSameYear(controlDate, new Date()) ? year : ''}`}
+                    />
                     <View
                         style={{
                             display: 'flex',
@@ -189,32 +163,33 @@ export const PaymentsHistory: React.FC<
                             marginBottom: 10,
                         }}
                     >
-                        {isLoading ?
-                                <Text
-                                    style={{
-                                        fontWeight: 'bold',
-                                        borderBottomWidth: 1,
-                                    }}
-                                >
-                                    Ładowanie...
-                                </Text>
-                         : 
-                         <>
-                         {payments.length ? (
-                                <Text
-                                    style={{
-                                        fontWeight: 'bold',
-                                        borderBottomWidth: 1,
-                                    }}
-                                >
-                                    Przychody:{' '}
-                                    {payments.reduce(
-                                        (acc, v) => acc + v.price,
-                                        0,
-                                    )}
-                                    zł
-                                </Text>
-                                /*
+                        {isLoading ? (
+                            <Text
+                                style={{
+                                    fontWeight: 'bold',
+                                    borderBottomWidth: 1,
+                                }}
+                            >
+                                Ładowanie...
+                            </Text>
+                        ) : (
+                            <>
+                                {payments.length ? (
+                                    <Text
+                                        style={{
+                                            fontWeight: 'bold',
+                                            borderBottomWidth: 1,
+                                        }}
+                                    >
+                                        Przychody:{' '}
+                                        {payments.reduce(
+                                            (acc, v) => acc + v.price,
+                                            0,
+                                        )}
+                                        zł
+                                    </Text>
+                                ) : (
+                                    /*
                                 TODO dodać ilość lekcji
                                 <Text
                                     style={{
@@ -224,37 +199,36 @@ export const PaymentsHistory: React.FC<
                                 >
                                     Lekcje:  
                                 </Text>*/
-                        ) : (
-                            <Text
-                                style={{
-                                    fontWeight: 'bold',
-                                    borderBottomWidth: 1,
-                                }}
-                            >
-                                Brak płatności
-                            </Text>
+                                    <Text
+                                        style={{
+                                            fontWeight: 'bold',
+                                            borderBottomWidth: 1,
+                                        }}
+                                    >
+                                        Brak płatności
+                                    </Text>
+                                )}
+                                {unpaidLessons.length ? (
+                                    <Text
+                                        style={{
+                                            fontWeight: 'bold',
+                                            borderBottomWidth: 1,
+                                        }}
+                                    >
+                                        Zaległości: {unpaidLessons.length}
+                                    </Text>
+                                ) : (
+                                    <Text
+                                        style={{
+                                            fontWeight: 'bold',
+                                            borderBottomWidth: 1,
+                                        }}
+                                    >
+                                        Brak Zaległości
+                                    </Text>
+                                )}
+                            </>
                         )}
-                        {unpaidLessons.length ? (
-                            <Text
-                                style={{
-                                    fontWeight: 'bold',
-                                    borderBottomWidth: 1,
-                                }}
-                            >
-                                Zaległości: {unpaidLessons.length}
-                            </Text>
-                        ) : (
-                            <Text
-                                style={{
-                                    fontWeight: 'bold',
-                                    borderBottomWidth: 1,
-                                }}
-                            >
-                                Brak Zaległości
-                            </Text>
-                        )}
-                        </>
-                    }
                     </View>
                 </View>
                 <ScrollView showsVerticalScrollIndicator={false}>
@@ -264,18 +238,11 @@ export const PaymentsHistory: React.FC<
                             marginBottom: 20,
                         }}
                     >
-                        <LoadWrapper loading={isLoading} size="large">
-                            {payments.sort((a, b) => compareDesc(a.date, b.date))
-                                    .map(p => (
-                                        <PaymentTile
-                                            key={p.id + 1}
-                                            payment={p}
-                                            onClick={() =>
-                                                handleOpenPaymentModal(p)
-                                            }
-                                        />
-                                    ))}
-                        </LoadWrapper>
+                        <PaymentsList
+                            isLoading={isLoading}
+                            payments={payments}
+                            onSelect={handleOpenPaymentModal}
+                        />
                     </View>
                     {isFutureMonth || (
                         <OverduesTile

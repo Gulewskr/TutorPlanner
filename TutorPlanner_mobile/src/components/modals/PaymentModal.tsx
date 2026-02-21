@@ -1,7 +1,7 @@
 import { Button } from '@components/button';
 import { Tile } from '@components/tile';
 import { useModalContext } from '@contexts/modalContext';
-import { PaymentDTO } from '@model';
+import { Payment } from '@model';
 import { getFullName } from '@utils/utils';
 import { format } from 'date-fns';
 import React from 'react';
@@ -9,7 +9,7 @@ import { Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 interface PaymentModalProps {
-    payment: PaymentDTO;
+    payment: Payment;
     goToEditForm: () => void;
     goToStudentProfile?: () => void;
     onDelete: () => void;

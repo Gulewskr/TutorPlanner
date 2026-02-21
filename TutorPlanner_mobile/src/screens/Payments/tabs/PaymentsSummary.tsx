@@ -17,13 +17,14 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { getMonth, getYear } from 'date-fns';
 import { useOverdues } from '@hooks/useOverdues';
 import { useModalContext } from '@contexts/modalContext';
-import { PaymentDTO } from '@model';
+import { Payment } from '@model';
 import { PaymentModal } from '@components/modals/PaymentModal';
 import { useConfirmModal } from '@contexts/confirmModalContext';
 import { getFullName } from '@utils/utils';
 import { paymentsService } from '@services/payments.service';
 import { useAlert } from '@contexts/AlertContext';
 import { setLoadingPage } from '@contexts/NavbarReducer';
+import { STYLES } from '@styles/theme';
 
 export const PaymentsSummary: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'Summary'>
@@ -93,7 +94,7 @@ export const PaymentsSummary: React.FC<
         }
     };
 
-    const handleShowEventModal = (payment: PaymentDTO) => {
+    const handleShowEventModal = (payment: Payment) => {
         setModalBody(
             <PaymentModal
                 payment={payment}
@@ -213,8 +214,7 @@ export const PaymentsSummary: React.FC<
 
 const styles = EStyleSheet.create({
     headText: {
-        fontSize: 20,
-        fontWeight: 'bold',
+        ...STYLES.h3,
         width: '50%',
         textAlign: 'right',
         paddingRight: 10,

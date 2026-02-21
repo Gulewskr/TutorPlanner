@@ -5,8 +5,27 @@ import { Layout } from '../Layout';
 import { PaymentsTabParamList } from '@components/ui/navbar';
 
 const tabs: Array<TabItem<keyof PaymentsTabParamList>> = [
-    { id: 'Summary', isExpanded: true, text: 'Podsumowanie', icon: 'payments' },
-    { id: 'History', isExpanded: true, text: 'Historia', icon: 'diagram' },
+    {
+        id: 'Summary',
+        hasHiddenLabel: 'whenNotActive',
+        isExpanded: true,
+        text: 'Podsumowanie',
+        icon: 'payments',
+    },
+    {
+        id: 'QuarterDetails',
+        hasHiddenLabel: 'whenNotActive',
+        isExpanded: true,
+        text: 'Szczegóły',
+        icon: 'diagram',
+    },
+    {
+        id: 'History',
+        hasHiddenLabel: 'whenNotActive',
+        isExpanded: true,
+        text: 'Historia',
+        icon: 'diagram',
+    },
     {
         id: 'Create',
         hasHiddenLabel: 'always',

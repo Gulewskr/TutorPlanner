@@ -1,2 +1,4 @@
 import LoadWrapper from './LoadWrapper';
-export { LoadWrapper };
+import LoadingIcon from './LoadingIcon';
+
+export { LoadWrapper, LoadingIcon };

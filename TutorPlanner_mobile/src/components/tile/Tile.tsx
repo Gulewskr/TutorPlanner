@@ -21,6 +21,7 @@ type TileColors =
 
 interface TileProps {
     color?: TileColors;
+    customColor?: string;
     width?: number;
     centered?: boolean;
     hasShadow?: boolean;
@@ -47,6 +48,7 @@ const TILE_COLORS: { [key in TileColors]: string } = {
 const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
     children,
     color = 'white',
+    customColor,
     hasShadow = true,
     centered = false,
     onClick,
@@ -59,7 +61,10 @@ const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
     };
 
     const selectedColor =
-        color && TILE_COLORS[color] ? TILE_COLORS[color] : getRandomColorKey();
+        customColor ||
+        (color && TILE_COLORS[color]
+            ? TILE_COLORS[color]
+            : getRandomColorKey());
 
     return (
         <View
@@ -79,7 +84,7 @@ const CustomTile: React.FC<PropsWithChildren<TileProps>> = ({
                     styles.content,
                     {
                         backgroundColor: selectedColor,
-                         flex: 1
+                        flex: 1,
                     },
                 ]}
             >

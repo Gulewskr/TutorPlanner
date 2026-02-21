@@ -33,7 +33,16 @@ import LoadingScreen from '@components/ui/LoadingScreen';
 import { navigationRef } from '@components/ui/navbar/GlobalNavigation';
 import LoadingPage from '@components/ui/LoadingPage';
 import { Events } from '@screens/Events/Events';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 //import { title } from 'process';
+
+const QUERY_CLIENT = new QueryClient({
+    defaultOptions: {
+        queries: {
+            retry: 1
+        }
+    }
+});
 
 EStyleSheet.build({
     $color_primary: '#FFA9F1',
@@ -65,83 +74,87 @@ const App: React.FC<{}> = () => {
             ref={navigationRef}
             theme={scheme === 'dark' ? DarkTheme : DefaultTheme}
         >
-            <StatusBar
-                barStyle="light-content"
-                backgroundColor={$bgColor_primary}
-            />
-            <GlobalContextProvider>
-                <Provider store={store}>
-                    <View
-                        style={{
-                            backgroundColor: 'transparent',
-                            flex: 1,
-                        }}
-                    >
-                        <LoadingScreen />
-                        <Navbar />
-                        <LoadingPage />
-                        <ConfirmModalProvider>
-                            <ModalProvider>
-                                <AlertProvider>
-                                    <StudentsProvider>
-                                        <StudentProvider>
-                                            <Tab.Navigator
-                                                screenOptions={{
-                                                    animation: 'none',
-                                                    headerShown: false,
-                                                }}
-                                                initialRouteName="Home"
-                                            >
-                                                <Tab.Screen
-                                                    name="Home"
-                                                    component={Home}
-                                                    options={{
-                                                        headerTitleAlign:
-                                                            'center',
-                                                        title: 'Welcome',
+            <QueryClientProvider client={QUERY_CLIENT}>
+                <StatusBar
+                    barStyle="light-content"
+                    backgroundColor={$bgColor_primary}
+                />
+                <GlobalContextProvider>
+                    <Provider store={store}>
+                        <View
+                            style={{
+                                backgroundColor: 'transparent',
+                                flex: 1,
+                            }}
+                        >
+                            <LoadingScreen />
+                            <Navbar />
+                            <LoadingPage />
+                            <ConfirmModalProvider>
+                                <ModalProvider>
+                                    <AlertProvider>
+                                        <StudentsProvider>
+                                            <StudentProvider>
+                                                <Tab.Navigator
+                                                    screenOptions={{
+                                                        animation: 'none',
+                                                        headerShown: false,
                                                     }}
-                                                />
-                                                <Tab.Screen
-                                                    name="Calendar"
-                                                    component={Calendar}
-                                                />
-                                                <Tab.Screen
-                                                    name="Lessons"
-                                                    component={Lessons}
-                                                />
-                                                <Tab.Screen
-                                                    name="Events"
-                                                    component={Events}
-                                                />
-                                                <Tab.Screen
-                                                    name="Notes"
-                                                    component={Notes}
-                                                />
-                                                <Tab.Screen
-                                                    name="Payments"
-                                                    component={Payments}
-                                                />
-                                                <Tab.Screen
-                                                    name="Students"
-                                                    component={Students}
-                                                />
-                                                <Tab.Screen
-                                                    name="Settings"
-                                                    component={Settings}
-                                                />
-                                                <Tab.Screen
-                                                    name="CreatePayment"
-                                                    component={CreatePayment}
-                                                />
-                                            </Tab.Navigator>
-                                        </StudentProvider>
-                                    </StudentsProvider>
-                                </AlertProvider>
-                            </ModalProvider>
-                        </ConfirmModalProvider>
-                    </View>
-                </Provider>
-            </GlobalContextProvider>
+                                                    initialRouteName="Home"
+                                                >
+                                                    <Tab.Screen
+                                                        name="Home"
+                                                        component={Home}
+                                                        options={{
+                                                            headerTitleAlign:
+                                                                'center',
+                                                            title: 'Welcome',
+                                                        }}
+                                                    />
+                                                    <Tab.Screen
+                                                        name="Calendar"
+                                                        component={Calendar}
+                                                    />
+                                                    <Tab.Screen
+                                                        name="Lessons"
+                                                        component={Lessons}
+                                                    />
+                                                    <Tab.Screen
+                                                        name="Events"
+                                                        component={Events}
+                                                    />
+                                                    <Tab.Screen
+                                                        name="Notes"
+                                                        component={Notes}
+                                                    />
+                                                    <Tab.Screen
+                                                        name="Payments"
+                                                        component={Payments}
+                                                    />
+                                                    <Tab.Screen
+                                                        name="Students"
+                                                        component={Students}
+                                                    />
+                                                    <Tab.Screen
+                                                        name="Settings"
+                                                        component={Settings}
+                                                    />
+                                                    <Tab.Screen
+                                                        name="CreatePayment"
+                                                        component={
+                                                            CreatePayment
+                                                        }
+                                                    />
+                                                </Tab.Navigator>
+                                            </StudentProvider>
+                                        </StudentsProvider>
+                                    </AlertProvider>
+                                </ModalProvider>
+                            </ConfirmModalProvider>
+                        </View>
+                    </Provider>
+                </GlobalContextProvider>
+            </QueryClientProvider>
         </NavigationContainer>
     );
 };

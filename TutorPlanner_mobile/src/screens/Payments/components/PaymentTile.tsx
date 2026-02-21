@@ -1,19 +1,21 @@
 import { Tile } from '@components/tile';
-import { PaymentDTO } from '@model';
 import { format } from 'date-fns';
 import { Text, View } from 'react-native';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import { getFullName } from '@utils/utils';
+import { Payment } from '@model';
+import { STYLES } from '@styles/theme';
 
 interface StudentTileProps {
-    payment: PaymentDTO;
+    payment: Payment;
     onClick: () => void;
     severity?: 'error';
+    customColor?: string;
 }
 
 export const PaymentTile: React.FC<StudentTileProps> = ({
     payment,
     onClick,
+    customColor,
 }) => {
     const { student } = payment;
 
@@ -23,29 +25,21 @@ export const PaymentTile: React.FC<StudentTileProps> = ({
 
     return (
         <View style={{ marginBottom: 10 }}>
-            <Tile color="white" onClick={onClick}>
-                <View
-                    style={{
-                        paddingVertical: 10,
-                        paddingHorizontal: 5,
-                        gap: 5,
-                    }}
-                >
-                    <Text style={styles.headerText}>
-                        {getFullName(student)} {payment.price}zł
-                    </Text>
-                    <Text style={styles.text}>
-                        {format(payment.date, 'yyyy-MM-dd')}
+            <Tile color="white" customColor={customColor} onClick={onClick}>
+                <View style={STYLES.list}>
+                    <Text>
+                        <Text style={STYLES.h1}>
+                            {getFullName(student)}
+                        </Text>
+                        {' - '}
+                        <Text style={STYLES.text}>
+                            {format(payment.date, 'yyyy-MM-dd')}
+                        </Text>
+                        {' - '}
+                        <Text style={STYLES.h1}>{payment.price}zł</Text>
                     </Text>
                 </View>
             </Tile>
         </View>
     );
 };
-
-const styles = EStyleSheet.create({
-    headerText: {
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
-});

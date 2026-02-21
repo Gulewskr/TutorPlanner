@@ -10,24 +10,18 @@ import { Layout } from '@screens/Layout';
 import { StudentForm } from '@screens/Students/components/StudentForm';
 import { StudentsLayout } from '../Layout';
 import { useStudentContext } from '../StudentContext';
+import { STYLES } from '@styles/theme';
 
 const FormHeader = (
     <Text
         style={{
-            fontSize: 20,
-            fontWeight: 'bold',
+            ...STYLES.h3,
             textAlign: 'center',
         }}
     >
         Edycja danych ucznia
     </Text>
 );
-
-const containerStyle: ViewStyle = {
-    paddingVertical: 0,
-    paddingHorizontal: 15,
-    width: '100%',
-};
 
 export const StudentEdit: React.FC<
     BottomTabScreenProps<StudentProfileTabParamList, 'Edit'>
@@ -64,7 +58,7 @@ export const StudentEdit: React.FC<
             {inProfile ? (
                 <StudentsLayout {...props} student={student}>
                     {FormHeader}
-                    <View style={containerStyle}>
+                    <View style={STYLES.fullWidthContainer}>
                         <StudentForm
                             type="edit"
                             onCancel={() => navigation.jumpTo('Info')}
@@ -87,7 +81,7 @@ export const StudentEdit: React.FC<
                     hasHeaderSeperated
                 >
                     {FormHeader}
-                    <View style={containerStyle}>
+                    <View style={STYLES.fullWidthContainer}>
                         <StudentForm
                             type="edit"
                             onCancel={navigation.goBack}
