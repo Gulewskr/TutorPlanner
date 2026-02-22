@@ -4,6 +4,7 @@ export interface Account {
     color: string;
 }
 
+//TODO - remove this and use data returned from server instead
 export const ACCOUNTS: Account[] = [{
     id: 0,
     name: "Natalia",

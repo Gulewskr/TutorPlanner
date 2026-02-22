@@ -1,4 +1,12 @@
-import { format, isValid, parse } from 'date-fns';
+import {
+    endOfQuarter,
+    format,
+    isValid,
+    parse,
+    setQuarter,
+    setYear,
+    startOfQuarter,
+} from 'date-fns';
 import { Request } from 'express';
 
 export const validateDateFormat = (dateString?: string): Date => {
@@ -42,7 +50,9 @@ export const parseDate = (dateString: string): Date => {
     return getDateWithoutTZ(date);
 };
 
-export const parseReqestQueryToOptionalDate = (dateString?: string): Date | undefined => {
+export const parseReqestQueryToOptionalDate = (
+    dateString?: string,
+): Date | undefined => {
     if (!dateString) {
         return undefined;
     }
@@ -52,4 +62,21 @@ export const parseReqestQueryToOptionalDate = (dateString?: string): Date | unde
 export const getDateWithoutTZ = (date: Date): Date =>
     new Date(date.valueOf() - date.getTimezoneOffset() * 60 * 1000);
 
-export const toMySQLDate = (date: string | Date): string => format(date, 'yyyy-MM-dd');
+export const toMySQLDate = (date: string | Date): string =>
+    format(date, 'yyyy-MM-dd');
+
+export const getQuarterRange = (
+    quarter: number,
+    year: number,
+): { from: Date; to: Date } => {
+    if (quarter < 1 || quarter > 4) {
+        throw new Error('Quarter must be between 1 and 4');
+    }
+
+    const base = setQuarter(setYear(new Date(), year), quarter);
+
+    return {
+        from: startOfQuarter(base),
+        to: endOfQuarter(base),
+    };
+};

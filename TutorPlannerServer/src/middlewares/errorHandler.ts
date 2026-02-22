@@ -3,6 +3,7 @@ import { ZodError } from 'zod';
 import { InvalidFormatError } from '../models/errors/invalid_format.error';
 import { GeneralError } from '../models/errors/general.error';
 import { ErrorCode } from '../models/errors/errorsCodes';
+import { Prisma } from '@prisma/client';
 
 export const errorHandler = (
     err: Error | any,
@@ -23,6 +24,28 @@ export const errorHandler = (
                 message: issue.message,
                 code: issue.code,
             }))
+        }
+        res.status(400);
+        res.json(error);
+        res.end();
+        return;
+    }
+
+
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        res.status(500);
+        res.end();
+        return;
+    }
+
+
+    if (err instanceof Prisma.PrismaClientValidationError) {
+        console.log(JSON.stringify(err.message));
+        
+        const error: InvalidFormatError = {
+            message: 'invalid request data',
+            code: ErrorCode.VALIDATION_FAILED,
+            errors: []
         }
         res.status(400);
         res.json(error);

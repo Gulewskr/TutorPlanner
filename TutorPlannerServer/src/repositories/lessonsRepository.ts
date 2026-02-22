@@ -401,6 +401,25 @@ export const lessonRepository = {
         });
         return res[0]?._sum?.price || 0;
     },
+    getPriceOfLessonsInTimeRange: async (
+        from: Date,
+        to: Date
+    ): Promise<number> => {
+        const res = await prisma.event.groupBy({
+            where: {
+                eventType: 'LESSON',
+                date: {
+                    gte: from,
+                    lte: to
+                }
+            },
+            by: 'studentId',
+            _sum: {
+                price: true,
+            },
+        });
+        return res[0]?._sum?.price || 0;
+    },
     getUnpaidLessonsByStudentId: async (
         studentId: number,
     ): Promise<LessonDAO[]> => {

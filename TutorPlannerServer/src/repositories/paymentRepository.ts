@@ -1,15 +1,11 @@
 import { Prisma, Payment } from '@prisma/client';
 import { prisma } from '../db';
-import {
-    CreatePaymentInput
-} from '../models/payment.model';
+import { CreatePaymentInput } from '../models/payment.model';
 import { toMySQLDate } from '../utils/utils';
-import { isDate } from 'date-fns';
+import { endOfMonth, isDate } from 'date-fns';
 
 export const paymentRepository = {
-    getPaymentById: async (
-        id: number,
-    ): Promise<Payment | null> => {
+    getPaymentById: async (id: number): Promise<Payment | null> => {
         return await prisma.payment.findFirst({
             where: {
                 id: id,
@@ -19,9 +15,7 @@ export const paymentRepository = {
             },
         });
     },
-    getPaymentByStudentId: async (
-        studentId: number,
-    ): Promise<Payment[]> => {
+    getPaymentByStudentId: async (studentId: number): Promise<Payment[]> => {
         return await prisma.payment.findMany({
             where: {
                 studentId: studentId,
@@ -53,6 +47,22 @@ export const paymentRepository = {
             },
         });
     },
+    getPaymentsInTimeRange: async (
+        from: Date,
+        to: Date,
+    ): Promise<Payment[]> => {
+        return await prisma.payment.findMany({
+            where: {
+                date: {
+                    gte: from,
+                    lte: to,
+                },
+            },
+            include: {
+                student: true,
+            },
+        });
+    },
     createPayment: async (payment: CreatePaymentInput): Promise<Payment> => {
         return await prisma.payment.create({
             data: {
@@ -65,7 +75,7 @@ export const paymentRepository = {
                     },
                 },
                 accountId: payment.accountId,
-                type: payment.type
+                type: payment.type,
             },
         });
     },
