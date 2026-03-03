@@ -105,10 +105,10 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
                 initialData
                     ? {
                           student: `${initialData.student.id}`,
-                          price: initialData.price,
+                          price: initialData.value,
                           date: initialData.date,
                           type: initialData.type,
-                          account: initialData.account
+                          account: initialData.accountId
                       }
                     : undefined,
             ),

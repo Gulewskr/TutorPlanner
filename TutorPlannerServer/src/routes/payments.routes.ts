@@ -102,7 +102,8 @@ router.post('/', async (req: Request<{}, PaymentDTO, CreatePayment>, res, next) 
     try {
         const parsedBody = createPaymentSchema.parse(req.body);
         const payment = await PaymentsService.addPayment(parsedBody);
-        res.status(200).json(paymentToPaymentDTO(payment));
+        const data = await PaymentsService.getPayment(payment.id)
+        res.status(200).json(paymentToPaymentDTO(data));
     } catch (err) {
         next(err);
     }

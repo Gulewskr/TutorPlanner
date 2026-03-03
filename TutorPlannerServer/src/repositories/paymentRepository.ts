@@ -1,11 +1,11 @@
 import { Prisma, Payment } from '@prisma/client';
 import { prisma } from '../db';
-import { CreatePaymentInput } from '../models/payment.model';
+import { CreatePaymentInput, FullPayment } from '../models/payment.model';
 import { toMySQLDate } from '../utils/utils';
 import { endOfMonth, isDate } from 'date-fns';
 
 export const paymentRepository = {
-    getPaymentById: async (id: number): Promise<Payment | null> => {
+    getPaymentById: async (id: number): Promise<FullPayment | null> => {
         return await prisma.payment.findFirst({
             where: {
                 id: id,
@@ -15,7 +15,7 @@ export const paymentRepository = {
             },
         });
     },
-    getPaymentByStudentId: async (studentId: number): Promise<Payment[]> => {
+    getPaymentByStudentId: async (studentId: number): Promise<FullPayment[]> => {
         return await prisma.payment.findMany({
             where: {
                 studentId: studentId,
@@ -39,7 +39,7 @@ export const paymentRepository = {
     },
     getPayments: async (
         filter?: Prisma.PaymentWhereInput,
-    ): Promise<Payment[]> => {
+    ): Promise<FullPayment[]> => {
         return await prisma.payment.findMany({
             where: filter,
             include: {
@@ -50,7 +50,7 @@ export const paymentRepository = {
     getPaymentsInTimeRange: async (
         from: Date,
         to: Date,
-    ): Promise<Payment[]> => {
+    ): Promise<FullPayment[]> => {
         return await prisma.payment.findMany({
             where: {
                 date: {

@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { Payment } from '../models/payment.model';
+import { FullPayment, Payment } from '../models/payment.model';
 import { endOfMonth } from 'date-fns';
 import { paymentRepository } from '../repositories/paymentRepository';
 import { getQuarterRange, parseDate, validateDateFormat } from '../utils/utils';
@@ -21,7 +21,7 @@ interface Filters {
 }
 
 class PaymentsService {
-    public async getPayment(id: number): Promise<Payment> {
+    public async getPayment(id: number): Promise<FullPayment> {
         const payment = await paymentRepository.getPaymentById(id);
         if (payment == null) {
             throw new Error(`Could not find payment`);
@@ -29,7 +29,7 @@ class PaymentsService {
         return payment;
     }
 
-    public async getFilteredPayments(filters?: Filters): Promise<Payment[]> {
+    public async getFilteredPayments(filters?: Filters): Promise<FullPayment[]> {
         if (!filters) {
             return await paymentRepository.getPayments();
         }
@@ -42,7 +42,7 @@ class PaymentsService {
         );
     }
 
-    public async getStudentPayments(studentId: number): Promise<Payment[]> {
+    public async getStudentPayments(studentId: number): Promise<FullPayment[]> {
         return await paymentRepository.getPaymentByStudentId(studentId);
     }
 

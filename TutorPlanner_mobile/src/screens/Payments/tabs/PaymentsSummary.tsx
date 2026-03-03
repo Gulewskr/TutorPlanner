@@ -71,7 +71,7 @@ export const PaymentsSummary: React.FC<
 
         setSummaryDate({
             lessonsNumber: lessons.length,
-            income: payments.map(v => v.price).reduce((acc, v) => acc + v, 0),
+            income: payments.map(v => v.value).reduce((acc, v) => acc + v, 0),
             paymentsNumber: payments.length,
         });
         setIsLoading(false);

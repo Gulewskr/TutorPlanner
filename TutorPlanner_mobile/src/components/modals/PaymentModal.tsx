@@ -34,7 +34,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                         <Text>{`Kwota: `}</Text>
                         <Text
                             style={{ fontWeight: 'bold' }}
-                        >{`${payment.price}zł`}</Text>
+                        >{`${payment.value}zł`}</Text>
                     </View>
                 </Tile>
             </View>

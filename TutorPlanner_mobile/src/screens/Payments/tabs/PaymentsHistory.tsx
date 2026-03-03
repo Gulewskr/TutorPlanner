@@ -183,7 +183,7 @@ export const PaymentsHistory: React.FC<
                                     >
                                         Przychody:{' '}
                                         {payments.reduce(
-                                            (acc, v) => acc + v.price,
+                                            (acc, v) => acc + v.value,
                                             0,
                                         )}
                                         zł

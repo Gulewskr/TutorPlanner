@@ -6,11 +6,11 @@ const PAYMENTS_TYPES: PaymentType[] = ['DIGITAL', 'CASH'];
 
 type Payment = {
     id: number;
-    price: number;
+    value: number;
     date: Date;
     student: StudentDTO;
     type: PaymentType;
-    account: number;
+    accountId: number;
 };
 
 export { PAYMENTS_TYPES };

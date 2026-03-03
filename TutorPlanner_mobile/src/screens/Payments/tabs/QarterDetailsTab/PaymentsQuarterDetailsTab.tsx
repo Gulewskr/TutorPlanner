@@ -9,7 +9,7 @@ import { compareDesc } from 'date-fns';
 import { setLoadingPage } from '@contexts/NavbarReducer';
 import { IncomeProjectionTile } from './IncomeProjectionTile';
 import { IncomePerAccountTile } from './IncomePerAccountTile';
-import { Account, ACCOUNTS } from './account';
+import { Account } from './account';
 import { LoadWrapper } from '@components/loader';
 import { PaymentTile } from '@screens/Payments/components/PaymentTile';
 import { PageNavigation } from '@screens/Payments/components/PageNavigation';
@@ -70,7 +70,7 @@ export const PaymentsQuarterDetailsTab: React.FC<
                 isSelected: selectedAccounts.has(a.id),
                 income: a.income,
             })) || [],
-        [data],
+        [data, selectedAccounts],
     );
 
     useEffect(() => {
@@ -121,8 +121,8 @@ export const PaymentsQuarterDetailsTab: React.FC<
                 }}
             >
                 <IncomeProjectionTile
-                    income={0}
-                    expectedIncome={0}
+                    income={data?.income || 0}
+                    expectedIncome={data?.expectedIncome || 0}
                     isLoading={isLoading}
                 />
                 <Header
@@ -153,6 +153,7 @@ export const PaymentsQuarterDetailsTab: React.FC<
                 />
                 <LoadWrapper loading={isLoading} error={isError} size="large">
                     {data?.payments
+                        .filter(a => selectedAccounts.has(a.accountId))
                         .sort((a, b) => compareDesc(a.date, b.date))
                         .map(p => (
                             <PaymentTile
@@ -164,7 +165,7 @@ export const PaymentsQuarterDetailsTab: React.FC<
                                 customColor={
                                     p.type === 'CASH'
                                         ? CASH_ACCOUNT.color
-                                        : ACCOUNTS.find(a => a.id === p.id)
+                                        : data.accounts.find(a => a.id === p.accountId)
                                               ?.color
                                 }
                             />

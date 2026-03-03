@@ -1,4 +1,4 @@
-import { Payment } from '@prisma/client';
+import { Payment, Student } from '@prisma/client';
 
 type CreatePaymentInput = {
     price: number;
@@ -8,5 +8,9 @@ type CreatePaymentInput = {
     accountId: number;
 };
 
+interface FullPayment extends Payment {
+    student: Student
+}
+
 export type { CreatePaymentInput };
-export { Payment };
+export { Payment, FullPayment };

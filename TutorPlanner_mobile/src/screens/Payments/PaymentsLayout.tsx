@@ -24,7 +24,7 @@ const tabs: Array<TabItem<keyof PaymentsTabParamList>> = [
         hasHiddenLabel: 'whenNotActive',
         isExpanded: true,
         text: 'Historia',
-        icon: 'diagram',
+        icon: 'history',
     },
     {
         id: 'Create',

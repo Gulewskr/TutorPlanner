@@ -28,6 +28,7 @@ type ICON_NAME =
     | 'filter'
     | 'gmail'
     | 'home'
+    | 'history'
     | 'list'
     | 'message'
     | 'messenger'
@@ -73,6 +74,7 @@ const iconsMap: { [key in ICON_NAME]: any } = {
     filter: require('../../assets/icons/filter.png'),
     gmail: require('../../assets/icons/gmail.png'),
     home: require('../../assets/icons/home.png'),
+    history: require('../../assets/icons/history.png'),
     list: require('../../assets/icons/list.png'),
     message: require('../../assets/icons/message.png'),
     messenger: require('../../assets/icons/messenger.png'),

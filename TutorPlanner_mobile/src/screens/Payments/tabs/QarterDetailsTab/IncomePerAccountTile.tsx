@@ -34,8 +34,8 @@ export const IncomePerAccountTile: React.FC<IncomePerAccountTileProps> = ({
                             <Text style={styles.headText}>{account.name}</Text>
                             <Text>{`${income.total}zł`}</Text>
                         </View>
-                        {income.cash && (
-                            <View style={STYLES.fullWidthRow}>
+                        {!!income.cash && (
+                            <View style={[STYLES.fullWidthRow, { justifyContent: 'center' }]}>
                                 <Text>{`gotówka: ${income.cash}zł`}</Text>
                                 <Text>{`przelew: ${income.digital}zł`}</Text>
                             </View>

@@ -26,7 +26,7 @@ export const getQuarterDetails = async ({
     year: number;
 }): Promise<QuarterDetailsView> => {
     const response = await axios.get(
-        `${PAYMENTS_URL}/quarterDetails?quarter=${quarter}&year=${year}`,
+        `${PAYMENTS_URL}/summary/quarter?quarter=${quarter}&year=${year}`,
     );
     return response.data;
 };

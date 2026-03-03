@@ -70,6 +70,7 @@ export const STYLES = EStyleSheet.create({
         paddingHorizontal: DEFAULT.SPACING.M,
         width: '100%',
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        gap: DEFAULT.SPACING.M
     },
 }) as Styles;
