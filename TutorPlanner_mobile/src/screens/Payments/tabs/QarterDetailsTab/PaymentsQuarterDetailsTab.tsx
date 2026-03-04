@@ -157,7 +157,7 @@ export const PaymentsQuarterDetailsTab: React.FC<
                         .sort((a, b) => compareDesc(a.date, b.date))
                         .map(p => (
                             <PaymentTile
-                                key={p.id + 1}
+                                key={p.id}
                                 payment={p}
                                 onClick={() => {
                                     //TODO

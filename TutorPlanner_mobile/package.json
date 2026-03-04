@@ -6,7 +6,9 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "pretty": "prettier --write \"**/*.{ts,tsx,js,jsx}\""
+    "pretty": "prettier --write \"**/*.{ts,tsx,js,jsx}\"",
+    "publish": "eas build -p android --profile production",
+    "publish-local": "eas build -p android --profile production --local"
   },
   "dependencies": {
     "@expo-google-fonts/modak": "0.4.1",
@@ -44,7 +46,6 @@
     "@types/jest": "29.5.14",
     "@types/node": "22.13.1",
     "@types/react": "~18.3.12",
-    "@types/react-native": "kristerkari/react-native-types-for-css-modules#v0.72.8",
     "@types/react-test-renderer": "19.0.0",
     "babel-plugin-module-resolver": "5.0.2",
     "expo-modules-core": "2.2.2",

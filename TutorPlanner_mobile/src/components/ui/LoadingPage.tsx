@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@contexts/NavbarReducer';
 
 // base | christmas
-const theme = 'base';
+const theme = 'easter';
 
 const LOADING_GIFS = [
     require(`../../assets/loadingScreens/${theme}/1.gif`),

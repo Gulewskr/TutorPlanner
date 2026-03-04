@@ -190,9 +190,9 @@ const getFormSchema = (
                 componentProps: {
                     label: 'Konto',
                     placeholder: '--Wybierz konto--',
-                    options: ACCOUNTS.map(acc => ({
-                        value: acc.id,
-                        label: acc.name, 
+                    options: ACCOUNTS.map(a => ({
+                        value: a.id,
+                        label: a.name, 
                     })),
                 }
             },

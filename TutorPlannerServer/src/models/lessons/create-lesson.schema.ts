@@ -6,11 +6,10 @@ const dateTextSchema = z.string()
 
 export const createLessonSchema = z.object({
   name: z.string(),
-  description: z.string(),
+  description: z.string().optional(),
   student: z.number(),
   price: z.number(),
   date: z.date(),
-  date_text: dateTextSchema,
   startHour: z.number(),
   endHour: z.number(),
   weekly: z.boolean()

@@ -61,6 +61,12 @@ class PaymentsService {
         const updateData: Prisma.PaymentUpdateInput = {
             price: data.price,
         };
+        if (data.type) {
+            updateData.type = data.type;
+        }
+        if (data.accountId !== undefined) {
+            updateData.accountId = data.accountId;
+        }
         if (data.date) {
             updateData.date = parseDate(data.date);
         }

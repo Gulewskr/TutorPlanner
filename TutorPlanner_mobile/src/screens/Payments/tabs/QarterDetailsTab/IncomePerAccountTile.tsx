@@ -26,6 +26,7 @@ export const IncomePerAccountTile: React.FC<IncomePerAccountTileProps> = ({
         <View style={{ gap: 10 }}>
             {accounts.map(({ account, isSelected, income }) => (
                 <Tile
+                    key={account.id}
                     customColor={isSelected ? account.color : '#b6b6b6'}
                     onClick={() => onSelect(account.id)}
                 >

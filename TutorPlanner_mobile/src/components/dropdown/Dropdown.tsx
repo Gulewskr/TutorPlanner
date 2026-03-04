@@ -30,7 +30,7 @@ const Dropdown: React.FC<CheckboxProps> = ({
     const [selectedValue, setSelectedValue] = useState<
         DropdownOption | undefined
     >(() => {
-        if (!options || !defaultValue) {
+        if (!options || defaultValue === undefined) {
             return undefined;
         }
         return options.find(opt => opt.value == defaultValue);

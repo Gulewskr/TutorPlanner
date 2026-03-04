@@ -405,7 +405,7 @@ export const lessonRepository = {
         from: Date,
         to: Date
     ): Promise<number> => {
-        const res = await prisma.event.groupBy({
+        const res = await prisma.event.aggregate({
             where: {
                 eventType: 'LESSON',
                 date: {
@@ -413,12 +413,11 @@ export const lessonRepository = {
                     lte: to
                 }
             },
-            by: 'studentId',
             _sum: {
                 price: true,
-            },
+            }
         });
-        return res[0]?._sum?.price || 0;
+        return res._sum?.price || 0;
     },
     getUnpaidLessonsByStudentId: async (
         studentId: number,

@@ -42,11 +42,7 @@ export const PaymentsSummary: React.FC<
     });
 
     const isFocused = useIsFocused();
-    const {
-        payments,
-        isLoading: paymentsLoading,
-        fetchPayments,
-    } = usePayments();
+    const { payments, isLoading: paymentsLoading, fetchPayments } = usePayments();
     const { overdueLessons } = useOverdues();
     const { setIsOpen, setModalBody } = useModalContext();
     const { openModal } = useConfirmModal();
@@ -99,6 +95,7 @@ export const PaymentsSummary: React.FC<
             <PaymentModal
                 payment={payment}
                 goToEditForm={() => {
+                    console.log(payment)
                     navigation.navigate('Edit', {
                         payment: payment,
                     });
@@ -151,16 +148,10 @@ export const PaymentsSummary: React.FC<
                     <View style={{ padding: 5 }}>
                         <View style={styles.fullWidthRow}>
                             <Text style={styles.headText}>Zarobki</Text>
-                            <Text>
-                                {summaryData.income
-                                    ? `${summaryData.income}zł`
-                                    : '-'}
-                            </Text>
+                            <Text>{summaryData.income ? `${summaryData.income}zł` : '-'}</Text>
                         </View>
                         <View style={styles.fullWidthRow}>
-                            <Text style={styles.headText}>
-                                Liczba płatności
-                            </Text>
+                            <Text style={styles.headText}>Liczba płatności</Text>
                             <Text>{summaryData.paymentsNumber}</Text>
                         </View>
                         <View style={styles.fullWidthRow}>
@@ -177,11 +168,7 @@ export const PaymentsSummary: React.FC<
                 />
                 <View style={{ height: 20 }} />
                 <Header
-                    title={
-                        payments.length > 5
-                            ? 'Ostatnie 5 płatności'
-                            : 'Ostatnie płatności'
-                    }
+                    title={payments.length > 5 ? 'Ostatnie 5 płatności' : 'Ostatnie płatności'}
                     isCentered
                     styles={{ height: 30, marginBottom: 10 }}
                 />
@@ -189,13 +176,16 @@ export const PaymentsSummary: React.FC<
                     <ActivityIndicator size="large" color={$color_primary} />
                 ) : payments.length ? (
                     <>
-                        {payments.slice(0, 5).map(p => (
-                            <PaymentTile
-                                key={p.id}
-                                payment={p}
-                                onClick={() => handleShowEventModal(p)}
-                            />
-                        ))}
+                        {payments
+                            .slice(-5)
+                            .reverse()
+                            .map(p => (
+                                <PaymentTile
+                                    key={p.id}
+                                    payment={p}
+                                    onClick={() => handleShowEventModal(p)}
+                                />
+                            ))}
                     </>
                 ) : (
                     <Text>Brak płatności</Text>

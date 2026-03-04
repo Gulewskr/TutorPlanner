@@ -78,7 +78,7 @@ export const StudentsList: React.FC<
             >
                 <LoadWrapper loading={loading}>
                     {students ? (
-                        students.map(student => (
+                        students.sort((a, b) => `${a.firstname}${a.surename}`.localeCompare(`${b.firstname}${b.surename}`)).map(student => (
                             <StudentTile
                                 key={`${student.id}`}
                                 student={student}
