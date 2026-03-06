@@ -9,6 +9,9 @@
       "@components/*": [
         "src/components/*"
       ],
+      "@components-new/*": [
+        "src/components-2/*"
+      ],
       "@model": [
         "src/model/index.ts"
       ],

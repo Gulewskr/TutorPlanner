@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native';
-import { Button } from '@components/button';
+import { Button } from '@components-new/button';
 import { Layout } from '../Layout';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
@@ -111,6 +111,7 @@ export const Home: React.FC<
                                     }
                                     label="Dodaj ucznia"
                                     width={160}
+                                    secondary
                                 />
                             </View>
                         </View>
@@ -123,6 +124,8 @@ export const Home: React.FC<
                                     }
                                     label="Dodaj płatność"
                                     width={160}
+                                    secondary
+                                    severity='success'
                                 />
                             </View>
                             <View style={{ width: '50%' }}>
@@ -136,6 +139,8 @@ export const Home: React.FC<
                                     }
                                     label="Dodaj wydarzenie"
                                     width={160}
+                                    secondary
+                                    severity='error'
                                 />
                             </View>
                         </View>

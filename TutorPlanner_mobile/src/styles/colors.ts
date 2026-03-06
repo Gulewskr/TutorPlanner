@@ -17,3 +17,29 @@ export const $color_primary_text = "#5e1052";
 
 export const $color_checkbox = '#11bd37';
 export const $color_active_page = '#f7728c';
+
+export const white = '#F5F5F5';
+export const black = '#070707';
+export const disabled = '#6F6F6F';
+
+export const primary = '#FF81B6';
+export const primary_shadow = '#FF66A6';
+export const primary_text = ''
+export const color_primary_bg_shadow = '#FF66A6';
+export const color_primary_text = '';
+export const color_primary_shadow = '';
+
+export const secondary = '#81D5FF';
+export const secondary_shadow = '#2EA1DA';
+
+export const error_color = '#FF6B6B';
+export const error_color_shadow = '#C44343';
+export const success_color = '#BAFCA2';
+export const success_color_shadow = '#60B840';
+export const warning_color = '#FFF59C';
+export const warning_color_shadow = '#FFF59C';
+export const disabled_color = '#6F6F6F';
+export const disabled_color_shadow = '#FFF59C';
+
+export const window_bg = '#FED3FF';
+export const tile_bg = '#FFDDE2';
