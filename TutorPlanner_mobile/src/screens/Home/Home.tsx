@@ -11,9 +11,9 @@ import { useEffect, useMemo } from 'react';
 import { useConfig } from '@hooks/useConfig';
 import { useModalContext } from '@contexts/modalContext';
 import { AppVersionModal } from '@components/modals/AppVersionModal';
-import { APP_VERSION } from 'src/config';
 import { useAlert } from '@contexts/AlertContext';
 import { setLoadingPage, setLoadingScreen, updateCurrentRoute } from '@contexts/NavbarReducer';
+import { APP_VERSION } from '../../config';
 
 export const Home: React.FC<
     BottomTabScreenProps<RootStackParamList, 'Home'>

@@ -31,7 +31,7 @@ export const lessonRepository = {
                 ...lesson,
                 date_text: toMySQLDate(lesson.date),
                 eventType: 'LESSON',
-                studentId: lesson.studentId
+                studentId: lesson.studentId,
             },
         })) as LessonDAO;
     },
@@ -51,9 +51,7 @@ export const lessonRepository = {
             },
         })) as LessonDAO[];
     },
-    getLessonsSeriesByStudentId: async (
-        studentId: number,
-    ): Promise<EventSeries[]> => {
+    getLessonsSeriesByStudentId: async (studentId: number): Promise<EventSeries[]> => {
         return await prisma.eventSeries.findMany({
             where: {
                 eventType: 'LESSON',
@@ -79,10 +77,7 @@ export const lessonRepository = {
             },
         })) as LessonDAO[];
     },
-    getLessonsInTimeFrame: async (
-        startDate: Date,
-        endDate: Date,
-    ): Promise<LessonDAO[]> => {
+    getLessonsInTimeFrame: async (startDate: Date, endDate: Date): Promise<LessonDAO[]> => {
         return (await prisma.event.findMany({
             where: {
                 eventType: 'LESSON',
@@ -100,20 +95,17 @@ export const lessonRepository = {
         return (await prisma.event.findMany({
             where: {
                 eventType: 'LESSON',
-                date_text: toMySQLDate(date)
+                date_text: toMySQLDate(date),
             },
             orderBy: {
                 startHour: 'asc',
             },
         })) as LessonDAO[];
     },
-    update: async (
-        id: number,
-        event: Prisma.EventUpdateInput,
-    ): Promise<LessonDAO> => {
+    update: async (id: number, event: Prisma.EventUpdateInput): Promise<LessonDAO> => {
         event.eventType = EventType.LESSON;
         if (event.date && isDate(event.date)) {
-            event.date_text = toMySQLDate(event.date)
+            event.date_text = toMySQLDate(event.date);
         }
         return eventRepository.update<LessonDAO>(id, event);
     },
@@ -154,12 +146,12 @@ export const lessonRepository = {
             student: number;
         }>,
     ): Promise<void> => {
-        const firstLesson = await prisma.event.findFirstOrThrow({
+        const firstLesson = (await prisma.event.findFirstOrThrow({
             where: {
                 eventType: 'LESSON',
                 id: lessonId,
             },
-        }) as LessonDAO;
+        })) as LessonDAO;
 
         if (!firstLesson.eventSeriesId) {
             throw new Error('Selected lesson is not part of event series.');
@@ -173,17 +165,17 @@ export const lessonRepository = {
 
         let updatedLessonsToSave: LessonDAO[] = [];
         if (dayOfWeek != -1) {
-            const lessonsToUpdate = await prisma.event.findMany({
+            const lessonsToUpdate = (await prisma.event.findMany({
                 where: {
                     eventSeriesId: seriesId,
                     date: {
-                        gte: firstLesson.date
+                        gte: firstLesson.date,
                     },
                     isOverridden: {
-                        not: true
-                    }
-                }
-            }) as LessonDAO[];
+                        not: true,
+                    },
+                },
+            })) as LessonDAO[];
 
             if (firstLesson.isOverridden) {
                 lessonsToUpdate.push(firstLesson);
@@ -191,7 +183,7 @@ export const lessonRepository = {
 
             updatedLessonsToSave = lessonsToUpdate.map(lesson => {
                 const newDate = addDays(startOfWeek(lesson.date), dayOfWeek);
-                return ({
+                return {
                     ...lesson,
                     name: data.name || lesson.name,
                     description: data.description || lesson.description,
@@ -201,38 +193,13 @@ export const lessonRepository = {
                     endHour: data.endHour || lesson.endHour,
                     date: newDate,
                     date_text: toMySQLDate(newDate),
-                })
-            })
-        }
-        
-        
-        await prisma.$transaction(async (tx) => {
-            await tx.eventSeries.update({
-                data: {
-                    name: data.name,
-                    description: data.description,
-                    startHour: data.startHour,
-                    endHour: data.endHour,
-                    price: data.price,
-                    studentId: data.student,
-                },
-                where: {
-                    id: seriesId,
-                },
+                };
             });
-            if (updatedLessonsToSave.length) {
-                await tx.event.deleteMany({
-                    where: {
-                        id: {
-                            in: updatedLessonsToSave.map(({id}) => id) 
-                        }
-                    }
-                });
-                await tx.event.createMany({
-                    data: updatedLessonsToSave
-                });
-            } else {
-                await tx.event.updateMany({
+        }
+
+        await prisma.$transaction(
+            async tx => {
+                await tx.eventSeries.update({
                     data: {
                         name: data.name,
                         description: data.description,
@@ -242,17 +209,44 @@ export const lessonRepository = {
                         studentId: data.student,
                     },
                     where: {
-                        isOverridden: false,
-                        eventSeriesId: seriesId,
-                        date: {
-                            gte: firstLesson.date,
-                        },
+                        id: seriesId,
                     },
                 });
-            }
-        }, {
-            timeout: 10000
-        });
+                if (updatedLessonsToSave.length) {
+                    await tx.event.deleteMany({
+                        where: {
+                            id: {
+                                in: updatedLessonsToSave.map(({ id }) => id),
+                            },
+                        },
+                    });
+                    await tx.event.createMany({
+                        data: updatedLessonsToSave,
+                    });
+                } else {
+                    await tx.event.updateMany({
+                        data: {
+                            name: data.name,
+                            description: data.description,
+                            startHour: data.startHour,
+                            endHour: data.endHour,
+                            price: data.price,
+                            studentId: data.student,
+                        },
+                        where: {
+                            isOverridden: false,
+                            eventSeriesId: seriesId,
+                            date: {
+                                gte: firstLesson.date,
+                            },
+                        },
+                    });
+                }
+            },
+            {
+                timeout: 10000,
+            },
+        );
     },
     updateLessonSeriesBySeriesId: async (
         id: number,
@@ -300,9 +294,7 @@ export const lessonRepository = {
     delete: async (id: number): Promise<LessonDAO> => {
         return eventRepository.delete<LessonDAO>(id);
     },
-    getLessons: async (
-        filter: Prisma.EventWhereInput,
-    ): Promise<LessonDAO[]> => {
+    getLessons: async (filter: Prisma.EventWhereInput): Promise<LessonDAO[]> => {
         filter.eventType = 'LESSON';
 
         return (await prisma.event.findMany({
@@ -312,9 +304,7 @@ export const lessonRepository = {
             },
         })) as LessonDAO[];
     },
-    getNextLessonByStudentId: async (
-        studentId: number,
-    ): Promise<LessonDAO | undefined> => {
+    getNextLessonByStudentId: async (studentId: number): Promise<LessonDAO | undefined> => {
         try {
             return (await prisma.event.findFirstOrThrow({
                 where: {
@@ -384,15 +374,14 @@ export const lessonRepository = {
             pageSize: pageSize || amount,
         };
     },
-    getSumOfPaidLessonsByStudentId: async (
-        studentId: number,
-    ): Promise<number> => {
+    getSumOfPaidLessonsByStudentId: async (studentId: number): Promise<number> => {
         const res = await prisma.event.groupBy({
             where: {
                 eventType: 'LESSON',
                 studentId: studentId,
                 isPaid: true,
                 isCanceled: { not: true },
+                isDeleted: { not: true },
             },
             by: 'studentId',
             _sum: {
@@ -401,48 +390,45 @@ export const lessonRepository = {
         });
         return res[0]?._sum?.price || 0;
     },
-    getPriceOfLessonsInTimeRange: async (
-        from: Date,
-        to: Date
-    ): Promise<number> => {
+    getPriceOfLessonsInTimeRange: async (from: Date, to: Date): Promise<number> => {
         const res = await prisma.event.aggregate({
             where: {
                 eventType: 'LESSON',
                 date: {
                     gte: from,
-                    lte: to
-                }
+                    lte: to,
+                },
+                isCanceled: { not: true },
+                isDeleted: { not: true },
             },
             _sum: {
                 price: true,
-            }
+            },
         });
         return res._sum?.price || 0;
     },
-    getUnpaidLessonsByStudentId: async (
-        studentId: number,
-    ): Promise<LessonDAO[]> => {
+    getUnpaidLessonsByStudentId: async (studentId: number): Promise<LessonDAO[]> => {
         return (await prisma.event.findMany({
             where: {
                 eventType: 'LESSON',
                 studentId: studentId,
                 isPaid: false,
                 isCanceled: { not: true },
+                isDeleted: { not: true },
             },
             orderBy: {
                 date: 'asc',
             },
         })) as LessonDAO[];
     },
-    getPaidLessonsByStudentId: async (
-        studentId: number,
-    ): Promise<LessonDAO[]> => {
+    getPaidLessonsByStudentId: async (studentId: number): Promise<LessonDAO[]> => {
         return (await prisma.event.findMany({
             where: {
                 eventType: 'LESSON',
                 studentId: studentId,
                 isPaid: true,
                 isCanceled: { not: true },
+                isDeleted: { not: true },
             },
             orderBy: {
                 date: 'desc',

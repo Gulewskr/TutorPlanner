@@ -1,7 +1,7 @@
 import { CONFIG_URL } from './config';
 import { axios } from './baseService';
 import { WelcomeMessageDTO, VersionCheckDTO } from '@model';
-import { APP_VERSION } from 'src/config';
+import { APP_VERSION } from '../config';
 
 class ConfigService {
     getWelcomeMessage = async (): Promise<WelcomeMessageDTO> => {

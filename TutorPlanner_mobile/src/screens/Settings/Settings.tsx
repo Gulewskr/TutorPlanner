@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Layout } from '../Layout';
 import { RootStackParamList } from '@components/ui/navbar';
 import { Button } from '@components/button';
-import { APP_VERSION } from 'src/config';
+import { APP_VERSION } from '../../config';
 import { Text } from 'react-native';
 import { studentsService } from '@services/students.service';
 import { useAlert } from '@contexts/AlertContext';
