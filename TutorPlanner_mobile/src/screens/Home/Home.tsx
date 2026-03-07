@@ -128,8 +128,6 @@ export const Home: React.FC<
                         </Columns>
                     </View>
                     <Header
-                        rightIcon={'addLesson'}
-                        rightAction={() => 1}
                         title={'Dzisiejszy plan'}
                         noBackground
                     />

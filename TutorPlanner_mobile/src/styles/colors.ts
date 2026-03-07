@@ -46,3 +46,5 @@ export const disabled_color_shadow = '#FFF59C';
 
 export const window_bg = '#FED3FF';
 export const tile_bg = '#FFDDE2';
+export const tile_bg_shadow = '#0000003d';
+

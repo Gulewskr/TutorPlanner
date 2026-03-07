@@ -19,7 +19,15 @@ interface HeaderProps {
     styles?: any;
     titleFontSize?: number;
     noBackground?: boolean;
+    size?: 'xxs' | 's' | 'm' | 'l';
 }
+
+const sizes = {
+    xxs: 30,
+    s: 60,
+    m: 70,
+    l: 80,
+};
 
 const Header: React.FC<HeaderProps> = ({
     isLeftActionDisabled,
@@ -34,11 +42,16 @@ const Header: React.FC<HeaderProps> = ({
     styles: customStyles,
     titleFontSize,
     noBackground,
+    size = 'l'
 }) => {
     const leftActionActive = !isLeftActionDisabled && leftAction;
 
     return (
-        <View style={[styles.header, !noBackground && styles.bg, customStyles && customStyles]}>
+        <View style={[styles.header, !noBackground && styles.bg, customStyles && customStyles,
+            {
+                height: sizes[size],
+            }
+        ]}>
             {leftActionActive && (
                 <View style={styles.left_icon}>
                     <Button icon={leftIcon} type="icon-button" secondary onClick={leftAction} />
@@ -83,7 +96,6 @@ export default Header;
 
 const styles = EStyleSheet.create({
     header: {
-        height: 80,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',

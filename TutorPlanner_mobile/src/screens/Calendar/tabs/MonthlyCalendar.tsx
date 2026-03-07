@@ -19,17 +19,20 @@ import {
     format,
 } from 'date-fns';
 import { DayInCalendar } from '../components/calendar/DayInCalendar';
-import {
-    getDayOfWeek,
-    MONTHS_NOMINATIVE,
-    WEEKDAYS,
-} from '../components/calendar/utils';
+import { getDayOfWeek, MONTHS_NOMINATIVE, WEEKDAYS } from '../components/calendar/utils';
 import { useCalendarContext } from '../CalendarContext';
 import { $color_primary_shadow } from '@styles/colors';
-import { EventsList } from '@components/complex/eventslist';
 import { $border_width } from '@styles/global';
 import { setLoadingPage } from '@contexts/NavbarReducer';
 import { useFocusEffect } from '@react-navigation/native';
+import { useDayEvents } from '../hooks/useDayEvents';
+import { EventsList } from '@components-new/complex/eventslist';
+import { EventModal } from '@components-new/modals/EventModal';
+import { LessonModal } from '@components-new/modals';
+import { EventDTO, LessonDTO } from '@model';
+import { useModalContext } from '@contexts/modalContext';
+import { Header } from '@components-new/header';
+import { STYLES } from '@styles/theme';
 
 const CALENDAR_WEEKS = [0, 1, 2, 3, 4, 5];
 const WEEK_DAYS_RANGE = [0, 1, 2, 3, 4, 5, 6];
@@ -40,13 +43,8 @@ export const MonthlyCalendar: React.FC<
     const { navigation, route } = props;
     const [controlDate, setControlDate] = useState(new Date());
 
-    const {
-        calendarData,
-        selectedDate,
-        loading,
-        selectDate,
-        fetchMonthlyCalendarData,
-    } = useCalendarContext();
+    const { calendarData, selectedDate, loading, selectDate, fetchMonthlyCalendarData } =
+        useCalendarContext();
 
     useFocusEffect(
         React.useCallback(() => {
@@ -70,10 +68,7 @@ export const MonthlyCalendar: React.FC<
     const refresh = () => fetchMonthlyCalendarData(controlDate);
 
     const firstDayOfMonth = startOfMonth(controlDate);
-    const firstDayInCallendar = subDays(
-        firstDayOfMonth,
-        getDayOfWeek(firstDayOfMonth),
-    );
+    const firstDayInCallendar = subDays(firstDayOfMonth, getDayOfWeek(firstDayOfMonth));
 
     const handlePreviousMonth = () => {
         setControlDate(subMonths(controlDate, 1));
@@ -85,12 +80,57 @@ export const MonthlyCalendar: React.FC<
 
     const handleSelectDate = (day: Date) => {
         if (!isSameMonth(day, controlDate)) {
-            isBefore(day, controlDate)
-                ? handlePreviousMonth()
-                : handleNextMonth();
+            isBefore(day, controlDate) ? handlePreviousMonth() : handleNextMonth();
         }
         setControlDate(day);
         selectDate(day);
+    };
+
+    const { events } = useDayEvents(controlDate);
+
+    const { setIsOpen, setModalBody } = useModalContext();
+
+    const handleShowLessonModal = (lesson: LessonDTO) => {
+        setModalBody(
+            <LessonModal
+                lesson={lesson}
+                goToStudentProfile={() => {
+                    navigation.getParent()?.navigate('Students', {
+                        screen: 'Profile',
+                        params: {
+                            studentId: lesson.studentId,
+                        },
+                    });
+                }}
+                goToEditForm={() => {
+                    navigation.getParent()?.navigate('Lessons', {
+                        screen: 'Edit',
+                        params: {
+                            lessonId: lesson.id,
+                        },
+                    });
+                }}
+                onChange={refresh}
+            />,
+        );
+        setIsOpen(true);
+    };
+
+    const handleShowEventModal = (event: EventDTO) => {
+        setModalBody(
+            <EventModal
+                event={event}
+                goToEditForm={() => {
+                    navigation.getParent()?.navigate('Events', {
+                        screen: 'Edit',
+                        params: {
+                            event: event,
+                        },
+                    });
+                }}
+            />,
+        );
+        setIsOpen(true);
     };
 
     return (
@@ -134,26 +174,15 @@ export const MonthlyCalendar: React.FC<
                                     />
                                 </View>
                                 <View style={{ width: '55%' }}>
-                                    <Tile
-                                        color="white"
-                                        centered
-                                        hasShadow={false}
-                                        height={20}
-                                    >
+                                    <Tile color="white" centered hasShadow={false} height={20}>
                                         <Text
                                             style={{
                                                 fontWeight: 'bold',
                                             }}
                                         >
-                                            {
-                                                MONTHS_NOMINATIVE[
-                                                    controlDate.getMonth()
-                                                ]
-                                            }
-                                            {!isSameYear(
-                                                controlDate,
-                                                new Date(),
-                                            ) && format(controlDate, ' yyyy')}
+                                            {MONTHS_NOMINATIVE[controlDate.getMonth()]}
+                                            {!isSameYear(controlDate, new Date()) &&
+                                                format(controlDate, ' yyyy')}
                                         </Text>
                                     </Tile>
                                 </View>
@@ -200,30 +229,15 @@ export const MonthlyCalendar: React.FC<
                                                 firstDayInCallendar,
                                                 week * 7 + dayIndex,
                                             );
-                                            const dateKey = format(
-                                                day,
-                                                'yyyy-MM-dd',
-                                            );
+                                            const dateKey = format(day, 'yyyy-MM-dd');
                                             return (
                                                 <DayInCalendar
                                                     day={day}
                                                     key={dayIndex}
-                                                    eventsData={
-                                                        calendarData[dateKey]
-                                                    }
-                                                    isBlackedOut={
-                                                        !isSameMonth(
-                                                            controlDate,
-                                                            day,
-                                                        )
-                                                    }
-                                                    isSelected={isSameDay(
-                                                        selectedDate,
-                                                        day,
-                                                    )}
-                                                    onClick={() =>
-                                                        handleSelectDate(day)
-                                                    }
+                                                    eventsData={calendarData[dateKey]}
+                                                    isBlackedOut={!isSameMonth(controlDate, day)}
+                                                    isSelected={isSameDay(selectedDate, day)}
+                                                    onClick={() => handleSelectDate(day)}
                                                 />
                                             );
                                         })}
@@ -233,10 +247,17 @@ export const MonthlyCalendar: React.FC<
                         </View>
                         <View style={styles.shadow} />
                     </View>
+                    <Text style={[STYLES.h3, {
+                        alignSelf: 'flex-start',
+                    }]}>
+                        {format(controlDate, 'dd MM yyyy')}
+                    </Text>
                     <EventsList
-                        day={selectedDate}
+                        events={events}
                         navigation={navigation.getParent()}
                         onChange={refresh}
+                        onEventClick={handleShowEventModal}
+                        onLessonClick={handleShowLessonModal}
                     />
                 </View>
             </ScrollView>

@@ -1,6 +1,6 @@
 import { TextStyle, ViewStyle } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet"
-import { $color_error_button, black, disabled, error_color, error_color_shadow, primary, primary_shadow, secondary, secondary_shadow, success_color, success_color_shadow, warning_color, warning_color_shadow } from "./colors";
+import { $color_error_button, black, disabled, error_color, error_color_shadow, primary, primary_shadow, secondary, secondary_shadow, success_color, success_color_shadow, tile_bg_shadow, warning_color, warning_color_shadow } from "./colors";
 import { error } from "console";
 
 //TODO
@@ -56,7 +56,11 @@ export const DEFAULT = {
         warning: {
             default: `-5 -5 1 0 ${warning_color_shadow} inset`,
             pressed: `5 5 1 0 ${warning_color_shadow} inset`,
-        }
+        },
+        tile: {
+            default: `-5 -5 1 0 ${tile_bg_shadow} inset`,
+            pressed: `5 5 1 0 ${tile_bg_shadow} inset`,
+        },
     },
     navbar: {
         background: primary,

@@ -1,2 +1,4 @@
 import Tile from './Tile';
-export { Tile };
+import { EventTile } from './EventTile';
+import { LessonTile } from './LessonTile';
+export { Tile, EventTile, LessonTile };

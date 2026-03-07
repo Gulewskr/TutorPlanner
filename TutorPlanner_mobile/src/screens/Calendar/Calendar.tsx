@@ -5,7 +5,7 @@ import { BottomTabScreenProps, createBottomTabNavigator } from '@react-navigatio
 import { DailyCalendar } from './tabs/DailyCalendar';
 import { MonthlyCalendar } from './tabs/MonthlyCalendar';
 import { CalendarTabParamList } from './calendarTabs';
-import { NavbarNavigationScreens, RootStackParamList } from '@components/ui/navbar';
+import { NavbarNavigationScreens, RootStackParamList } from '@components-new/ui/navbar';
 import { CalendarProvider } from './CalendarContext';
 import { updateCurrentRoute } from '@contexts/NavbarReducer';
 import { useFocusEffect } from '@react-navigation/native';
