@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
 import { DEFAULT } from '@styles/theme';
-import { black, error_color, error_color_shadow, primary, primary_shadow, success_color, success_color_shadow, tile_bg, white } from '@styles/colors';
+import { black, disabled, error_color, error_color_shadow, primary, primary_shadow, success_color, success_color_shadow, tile_bg, white } from '@styles/colors';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 interface TagProps {
     text: string;
-    severity?: 'success' | 'error' | 'warning' | 'info';
+    severity?: 'success' | 'error' | 'warning' | 'info' | 'disabled';
     onDelete?: () => void;
 }
 
@@ -20,6 +20,7 @@ const Tag: React.FC<TagProps> = ({ severity, text, onDelete }) => {
                 severity === 'error' && styles.error,
                 severity === 'warning' && styles.warning,
                 severity === 'info' && styles.default,
+                severity === 'disabled' && styles.disabled,
             ]}
         >
             <Text
@@ -59,6 +60,10 @@ const styles = EStyleSheet.create({
         backgroundColor: primary,
         borderColor: primary_shadow,
     },
+    disabled: {
+        backgroundColor: disabled,
+        borderColor: black,
+    }
 });
 
 export { Tag };

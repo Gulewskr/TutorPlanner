@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { mapHourValueToText } from '@utils/dateUtils';
 import { LessonDTO } from '@model';
 import { Icon, ICON_NAME } from '@components/icon';
@@ -22,7 +22,8 @@ const LessonTile: React.FC<LessonTileProps> = ({ lesson, onClick }) => {
     }, [lesson]);
 
     return (
-        <View
+        <Pressable
+            onPress={onClick}
             style={[
                 {
                     flex: 1,
@@ -77,12 +78,13 @@ const LessonTile: React.FC<LessonTileProps> = ({ lesson, onClick }) => {
                 }}
             >
                 <Text style={STYLES.text_styles.boldbody}>{lesson.name}</Text>
-                {lesson.isPaid ? (
+                {lesson.isCanceled ? (
+                    <Tag severity="disabled" text="anulowana" />
+                ) : lesson.isPaid ? (
                     <Tag severity="success" text="opłacona" />
                 ) : (
                     <Tag severity="error" text="nieopłacona" />
                 )}
-                {lesson.isCanceled && <Tag severity="warning" text="anulowana" />}
             </View>
             <View
                 style={{
@@ -104,7 +106,7 @@ const LessonTile: React.FC<LessonTileProps> = ({ lesson, onClick }) => {
                     <Icon icon={iconName} />
                 </View>
             </View>
-        </View>
+        </Pressable>
     );
 };
 

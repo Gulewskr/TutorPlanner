@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { format } from 'date-fns';
 import { mapHourValueToText } from '@utils/dateUtils';
 import { EventDTO } from '@model';
@@ -28,7 +28,8 @@ const EventTile: React.FC<EventTileProps> = ({ event, onClick }) => {
     }, []);
 
     return (
-        <View
+        <Pressable
+            onPress={onClick}
             style={{
                 flex: 1,
                 flexDirection: 'row',
@@ -56,7 +57,7 @@ const EventTile: React.FC<EventTileProps> = ({ event, onClick }) => {
                 </Text>
                 <Text>{format(event.date, 'yyyy-MM-dd')}</Text>
             </View>
-        </View>
+        </Pressable>
     );
 };
 
