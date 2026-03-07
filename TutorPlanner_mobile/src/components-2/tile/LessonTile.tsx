@@ -4,6 +4,8 @@ import { mapHourValueToText } from '@utils/dateUtils';
 import { LessonDTO } from '@model';
 import { Icon, ICON_NAME } from '@components/icon';
 import { DEFAULT, STYLES } from '@styles/theme';
+import { tile_bg, white } from '@styles/colors';
+import { Tag } from '@components-new/tag/tag';
 
 interface LessonTileProps {
     lesson: LessonDTO;
@@ -25,11 +27,11 @@ const LessonTile: React.FC<LessonTileProps> = ({ lesson, onClick }) => {
                 {
                     flex: 1,
                     flexDirection: 'row',
-                    backgroundColor: 'white',
                     minHeight: 50,
                     boxShadow: DEFAULT.boxShadow.tile.pressed,
                     borderRadius: 10,
                     overflow: 'hidden',
+                    backgroundColor: tile_bg,
                 },
                 STYLES.border,
             ]}
@@ -38,11 +40,13 @@ const LessonTile: React.FC<LessonTileProps> = ({ lesson, onClick }) => {
                 style={{
                     alignItems: 'center',
                     justifyContent: 'center',
+                    backgroundColor: 'white',
                     width: 50,
                     height: '100%',
                     borderRadius: '10 10 0 0',
                     borderRightWidth: DEFAULT.border.width.m,
                     borderColor: DEFAULT.border.color,
+                    boxShadow: DEFAULT.boxShadow.tile.pressed,
                 }}
             >
                 <Text
@@ -74,20 +78,31 @@ const LessonTile: React.FC<LessonTileProps> = ({ lesson, onClick }) => {
             >
                 <Text style={STYLES.text_styles.boldbody}>{lesson.name}</Text>
                 {lesson.isPaid ? (
-                    <Text style={STYLES.text}>opłacona</Text>
+                    <Tag severity="success" text="opłacona" />
                 ) : (
-                    <Text style={STYLES.text}>nieopłacona</Text>
+                    <Tag severity="error" text="nieopłacona" />
                 )}
-                {lesson.isCanceled && <Text style={STYLES.text}>anulowana</Text>}
+                {lesson.isCanceled && <Tag severity="warning" text="anulowana" />}
             </View>
             <View
                 style={{
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: 40,
                 }}
             >
-                <Icon icon={iconName} />
+                <View
+                    style={[
+                        {
+                            backgroundColor: white,
+                            borderRadius: 10,
+                            padding: DEFAULT.SPACING.XXS,
+                            margin: DEFAULT.SPACING.XS,
+                        },
+                        STYLES.border,
+                    ]}
+                >
+                    <Icon icon={iconName} />
+                </View>
             </View>
         </View>
     );

@@ -7,6 +7,7 @@ import { error } from "console";
 export const DEFAULT = { 
     SPACING: {
         NONE: 0,
+        XXS: 2,
         XS: 5,
         S: 10,
         M: 15,
@@ -16,7 +17,8 @@ export const DEFAULT = {
         h3: 20,
         h2: 18,
         h1: 16,
-        body: 12
+        body: 12,
+        min: 10
     },
     fontWeight: {
         bold: 'bold',
@@ -28,7 +30,12 @@ export const DEFAULT = {
             m: 2,
             l: 3,
         },
-        color: black
+        color: black,
+        radius: {
+            s: 5,
+            m: 10,
+            l: 15,
+        }
     },
     height: {
         s: 20,
