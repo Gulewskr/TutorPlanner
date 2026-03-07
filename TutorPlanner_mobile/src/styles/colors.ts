@@ -22,6 +22,9 @@ export const white = '#F5F5F5';
 export const black = '#070707';
 export const disabled = '#6F6F6F';
 
+
+export const old_primary = '#FFA9F1';
+
 export const primary = '#FF81B6';
 export const primary_shadow = '#FF66A6';
 export const primary_text = ''

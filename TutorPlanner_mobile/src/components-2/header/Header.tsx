@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Button } from '@components/button';
-import { ICON_NAME } from '@components/icon';
+import { Button } from '@components-new/button';
+import { ICON_NAME } from '@components-new/icon';
 import { $color_black } from '@styles/colors';
+import { DEFAULT } from '@styles/theme';
 
 interface HeaderProps {
     isLeftActionDisabled?: boolean;
@@ -17,6 +18,7 @@ interface HeaderProps {
     title?: string;
     styles?: any;
     titleFontSize?: number;
+    noBackground?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -30,21 +32,16 @@ const Header: React.FC<HeaderProps> = ({
     rightAction,
     isCentered: centered = false,
     styles: customStyles,
-    titleFontSize
+    titleFontSize,
+    noBackground,
 }) => {
     const leftActionActive = !isLeftActionDisabled && leftAction;
 
     return (
-        <View style={[styles.header, customStyles && customStyles]}>
+        <View style={[styles.header, !noBackground && styles.bg, customStyles && customStyles]}>
             {leftActionActive && (
                 <View style={styles.left_icon}>
-                    <Button
-                        icon={leftIcon}
-                        type="icon-button"
-                        secondary
-                        onClick={leftAction}
-                        hasShadow={false}
-                    />
+                    <Button icon={leftIcon} type="icon-button" secondary onClick={leftAction} />
                 </View>
             )}
             <View
@@ -62,26 +59,18 @@ const Header: React.FC<HeaderProps> = ({
                         style={{
                             fontSize: titleFontSize || 20,
                             fontWeight: 900,
-                            color: $color_black
+                            color: $color_black,
                         }}
                     >
                         {title}
                     </Text>
                 )}
-                {subtitle && (
-                    <Text style={styles.optional_text}>{subtitle}</Text>
-                )}
+                {subtitle && <Text style={styles.optional_text}>{subtitle}</Text>}
             </View>
 
             {rightAction && (
                 <View style={styles.right_icon}>
-                    <Button
-                        icon={rightIcon}
-                        type="icon-button"
-                        secondary
-                        onClick={rightAction}
-                        hasShadow={false}
-                    />
+                    <Button icon={rightIcon} type="icon-button" secondary onClick={rightAction} />
                 </View>
             )}
         </View>
@@ -99,9 +88,12 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        zIndex: 10,
     },
-
+    bg: {
+        backgroundColor: DEFAULT.navbar.background,
+        borderBottomWidth: DEFAULT.border.width.m,
+        borderBottomColor: DEFAULT.border.color,
+    },
     left_icon: {
         marginLeft: 10,
     },

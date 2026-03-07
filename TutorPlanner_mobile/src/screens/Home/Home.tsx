@@ -3,7 +3,7 @@ import { Button } from '@components-new/button';
 import { Layout } from '../Layout';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import { Header } from '@components/header';
+import { Header } from '@components-new/header';
 import { EventsList } from '@components/complex/eventslist';
 import { ScrollView } from '@components/ui/scrool-view';
 import { NavbarNavigationScreens, RootStackParamList } from '@components/ui/navbar';
@@ -14,6 +14,7 @@ import { AppVersionModal } from '@components/modals/AppVersionModal';
 import { useAlert } from '@contexts/AlertContext';
 import { setLoadingPage, setLoadingScreen, updateCurrentRoute } from '@contexts/NavbarReducer';
 import { APP_VERSION } from '../../config';
+import { Columns } from '@components-new/view';
 
 export const Home: React.FC<
     BottomTabScreenProps<RootStackParamList, 'Home'>
@@ -86,72 +87,52 @@ export const Home: React.FC<
             {isFocused && (
                 <ScrollView>
                     <View style={styles.controlPanel}>
-                        <View style={styles.double_button_container}>
-                            <View style={{ width: '50%' }}>
-                                <Button
-                                    icon="addLesson"
-                                    onClick={() =>
-                                        navigation.navigate('Lessons', {
-                                            screen: 'Create',
-                                            initial: true,
-                                        })
-                                    }
-                                    label="Dodaj zajęcia"
-                                    width={160}
-                                />
-                            </View>
-                            <View style={{ width: '50%' }}>
-                                <Button
-                                    icon="addStudent"
-                                    onClick={() =>
-                                        navigation.navigate('Students', {
-                                            screen: 'Create',
-                                            initial: true,
-                                        })
-                                    }
-                                    label="Dodaj ucznia"
-                                    width={160}
-                                    secondary
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.double_button_container}>
-                            <View style={{ width: '50%' }}>
-                                <Button
-                                    icon="addPayment"
-                                    onClick={() =>
-                                        navigation.navigate('CreatePayment')
-                                    }
-                                    label="Dodaj płatność"
-                                    width={160}
-                                    secondary
-                                    severity='success'
-                                />
-                            </View>
-                            <View style={{ width: '50%' }}>
-                                <Button
-                                    icon='event'
-                                    onClick={() =>
-                                        navigation.navigate('Events', {
-                                            screen: 'Create',
-                                            initial: true,
-                                        })
-                                    }
-                                    label="Dodaj wydarzenie"
-                                    width={160}
-                                    secondary
-                                    severity='error'
-                                />
-                            </View>
-                        </View>
+                        <Columns columns={2} gap={10}>
+                            <Button
+                                icon="addStudent"
+                                onClick={() =>
+                                    navigation.navigate('Students', {
+                                        screen: 'Create',
+                                        initial: true,
+                                    })
+                                }
+                                label="Dodaj ucznia"
+                            />
+                            <Button
+                                icon="addPayment"
+                                onClick={() =>
+                                    navigation.navigate('CreatePayment')
+                                }
+                                label="Dodaj płatność"
+                            />
+                            <Button
+                                icon="addLesson"
+                                onClick={() =>
+                                    navigation.navigate('Lessons', {
+                                        screen: 'Create',
+                                        initial: true,
+                                    })
+                                }
+                                label="Dodaj zajęcia"
+                            />
+                            <Button
+                                icon='event'
+                                onClick={() =>
+                                    navigation.navigate('Events', {
+                                        screen: 'Create',
+                                        initial: true,
+                                    })
+                                }
+                                label="Dodaj wydarzenie"
+                            />
+                        </Columns>
                     </View>
-                    <View style={styles.timeline}>
-                        <Header
-                            rightIcon={'addLesson'}
-                            rightAction={() => 1}
-                            title={'Dzisiejszy plan'}
-                        />
-                    </View>
+                    <Header
+                        rightIcon={'addLesson'}
+                        rightAction={() => 1}
+                        title={'Dzisiejszy plan'}
+                        noBackground
+                    />
                     <EventsList day={today} navigation={navigation} />
                 </ScrollView>
             )}
@@ -160,17 +141,9 @@ export const Home: React.FC<
 };
 
 const styles = StyleSheet.create({
-    double_button_container: {
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 10,
-        marginTop: 5,
-        marginBottom: 5,
-        width: '100%',
-        paddingHorizontal: 15,
-    },
     controlPanel: {
-        gap: 5,
+        gap: 15,
+        padding: 15,
+        paddingVertical: 10,
     },
-    timeline: {},
 });

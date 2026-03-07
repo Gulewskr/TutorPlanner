@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {
-    black,
     primary,
     secondary as color_secondary,
     error_color,
@@ -13,7 +12,6 @@ import {
 } from '@styles/colors';
 import { DEFAULT, STYLES } from '@styles/theme';
 
-type ButtonSize = 'small' | 'medium' | 'large';
 type ButtonSeverity = 'success' | 'error' | 'warning';
 interface ButtonProps {
     secondary?: boolean;
@@ -22,9 +20,6 @@ interface ButtonProps {
     label?: string;
     onClick: () => void;
     disabled?: boolean;
-    size?: ButtonSize;
-    hasShadow?: boolean;
-    width?: number;
     severity?: ButtonSeverity;
 }
 
@@ -35,9 +30,6 @@ const Button: React.FC<ButtonProps> = ({
     disabled = false,
     label,
     icon,
-    size = 'medium',
-    hasShadow = true,
-    width: customWidth,
     severity,
 }) => {
     const [pressed, setPressed] = useState<boolean>(false);
@@ -49,8 +41,7 @@ const Button: React.FC<ButtonProps> = ({
         <Pressable
             disabled={disabled}
             style={[
-                style.button,
-                isIconButton && style.iconButton,
+                isIconButton ? style.iconButton : style.button,
                 !severity && !secondary && style.primary,
                 !severity && secondary && style.secondary,
                 severity === 'success' && style.success,
@@ -80,9 +71,14 @@ const styles = (
 ) =>
     EStyleSheet.create({
         iconButton: {
+            alignItems: 'center',
+            justifyContent: 'center',
             width: 40,
             minWidth: 40,
             aspectRatio: 1,
+            paddingLeft: 10,
+            paddingRight: 10,
+            borderRadius: 15,
         },
         button: {
             alignItems: 'center',
@@ -91,9 +87,7 @@ const styles = (
             borderRadius: 15,
             flexGrow: 1,
             paddingLeft: 10,
-            paddingRight: 10,
-            borderWidth: DEFAULT.border.width.m,
-            borderColor: black,
+            paddingRight: 10
         },
         primary: {
             backgroundColor: primary,

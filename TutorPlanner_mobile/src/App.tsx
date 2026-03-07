@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StatusBar, Text, useColorScheme, View } from 'react-native';
+import { StatusBar, useColorScheme, View } from 'react-native';
 import {
     NavigationContainer,
     DarkTheme,
@@ -24,7 +24,7 @@ import { AlertProvider } from '@contexts/AlertContext';
 import { ConfirmModalProvider } from '@contexts/confirmModalContext';
 import { StudentsProvider } from '@contexts/StudentsContext';
 import { StudentProvider } from '@contexts/StudentContext';
-import { $bgColor_primary } from '@styles/colors';
+import { primary } from '@styles/colors';
 import { GlobalContextProvider } from '@contexts/GlobalContext';
 import { Provider } from 'react-redux';
 import { store } from '@contexts/NavbarReducer';
@@ -77,7 +77,7 @@ const App: React.FC<{}> = () => {
             <QueryClientProvider client={QUERY_CLIENT}>
                 <StatusBar
                     barStyle="light-content"
-                    backgroundColor={$bgColor_primary}
+                    backgroundColor={primary}
                 />
                 <GlobalContextProvider>
                     <Provider store={store}>
