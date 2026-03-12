@@ -1,4 +1,4 @@
-import { TabItem, Tabs } from '@components/tab';
+import { TabItem, Tabs } from '@components-new/tab';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { PropsWithChildren } from 'react';
 import { Layout } from '../Layout';

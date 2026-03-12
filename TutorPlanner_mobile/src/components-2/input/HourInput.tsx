@@ -5,6 +5,8 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { mapDateToHourValue, mapHourValueToDate } from '@utils/dateUtils';
 import { $border_width, $border_width_line } from '@styles/global';
+import { white_bg } from '@styles/colors';
+import { DEFAULT, DEFAULT_STYLES } from '@styles/theme';
 
 interface HourInputProps {
     placeholder?: string;
@@ -107,8 +109,6 @@ const CustomInput: React.FC<HourInputProps> = ({
                     </View>
                 </TouchableOpacity>
             </View>
-
-            <View style={styles.shadow}></View>
             {showStartHourPicker && (
                 <DateTimePicker
                     style={styles.input}
@@ -140,33 +140,30 @@ CustomInput.displayName = 'CustomInput';
 export default CustomInput;
 
 const styles = EStyleSheet.create({
-    label: {
-        position: 'absolute',
-        top: -12,
-        left: 10,
-        zIndex: 2,
-        backgroundColor: '$color_white',
-        paddingHorizontal: 5,
-        fontSize: 12,
-        color: '$color_black',
-        width: 120,
-        height: 20,
-        borderRadius: 10,
-        borderWidth: $border_width,
-        borderColor: '$color_black',
-        textAlign: 'center',
-        textAlignVertical: 'center',
+    input: {
+        position: 'relative',
+        width: '100%',
     },
+
+    label: {
+        zIndex: 2,
+        paddingHorizontal: 5,
+        color: '$color_black',
+        width: '100%',
+        fontSize: DEFAULT.fonsSize.body,
+        fontWeight: DEFAULT.fontWeight.bold,
+    },
+
     content: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: 40,
-        borderWidth: $border_width,
-        borderColor: '$color_black',
-        borderRadius: 15,
-        backgroundColor: '$color_white',
-        padding: 10,
+        height: 50,
+        borderWidth: DEFAULT_STYLES.input.borderWidth,
+        borderColor: DEFAULT_STYLES.input.borderColor,
+        borderRadius: DEFAULT_STYLES.input.borderRadius,
+        backgroundColor: white_bg,
+        boxShadow: DEFAULT.boxShadow.tile.default,
     },
     hourinput: {
         borderRadius: 15,
@@ -180,25 +177,9 @@ const styles = EStyleSheet.create({
     hourinputText: {
         fontSize: 20,
     },
-    input: {
-        flex: 1,
-        marginLeft: 10,
-    },
     separator: {
         width: 20,
         borderWidth: $border_width_line,
         margin: 10,
-    },
-    shadow: {
-        borderRadius: 15,
-        height: '100%',
-        position: 'absolute',
-        top: 4,
-        left: 4,
-        backgroundColor: '$shadow_color_primary',
-        borderWidth: $border_width,
-        width: '100%',
-        borderColor: '$color_black',
-        zIndex: -1,
-    },
+    }
 });

@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
-import { StudentProfileTabParamList } from '@components/ui/navbar';
+import { StudentProfileTabParamList } from '@components-new/ui/navbar';
 import { useAlert } from '@contexts/AlertContext';
 import { useStudentsContext } from '@contexts/StudentsContext';
 import { StudentDTO } from '@model';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { getFullName } from '@utils/utils';
-import { Text, View, ViewStyle } from 'react-native';
+import { Text, View } from 'react-native';
 import { Layout } from '@screens/Layout';
 import { StudentForm } from '@screens/Students/components/StudentForm';
 import { StudentsLayout } from '../Layout';
@@ -78,7 +78,6 @@ export const StudentEdit: React.FC<
                     route={'Students'}
                     hasHeader
                     title={getFullName(student)}
-                    hasHeaderSeperated
                 >
                     {FormHeader}
                     <View style={STYLES.fullWidthContainer}>

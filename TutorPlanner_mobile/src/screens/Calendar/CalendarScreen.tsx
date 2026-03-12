@@ -12,7 +12,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator<CalendarTabParamList>();
 
-export const RootCalendar: React.FC<
+export const CalendarScreen: React.FC<
     BottomTabScreenProps<RootStackParamList, 'Calendar'>
 > = ({ navigation, route }) => {
 
@@ -73,5 +73,3 @@ BottomTabScreenProps<CalendarTabParamList, 'Event'>
         </Layout>
     );
 };
-
-export { RootCalendar as Calendar };

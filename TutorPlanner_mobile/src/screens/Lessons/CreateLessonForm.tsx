@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Layout } from '../Layout';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
+import { FormProvider, FormRenderer } from '@components-new/complex/form-renderer';
 import { lessonsService } from '@services/lessons.service';
 import { ActivityIndicator, View } from 'react-native';
-import { ScrollView } from '@components/ui/scrool-view';
+import { ScrollView } from '@components-new/ui/scrool-view';
 import { StudentDTO } from '@model';
-import { FormRendererSchema } from '@components/complex/form-renderer/model';
+import { FormRendererSchema } from '@components-new/complex/form-renderer/model';
 import { getFullName } from '@utils/utils';
-import { LessonsTabParamList } from '@components/ui/navbar';
+import { LessonsTabParamList } from '@components-new/ui/navbar';
 import { $color_primary } from '@styles/colors';
 import { useStudentsContext } from '@contexts/StudentsContext';
 import { useAlert } from '@contexts/AlertContext';
@@ -110,14 +110,14 @@ const getFormSchema = (students: StudentDTO[]): FormRendererSchema => ({
             component: 'input',
             componentProps: {
                 label: 'Nazwa',
-                placeholder: '--Nazwa wydarzenia--',
+                placeholder: 'Nazwa wydarzenia',
             },
         },
         description: {
             component: 'input',
             componentProps: {
                 label: 'Opis',
-                placeholder: '--Opis--',
+                placeholder: 'Opis',
             },
         },
         student: {
@@ -125,7 +125,7 @@ const getFormSchema = (students: StudentDTO[]): FormRendererSchema => ({
             componentProps: {
                 label: 'Uczeń',
                 icon: 'students',
-                placeholder: '--Wybierz ucznia--',
+                placeholder: 'Wybierz ucznia',
                 options: students.map(stud => ({
                     value: stud.id,
                     label: getFullName(stud),
@@ -137,7 +137,7 @@ const getFormSchema = (students: StudentDTO[]): FormRendererSchema => ({
             componentProps: {
                 label: 'Cena',
                 icon: 'payments',
-                placeholder: '--Podaj cene--',
+                placeholder: 'Podaj cene',
             },
         },
         date: {
@@ -145,14 +145,14 @@ const getFormSchema = (students: StudentDTO[]): FormRendererSchema => ({
             componentProps: {
                 label: 'Data',
                 icon: 'calendar',
-                placeholder: '--Data--',
+                placeholder: 'Data',
             },
         },
         hour: {
             component: 'hour-input',
             componentProps: {
                 label: 'Godzina',
-                placeholder: '--Godzina--',
+                placeholder: 'Godzina',
             },
         },
         isWeekly: {

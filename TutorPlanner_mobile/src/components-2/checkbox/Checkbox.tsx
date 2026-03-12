@@ -4,7 +4,8 @@ import { Icon } from '@components/icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Tile } from '@components/tile';
 import { $border_width } from '@styles/global';
-import { $color_checkbox } from '@styles/colors';
+import { $color_checkbox, success_color, white, white_bg, window_bg } from '@styles/colors';
+import { DEFAULT, DEFAULT_STYLES, STYLES } from '@styles/theme';
 
 interface CheckboxProps {
     label?: string;
@@ -14,9 +15,12 @@ interface CheckboxProps {
 
 const CheckboxTile: React.FC<CheckboxProps> = props => {
     return (
-        <Tile color="white">
+        <View style={[
+            STYLES.tile,
+            styles.content
+        ]}>
             <Checkbox {...props} />
-        </Tile>
+        </View>
     );
 };
 
@@ -75,35 +79,49 @@ export { CheckboxTile, StaticCheckboxTile };
 export default Checkbox;
 
 const styles = EStyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        gap: 5,
-        alignItems: 'center',
+    input: {
+        position: 'relative',
+        width: '100%',
     },
-    checkboxBG: {
-        width: 25,
-        height: 25,
-        borderRadius: 5,
-        backgroundColor: '$shadow_color_primary',
-        borderWidth: $border_width,
-        borderColor: '$color_black',
+
+    label: {
+        zIndex: 2,
+        color: '$color_black',
+        width: '100%',
+        fontSize: DEFAULT.fonsSize.body,
+        fontWeight: DEFAULT.fontWeight.bold,
+    },
+
+    content: {
+        fontSize: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'center',
+        height: 50,
+        borderWidth: DEFAULT_STYLES.input.borderWidth,
+        borderColor: DEFAULT_STYLES.input.borderColor,
+        borderRadius: DEFAULT_STYLES.input.borderRadius,
+        backgroundColor: white_bg,
+        boxShadow: DEFAULT.boxShadow.tile.default,
+    },
+    container: {
+        width: '100%',
+        paddingHorizontal: DEFAULT.SPACING.S,
+        gap: DEFAULT.SPACING.S,
+        flexDirection: 'row',
         alignItems: 'center',
     },
     checkbox: {
-        width: 25,
-        height: 25,
+        width: 30,
+        height: 30,
         borderRadius: 5,
-        backgroundColor: '$color_white',
-        borderWidth: $border_width,
-        borderColor: '$color_black',
+        backgroundColor: white,
+        borderWidth: DEFAULT.border.width.m,
+        borderColor: DEFAULT.border.color,
         justifyContent: 'center',
         alignItems: 'center',
     },
     checked: {
-        backgroundColor: $color_checkbox,
-    },
-    label: {
-        fontSize: 16,
+        backgroundColor: success_color,
     },
 });

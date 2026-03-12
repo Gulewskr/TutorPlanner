@@ -3,7 +3,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { PaymentsLayout } from '../PaymentsLayout';
 import { PaymentForm } from '../components/PaymentForm';
-import { PaymentsTabParamList } from '@components/ui/navbar';
+import { PaymentsTabParamList } from '@components-new/ui/navbar';
 
 export const PaymentEdit: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'Edit'>

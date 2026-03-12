@@ -9,7 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EStyleSheet from 'react-native-extended-stylesheet';
 //screens
 import { Home } from './screens/Home/Home';
-import { Calendar } from './screens/Calendar/Calendar';
+import { CalendarScreen } from './screens/Calendar/CalendarScreen';
 import { Students } from './screens/Students/Students';
 import { Payments } from './screens/Payments/Payments';
 import { Notes } from './screens/Notes/Notes';
@@ -84,7 +84,7 @@ const App: React.FC<{}> = () => {
                         <View
                             style={{
                                 backgroundColor: 'transparent',
-                                flex: 1,
+                                flex: 1
                             }}
                         >
                             <LoadingScreen />
@@ -113,7 +113,7 @@ const App: React.FC<{}> = () => {
                                                     />
                                                     <Tab.Screen
                                                         name="Calendar"
-                                                        component={Calendar}
+                                                        component={CalendarScreen}
                                                     />
                                                     <Tab.Screen
                                                         name="Lessons"

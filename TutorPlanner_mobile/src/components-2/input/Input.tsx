@@ -3,6 +3,8 @@ import { Text, View, TextInput } from 'react-native';
 import { Icon, ICON_NAME } from '@components/icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { $border_width } from '@styles/global';
+import { DEFAULT, DEFAULT_STYLES } from '@styles/theme';
+import { white_bg } from '@styles/colors';
 
 export interface InputProps {
     placeholder?: string;
@@ -10,6 +12,7 @@ export interface InputProps {
     label?: string;
     defaultValue?: string | number;
     value?: string;
+    textAlign?: 'center' | 'left' | 'right';
     //TODO - make this required later
     onChange?: (value: string) => void;
 }
@@ -18,31 +21,38 @@ const CustomInput: React.FC<InputProps> = ({
     placeholder,
     icon,
     label,
+    textAlign,
     onChange,
     defaultValue,
 }) => {
-    const [width, setWidth] = useState(0);
+    const initialValue = defaultValue ? String(defaultValue) : undefined;
 
     return (
-        <View
-            style={[styles.input, label && { marginTop: 5 }]}
-            onLayout={event => {
-                const { width } = event.nativeEvent.layout;
-                setWidth(width);
-            }}
-        >
+        <View style={[styles.input]}>
             {label && <Text style={styles.label}>{label}</Text>}
             <View style={styles.content}>
-                {icon && <Icon icon={icon} />}
+                {icon && (
+                    <View
+                        style={{
+                            borderRightWidth: DEFAULT.border.width.m,
+                            borderColor: DEFAULT.border.color,
+                            height: '100%',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            paddingHorizontal: DEFAULT.SPACING.XXS,
+                        }}
+                    >
+                        <Icon icon={icon} />
+                    </View>
+                )}
                 <TextInput
-                    style={styles.textInput}
+                    style={[styles.textInput]}
+                    textAlign={textAlign}
                     placeholder={placeholder}
                     onChangeText={onChange}
-                    defaultValue={String(defaultValue)}
+                    defaultValue={initialValue}
                 />
             </View>
-
-            <View style={[styles.shadow, { width }]}></View>
         </View>
     );
 };
@@ -55,39 +65,32 @@ const styles = EStyleSheet.create({
     input: {
         position: 'relative',
         width: '100%',
+        minHeight: 40,
     },
     label: {
-        position: 'absolute',
-        top: -10,
-        left: 10,
         zIndex: 2,
-        backgroundColor: '$color_white',
         paddingHorizontal: 5,
-        fontSize: 12,
         color: '$color_black',
-        width: 120,
-        height: 20,
-        borderRadius: 15,
-        borderWidth: $border_width,
-        borderColor: '$color_black',
-        textAlign: 'center',
-        textAlignVertical: 'center',
+        width: '100%',
+        fontSize: DEFAULT.fonsSize.body,
+        fontWeight: DEFAULT.fontWeight.bold,
     },
 
     content: {
         flexDirection: 'row',
         alignItems: 'center',
-        minHeight: 40,
-        borderWidth: $border_width,
-        borderColor: '$color_black',
-        borderRadius: 15,
-        backgroundColor: '$color_white',
-        padding: 10,
+        height: 50,
+        borderWidth: DEFAULT_STYLES.input.borderWidth,
+        borderColor: DEFAULT_STYLES.input.borderColor,
+        borderRadius: DEFAULT_STYLES.input.borderRadius,
+        backgroundColor: white_bg,
+        boxShadow: DEFAULT.boxShadow.tile.default,
     },
 
     textInput: {
         flex: 1,
         marginLeft: 10,
+        fontWeight: DEFAULT_STYLES.input.fontWeight,
     },
 
     shadow: {

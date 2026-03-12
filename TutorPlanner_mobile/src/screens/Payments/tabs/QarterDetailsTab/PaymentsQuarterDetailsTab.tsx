@@ -17,6 +17,7 @@ import { View } from 'react-native';
 import { getQuarterDetails } from '@services/payments/get-quarter-details-view';
 import { useAlert } from '@contexts/AlertContext';
 import { useQuery } from '@tanstack/react-query';
+import { DEFAULT } from '@styles/theme';
 
 const CASH_ACCOUNT: Account = {
     id: -1,
@@ -128,7 +129,7 @@ export const PaymentsQuarterDetailsTab: React.FC<
                 <Header
                     title="Szczegóły"
                     isCentered
-                    styles={{ height: 30, marginTop: 10, marginBottom: 10 }}
+                    styles={{ height: 50 }}
                 />
                 <LoadWrapper loading={isLoading} error={isError} size="large">
                     <IncomePerAccountTile
@@ -149,27 +150,32 @@ export const PaymentsQuarterDetailsTab: React.FC<
                 <Header
                     title="Płatności"
                     isCentered
-                    styles={{ height: 30, marginTop: 10, marginBottom: 10 }}
+                    styles={{ height: 50 }}
                 />
                 <LoadWrapper loading={isLoading} error={isError} size="large">
-                    {data?.payments
-                        .filter(a => selectedAccounts.has(a.accountId))
-                        .sort((a, b) => compareDesc(a.date, b.date))
-                        .map(p => (
-                            <PaymentTile
-                                key={p.id}
-                                payment={p}
-                                onClick={() => {
-                                    //TODO
-                                }}
-                                customColor={
-                                    p.type === 'CASH'
-                                        ? CASH_ACCOUNT.color
-                                        : data.accounts.find(a => a.id === p.accountId)
-                                              ?.color
-                                }
-                            />
-                        ))}
+                    <View style={{
+                        gap: DEFAULT.SPACING.S,
+                        width: '100%'
+                    }}>
+                        {data?.payments
+                            .filter(a => selectedAccounts.has(a.accountId))
+                            .sort((a, b) => compareDesc(a.date, b.date))
+                            .map(p => (
+                                <PaymentTile
+                                    key={p.id}
+                                    payment={p}
+                                    onClick={() => {
+                                        //TODO
+                                    }}
+                                    customColor={
+                                        p.type === 'CASH'
+                                            ? CASH_ACCOUNT.color
+                                            : data.accounts.find(a => a.id === p.accountId)
+                                                ?.color
+                                    }
+                                />
+                            ))}
+                    </View>
                 </LoadWrapper>
             </ScrollView>
         </PaymentsLayout>

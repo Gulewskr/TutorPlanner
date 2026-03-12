@@ -1,28 +1,10 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
-import { Button } from '@components/button';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, Dimensions, NativeScrollEvent, NativeSyntheticEvent, ScrollView, Text, View, ViewStyle } from 'react-native';
 import { CalendarLayout } from '../CalendarLayout';
 import { CalendarTabParamList } from '../calendarTabs';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import { Tile } from '@components/tile';
-import {
-    startOfMonth,
-    subDays,
-    subMonths,
-    addMonths,
-    isSameMonth,
-    isBefore,
-    isSameYear,
-    addDays,
-    isSameDay,
-    format,
-} from 'date-fns';
-import { DayInCalendar } from '../components/calendar/DayInCalendar';
-import { getDayOfWeek, MONTHS_NOMINATIVE, WEEKDAYS } from '../components/calendar/utils';
+import { format } from 'date-fns';
 import { useCalendarContext } from '../CalendarContext';
-import { $color_primary_shadow } from '@styles/colors';
-import { $border_width } from '@styles/global';
 import { setLoadingPage } from '@contexts/NavbarReducer';
 import { useFocusEffect } from '@react-navigation/native';
 import { useDayEvents } from '../hooks/useDayEvents';
@@ -31,11 +13,13 @@ import { EventModal } from '@components-new/modals/EventModal';
 import { LessonModal } from '@components-new/modals';
 import { EventDTO, LessonDTO } from '@model';
 import { useModalContext } from '@contexts/modalContext';
-import { Header } from '@components-new/header';
 import { STYLES } from '@styles/theme';
+import { Calendar } from '../components/Calendar';
 
-const CALENDAR_WEEKS = [0, 1, 2, 3, 4, 5];
-const WEEK_DAYS_RANGE = [0, 1, 2, 3, 4, 5, 6];
+const CALENDAR_HEIGHT = 380;
+//TODO - should depends on screen size
+const MAX_LIST_HEIGHT = 800;
+const MIN_LIST_HEIGHT = 200;
 
 export const MonthlyCalendar: React.FC<
     BottomTabScreenProps<CalendarTabParamList, 'MonthlyCalendar'>
@@ -43,8 +27,7 @@ export const MonthlyCalendar: React.FC<
     const { navigation, route } = props;
     const [controlDate, setControlDate] = useState(new Date());
 
-    const { calendarData, selectedDate, loading, selectDate, fetchMonthlyCalendarData } =
-        useCalendarContext();
+    const { fetchMonthlyCalendarData } = useCalendarContext();
 
     useFocusEffect(
         React.useCallback(() => {
@@ -54,42 +37,19 @@ export const MonthlyCalendar: React.FC<
     );
 
     useEffect(() => {
-        if (!loading) {
-            setTimeout(() => {
-                setLoadingPage(false);
-            }, 1000);
-        }
-    }, [loading]);
+        setTimeout(() => {
+            setLoadingPage(false);
+        }, 1000);
+    }, []);
 
     useEffect(() => {
         fetchMonthlyCalendarData(controlDate);
     }, [controlDate]);
 
     const refresh = () => fetchMonthlyCalendarData(controlDate);
-
-    const firstDayOfMonth = startOfMonth(controlDate);
-    const firstDayInCallendar = subDays(firstDayOfMonth, getDayOfWeek(firstDayOfMonth));
-
-    const handlePreviousMonth = () => {
-        setControlDate(subMonths(controlDate, 1));
-    };
-
-    const handleNextMonth = () => {
-        setControlDate(addMonths(controlDate, 1));
-    };
-
-    const handleSelectDate = (day: Date) => {
-        if (!isSameMonth(day, controlDate)) {
-            isBefore(day, controlDate) ? handlePreviousMonth() : handleNextMonth();
-        }
-        setControlDate(day);
-        selectDate(day);
-    };
-
-    const { events } = useDayEvents(controlDate);
-
     const { setIsOpen, setModalBody } = useModalContext();
 
+    const { events } = useDayEvents(controlDate);
     const handleShowLessonModal = (lesson: LessonDTO) => {
         setModalBody(
             <LessonModal
@@ -133,200 +93,128 @@ export const MonthlyCalendar: React.FC<
         setIsOpen(true);
     };
 
+    const scrollY = useRef(new Animated.Value(0)).current;
+    const listHeight = useRef(new Animated.Value(MIN_LIST_HEIGHT)).current;
+
+    /*
+    const showCalendar = () => {
+        Animated.timing(calendarHeight, {
+            toValue: CALENDAR_HEIGHT,
+            duration: 300,
+            useNativeDriver: false,
+        }).start();
+        Animated.timing(listHeight, {
+            toValue: MIN_LIST_HEIGHT,
+            duration: 300,
+            useNativeDriver: false,
+        }).start();
+    };
+    const hideCalendar = () => {
+        Animated.timing(calendarHeight, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: false,
+        }).start();
+        Animated.timing(listHeight, {
+            toValue: MAX_LIST_HEIGHT,
+            duration: 300,
+            useNativeDriver: false,
+        }).start();
+    };
+    */
+    const listScale = listHeight.interpolate({
+        inputRange: [MIN_LIST_HEIGHT, MAX_LIST_HEIGHT],
+        outputRange: [1, MAX_LIST_HEIGHT / MIN_LIST_HEIGHT],
+        extrapolate: 'clamp',
+    });
+
+    const calendarScale = scrollY.interpolate({
+        inputRange: [0, CALENDAR_HEIGHT],
+        outputRange: [0, 1],
+        extrapolate: 'clamp',
+    });
+
+    const calendarHeight = scrollY.interpolate({
+        inputRange: [0, CALENDAR_HEIGHT],
+        outputRange: [CALENDAR_HEIGHT, 0],
+        extrapolate: 'clamp',
+    });
+    let ScreenHeight = Dimensions.get('window').height + CALENDAR_HEIGHT;
+    const scrollRef = useRef<ScrollView>(null);
+
     return (
         <CalendarLayout {...props}>
-            <ScrollView>
-                <View
-                    style={{
-                        paddingHorizontal: 15,
-                        gap: 15,
-                        alignItems: 'center',
-                        width: '100%',
-                    }}
-                >
+            <ScrollView
+                ref={scrollRef}
+                onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+                    useNativeDriver: false,
+                    listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+                        const y = event.nativeEvent.contentOffset.y;
+
+                        if (y > (CALENDAR_HEIGHT + 50)) {
+                            scrollRef.current?.scrollTo({
+                            y: CALENDAR_HEIGHT + 50,
+                            animated: false,
+                            });
+                        }
+                    }
+                })}
+            >
+                <View style={{ paddingTop: 10 }}>
+                    <Animated.View
+                        style={{
+                            paddingTop: scrollY,
+                            padding: 15,
+                            gap: 15,
+                            alignItems: 'center',
+                            width: '100%',
+                            height: ScreenHeight,
+                            marginBottom: CALENDAR_HEIGHT,
+                        }}
+                    >
                     {/*
-                        <Button
-                            onClick={() => navigation.jumpTo('DailyCalendar')}
-                            hasShadow
-                            icon="calendar"
-                            label="Przełącz na widok dzienny"
-                        />
-                    */}
-                    <View style={styles.container}>
-                        <View style={styles.calendar}>
-                            <View
-                                style={{
-                                    width: '100%',
-                                    flexDirection: 'row',
-                                    marginVertical: 10,
-                                    gap: 10,
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <View>
-                                    <Button
-                                        type="icon-button"
-                                        hasShadow={false}
-                                        onClick={handlePreviousMonth}
-                                        icon="arrowLeft"
-                                        severity="warning"
-                                        size="small"
-                                    />
-                                </View>
-                                <View style={{ width: '55%' }}>
-                                    <Tile color="white" centered hasShadow={false} height={20}>
-                                        <Text
-                                            style={{
-                                                fontWeight: 'bold',
-                                            }}
-                                        >
-                                            {MONTHS_NOMINATIVE[controlDate.getMonth()]}
-                                            {!isSameYear(controlDate, new Date()) &&
-                                                format(controlDate, ' yyyy')}
-                                        </Text>
-                                    </Tile>
-                                </View>
-                                <View>
-                                    <Button
-                                        type="icon-button"
-                                        hasShadow={false}
-                                        onClick={handleNextMonth}
-                                        icon="arrowRight"
-                                        severity="warning"
-                                        size="small"
-                                    />
-                                </View>
-                            </View>
-                            <View style={styles.grid}>
-                                <View
-                                    style={[
-                                        styles.grid_loading_opacity,
-                                        { display: loading ? 'flex' : 'none' },
-                                    ]}
-                                />
-                                <View
-                                    style={[
-                                        styles.grid_loading,
-                                        { display: loading ? 'flex' : 'none' },
-                                    ]}
-                                >
-                                    <ActivityIndicator
-                                        size={'large'}
-                                        color={$color_primary_shadow}
-                                    />
-                                </View>
-                                <View style={styles.grid_row}>
-                                    {WEEKDAYS.map(day => (
-                                        <Text key={day} style={styles.weekday}>
-                                            {day}
-                                        </Text>
-                                    ))}
-                                </View>
-                                {CALENDAR_WEEKS.map(week => (
-                                    <View key={week} style={styles.grid_row}>
-                                        {WEEK_DAYS_RANGE.map(dayIndex => {
-                                            const day = addDays(
-                                                firstDayInCallendar,
-                                                week * 7 + dayIndex,
-                                            );
-                                            const dateKey = format(day, 'yyyy-MM-dd');
-                                            return (
-                                                <DayInCalendar
-                                                    day={day}
-                                                    key={dayIndex}
-                                                    eventsData={calendarData[dateKey]}
-                                                    isBlackedOut={!isSameMonth(controlDate, day)}
-                                                    isSelected={isSameDay(selectedDate, day)}
-                                                    onClick={() => handleSelectDate(day)}
-                                                />
-                                            );
-                                        })}
-                                    </View>
-                                ))}
-                            </View>
-                        </View>
-                        <View style={styles.shadow} />
-                    </View>
-                    <Text style={[STYLES.h3, {
-                        alignSelf: 'flex-start',
-                    }]}>
-                        {format(controlDate, 'dd MM yyyy')}
-                    </Text>
-                    <EventsList
-                        events={events}
-                        navigation={navigation.getParent()}
-                        onChange={refresh}
-                        onEventClick={handleShowEventModal}
-                        onLessonClick={handleShowLessonModal}
+                    <Button
+                        onClick={() => navigation.jumpTo('DailyCalendar')}
+                        hasShadow
+                        icon="calendar"
+                        label="Przełącz na widok dzienny"
                     />
+                    */}
+                        <Animated.View
+                            style={{
+                                height: calendarHeight,
+                                overflow: 'hidden',
+                                width: '100%',
+                            }}
+                        >
+                            <Calendar controlDate={controlDate} setControlDate={setControlDate} />
+                        </Animated.View>
+                        <Text
+                            style={[
+                                STYLES.h3,
+                                {
+                                    alignSelf: 'flex-start',
+                                },
+                            ]}
+                        >
+                            {format(controlDate, 'dd MM yyyy')}
+                        </Text>
+                        <Animated.View
+                            style={{
+                                alignItems: 'center',
+                                flex: 1,
+                            }}
+                        >
+                            <EventsList
+                                events={events}
+                                onChange={refresh}
+                                onEventClick={handleShowEventModal}
+                                onLessonClick={handleShowLessonModal}
+                            />
+                        </Animated.View>
+                    </Animated.View>
                 </View>
             </ScrollView>
         </CalendarLayout>
     );
 };
-
-const styles = EStyleSheet.create({
-    container: {
-        height: 400,
-        width: '100%',
-    },
-    calendar: {
-        gap: 5,
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: 10,
-        zIndex: 1,
-        borderWidth: $border_width,
-        alignItems: 'center',
-        backgroundColor: '$tile_bgColor',
-        borderColor: '$color_black',
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-    },
-    shadow: {
-        position: 'absolute',
-        top: 5,
-        left: 5,
-        borderRadius: 10,
-        backgroundColor: '$shadow_color_primary',
-        zIndex: 0,
-        borderWidth: $border_width,
-        borderColor: '$color_black',
-        width: '100%',
-        height: '100%',
-    },
-    grid: {
-        flexDirection: 'column',
-        gap: 5,
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    grid_row: {
-        gap: 5,
-        marginHorizontal: 5,
-        flexDirection: 'row',
-    },
-    grid_loading_opacity: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        opacity: 0.75,
-        backgroundColor: '$tile_bgColor',
-        zIndex: 1,
-        justifyContent: 'center',
-    },
-    grid_loading: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        zIndex: 1,
-        justifyContent: 'center',
-    },
-    weekday: {
-        fontWeight: 'bold',
-        textAlign: 'center',
-        width: 40,
-    },
-});

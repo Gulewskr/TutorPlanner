@@ -4,12 +4,12 @@ import { StudentProfileTabParamList } from '../StudentProfile';
 import { StudentsLayout } from '../Layout';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Button } from '@components/button';
-import { Tile } from '@components/tile';
+import { Button } from '@components-new/button';
 import { StudentNextLesson } from '@screens/Students/components/StudentNextLesson';
 import { useStudentContext } from '../StudentContext';
 import { ScrollView } from '@components/ui/scrool-view';
 import { setLoadingPage } from '@contexts/NavbarReducer';
+import { STYLES } from '@styles/theme';
 
 export const StudentInformations: React.FC<
     BottomTabScreenProps<StudentProfileTabParamList, 'Info'>
@@ -25,12 +25,12 @@ export const StudentInformations: React.FC<
         }, 1000);
     }
 
-    const reloadBalance = async () => {
-        student && recalculate(student.id);
-    };
 
     const goToCreateLesson = (): void => navigation.jumpTo('CreateLessons');
     const goToLessonsList = (): void => navigation.jumpTo('Lessons');
+    const reloadBalance = async () => {
+        student && recalculate(student.id);
+    };
     const goToEdit = (): void =>
         student &&
         navigation.jumpTo('Edit', {
@@ -43,11 +43,16 @@ export const StudentInformations: React.FC<
             <ScrollView>
                 <View style={styles.double_button_container}>
                     <View style={{ width: '48%' }}>
-                        <Tile color="white" hasShadow centered>
-                            <Text style={{ fontWeight: 'bold' }}>
+                        <View style={{
+
+                        }}>
+                            <Text style={[STYLES.tile, {
+                                textAlign: 'center',
+                                textAlignVertical: 'center'
+                            }]}>
                                 Bilans: {student?.balance || 0}zł
                             </Text>
-                        </Tile>
+                        </View>
                     </View>
                     <View style={{ width: '48%' }}>
                         <Button
@@ -55,7 +60,6 @@ export const StudentInformations: React.FC<
                             label="Dodaj wpłate"
                             secondary
                             onClick={goToAddPayment}
-                            size="small"
                         />
                     </View>
                     {/*

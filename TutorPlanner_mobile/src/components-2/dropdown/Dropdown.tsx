@@ -3,6 +3,8 @@ import { Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { Icon, ICON_NAME } from '@components/icon';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { $border_width } from '@styles/global';
+import { DEFAULT, DEFAULT_STYLES } from '@styles/theme';
+import { primary, white_bg } from '@styles/colors';
 
 interface DropdownOption {
     label: string;
@@ -27,9 +29,7 @@ const Dropdown: React.FC<CheckboxProps> = ({
     onChange,
     defaultValue,
 }) => {
-    const [selectedValue, setSelectedValue] = useState<
-        DropdownOption | undefined
-    >(() => {
+    const [selectedValue, setSelectedValue] = useState<DropdownOption | undefined>(() => {
         if (!options || defaultValue === undefined) {
             return undefined;
         }
@@ -54,17 +54,34 @@ const Dropdown: React.FC<CheckboxProps> = ({
                 activeOpacity={1}
             >
                 <View style={styles.content}>
-                    {icon && <Icon icon={icon} />}
-                    <Text>
-                        {selectedValue ? selectedValue.label : placeholder}
-                    </Text>
+                    {icon && (
+                        <View
+                            style={{
+                                borderRightWidth: DEFAULT.border.width.m,
+                                borderColor: DEFAULT.border.color,
+                                height: '100%',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                paddingHorizontal: DEFAULT.SPACING.XXS,
+                            }}
+                        >
+                            <Icon icon={icon} />
+                        </View>
+                    )}
+                    <Text style={{marginLeft: DEFAULT.SPACING.S}}>{selectedValue ? selectedValue.label : placeholder}</Text>
                     <View
                         style={{
+                            borderLeftWidth: DEFAULT.border.width.m,
+                            borderColor: DEFAULT.border.color,
                             marginLeft: 'auto',
-                            transform: `rotate(${openMenu ? '-90deg' : '90deg'})`,
+                            backgroundColor: primary,
+                            height: '100%',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            boxShadow: DEFAULT.boxShadow.primary.default
                         }}
                     >
-                        <Icon icon="arrowRight" />
+                        <Icon icon='arrow-down' rotate={openMenu ? '180deg' : undefined} />
                     </View>
                 </View>
             </TouchableOpacity>
@@ -83,7 +100,6 @@ const Dropdown: React.FC<CheckboxProps> = ({
                     </ScrollView>
                 </View>
             )}
-            <View style={[styles.shadow]}></View>
         </View>
     );
 };
@@ -97,47 +113,25 @@ const styles = EStyleSheet.create({
         position: 'relative',
         width: '100%',
     },
+
     label: {
-        position: 'absolute',
-        top: -10,
-        left: 10,
         zIndex: 2,
-        backgroundColor: '$color_white',
         paddingHorizontal: 5,
-        fontSize: 12,
         color: '$color_black',
-        width: 120,
-        height: 20,
-        borderRadius: 15,
-        borderWidth: $border_width,
-        borderColor: '$color_black',
-        textAlign: 'center',
-        textAlignVertical: 'center',
+        width: '100%',
+        fontSize: DEFAULT.fonsSize.body,
+        fontWeight: DEFAULT.fontWeight.bold,
     },
 
     content: {
         flexDirection: 'row',
         alignItems: 'center',
-        minHeight: 40,
-        borderWidth: $border_width,
-        borderColor: '$color_black',
-        borderRadius: 15,
-        backgroundColor: '$color_white',
-        gap: 10,
-        padding: 10,
-    },
-
-    shadow: {
-        borderRadius: 15,
-        height: '100%',
-        width: '100%',
-        position: 'absolute',
-        top: 4,
-        left: 4,
-        backgroundColor: '$shadow_color_primary',
-        borderWidth: $border_width,
-        borderColor: '$color_black',
-        zIndex: -1,
+        height: 50,
+        borderWidth: DEFAULT_STYLES.input.borderWidth,
+        borderColor: DEFAULT_STYLES.input.borderColor,
+        borderRadius: DEFAULT_STYLES.input.borderRadius,
+        backgroundColor: white_bg,
+        boxShadow: DEFAULT.boxShadow.tile.default,
     },
 
     itemList: {

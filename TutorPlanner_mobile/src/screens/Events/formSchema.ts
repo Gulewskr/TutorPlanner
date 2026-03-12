@@ -1,4 +1,4 @@
-import { FormField, FormRendererSchema } from "@components/complex/form-renderer/model";
+import { FormField, FormRendererSchema } from "@components-new/complex/form-renderer/model";
 import { formatToDayInCalendar } from "@utils/dateUtils";
 
 export interface EventFormData {
@@ -28,14 +28,14 @@ const FIELDS_SCHEMA: { [name: string]: FormField } = {
         component: 'input',
         componentProps: {
             label: 'Nazwa',
-            placeholder: '--Nazwa wydarzenia--',
+            placeholder: 'Nazwa wydarzenia',
         },
     },
     description: {
         component: 'input',
         componentProps: {
             label: 'Opis',
-            placeholder: '--Opis--',
+            placeholder: 'Opis',
         },
     },
     date: {
@@ -43,14 +43,14 @@ const FIELDS_SCHEMA: { [name: string]: FormField } = {
         componentProps: {
             label: 'Data',
             icon: 'calendar',
-            placeholder: '--Data--',
+            placeholder: 'Data',
         },
     },
     hour: {
         component: 'hour-input',
         componentProps: {
             label: 'Godzina',
-            placeholder: '--Godzina--',
+            placeholder: 'Godzina',
         },
     }
 }

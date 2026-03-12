@@ -28,6 +28,7 @@ export const old_primary = '#FFA9F1';
 export const primary = '#FF81B6';
 export const primary_shadow = '#FF66A6';
 export const primary_text = ''
+export const primary_hover = '#F5D4F5';
 export const color_primary_bg_shadow = '#FF66A6';
 export const color_primary_text = '';
 export const color_primary_shadow = '';
@@ -40,11 +41,14 @@ export const error_color_shadow = '#C44343';
 export const success_color = '#BAFCA2';
 export const success_color_shadow = '#60B840';
 export const warning_color = '#FFF59C';
-export const warning_color_shadow = '#FFF59C';
+export const warning_color_shadow = '#D8BF34';
 export const disabled_color = '#6F6F6F';
 export const disabled_color_shadow = '#FFF59C';
 
 export const window_bg = '#FED3FF';
 export const tile_bg = '#FFDDE2';
 export const tile_bg_shadow = '#0000003d';
+
+export const white_bg = '#FFFCE3';
+export const disable_bg = `#D9D9D9`;
 

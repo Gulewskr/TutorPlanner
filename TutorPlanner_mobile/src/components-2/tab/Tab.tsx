@@ -1,5 +1,7 @@
 import { Icon, ICON_NAME } from '@components/icon';
+import { black, disable_bg, old_primary, primary, primary_shadow, tile_bg_shadow, white_bg } from '@styles/colors';
 import { $border_width } from '@styles/global';
+import { DEFAULT } from '@styles/theme';
 import React, { PropsWithChildren, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Dimensions } from 'react-native';
@@ -39,7 +41,29 @@ const CustomTabs: React.FC<PropsWithChildren<TabProps>> = ({
                             key={index}
                             style={[
                                 styles.tab,
-                                isActive && styles.active_tab,
+                                isActive && {
+                                    backgroundColor: primary,
+                                    paddingHorizontal: 20,
+                                    flexGrow: 1,
+                                    boxShadow: [
+                                        {
+                                            offsetX: -5,
+                                            offsetY: -5,
+                                            blurRadius: 1,
+                                            spreadDistance: 0,
+                                            color: primary_shadow,
+                                            inset: true,
+                                        },
+                                        {
+                                            offsetX: 5,
+                                            offsetY: 5,
+                                            blurRadius: 1,
+                                            spreadDistance: 0,
+                                            color: old_primary,
+                                            inset: true,
+                                        },
+                                    ],
+                                },
                                 tab.isExpanded && styles.expanded_tab,
                                 index != 0 && { marginLeft: -1 },
                             ]}
@@ -69,29 +93,32 @@ export default CustomTabs;
 
 const styles = EStyleSheet.create({
     border: {
-        borderBottomWidth: $border_width,
-        borderBottomColor: '$color_black',
+        borderBottomWidth: DEFAULT.border.width.m,
+        borderBottomColor: black,
         width: '100%',
         alignItems: 'center',
+        marginTop: DEFAULT.SPACING.S
     },
     content: {
         flexDirection: 'row',
         justifyContent: 'center',
         flexWrap: 'wrap',
-        marginHorizontal: 10,
+        marginHorizontal: DEFAULT.SPACING.M,
     },
 
     tab: {
         flexDirection: 'row',
-        gap: 10,
-        borderWidth: $border_width,
+        gap: DEFAULT.SPACING.S,
+        borderWidth: DEFAULT.border.width.m,
         borderBottomWidth: 0,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
-        minWidth: 50,
+        minWidth: 30,
         minHeight: 40,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: disable_bg,
+        boxShadow: DEFAULT.boxShadow.tile.pressed
     },
 
     text: {
@@ -106,12 +133,6 @@ const styles = EStyleSheet.create({
     },
 
     expanded_tab: {
-        flexGrow: 1,
-    },
-
-    active_tab: {
-        backgroundColor: '$color_primary',
-        paddingHorizontal: 20,
         flexGrow: 1,
     },
 });

@@ -1,4 +1,4 @@
-import { Button } from '@components/button';
+import { Button } from '@components-new/button';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -42,19 +42,19 @@ export const FormRenderer: React.FunctionComponent<FormRendererProps> = ({
         >
             {FormBody}
             <View style={styles.double_button_container}>
-                <View style={{ width: '50%' }}>
+                <View style={{ width: '50%', height: 40 }}>
                     <Button
-                        icon="cancel"
                         onClick={onCancel}
                         label={cancelLabel}
+                        severity='error'
                     />
                 </View>
-                <View style={{ width: '50%' }}>
+                <View style={{ width: '50%', height: 40 }}>
                     <Button
-                        icon="checkbox"
                         onClick={handleSubmit}
                         label={confirmLabel}
                         disabled={sendingData}
+                        severity='success'
                     />
                 </View>
             </View>

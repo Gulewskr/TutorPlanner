@@ -7,7 +7,6 @@ import { primary_shadow, window_bg } from '@styles/colors';
 
 import { useSelector } from 'react-redux';
 
-//import Animated from 'react-native-reanimated';
 import { RootState, updateCurrentRoute } from '@contexts/NavbarReducer';
 import { navigate } from './GlobalNavigation';
 import { DEFAULT, STYLES } from '@styles/theme';

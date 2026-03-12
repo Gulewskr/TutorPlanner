@@ -1,9 +1,9 @@
+import { LessonTile } from '@components-new/tile';
 import { Header } from '@components/header';
 import { LessonModal } from '@components/modals';
 import { Tile } from '@components/tile';
 import { useModalContext } from '@contexts/modalContext';
 import { LessonDTO } from '@model';
-import { LessonTile } from '@screens/Lessons/components/LessonTile';
 import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
@@ -90,14 +90,15 @@ export const OverduesTile: React.FC<OverduesTileProps> = ({
             {!isLoading && lessons && (
                 <ScrollView
                     nestedScrollEnabled={true}
-                    style={{ marginTop: 10 }}
+                    style={{ marginTop: 10, width: '100%' }}
                 >
-                    <View style={{ gap: 10, marginTop: 10, paddingBottom: 20 }}>
+                    <View style={{ gap: 10, marginTop: 10, paddingBottom: 20, width: '100%' }}>
                         {lessons.map((lesson, i) => (
                             <LessonTile
                                 key={lesson.id}
                                 lesson={lesson}
                                 onClick={() => handleShowEventModal(lesson)}
+                                showDate
                             />
                         ))}
                     </View>

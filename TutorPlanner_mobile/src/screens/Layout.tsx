@@ -31,7 +31,7 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
     const isSettingsButtonDisabled = route == 'Settings';
 
     return (
-        <View style={styles.container}>
+        <>
             {alerts && (
                 <View
                     style={{
@@ -74,10 +74,10 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
                     />
                 </View>
             )}
-            <KeyboardAvoidingView style={styles.content} behavior="padding">
+            <View style={styles.content}>
                 {children}
-            </KeyboardAvoidingView>
-        </View>
+            </View>
+        </>
     );
 };
 
@@ -89,13 +89,6 @@ const styles = EStyleSheet.create({
         height: '100%',
         width: '100%',
     },
-    container: {
-        zIndex: 1,
-        height: 500,
-        position: 'relative',
-        flex: 1,
-        backgroundColor: 'red',
-    },
     header_container: {
         position: 'fixed',
         top: 0,
@@ -103,10 +96,10 @@ const styles = EStyleSheet.create({
         fontFamily: 'Modak_400Regular',
     },
     content: {
-        display: 'flex',
         flexDirection: 'column',
         gap: 15,
         alignItems: 'center',
-        marginBottom: 100,
+        flex: 1,
+        paddingBottom: 35
     },
 });

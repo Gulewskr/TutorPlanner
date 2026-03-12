@@ -4,27 +4,27 @@ import { useIsFocused } from '@react-navigation/native';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { PaymentsLayout } from '../PaymentsLayout';
 import { PaymentTile } from '../components/PaymentTile';
-import { ScrollView } from '@components/ui/scrool-view';
-import { Header } from '@components/header';
-import { Button } from '@components/button';
+import { ScrollView } from '@components-new/ui/scrool-view';
+import { Header } from '@components-new/header';
+import { Button } from '@components-new/button';
 import { $color_primary } from '@styles/colors';
 import { usePayments } from '@hooks/usePayments';
 import { lessonsService } from '@services/lessons.service';
 import { OverduesTile } from '../components/OverduesTile';
-import { PaymentsTabParamList } from '@components/ui/navbar';
-import { Tile } from '@components/tile';
+import { PaymentsTabParamList } from '@components-new/ui/navbar';
+import { Tile } from '@components-new/tile';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { getMonth, getYear } from 'date-fns';
 import { useOverdues } from '@hooks/useOverdues';
 import { useModalContext } from '@contexts/modalContext';
 import { Payment } from '@model';
-import { PaymentModal } from '@components/modals/PaymentModal';
+import { PaymentModal } from '@components-new/modals/PaymentModal';
 import { useConfirmModal } from '@contexts/confirmModalContext';
 import { getFullName } from '@utils/utils';
 import { paymentsService } from '@services/payments.service';
 import { useAlert } from '@contexts/AlertContext';
 import { setLoadingPage } from '@contexts/NavbarReducer';
-import { STYLES } from '@styles/theme';
+import { DEFAULT, STYLES } from '@styles/theme';
 
 export const PaymentsSummary: React.FC<
     BottomTabScreenProps<PaymentsTabParamList, 'Summary'>
@@ -133,18 +133,20 @@ export const PaymentsSummary: React.FC<
 
     return (
         <PaymentsLayout {...props}>
-            <ScrollView
-                styles={{
-                    paddingHorizontal: 10,
-                    marginBottom: 100,
-                }}
-            >
+            <ScrollView styles={{paddingHorizontal: DEFAULT.SPACING.M}}>
                 <Header
                     title="Bieżący miesiąc"
                     isCentered
-                    styles={{ height: 30, marginBottom: 10 }}
+                    noBackground
+                    size='s'
                 />
-                <Tile color="white">
+                <View style={[
+                    STYLES.tile,
+                    {
+                        width: '100%',
+                        height: 100
+                    }
+                ]}>
                     <View style={{ padding: 5 }}>
                         <View style={styles.fullWidthRow}>
                             <Text style={styles.headText}>Zarobki</Text>
@@ -159,7 +161,7 @@ export const PaymentsSummary: React.FC<
                             <Text>{summaryData.lessonsNumber}</Text>
                         </View>
                     </View>
-                </Tile>
+                </View>
                 <View style={{ height: 20 }} />
                 <OverduesTile
                     lessons={overdueLessons}
@@ -170,12 +172,13 @@ export const PaymentsSummary: React.FC<
                 <Header
                     title={payments.length > 5 ? 'Ostatnie 5 płatności' : 'Ostatnie płatności'}
                     isCentered
-                    styles={{ height: 30, marginBottom: 10 }}
+                    noBackground
+                    size='s'
                 />
                 {isLoading ? (
                     <ActivityIndicator size="large" color={$color_primary} />
                 ) : payments.length ? (
-                    <>
+                    <View style={{gap: 10, width: '100%'}}>
                         {payments
                             .slice(-5)
                             .reverse()
@@ -186,11 +189,11 @@ export const PaymentsSummary: React.FC<
                                     onClick={() => handleShowEventModal(p)}
                                 />
                             ))}
-                    </>
+                    </View>
                 ) : (
                     <Text>Brak płatności</Text>
                 )}
-                <View style={{ marginTop: 10 }}>
+                <View style={{ marginTop: 10, height: 40 }}>
                     <Button
                         onClick={() => navigation.jumpTo('History')}
                         icon="diagram"

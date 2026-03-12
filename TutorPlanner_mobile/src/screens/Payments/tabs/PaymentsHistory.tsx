@@ -2,16 +2,12 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, Text, TextStyle, View } from 'react-native';
 import { PaymentsLayout } from '../PaymentsLayout';
-import { PaymentTile } from '../components/PaymentTile';
-import { Button } from '@components/button';
-import { addMonths, compareDesc, getMonth, getYear, isBefore, isSameYear } from 'date-fns';
+import { addMonths, getMonth, getYear, isBefore, isSameYear } from 'date-fns';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { usePayments } from '@hooks/usePayments';
 import { OverduesTile } from '../components/OverduesTile';
-import { useUnpaidLessons } from '@hooks/useUnpaidLessons';
-import { PaymentsTabParamList } from '@components/ui/navbar';
+import { PaymentsTabParamList } from '@components-new/ui/navbar';
 import { useModalContext } from '@contexts/modalContext';
-import { PaymentModal } from '@components/modals/PaymentModal';
+import { PaymentModal } from '@components-new/modals/PaymentModal';
 import { useAlert } from '@contexts/AlertContext';
 import { getFullName } from '@utils/utils';
 import { paymentsService } from '@services/payments.service';
@@ -23,6 +19,7 @@ import { Payment } from '@model';
 import { PageNavigation } from '../components/PageNavigation';
 import { lessonsService } from '@services/lessons.service';
 import { useQuery } from '@tanstack/react-query';
+import { DEFAULT } from '@styles/theme';
 
 const BOLD_UNDERLINE_TEXT_STYLES: TextStyle = {
     fontWeight: 'bold',
@@ -140,64 +137,60 @@ export const PaymentsHistory: React.FC<
         <PaymentsLayout {...props}>
             <View
                 style={{
-                    paddingHorizontal: 10,
+                    paddingHorizontal: DEFAULT.SPACING.M,
+                    width: '100%',
                 }}
             >
+                <PageNavigation
+                    onPrev={() => {
+                        handleMonthChange(-1);
+                    }}
+                    onNext={() => {
+                        handleMonthChange(1);
+                    }}
+                    title={`${getMonthName(month)} ${!isSameYear(controlDate, new Date()) ? year : ''}`}
+                />
                 <View
                     style={{
+                        display: 'flex',
+                        alignContent: 'center',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        gap: 20,
                         width: '100%',
+                        marginBottom: 10,
                     }}
                 >
-                    <PageNavigation
-                        onPrev={() => {
-                            handleMonthChange(-1);
-                        }}
-                        onNext={() => {
-                            handleMonthChange(1);
-                        }}
-                        title={`${getMonthName(month)} ${!isSameYear(controlDate, new Date()) ? year : ''}`}
-                    />
-                    <View
-                        style={{
-                            display: 'flex',
-                            alignContent: 'center',
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            gap: 20,
-                            width: '100%',
-                            marginBottom: 10,
-                        }}
-                    >
-                        {isLoading ? (
+                    {isLoading ? (
+                        <Text
+                            style={BOLD_UNDERLINE_TEXT_STYLES}
+                        >
+                            Ładowanie...
+                        </Text>
+                    ) : (
+                        <>
                             <Text
                                 style={BOLD_UNDERLINE_TEXT_STYLES}
                             >
-                                Ładowanie...
+                                {currentIncome
+                                    ? `Zarobki: ${currentIncome} zł`
+                                    : 'Brak płatności'}
                             </Text>
-                        ) : (
-                            <>
-                                <Text
-                                    style={BOLD_UNDERLINE_TEXT_STYLES}
-                                >
-                                    {currentIncome
-                                        ? `Zarobki: ${currentIncome} zł`
-                                        : 'Brak płatności'}
-                                </Text>
-                                <Text
-                                    style={BOLD_UNDERLINE_TEXT_STYLES}
-                                >
-                                    Przewidywania: {expectedIncome}
-                                    zł
-                                </Text>
-                            </>
-                        )}
-                    </View>
+                            <Text
+                                style={BOLD_UNDERLINE_TEXT_STYLES}
+                            >
+                                Przewidywania: {expectedIncome}
+                                zł
+                            </Text>
+                        </>
+                    )}
                 </View>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View
                         style={{
                             alignItems: 'center',
-                            marginBottom: 20,
+                            gap: DEFAULT.SPACING.S,
+                            marginBottom: DEFAULT.SPACING.S
                         }}
                     >
                         <PaymentsList
@@ -217,11 +210,6 @@ export const PaymentsHistory: React.FC<
                                 hasHeader={false}
                             />
                         ))}
-                    <View
-                        style={{
-                            height: 200,
-                        }}
-                    />
                 </ScrollView>
             </View>
         </PaymentsLayout>

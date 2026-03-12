@@ -3,7 +3,8 @@ import { Header } from '@components/header';
 import { LessonDTO } from '@model';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { LessonTile } from '../../Lessons/components/LessonTile';
+import { LessonTile } from '@components-new/tile';
+//import { LessonTile } from '../../Lessons/components/LessonTile';
 
 interface StudentNextLessonProps {
     lesson?: LessonDTO;
@@ -25,9 +26,7 @@ const StudentNextLesson: React.FC<StudentNextLessonProps> = ({ lesson }) => {
         >
             <Header title="Najbliższe zajęcia" isCentered />
             {lesson ? (
-                <View>
-                    <LessonTile lesson={lesson} onClick={navigateToCallendar} />
-                </View>
+                <LessonTile lesson={lesson} onClick={navigateToCallendar} showDate hideTags />
             ) : (
                 <Text>Brak zaplanowanych zajęć</Text>
             )}

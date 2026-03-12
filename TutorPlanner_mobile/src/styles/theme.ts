@@ -1,6 +1,6 @@
 import { TextStyle, ViewStyle } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet"
-import { $color_error_button, black, disabled, error_color, error_color_shadow, primary, primary_shadow, secondary, secondary_shadow, success_color, success_color_shadow, tile_bg_shadow, warning_color, warning_color_shadow } from "./colors";
+import { $color_error_button, $tile_bgColor, black, disabled, error_color, error_color_shadow, primary, primary_shadow, secondary, secondary_shadow, success_color, success_color_shadow, tile_bg, tile_bg_shadow, warning_color, warning_color_shadow, white_bg } from "./colors";
 import { error } from "console";
 
 //TODO
@@ -74,6 +74,26 @@ export const DEFAULT = {
         activePageColor: primary_shadow,
         activePageColorShadow: `-6 -10 1 0 #8F3A5D inset`,
         disabledColor: disabled,
+    },
+    calendar: {
+        background: $tile_bgColor,
+        fontSize: 12,
+        fontWeight: 900,
+        disabled: {
+            color: "#DDA9A9",
+            background: '#EAD5F4'
+        }
+    }
+}
+
+export const DEFAULT_STYLES: {
+    input: ViewStyle & TextStyle
+} = {
+    input: {
+        borderWidth: DEFAULT.border.width.m,
+        borderColor: DEFAULT.border.color,
+        borderRadius: DEFAULT.border.radius.s,
+        fontWeight: DEFAULT.fontWeight.bold as TextStyle['fontWeight']
     }
 }
 
@@ -91,6 +111,7 @@ type Styles = {
   fullWidthRow: ViewStyle;
   border: ViewStyle;
   primary_bg: ViewStyle;
+  tile: ViewStyle;
 };
 
 export const STYLES = EStyleSheet.create({
@@ -162,5 +183,14 @@ export const STYLES = EStyleSheet.create({
     warning_bg: {
         backgroundColor: warning_color,
         boxShadow: `-5 -5 1 0 ${warning_color_shadow} inset`
+    },
+    tile: {
+        fontWeight: 'bold',
+        height: 40,
+        backgroundColor: white_bg,
+        boxShadow: DEFAULT.boxShadow.tile.default,
+        borderWidth: DEFAULT.border.width.m,
+        borderColor: DEFAULT.border.color,
+        borderRadius: DEFAULT.border.radius.m
     }
 }) as Styles;

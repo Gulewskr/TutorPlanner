@@ -5,6 +5,8 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { format, parse } from 'date-fns';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { $border_width } from '@styles/global';
+import { white_bg } from '@styles/colors';
+import { DEFAULT, DEFAULT_STYLES } from '@styles/theme';
 
 export interface DatepickerProps {
     placeholder?: string;
@@ -73,14 +75,23 @@ const Datepicker: React.FC<DatepickerProps> = ({
             {label && <Text style={styles.label}>{label}</Text>}
             <TouchableOpacity onPress={() => setShowPicker(true)}>
                 <View style={styles.content}>
-                    {icon && <Icon icon={icon} />}
-                    <Text style={styles.textInput}>
-                        {dateText ? dateText : placeholder}
-                    </Text>
+                    {icon && (
+                        <View
+                            style={{
+                                borderRightWidth: DEFAULT.border.width.m,
+                                borderColor: DEFAULT.border.color,
+                                height: '100%',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                paddingHorizontal: DEFAULT.SPACING.XXS,
+                            }}
+                        >
+                            <Icon icon={icon} />
+                        </View>
+                    )}
+                    <Text style={styles.textInput}>{dateText ? dateText : placeholder}</Text>
                 </View>
             </TouchableOpacity>
-
-            <View style={[styles.shadow, { width }]}></View>
 
             {showPicker && (
                 <DateTimePicker
@@ -105,49 +116,29 @@ const styles = EStyleSheet.create({
         position: 'relative',
         width: '100%',
     },
+
     label: {
-        position: 'absolute',
-        top: -10,
-        left: 10,
         zIndex: 2,
-        backgroundColor: '$color_white',
         paddingHorizontal: 5,
-        fontSize: 12,
         color: '$color_black',
-        width: 120,
-        height: 20,
-        borderRadius: 15,
-        borderWidth: $border_width,
-        borderColor: '$color_black',
-        textAlign: 'center',
-        textAlignVertical: 'center',
+        width: '100%',
+        fontSize: DEFAULT.fonsSize.body,
+        fontWeight: DEFAULT.fontWeight.bold,
     },
 
     content: {
         flexDirection: 'row',
         alignItems: 'center',
-        minHeight: 40,
-        borderWidth: $border_width,
-        borderColor: '$color_black',
-        borderRadius: 15,
-        backgroundColor: '$color_white',
-        padding: 10,
+        height: 50,
+        borderWidth: DEFAULT_STYLES.input.borderWidth,
+        borderColor: DEFAULT_STYLES.input.borderColor,
+        borderRadius: DEFAULT_STYLES.input.borderRadius,
+        backgroundColor: white_bg,
+        boxShadow: DEFAULT.boxShadow.tile.default,
     },
 
     textInput: {
         flex: 1,
         marginLeft: 10,
-    },
-
-    shadow: {
-        borderRadius: 15,
-        height: '100%',
-        position: 'absolute',
-        top: 4,
-        left: 4,
-        backgroundColor: '$shadow_color_primary',
-        borderWidth: $border_width,
-        borderColor: '$color_black',
-        zIndex: -1,
     },
 });

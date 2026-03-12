@@ -1,9 +1,8 @@
 import React from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Tile } from '@components/tile';
 import { Text, View } from 'react-native';
 import { STYLES } from '@styles/theme';
-import { LoadingIcon } from '@components/loader';
+import { LoadingIcon } from '@components-new/loader';
 
 interface IncomeProjectionTileProps {
     income: number;
@@ -17,7 +16,13 @@ export const IncomeProjectionTile: React.FC<IncomeProjectionTileProps> = ({
     isLoading,
 }) => {
     return (
-        <Tile color="white">
+        <View style={[
+            STYLES.tile,
+            {
+                width: '100%',
+                height: 70
+            }
+        ]}>
             <View style={{ padding: 5 }}>
                 <View style={styles.fullWidthRow}>
                     <Text style={styles.headText}>Zarobki</Text>
@@ -32,7 +37,7 @@ export const IncomeProjectionTile: React.FC<IncomeProjectionTileProps> = ({
                     )}
                 </View>
             </View>
-        </Tile>
+        </View>
     );
 };
 

@@ -4,7 +4,6 @@ import { Layout } from '../Layout';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { Header } from '@components-new/header';
-import { EventsList } from '@components/complex/eventslist';
 import { ScrollView } from '@components/ui/scrool-view';
 import { NavbarNavigationScreens, RootStackParamList } from '@components/ui/navbar';
 import { useEffect, useMemo } from 'react';
@@ -15,6 +14,11 @@ import { useAlert } from '@contexts/AlertContext';
 import { setLoadingPage, setLoadingScreen, updateCurrentRoute } from '@contexts/NavbarReducer';
 import { APP_VERSION } from '../../config';
 import { Columns } from '@components-new/view';
+import { EventsList } from '@components-new/complex/eventslist';
+import { EventModal } from '@components-new/modals/EventModal';
+import { EventDTO, LessonDTO } from '@model';
+import { useDayEvents } from '@screens/Calendar/hooks/useDayEvents';
+import { LessonModal } from '@components-new/modals';
 
 export const Home: React.FC<
     BottomTabScreenProps<RootStackParamList, 'Home'>
@@ -28,6 +32,50 @@ export const Home: React.FC<
     useFocusEffect(() => {
         updateCurrentRoute('Home' as NavbarNavigationScreens)
     });
+    
+    const { events, refetch } = useDayEvents(today);
+    const handleShowLessonModal = (lesson: LessonDTO) => {
+        setModalBody(
+            <LessonModal
+                lesson={lesson}
+                goToStudentProfile={() => {
+                    navigation.getParent()?.navigate('Students', {
+                        screen: 'Profile',
+                        params: {
+                            studentId: lesson.studentId,
+                        },
+                    });
+                }}
+                goToEditForm={() => {
+                    navigation.getParent()?.navigate('Lessons', {
+                        screen: 'Edit',
+                        params: {
+                            lessonId: lesson.id,
+                        },
+                    });
+                }}
+                onChange={refetch}
+            />,
+        );
+        setIsOpen(true);
+    };
+
+    const handleShowEventModal = (event: EventDTO) => {
+        setModalBody(
+            <EventModal
+                event={event}
+                goToEditForm={() => {
+                    navigation.getParent()?.navigate('Events', {
+                        screen: 'Edit',
+                        params: {
+                            event: event,
+                        },
+                    });
+                }}
+            />,
+        );
+        setIsOpen(true);
+    };
 
     useEffect(() => {
         if (!versionCheck) {
@@ -131,7 +179,12 @@ export const Home: React.FC<
                         title={'Dzisiejszy plan'}
                         noBackground
                     />
-                    <EventsList day={today} navigation={navigation} />
+                    <EventsList 
+                        events={events}
+                        onChange={refetch}
+                        onEventClick={handleShowEventModal}
+                        onLessonClick={handleShowLessonModal}
+                    />
                 </ScrollView>
             )}
         </Layout>

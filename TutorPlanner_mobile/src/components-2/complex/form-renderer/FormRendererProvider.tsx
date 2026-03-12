@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import { FieldWrapper } from './FieldWrapper';
 import { FormRendererSchema } from './model';
-import { View } from 'react-native';
 
 interface FormContextProps {
     formData: any; //Init form data

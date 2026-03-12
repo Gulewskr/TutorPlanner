@@ -1,7 +1,6 @@
 import React from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Tile } from '@components/tile';
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { Account } from './account';
 import { STYLES } from '@styles/theme';
 
@@ -25,10 +24,17 @@ export const IncomePerAccountTile: React.FC<IncomePerAccountTileProps> = ({
     return (
         <View style={{ gap: 10 }}>
             {accounts.map(({ account, isSelected, income }) => (
-                <Tile
+                <Pressable
                     key={account.id}
-                    customColor={isSelected ? account.color : '#b6b6b6'}
-                    onClick={() => onSelect(account.id)}
+                    style={[
+                        STYLES.tile,
+                        {
+                            width: '100%',
+                            height: 70,
+                            backgroundColor: isSelected ? account.color : '#b6b6b6'
+                        }
+                    ]}
+                    onPress={() => onSelect(account.id)}
                 >
                     <View style={{ padding: 5 }}>
                         <View style={STYLES.fullWidthRow}>
@@ -42,7 +48,7 @@ export const IncomePerAccountTile: React.FC<IncomePerAccountTileProps> = ({
                             </View>
                         )}
                     </View>
-                </Tile>
+                </Pressable>
             ))}
         </View>
     );

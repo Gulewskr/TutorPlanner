@@ -1,5 +1,5 @@
-import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
-import { FormRendererSchema } from '@components/complex/form-renderer/model';
+import { FormProvider, FormRenderer } from '@components-new/complex/form-renderer';
+import { FormRendererSchema } from '@components-new/complex/form-renderer/model';
 import { useAlert } from '@contexts/AlertContext';
 import { useStudentsContext } from '@contexts/StudentsContext';
 import { Payment, PAYMENTS_TYPES, PaymentType, StudentDTO } from '@model';
@@ -151,7 +151,7 @@ const getFormSchema = (
                 componentProps: {
                     label: 'Uczeń',
                     icon: 'students',
-                    placeholder: '--Wybierz ucznia--',
+                    placeholder: 'Wybierz ucznia',
                     options: students.map(stud => ({
                         value: stud.id,
                         label: getFullName(stud),
@@ -163,7 +163,7 @@ const getFormSchema = (
                 componentProps: {
                     label: 'Cena',
                     icon: 'payments',
-                    placeholder: '--Podaj cene--',
+                    placeholder: 'Podaj cene',
                 },
             },
             date: {
@@ -171,14 +171,14 @@ const getFormSchema = (
                 componentProps: {
                     label: 'Data',
                     icon: 'calendar',
-                    placeholder: '--Data--',
+                    placeholder: 'Data',
                 },
             },
             type: {
                 component: 'dropdown',
                 componentProps: {
                     label: 'Typ płatności',
-                    placeholder: '--Wybierz ucznia--',
+                    placeholder: 'Wybierz ucznia',
                     options: PAYMENTS_TYPES.map(typ => ({
                         value: typ,
                         label: typ, 
@@ -189,7 +189,7 @@ const getFormSchema = (
                 component: 'dropdown',
                 componentProps: {
                     label: 'Konto',
-                    placeholder: '--Wybierz konto--',
+                    placeholder: 'Wybierz konto',
                     options: ACCOUNTS.map(a => ({
                         value: a.id,
                         label: a.name, 

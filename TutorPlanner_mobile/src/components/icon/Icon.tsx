@@ -3,6 +3,7 @@ import { Image, StyleSheet } from 'react-native';
 interface IconProps {
     icon: ICON_NAME;
     size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    rotate?: '90deg' | '180deg' | '270deg';
 }
 
 type ICON_NAME =
@@ -11,6 +12,7 @@ type ICON_NAME =
     | 'addNote'
     | 'addPayment'
     | 'addStudent'
+    | 'arrow-down'
     | 'arrowLeft'
     | 'arrowRight'
     | 'back'
@@ -57,6 +59,7 @@ const iconsMap: { [key in ICON_NAME]: any } = {
     addNote: require('../../assets/icons/addNote.png'),
     addPayment: require('../../assets/icons/addPayment.png'),
     addStudent: require('../../assets/icons/addStudent.png'),
+    'arrow-down': require('../../assets/icons/arrow-down.png'),
     arrowLeft: require('../../assets/icons/arrowLeft.png'),
     arrowRight: require('../../assets/icons/arrowRight.png'),
     back: require('../../assets/icons/back.png'),
@@ -98,10 +101,16 @@ const iconsMap: { [key in ICON_NAME]: any } = {
     upload: require('../../assets/icons/upload.png'),
 };
 
-const Icon: React.FC<IconProps> = ({ icon, size }) => (
+const Icon: React.FC<IconProps> = ({ icon, size, rotate }) => (
     <Image
         source={iconsMap[icon]}
-        style={[styles.icon, size && styles[`icon-${size}`]]}
+        style={[
+            styles.icon,
+            size && styles[`icon-${size}`],
+            rotate && {
+                transform: `rotate(${rotate})`,
+            },
+        ]}
     />
 );
 

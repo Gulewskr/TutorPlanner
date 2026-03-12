@@ -21,6 +21,8 @@ interface ButtonProps {
     onClick: () => void;
     disabled?: boolean;
     severity?: ButtonSeverity;
+    height?: number;
+    width?: number;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -31,6 +33,8 @@ const Button: React.FC<ButtonProps> = ({
     label,
     icon,
     severity,
+    height,
+    width
 }) => {
     const [pressed, setPressed] = useState<boolean>(false);
 
@@ -48,6 +52,12 @@ const Button: React.FC<ButtonProps> = ({
                 severity === 'warning' && style.warning,
                 severity === 'error' && style.error,
                 STYLES.border,
+                height && {
+                    height: height
+                },
+                width && {
+                    width: width
+                }
             ]}
             onPress={onClick}
             onPressIn={() => setPressed(true)}
@@ -78,7 +88,7 @@ const styles = (
             aspectRatio: 1,
             paddingLeft: 10,
             paddingRight: 10,
-            borderRadius: 15,
+            borderRadius: 10,
         },
         button: {
             alignItems: 'center',

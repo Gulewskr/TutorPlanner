@@ -4,7 +4,8 @@ import { LessonDTO } from '@model';
 import { $color_primary } from '@styles/colors';
 import { useModalContext } from '@contexts/modalContext';
 import { LessonModal } from '@components/modals';
-import { LessonTile } from '@screens/Lessons/components/LessonTile';
+import { LessonTile } from '@components-new/tile';
+import { DEFAULT } from '@styles/theme';
 
 interface LessonsListProps {
     lessons: LessonDTO[];
@@ -42,14 +43,15 @@ export const LessonsList: React.FC<LessonsListProps> = ({
                 <ActivityIndicator size="large" color={$color_primary} />
             ) : lessons.length ? (
                 <ScrollView nestedScrollEnabled={true}>
-                    <View style={{ gap: 10, paddingBottom: 20 }}>
-                        {lessons.map((event: LessonDTO, i) => (
-                            <LessonTile
-                                key={event.id}
-                                lesson={event}
-                                onClick={() => handleShowEventModal(event)}
-                            />
-                        ))}
+                    <View style={{gap: DEFAULT.SPACING.S}}>
+                    {lessons.map((event: LessonDTO, i) => (
+                        <LessonTile
+                            key={event.id}
+                            lesson={event}
+                            onClick={() => handleShowEventModal(event)}
+                            showDate hideTags
+                        />
+                    ))}
                     </View>
                 </ScrollView>
             ) : (

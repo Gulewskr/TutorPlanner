@@ -1,9 +1,9 @@
 import React from 'react';
-import { HourInput, Input } from '@components/input';
+import { HourInput, Input } from '@components-new/input';
 import { FormRendererComponents } from './model';
-import { Checkbox, CheckboxTile } from '@components/checkbox';
-import { Dropdown } from '@components/dropdown';
-import { Datepicker } from '@components/datepicker';
+import { Checkbox, CheckboxTile } from '@components-new/checkbox';
+import { Dropdown } from '@components-new/dropdown';
+import { Datepicker } from '@components-new/datepicker';
 
 interface FieldWrapperProps {
     component: FormRendererComponents;

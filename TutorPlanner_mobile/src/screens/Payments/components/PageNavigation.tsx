@@ -1,8 +1,9 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { Button } from '@components/button';
+import { Button } from '@components-new/button';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { $border_width } from '@styles/global';
+import { DEFAULT, STYLES } from '@styles/theme';
 
 interface Props {
     onPrev: () => void;
@@ -23,17 +24,21 @@ export const PageNavigation: React.FC<Props> = ({onPrev, title, onNext}) => {
             <Button
                 icon="arrowLeft"
                 type="icon-button"
-                hasShadow={false}
                 severity="warning"
                 onClick={onPrev}
             />
-            <View style={styles.control_text}>
+            <View style={[
+                STYLES.tile,
+                styles.control_text,
+                {
+                    boxShadow: DEFAULT.boxShadow.tile.pressed
+                }
+            ]}>
                 <Text style={{ fontWeight: 'bold' }}>{title}</Text>
             </View>
             <Button
                 icon="arrowRight"
                 type="icon-button"
-                hasShadow={false}
                 severity="warning"
                 onClick={onNext}
             />

@@ -1,4 +1,4 @@
-import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
+import { FormProvider, FormRenderer } from '@components-new/complex/form-renderer';
 import { useAlert } from '@contexts/AlertContext';
 import { StudentDTO } from '@model';
 import { studentsService } from '@services/students.service';
@@ -81,14 +81,14 @@ export const StudentForm: React.FC<StudentFormProps> = ({
                             component: 'input',
                             componentProps: {
                                 label: 'Imię',
-                                placeholder: '--Podaj imię--',
+                                placeholder: 'Dodaj imię',
                             },
                         },
                         lastname: {
                             component: 'input',
                             componentProps: {
                                 label: 'Nazwisko',
-                                placeholder: '--Podaj nazwisko--',
+                                placeholder: 'Dodaj nazwisko',
                             },
                         },
                         price: {
@@ -96,7 +96,7 @@ export const StudentForm: React.FC<StudentFormProps> = ({
                             componentProps: {
                                 label: 'Cena - domyślna',
                                 icon: 'payments',
-                                placeholder: '--Podaj cene--',
+                                placeholder: 'Dodaj cene',
                             },
                         },
                     },

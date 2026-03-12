@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Layout } from '../Layout';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { FormProvider, FormRenderer } from '@components/complex/form-renderer';
+import { FormProvider, FormRenderer } from '@components-new/complex/form-renderer';
 import { View } from 'react-native';
-import { ScrollView } from '@components/ui/scrool-view';
-import { EventsTabParamList } from '@components/ui/navbar';
+import { ScrollView } from '@components-new/ui/scrool-view';
+import { EventsTabParamList } from '@components-new/ui/navbar';
 import { useAlert } from '@contexts/AlertContext';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { eventsService } from '@services/events.service';

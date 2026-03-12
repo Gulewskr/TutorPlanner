@@ -1,5 +1,6 @@
 import { StudentDTO } from '@model';
 import { studentsService } from '@services/students.service';
+import { useQuery } from '@tanstack/react-query';
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
 interface ServerDataContext<T> {
@@ -23,26 +24,29 @@ export const StudentContext = createContext<StudnetContextProps>({
 export const useStudentsContext = () => useContext(StudentContext);
 
 export const StudentsProvider = ({ children }: React.PropsWithChildren) => {
-    const [loading, setLoading] = useState(false);
     const [students, setStudents] = useState<StudentDTO[]>([]);
 
-    const fetchData = async (): Promise<void> => {
-        setLoading(true);
-        const response = await studentsService.getStudentsList();
-        setLoading(false);
-        setStudents(response.data);
-    };
+    const studentsQuery = useQuery({
+        queryKey: ['students'],
+        queryFn: () => studentsService.getStudentsList(),
+    });
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        setStudents(
+            studentsQuery.data?.data.sort((a, b) =>
+                `${a.firstname}${a.surename}`.localeCompare(`${b.firstname}${b.surename}`),
+            ) ?? [],
+        );
+    }, [studentsQuery.data, studentsQuery.isLoading]);
 
     return (
         <StudentContext.Provider
             value={{
-                loading: loading,
+                loading: studentsQuery.isLoading,
                 data: students,
-                fetch: fetchData,
+                fetch: async () => {
+                    studentsQuery.refetch();
+                },
             }}
         >
             {children}

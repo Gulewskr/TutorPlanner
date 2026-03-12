@@ -6,12 +6,14 @@ import {
     $color_black,
     $color_danger,
     $color_disabled,
-    $color_success,
+    $color_primary_shadow,
     $color_warning,
     $color_white,
+    primary,
+    white,
 } from '@styles/colors';
 import { useMemo } from 'react';
-import { $border_width } from '@styles/global';
+import { DEFAULT } from '@styles/theme';
 
 interface DayInCalendarProps {
     day: Date;
@@ -37,7 +39,7 @@ const DayInCalendar: React.FC<DayInCalendarProps> = ({
                 ? [$color_black, $color_warning]
                 : [$color_white, 'red'];
         } else if (eventsData.numOfPaidedLessons > 0) {
-            return [$color_black, $color_success];
+            return [$color_black, primary];
         } else if (eventsData.canceledEventsNumber === eventsData.activeEventsNumber) {
             return [$color_white, $color_disabled];
         }
@@ -55,9 +57,15 @@ const DayInCalendar: React.FC<DayInCalendarProps> = ({
                 { position: 'relative' },
             ]}
         >
-            <Text>{format(day, 'd')}</Text>
+            <Text style={[
+                styles.dayText,
+                isToday(day) && styles.todayText,
+                isSelected && styles.selectedText,
+                isBlackedOut && styles.disabledText
+            ]}>{format(day, 'd')}</Text>
             {eventsData && eventsData.activeEventsNumber > 0 && (
-                <View style={[styles.event, { backgroundColor: bgColor }]}>
+                <View style={[styles.event, { borderColor: bgColor }]}>
+                    {/*
                     <Text
                         style={[
                             styles.event_text,
@@ -68,6 +76,7 @@ const DayInCalendar: React.FC<DayInCalendarProps> = ({
                     >
                         {eventsData.activeEventsNumber}
                     </Text>
+                    */}
                 </View>
             )}
         </Pressable>
@@ -76,24 +85,36 @@ const DayInCalendar: React.FC<DayInCalendarProps> = ({
 
 const styles = EStyleSheet.create({
     selected_day: {
-        backgroundColor: '$color_secondary',
+        backgroundColor: primary,
+        boxShadow: DEFAULT.boxShadow.primary.pressed,
+        borderColor: DEFAULT.border.color,
+        borderWidth: DEFAULT.border.width.m,
+    },
+    selectedText: {
+        backgroundColor: 'transparent',
+        color: white,
+        fontWeight: DEFAULT.calendar.fontWeight,
+        textShadowColor: "black",
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 10,
     },
     today: {
-        backgroundColor: '$shadow_color_primary',
-        borderColor: '$color_black',
-        color: 'red',
+        backgroundColor: DEFAULT.calendar.background,
+    },
+    todayText: {
+        color: $color_primary_shadow,
     },
     event: {
-        width: 16,
-        heigth: 10,
         position: 'absolute',
-        backgroundColor: 'red',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 50,
-        borderWidth: $border_width,
-        top: -6,
-        right: -6,
+        bottom: 6,
+        left: '50%',
+        width: 14,
+        heigth: 2,
+        borderWidth: 1,
+        borderColor: primary,
+        transform: [
+            {translateX: -6}
+        ]
     },
     event_text: {
         color: '$color_white',
@@ -101,17 +122,24 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
     },
     day: {
-        borderWidth: $border_width,
-        borderColor: '$color_black',
         borderRadius: 8,
         width: 40,
         height: 40,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '$color_primary',
+        fontSize: DEFAULT.calendar.fontSize,
+        backgroundColor: DEFAULT.calendar.background,
+    },
+    dayText: {
+        backgroundColor: 'transparent',
+        color: primary,
+        fontWeight: DEFAULT.calendar.fontWeight,
     },
     disabled: {
-        backgroundColor: '$color_disabled_primary',
+        backgroundColor: DEFAULT.calendar.disabled.background,
+    },
+    disabledText: {
+        color: DEFAULT.calendar.disabled.color,
     },
 });
 

@@ -1,4 +1,5 @@
 import Tile from './Tile';
 import { EventTile } from './EventTile';
 import { LessonTile } from './LessonTile';
-export { Tile, EventTile, LessonTile };
+import { StudentTile } from './StudentTile';
+export { Tile, EventTile, LessonTile, StudentTile };
